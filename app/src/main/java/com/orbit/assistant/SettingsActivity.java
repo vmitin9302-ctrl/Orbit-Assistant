@@ -33,6 +33,11 @@ import java.util.List;
 
 
 public class SettingsActivity extends Activity implements UiKit.AppearanceListener {
+    /** Presentation-only Russian translations; original text remains the fallback. */
+    private static String orbitLocalized(String english, String russian) {
+        return java.util.Locale.getDefault().getLanguage().equals("ru") ? russian : english;
+    }
+
     private static final int REQ_AUDIO = 71;
     private static final int REQ_CAMERA = 72;
     private static final int REQ_CONTACTS = 73;
@@ -118,7 +123,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
                 if (!canShowAuthResult()) return;
                 updateChatGptStatus();
                 Toast.makeText(SettingsActivity.this,
-                        "ChatGPT connected to Orbit", Toast.LENGTH_LONG).show();
+                        orbitLocalized("ChatGPT connected to Orbit", "ChatGPT подключён к Orbit"), Toast.LENGTH_LONG).show();
             });
         }
 
@@ -126,7 +131,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
             runOnUiThread(() -> {
                 if (!canShowAuthResult()) return;
                 updateChatGptStatus();
-                showOrbitMessageDialog("ChatGPT sign-in could not complete", message);
+                showOrbitMessageDialog(orbitLocalized("ChatGPT sign-in could not complete", "Не удалось войти в ChatGPT"), message);
             });
         }
     };
@@ -136,7 +141,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
          public void onSignedIn(ChatGptAuth.AccountInfo account) {
             if (!canShowAuthResult()) return;
             updateChatGptStatus();
-            Toast.makeText(SettingsActivity.this, "ChatGPT connected to Orbit", Toast.LENGTH_LONG).show();
+            Toast.makeText(SettingsActivity.this, orbitLocalized("ChatGPT connected to Orbit", "ChatGPT подключён к Orbit"), Toast.LENGTH_LONG).show();
         }
 
          public void onFailed(String message, boolean offerCodeSignIn) {
@@ -198,7 +203,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         updateChatGptStatus();
         if (chatGptStatus != null && !ChatGptAuth.isSignedIn(this) &&
                 ChatGptAuth.resumePendingDeviceCode(this, chatGptLoginCallback)) {
-            chatGptStatus.setText("Finishing secure ChatGPT sign-in…");
+            chatGptStatus.setText(orbitLocalized("Finishing secure ChatGPT sign-in…", "Завершение безопасного входа в ChatGPT…"));
             chatGptStatus.setTextColor(UiKit.TEXT);
         }
     }
@@ -247,8 +252,8 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
 
         LinearLayout titles = new LinearLayout(this);
         titles.setOrientation(LinearLayout.VERTICAL);
-        titles.addView(UiKit.text(this, "Settings", 28, UiKit.TEXT, true));
-        titles.addView(UiKit.text(this, "Orbit Power Assistant", 13, UiKit.MUTED, false));
+        titles.addView(UiKit.text(this, orbitLocalized("Settings", "Настройки"), 28, UiKit.TEXT, true));
+        titles.addView(UiKit.text(this, orbitLocalized("Orbit Power Assistant", "Orbit — умный помощник"), 13, UiKit.MUTED, false));
         brand.addView(titles, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         page.addView(brand);
 
@@ -276,28 +281,28 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         categoryList = categories;
         page.addView(categories, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        categories.addView(settingsCategoryCard(SECTION_ASSISTANT, "Assistant setup",
-                "Default assistant, Side button and Quick Settings access"), categoryLp());
-        categories.addView(settingsCategoryCard(SECTION_AI, "AI & account",
-                "AI Providers, ChatGPT sign-in and default AI"), categoryLp());
-        categories.addView(settingsCategoryCard(SECTION_VOICE, "Voice, context & permissions",
-                "Voice Beta, screen context and capabilities"), categoryLp());
-        categories.addView(settingsCategoryCard(SECTION_DATA, "Personalization & data",
-                "Weather, Gallery, reminders, saved places, Memory and backup"), categoryLp());
-        categories.addView(settingsCategoryCard(SECTION_ROUTINES, "Routines",
-                "Create, edit and run saved Action Engine chains"), categoryLp());
-        categories.addView(settingsCategoryCard(SECTION_EXTENSIONS, "Extensions",
-                "Add integrations and new actions to Orbit"), categoryLp());
-        categories.addView(settingsCategoryCard(SECTION_DECK, "Orbit Deck",
-                "Customize your personal Orbit shortcuts"), categoryLp());
-        categories.addView(settingsCategoryCard(SECTION_CONVERSATIONS, "Conversations",
-                "History, chat behavior and background notifications"), categoryLp());
-        categories.addView(settingsCategoryCard(SECTION_APPEARANCE, "Look & Feel",
-                "Theme Studio, font, chat text size and haptics"), categoryLp());
-        categories.addView(settingsCategoryCard(SECTION_UPDATES, "About & updates",
-                "Current version and verified official Orbit releases"), categoryLp());
-        categories.addView(settingsCategoryCard(SECTION_ADVANCED, "Advanced",
-                "Diagnostics and developer tools"), categoryLp());
+        categories.addView(settingsCategoryCard(SECTION_ASSISTANT, orbitLocalized("Assistant setup", "Настройка помощника"),
+                orbitLocalized("Default assistant, Side button and Quick Settings access", "Помощник по умолчанию, боковая кнопка и быстрые настройки")), categoryLp());
+        categories.addView(settingsCategoryCard(SECTION_AI, orbitLocalized("AI & account", "ИИ и аккаунт"),
+                orbitLocalized("AI Providers, ChatGPT sign-in and default AI", "Провайдеры ИИ, вход в ChatGPT и модель по умолчанию")), categoryLp());
+        categories.addView(settingsCategoryCard(SECTION_VOICE, orbitLocalized("Voice, context & permissions", "Голос, контекст и разрешения"),
+                orbitLocalized("Voice Beta, screen context and capabilities", "Голосовое управление, экран и возможности")), categoryLp());
+        categories.addView(settingsCategoryCard(SECTION_DATA, orbitLocalized("Personalization & data", "Персонализация и данные"),
+                orbitLocalized("Weather, Gallery, reminders, saved places, Memory and backup", "Погода, галерея, напоминания, места, память и резервные копии")), categoryLp());
+        categories.addView(settingsCategoryCard(SECTION_ROUTINES, orbitLocalized("Routines", "Автоматизации"),
+                orbitLocalized("Create, edit and run saved Action Engine chains", "Создание, изменение и запуск цепочек действий")), categoryLp());
+        categories.addView(settingsCategoryCard(SECTION_EXTENSIONS, orbitLocalized("Extensions", "Расширения"),
+                orbitLocalized("Add integrations and new actions to Orbit", "Интеграции и новые действия Orbit")), categoryLp());
+        categories.addView(settingsCategoryCard(SECTION_DECK, orbitLocalized("Orbit Deck", "Панель Orbit"),
+                orbitLocalized("Customize your personal Orbit shortcuts", "Настройка персональных ярлыков Orbit")), categoryLp());
+        categories.addView(settingsCategoryCard(SECTION_CONVERSATIONS, orbitLocalized("Conversations", "Диалоги"),
+                orbitLocalized("History, chat behavior and background notifications", "История, поведение чата и фоновые уведомления")), categoryLp());
+        categories.addView(settingsCategoryCard(SECTION_APPEARANCE, orbitLocalized("Look & Feel", "Внешний вид"),
+                orbitLocalized("Theme Studio, font, chat text size and haptics", "Темы, шрифты, размер текста и виброотклик")), categoryLp());
+        categories.addView(settingsCategoryCard(SECTION_UPDATES, orbitLocalized("About & updates", "О приложении и обновления"),
+                orbitLocalized("Current version and verified official Orbit releases", "Текущая версия и официальные обновления Orbit")), categoryLp());
+        categories.addView(settingsCategoryCard(SECTION_ADVANCED, orbitLocalized("Advanced", "Дополнительно"),
+                orbitLocalized("Diagnostics and developer tools", "Диагностика и инструменты разработчика")), categoryLp());
 
         TextView footer = UiKit.text(this, "Orbit " + BuildConfig.VERSION_NAME + " • Power Assistant", 12, UiKit.MUTED, false);
         footer.setGravity(Gravity.CENTER);
@@ -341,14 +346,14 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
 
         // Orbit's own field, with its surface removed: the row around it is already the outlined
         // box, and a second one inside it would read as a field inside a field.
-        EditText field = UiKit.input(this, "Search settings", false);
+        EditText field = UiKit.input(this, orbitLocalized("Search settings", "Поиск по настройкам"), false);
         field.setBackground(null);
         field.setPadding(0, 0, 0, 0);
         field.setMinHeight(0);
         field.setSingleLine(true);
         field.setImeOptions(android.view.inputmethod.EditorInfo.IME_ACTION_SEARCH);
         field.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
-        field.setContentDescription("Search settings");
+        field.setContentDescription(orbitLocalized("Search settings", "Поиск по настройкам"));
         field.addTextChangedListener(new android.text.TextWatcher() {
             @Override public void beforeTextChanged(CharSequence s, int a, int b, int c) {}
             @Override public void onTextChanged(CharSequence s, int a, int b, int c) {}
@@ -364,7 +369,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         clear.setImageResource(R.drawable.ic_close);
         clear.setBackground(UiKit.ripple(Color.TRANSPARENT, UiKit.accent(this), 18, this));
         clear.setColorFilter(UiKit.MUTED);
-        clear.setContentDescription("Clear settings search");
+        clear.setContentDescription(orbitLocalized("Clear settings search", "Очистить поиск настроек"));
         clear.setVisibility(View.GONE);
         clear.setOnClickListener(v -> {
             field.setText("");
@@ -410,9 +415,9 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         List<SettingsSearchIndex.Entry> matches = SettingsSearchIndex.search(text);
         if (matches.isEmpty()) {
             LinearLayout empty = card();
-            empty.addView(UiKit.text(this, "No settings found", 16, UiKit.TEXT, true));
+            empty.addView(UiKit.text(this, orbitLocalized("No settings found", "Настройки не найдены"), 16, UiKit.TEXT, true));
             TextView hint = UiKit.text(this,
-                    "Try a shorter word, or the name of the thing you want to change.",
+                    orbitLocalized("Try a shorter word, or the name of the thing you want to change.", "Попробуйте другое слово или название нужной функции."),
                     13, UiKit.MUTED, false);
             hint.setPadding(0, UiKit.dp(this, 6), 0, 0);
             empty.addView(hint);
@@ -585,15 +590,15 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
     }
 
     private String sectionDisplayName(String section) {
-        if (SECTION_ASSISTANT.equals(section)) return "Assistant setup";
-        if (SECTION_AI.equals(section)) return "AI & account";
-        if (SECTION_VOICE.equals(section)) return "Voice, context & permissions";
-        if (SECTION_DATA.equals(section)) return "Personalization & data";
-        if (SECTION_DECK.equals(section)) return "Orbit Deck";
-        if (SECTION_CONVERSATIONS.equals(section)) return "Conversations";
-        if (SECTION_APPEARANCE.equals(section)) return "Look & Feel";
-        if (SECTION_ADVANCED.equals(section)) return "Advanced";
-        return "Settings";
+        if (SECTION_ASSISTANT.equals(section)) return orbitLocalized("Assistant setup", "Настройка помощника");
+        if (SECTION_AI.equals(section)) return orbitLocalized("AI & account", "ИИ и аккаунт");
+        if (SECTION_VOICE.equals(section)) return orbitLocalized("Voice, context & permissions", "Голос, контекст и разрешения");
+        if (SECTION_DATA.equals(section)) return orbitLocalized("Personalization & data", "Персонализация и данные");
+        if (SECTION_DECK.equals(section)) return orbitLocalized("Orbit Deck", "Панель Orbit");
+        if (SECTION_CONVERSATIONS.equals(section)) return orbitLocalized("Conversations", "Диалоги");
+        if (SECTION_APPEARANCE.equals(section)) return orbitLocalized("Look & Feel", "Внешний вид");
+        if (SECTION_ADVANCED.equals(section)) return orbitLocalized("Advanced", "Дополнительно");
+        return orbitLocalized("Settings", "Настройки");
     }
 
     private String sectionDescription(String section) {
@@ -609,14 +614,14 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
     }
 
     private String sectionSubtitle(String section) {
-        if (SECTION_ASSISTANT.equals(section)) return "Core setup";
-        if (SECTION_AI.equals(section)) return "Models & access";
-        if (SECTION_VOICE.equals(section)) return "Input & awareness";
-        if (SECTION_DATA.equals(section)) return "Local context";
-        if (SECTION_DECK.equals(section)) return "Shortcuts";
-        if (SECTION_CONVERSATIONS.equals(section)) return "Chat behavior";
-        if (SECTION_APPEARANCE.equals(section)) return "Style & feedback";
-        if (SECTION_ADVANCED.equals(section)) return "Developer tools";
+        if (SECTION_ASSISTANT.equals(section)) return orbitLocalized("Core setup", "Основная настройка");
+        if (SECTION_AI.equals(section)) return orbitLocalized("Models & access", "Модели и доступ");
+        if (SECTION_VOICE.equals(section)) return orbitLocalized("Input & awareness", "Ввод и контекст");
+        if (SECTION_DATA.equals(section)) return orbitLocalized("Local context", "Локальный контекст");
+        if (SECTION_DECK.equals(section)) return orbitLocalized("Shortcuts", "Ярлыки");
+        if (SECTION_CONVERSATIONS.equals(section)) return orbitLocalized("Chat behavior", "Поведение чата");
+        if (SECTION_APPEARANCE.equals(section)) return orbitLocalized("Style & feedback", "Стиль и отклик");
+        if (SECTION_ADVANCED.equals(section)) return orbitLocalized("Developer tools", "Инструменты разработчика");
         return "Orbit";
     }
 
@@ -638,7 +643,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         back.setImageResource(R.drawable.ic_back);
         back.setImageTintList(android.content.res.ColorStateList.valueOf(UiKit.accent(this)));
         back.setBackground(UiKit.ripple(UiKit.SURFACE_2, UiKit.accent(this), 18, this));
-        back.setContentDescription("Back to Settings");
+        back.setContentDescription(orbitLocalized("Back to Settings", "Назад к настройкам"));
         back.setPadding(UiKit.dp(this, 11), UiKit.dp(this, 11), UiKit.dp(this, 11), UiKit.dp(this, 11));
         back.setOnClickListener(v -> navigation.performBack());
         UiKit.pressScale(back);
@@ -664,15 +669,15 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         page.addView(sectionTitle("SETUP", "setup"));
         LinearLayout setupCard = card();
         tagSectionCard(setupCard, "setup");
-        assistantStatus = UiKit.text(this, "Checking assistant status…", 15, UiKit.TEXT, true);
+        assistantStatus = UiKit.text(this, orbitLocalized("Checking assistant status…", "Проверка состояния помощника…"), 15, UiKit.TEXT, true);
         setupCard.addView(assistantStatus);
         TextView desc = UiKit.text(this, "Make Orbit the default Digital assistant app, then map Side button → Long press → Digital assistant in Samsung Settings.", 13, UiKit.MUTED, false);
         desc.setPadding(0, UiKit.dp(this, 7), 0, UiKit.dp(this, 14));
         setupCard.addView(desc);
-        assistantAction = primaryButton("Make Orbit default assistant");
+        assistantAction = primaryButton(orbitLocalized("Make Orbit default assistant", "Назначить Orbit помощником по умолчанию"));
         assistantAction.setOnClickListener(v -> openAssistantSettings(true));
         setupCard.addView(assistantAction);
-        Button rerunSetup = secondaryButton("Run setup again");
+        Button rerunSetup = secondaryButton(orbitLocalized("Run setup again", "Повторить настройку"));
         rerunSetup.setOnClickListener(v ->
                 startActivity(OnboardingActivity.manualIntent(this)));
         LinearLayout.LayoutParams rerunLp = new LinearLayout.LayoutParams(
@@ -684,7 +689,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         page.addView(sectionTitle("QUICK ACCESS", "setup"));
         LinearLayout quickCard = card();
         tagSectionCard(quickCard, "setup");
-        quickCard.addView(UiKit.text(this, "Quick Settings tiles", 16, UiKit.TEXT, true));
+        quickCard.addView(UiKit.text(this, orbitLocalized("Quick Settings tiles", "Плитки быстрых настроек"), 16, UiKit.TEXT, true));
         TextView quickNote = UiKit.text(this,
                 "Open Orbit instantly, or assign one saved Routine to a Quick Settings tile.",
                 12, UiKit.MUTED, false);
@@ -694,10 +699,10 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
 
         LinearLayout tileButtons = new LinearLayout(this);
         tileButtons.setGravity(Gravity.CENTER_VERTICAL);
-        Button addOrbit = secondaryButton("Add Orbit tile");
+        Button addOrbit = secondaryButton(orbitLocalized("Add Orbit tile", "Добавить плитку Orbit"));
         addOrbit.setOnClickListener(v -> QuickSettingsTiles.requestAddAskTile(this));
         tileButtons.addView(addOrbit, new LinearLayout.LayoutParams(0, UiKit.dp(this, 44), 1));
-        Button addRoutine = secondaryButton("Add Routine tile");
+        Button addRoutine = secondaryButton(orbitLocalized("Add Routine tile", "Добавить плитку автоматизации"));
         addRoutine.setOnClickListener(v -> QuickSettingsTiles.requestAddRoutineTile(this));
         LinearLayout.LayoutParams addRoutineLp = new LinearLayout.LayoutParams(0, UiKit.dp(this, 44), 1);
         addRoutineLp.leftMargin = UiKit.dp(this, 9);
@@ -715,7 +720,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         quickRoutineSelection = UiKit.text(this, "Quick Settings Routine: None", 13, UiKit.TEXT, true);
         quickRoutineSelection.setPadding(0, 0, 0, UiKit.dp(this, 8));
         quickCard.addView(quickRoutineSelection);
-        Button chooseRoutine = secondaryButton("Choose Quick Settings Routine");
+        Button chooseRoutine = secondaryButton(orbitLocalized("Choose Quick Settings Routine", "Выбрать автоматизацию для быстрых настроек"));
         chooseRoutine.setOnClickListener(v -> showQuickRoutineChooser());
         quickCard.addView(chooseRoutine, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 44)));
@@ -725,7 +730,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         page.addView(sectionTitle("HOME-SCREEN WIDGETS", "setup"));
         LinearLayout widgetCard = card();
         tagSectionCard(widgetCard, "setup");
-        widgetCard.addView(UiKit.text(this, "Orbit widgets", 16, UiKit.TEXT, true));
+        widgetCard.addView(UiKit.text(this, orbitLocalized("Orbit widgets", "Виджеты Orbit"), 16, UiKit.TEXT, true));
         TextView widgetNote = UiKit.text(this,
                 "Add Orbit widgets from your launcher's widget picker, or ask Android to pin one below.",
                 12, UiKit.MUTED, false);
@@ -740,13 +745,13 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         widgetEditNote.setPadding(0, 0, 0, UiKit.dp(this, 12));
         widgetCard.addView(widgetEditNote);
 
-        Button pinAskWidget = secondaryButton("Add Ask Orbit widget");
+        Button pinAskWidget = secondaryButton(orbitLocalized("Add Ask Orbit widget", "Добавить виджет чата Orbit"));
         pinAskWidget.setOnClickListener(v -> OrbitWidgets.requestPin(this,
                 AskOrbitWidgetProvider.class, "Ask Orbit"));
         widgetCard.addView(pinAskWidget, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 44)));
 
-        Button pinRoutineWidget = secondaryButton("Add Run Routine widget");
+        Button pinRoutineWidget = secondaryButton(orbitLocalized("Add Run Routine widget", "Добавить виджет автоматизации"));
         pinRoutineWidget.setOnClickListener(v -> OrbitWidgets.requestPin(this,
                 RunRoutineWidgetProvider.class, "Run Routine"));
         LinearLayout.LayoutParams pinRoutineWidgetLp = new LinearLayout.LayoutParams(
@@ -754,7 +759,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         pinRoutineWidgetLp.setMargins(0, UiKit.dp(this, 9), 0, 0);
         widgetCard.addView(pinRoutineWidget, pinRoutineWidgetLp);
 
-        Button pinQuickWidget = secondaryButton("Add Quick Actions widget");
+        Button pinQuickWidget = secondaryButton(orbitLocalized("Add Quick Actions widget", "Добавить виджет быстрых действий"));
         pinQuickWidget.setOnClickListener(v -> OrbitWidgets.requestPin(this,
                 QuickActionsWidgetProvider.class, "Quick Actions"));
         LinearLayout.LayoutParams pinQuickWidgetLp = new LinearLayout.LayoutParams(
@@ -766,7 +771,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         TextView remindersSection = sectionTitle("REMINDERS", "data");
         LinearLayout remindersCard = card();
         tagSectionCard(remindersCard, "data");
-        TextView reminderAppLabel = label("Default reminder app");
+        TextView reminderAppLabel = label(orbitLocalized("Default reminder app", "Приложение напоминаний по умолчанию"));
         reminderAppLabel.setPadding(UiKit.dp(this, 2), 0, 0, UiKit.dp(this, 6));
         TextView reminderAppNote = UiKit.text(this, "", 12, UiKit.MUTED, false);
         reminderAppNote.setLineSpacing(0, 1.12f);
@@ -779,7 +784,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
                 13, UiKit.MUTED, false);
         remindersHelp.setPadding(0, 0, 0, UiKit.dp(this, 12));
         remindersCard.addView(remindersHelp);
-        Button manageReminders = secondaryButton("Manage Orbit reminders");
+        Button manageReminders = secondaryButton(orbitLocalized("Manage Orbit reminders", "Управление напоминаниями Orbit"));
         manageReminders.setOnClickListener(v -> startActivity(new Intent(this, RemindersActivity.class)));
         remindersCard.addView(manageReminders, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 48)));
@@ -794,27 +799,27 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         personalDataHelp.setPadding(0, 0, 0, UiKit.dp(this, 12));
         personalDataCard.addView(personalDataHelp);
 
-        Button managePlaces = secondaryButton("Manage saved places");
+        Button managePlaces = secondaryButton(orbitLocalized("Manage saved places", "Управление сохранёнными местами"));
         managePlaces.setOnClickListener(v -> startActivity(new Intent(this, SavedPlacesActivity.class)));
         target(SettingsSearchIndex.KEY_PLACES, managePlaces);
         personalDataCard.addView(managePlaces, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 48)));
 
-        Button manageMemory = secondaryButton("Manage Orbit Memory");
+        Button manageMemory = secondaryButton(orbitLocalized("Manage Orbit Memory", "Управление памятью Orbit"));
         manageMemory.setOnClickListener(v -> startActivity(new Intent(this, MemoryActivity.class)));
         LinearLayout.LayoutParams manageMemoryLp = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 48));
         manageMemoryLp.setMargins(0, UiKit.dp(this, 9), 0, 0);
         personalDataCard.addView(target(SettingsSearchIndex.KEY_MEMORY, manageMemory), manageMemoryLp);
 
-        Button manageApps = secondaryButton("Manage app profiles");
+        Button manageApps = secondaryButton(orbitLocalized("Manage app profiles", "Управление профилями приложений"));
         manageApps.setOnClickListener(v -> startActivity(new Intent(this, AppsActivity.class)));
         LinearLayout.LayoutParams manageAppsLp = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 48));
         manageAppsLp.setMargins(0, UiKit.dp(this, 9), 0, 0);
         personalDataCard.addView(target(SettingsSearchIndex.KEY_APP_PROFILES, manageApps), manageAppsLp);
 
-        Button manageNotifications = secondaryButton("Manage notification intelligence");
+        Button manageNotifications = secondaryButton(orbitLocalized("Manage notification intelligence", "Управление умными уведомлениями"));
         manageNotifications.setOnClickListener(v -> startActivity(new Intent(this, NotificationsActivity.class)));
         LinearLayout.LayoutParams manageNotificationsLp = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 48));
@@ -846,12 +851,12 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         backupPrivacy.setPadding(0, 0, 0, UiKit.dp(this, 12));
         backupCard.addView(backupPrivacy);
 
-        Button exportBackup = secondaryButton("Export Orbit backup");
+        Button exportBackup = secondaryButton(orbitLocalized("Export Orbit backup", "Экспорт резервной копии Orbit"));
         exportBackup.setOnClickListener(v -> chooseBackupDestination());
         backupCard.addView(exportBackup, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 48)));
 
-        Button restoreBackup = secondaryButton("Restore Orbit backup");
+        Button restoreBackup = secondaryButton(orbitLocalized("Restore Orbit backup", "Восстановить резервную копию Orbit"));
         restoreBackup.setOnClickListener(v -> chooseBackupToRestore());
         LinearLayout.LayoutParams restoreBackupLp = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 48));
@@ -873,7 +878,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         providersRow.setFocusable(true);
         LinearLayout providersText = new LinearLayout(this);
         providersText.setOrientation(LinearLayout.VERTICAL);
-        providersText.addView(UiKit.text(this, "AI Providers", 15, UiKit.TEXT, true));
+        providersText.addView(UiKit.text(this, orbitLocalized("AI Providers", "Провайдеры ИИ"), 15, UiKit.TEXT, true));
         providerRowStatus = UiKit.text(this,
                 "Active: " + activeProvider.displayName() + " · " + activeProvider.statusDetail(this),
                 12, UiKit.MUTED, false);
@@ -906,51 +911,51 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         page.addView(sectionTitle("VOICE & CONTEXT", "voice"));
         LinearLayout voiceCard = card();
         tagSectionCard(voiceCard, "voice");
-        Button micPermission = secondaryButton("Grant microphone permission");
+        Button micPermission = secondaryButton(orbitLocalized("Grant microphone permission", "Разрешить доступ к микрофону"));
         micPermission.setOnClickListener(v -> requestPermissions(new String[]{Manifest.permission.RECORD_AUDIO}, REQ_AUDIO));
         voiceCard.addView(micPermission, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 48)));
-        Button contactPermission = secondaryButton("Allow contact-name lookup");
+        Button contactPermission = secondaryButton(orbitLocalized("Allow contact-name lookup", "Разрешить поиск имён контактов"));
         contactPermission.setOnClickListener(v -> requestPermissions(new String[]{Manifest.permission.READ_CONTACTS}, REQ_CONTACTS));
         LinearLayout.LayoutParams contactLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 48));
         contactLp.setMargins(0, UiKit.dp(this, 8), 0, 0);
         voiceCard.addView(contactPermission, contactLp);
-        Button cameraPermission = secondaryButton("Allow flashlight control");
+        Button cameraPermission = secondaryButton(orbitLocalized("Allow flashlight control", "Разрешить управление фонариком"));
         cameraPermission.setOnClickListener(v -> requestPermissions(new String[]{Manifest.permission.CAMERA}, REQ_CAMERA));
         LinearLayout.LayoutParams cameraLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 48));
         cameraLp.setMargins(0, UiKit.dp(this, 8), 0, 0);
         voiceCard.addView(cameraPermission, cameraLp);
         voiceCard.addView(target(SettingsSearchIndex.KEY_SCREEN_TEXT,
-                toggle("Allow Orbit to read current-screen text", Prefs.SCREEN_CONTEXT, true)));
+                toggle(orbitLocalized("Allow Orbit to read current-screen text", "Разрешить Orbit читать текст на экране"), Prefs.SCREEN_CONTEXT, true)));
         voiceCard.addView(target(SettingsSearchIndex.KEY_SCREENSHOTS,
-                toggle("Allow Orbit to receive screenshots",
+                toggle(orbitLocalized("Allow Orbit to receive screenshots", "Разрешить Orbit получать снимки экрана"),
                 "Visual context, previews, and screen-region selection.",
                 Prefs.SCREENSHOT, true)));
         voiceCard.addView(target(SettingsSearchIndex.KEY_ATTACH_SCREEN,
-                toggle("Attach current screen by default", Prefs.ATTACH_SCREEN_BY_DEFAULT, false)));
+                toggle(orbitLocalized("Attach current screen by default", "Прикреплять текущий экран по умолчанию"), Prefs.ATTACH_SCREEN_BY_DEFAULT, false)));
         voiceCard.addView(target(SettingsSearchIndex.KEY_CONTEXT_CHIPS,
-                toggle("Show contextual screen-action chips when attached", Prefs.CONTEXT_CHIPS, true)));
+                toggle(orbitLocalized("Show contextual screen-action chips when attached", "Показывать действия для прикреплённого экрана"), Prefs.CONTEXT_CHIPS, true)));
         voiceCard.addView(target(SettingsSearchIndex.KEY_SPEAK,
-                toggle("Speak replies to voice requests", Prefs.SPEAK, true)));
+                toggle(orbitLocalized("Speak replies to voice requests", "Озвучивать ответы на голосовые запросы"), Prefs.SPEAK, true)));
         voiceCard.addView(target(SettingsSearchIndex.KEY_VOICE_PAUSE,
-                toggle("Allow longer pauses while speaking",
+                toggle(orbitLocalized("Allow longer pauses while speaking", "Допускать длинные паузы при речи"),
                 "Voice Beta gives you more time to pause and think before Orbit decides you are finished. Tap the mic again if you want to finish sooner.",
                 Prefs.VOICE_PAUSE_FRIENDLY, true)));
         voiceCard.addView(target(SettingsSearchIndex.KEY_AUTO_LISTEN,
-                toggle("Start listening when overlay opens",
+                toggle(orbitLocalized("Start listening when overlay opens", "Включать прослушивание при открытии помощника"),
                 "Automatically activate the microphone when the assistant overlay appears.",
                 Prefs.AUTO_LISTEN_ON_OPEN, false)));
         voiceCard.addView(target(SettingsSearchIndex.KEY_FOLLOW_UPS,
-                toggle("Hands-free voice follow-ups",
+                toggle(orbitLocalized("Hands-free voice follow-ups", "Продолжать голосовой диалог без рук"),
                 "Reopen the microphone after Orbit speaks.",
                 Prefs.AUTO_LISTEN, false)));
         voiceCard.addView(target(SettingsSearchIndex.KEY_SMART_FOLLOW_UPS,
-                toggle("Smart follow-ups",
+                toggle(orbitLocalized("Smart follow-ups", "Умные уточнения"),
                 "Only reopen the microphone when Orbit is waiting for your answer.",
                 Prefs.SMART_FOLLOW_UPS, true)));
         voiceCard.addView(target(SettingsSearchIndex.KEY_KEYBOARD_AWARE,
-                toggle("Keyboard-aware assistant invocation", Prefs.KEYBOARD_AWARE_ASSISTANT, true)));
+                toggle(orbitLocalized("Keyboard-aware assistant invocation", "Учитывать клавиатуру при вызове помощника"), Prefs.KEYBOARD_AWARE_ASSISTANT, true)));
 
-        Button capabilities = secondaryButton("Permissions & capabilities");
+        Button capabilities = secondaryButton(orbitLocalized("Permissions & capabilities", "Разрешения и возможности"));
         capabilities.setOnClickListener(v -> startActivity(new Intent(this, CapabilitiesActivity.class)));
         LinearLayout.LayoutParams capabilitiesLp = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 48));
@@ -967,18 +972,18 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         weatherHelp.setPadding(0, 0, 0, UiKit.dp(this, 10));
         weatherCard.addView(weatherHelp);
         weatherCard.addView(weatherLocationToggle());
-        weatherCard.addView(label("Default weather location (optional)"));
+        weatherCard.addView(label(orbitLocalized("Default weather location (optional)", "Местоположение для погоды (необязательно)")));
         EditText weatherLocation = field("Naples, Florida", Prefs.weatherLocation(this), false);
         weatherCard.addView(weatherLocation);
-        weatherCard.addView(label("Weather units"));
+        weatherCard.addView(label(orbitLocalized("Weather units", "Единицы измерения погоды")));
         weatherCard.addView(weatherUnitsSelector(), selectorLp());
-        Button saveWeather = secondaryButton("Save weather location");
+        Button saveWeather = secondaryButton(orbitLocalized("Save weather location", "Сохранить местоположение"));
         LinearLayout.LayoutParams weatherSaveLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 46));
         weatherSaveLp.setMargins(0, UiKit.dp(this, 10), 0, 0);
         weatherCard.addView(saveWeather, weatherSaveLp);
         saveWeather.setOnClickListener(v -> {
             Prefs.get(this).edit().putString(Prefs.WEATHER_LOCATION, weatherLocation.getText().toString().trim()).apply();
-            Toast.makeText(this, weatherLocation.getText().toString().trim().isEmpty() ? "Default weather location cleared" : "Weather location saved", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, weatherLocation.getText().toString().trim().isEmpty() ? orbitLocalized("Default weather location cleared", "Местоположение для погоды удалено") : orbitLocalized("Weather location saved", "Местоположение для погоды сохранено"), Toast.LENGTH_SHORT).show();
         });
         TextView weatherNote = UiKit.text(this,
                 "If device location is off, Orbit uses the saved city. If neither is available, it will ask for a city and remember the last city you use for weather.",
@@ -989,7 +994,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         TextView gallerySection = sectionTitle("GALLERY", "data");
         LinearLayout galleryCard = card();
         tagSectionCard(galleryCard, "data");
-        galleryCard.addView(label("Gallery app"));
+        galleryCard.addView(label(orbitLocalized("Gallery app", "Приложение галереи")));
         galleryCard.addView(galleryAppSelector(), selectorLp());
         TextView galleryHelp = UiKit.text(this,
                 "Choose which compatible installed app Orbit uses when you attach an image. System picker remains the safe fallback if that app becomes unavailable.",
@@ -1015,7 +1020,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         // One control for the three choices, opening Orbit's shared picker, so Settings can never
         // offer a strength the chosen model refuses. Only the default for new chats lives here;
         // each chat keeps its own selection and is changed from its own header.
-        TextView defaultAiLabel = label("Default AI for new chats");
+        TextView defaultAiLabel = label(orbitLocalized("Default AI for new chats", "ИИ по умолчанию для новых чатов"));
         LinearLayout defaultAi = defaultAiSelector();
         aiCard.addView(controlGroup(SettingsSearchIndex.KEY_DEFAULT_AI, defaultAiLabel, defaultAi,
                 selectorLp()));
@@ -1036,7 +1041,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         // On unless the user says otherwise, and the switch stays so they always can. The default
         // comes from Prefs rather than a literal here, so the two cannot drift apart.
         aiCard.addView(target(SettingsSearchIndex.KEY_THINKING_UPDATES,
-                toggle("Thinking updates",
+                toggle(orbitLocalized("Thinking updates", "Сообщения о ходе работы"),
                 "Show brief updates about what Orbit is working on while it prepares an answer. "
                         + "Never shows private chain-of-thought.",
                 Prefs.THINKING_UPDATES, Prefs.THINKING_UPDATES_DEFAULT)));
@@ -1044,7 +1049,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         // one thing somebody would want to know before leaving it on: which addresses Orbit
         // contacts, and that it is only the pages the answer already used.
         aiCard.addView(target(SettingsSearchIndex.KEY_RICH_ANSWERS,
-                toggle("Sourced images in answers",
+                toggle(orbitLocalized("Sourced images in answers", "Изображения с указанием источников"),
                 "Show a useful picture inside an answer when one genuinely helps. Orbit only reads "
                         + "the preview image a page it already cited declares about itself, and "
                         + "never sends your chat, prompt or Vault anywhere to do it.",
@@ -1054,13 +1059,13 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         page.addView(sectionTitle("DIAGNOSTICS", "diagnostics"));
         LinearLayout diagnosticsCard = card();
         tagSectionCard(diagnosticsCard, "diagnostics");
-        diagnosticsCard.addView(UiKit.text(this, "Orbit diagnostics", 16, UiKit.TEXT, true));
+        diagnosticsCard.addView(UiKit.text(this, orbitLocalized("Orbit diagnostics", "Диагностика Orbit"), 16, UiKit.TEXT, true));
         TextView diagnosticsHelp = UiKit.text(this,
                 "View local routing, context, account, capability, and troubleshooting information.",
                 13, UiKit.MUTED, false);
         diagnosticsHelp.setPadding(0, UiKit.dp(this, 7), 0, UiKit.dp(this, 12));
         diagnosticsCard.addView(diagnosticsHelp);
-        Button diagnostics = secondaryButton("Open Orbit diagnostics");
+        Button diagnostics = secondaryButton(orbitLocalized("Open Orbit diagnostics", "Открыть диагностику Orbit"));
         diagnosticsCard.addView(diagnostics, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 48)));
         diagnostics.setOnClickListener(v -> startActivity(new Intent(this, DiagnosticsActivity.class)));
@@ -1069,10 +1074,10 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         page.addView(sectionTitle("ORBIT DECK", "deck"));
         LinearLayout deckCard = card();
         tagSectionCard(deckCard, "deck");
-        deckCard.addView(toggle("Show Deck shortcut on Chats",
+        deckCard.addView(toggle(orbitLocalized("Show Deck shortcut on Chats", "Показывать панель Orbit в чатах"),
                 "Puts the Deck control in the Chats header. Deck stays reachable from here either way.",
                 Prefs.DECK_SHORTCUT, true));
-        deckCard.addView(toggle("Smart suggestions",
+        deckCard.addView(toggle(orbitLocalized("Smart suggestions", "Умные предложения"),
                 "Show relevant shortcuts from recent Orbit context.",
                 Prefs.DECK_SUGGESTIONS, true));
         TextView deckNote = UiKit.text(this,
@@ -1083,7 +1088,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
                 12, UiKit.MUTED, false);
         deckNote.setPadding(0, UiKit.dp(this, 7), 0, UiKit.dp(this, 12));
         deckCard.addView(deckNote);
-        Button openDeck = secondaryButton("Open Orbit Deck");
+        Button openDeck = secondaryButton(orbitLocalized("Open Orbit Deck", "Открыть панель Orbit"));
         deckCard.addView(openDeck, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 48)));
         openDeck.setOnClickListener(v -> startActivity(new Intent(this, DeckActivity.class)));
@@ -1093,13 +1098,13 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         LinearLayout conversationCard = card();
         tagSectionCard(conversationCard, "conversations");
         conversationCard.addView(target(SettingsSearchIndex.KEY_NEW_CHAT,
-                toggle("Start a new chat each time Orbit opens", Prefs.NEW_CHAT_ON_OPEN, true)));
+                toggle(orbitLocalized("Start a new chat each time Orbit opens", "Начинать новый чат при каждом запуске Orbit"), Prefs.NEW_CHAT_ON_OPEN, true)));
         conversationCard.addView(target(SettingsSearchIndex.KEY_HISTORY,
-                toggle("Save recent chats on this device", Prefs.HISTORY_ENABLED, true)));
+                toggle(orbitLocalized("Save recent chats on this device", "Сохранять недавние чаты на устройстве"), Prefs.HISTORY_ENABLED, true)));
         conversationCard.addView(target(SettingsSearchIndex.KEY_THUMBNAILS,
-                toggle("Save screen attachment thumbnails in chat history", Prefs.SAVE_SCREEN_THUMBNAILS, false)));
+                toggle(orbitLocalized("Save screen attachment thumbnails in chat history", "Сохранять миниатюры снимков экрана в истории"), Prefs.SAVE_SCREEN_THUMBNAILS, false)));
         conversationCard.addView(target(SettingsSearchIndex.KEY_STOP_BUTTON,
-                toggle("Show Stop button while replying",
+                toggle(orbitLocalized("Show Stop button while replying", "Показывать кнопку «Стоп» во время ответа"),
                 "Replace Send with Stop while Orbit is generating a reply.",
                 Prefs.SHOW_STOP_BUTTON, true)));
         conversationCard.addView(notificationToggle());
@@ -1108,17 +1113,17 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
                 12, UiKit.MUTED, false);
         conversationNote.setPadding(0, UiKit.dp(this, 7), 0, UiKit.dp(this, 10));
         conversationCard.addView(conversationNote);
-        Button clearHistory = secondaryButton("Clear Orbit conversation history");
+        Button clearHistory = secondaryButton(orbitLocalized("Clear Orbit conversation history", "Очистить историю диалогов Orbit"));
         conversationCard.addView(target(SettingsSearchIndex.KEY_CLEAR_HISTORY, clearHistory),
                 new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 48)));
         clearHistory.setOnClickListener(v -> {
             AlertDialog dialog = new AlertDialog.Builder(this)
-                    .setTitle("Clear Orbit history?")
+                    .setTitle(orbitLocalized("Clear Orbit history?", "Очистить историю Orbit?"))
                     .setMessage("This deletes Orbit's locally saved recent chats. It does not affect your ChatGPT account.")
-                    .setNegativeButton("Cancel", null)
-                    .setPositiveButton("Clear", (d, which) -> {
+                    .setNegativeButton(orbitLocalized("Cancel", "Отмена"), null)
+                    .setPositiveButton(orbitLocalized("Clear", "Очистить"), (d, which) -> {
                         ConversationStore.clear(this);
-                        Toast.makeText(this, "Orbit conversation history cleared", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, orbitLocalized("Orbit conversation history cleared", "История диалогов Orbit очищена"), Toast.LENGTH_SHORT).show();
                     })
                     .create();
             styleOrbitDialog(dialog, true);
@@ -1149,14 +1154,14 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         tagSectionCard(styleCard, "appearance");
 
         styleCard.addView(controlGroup(SettingsSearchIndex.KEY_FONT,
-                label("App font"), fontSelector(), null));
+                label(orbitLocalized("App font", "Шрифт приложения")), fontSelector(), null));
         TextView fontNote = UiKit.text(this,
                 "Orbit Default is the current app font. Times New Roman uses your phone's Times New Roman font when it has one, and otherwise Android's built-in serif font for a similar classic look. Orbit doesn't include a font file.",
                 12, UiKit.MUTED, false);
         fontNote.setPadding(0, UiKit.dp(this, 8), 0, UiKit.dp(this, 8));
         styleCard.addView(fontNote);
 
-        TextView chatSizeLabel = label("Chat text size");
+        TextView chatSizeLabel = label(orbitLocalized("Chat text size", "Размер текста чата"));
         chatSizeLabel.setPadding(UiKit.dp(this, 2), UiKit.dp(this, 12), 0, UiKit.dp(this, 6));
         styleCard.addView(controlGroup(SettingsSearchIndex.KEY_CHAT_TEXT_SIZE,
                 chatSizeLabel, chatTextSizeSelector(), null));
@@ -1169,18 +1174,18 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         // Haptics stays here on purpose. It is not a color, it is not saved in a theme, and
         // applying a Theme Studio preset must never silently change how the phone feels.
         styleCard.addView(target(SettingsSearchIndex.KEY_HAPTICS,
-                toggle("Haptic feedback", Prefs.HAPTICS, true)));
+                toggle(orbitLocalized("Haptic feedback", "Виброотклик"), Prefs.HAPTICS, true)));
         TextView hapticNote = UiKit.text(this,
                 "Uses light tactile ticks for Orbit controls and Settings interactions. Turn this off to disable those haptics.",
                 12, UiKit.MUTED, false);
         hapticNote.setPadding(UiKit.dp(this, 4), UiKit.dp(this, 1), 0, UiKit.dp(this, 6));
         styleCard.addView(hapticNote);
 
-        TextView advancedLabel = label("Advanced");
+        TextView advancedLabel = label(orbitLocalized("Advanced", "Дополнительно"));
         advancedLabel.setPadding(UiKit.dp(this, 2), UiKit.dp(this, 20), 0, UiKit.dp(this, 6));
         styleCard.addView(advancedLabel);
         styleCard.addView(controlGroup(SettingsSearchIndex.KEY_PAGE_TRANSITIONS,
-                label("Page transitions"), pageTransitionSelector(), null));
+                label(orbitLocalized("Page transitions", "Переходы между страницами")), pageTransitionSelector(), null));
         TextView transitionNote = UiKit.text(this,
                 "How full-screen Orbit pages move when you open and leave them. Slide brings a page in from the right and sends it back out on the way back. Fade & settle uses a short fade with a small upward settle. None changes pages immediately. Android's own animation settings still apply.",
                 12, UiKit.MUTED, false);
@@ -1193,7 +1198,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         LinearLayout gestureCard = card();
         tagSectionCard(gestureCard, "appearance");
         gestureCard.addView(target(SettingsSearchIndex.KEY_SWIPE_BACK,
-                toggle("Swipe to go back",
+                toggle(orbitLocalized("Swipe to go back", "Свайп для возврата"),
                 "Use Orbit's interactive edge gesture when returning to the previous screen. The "
                         + "page follows your finger and the screen you came from appears behind it, "
                         + "across conversations, Settings and Orbit's other pages. Turn this off to "
@@ -1201,7 +1206,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
                         + "way, from the gesture, the navigation buttons, and every Back control.",
                 Prefs.ENHANCED_CHAT_BACK, true)));
         gestureCard.addView(target(SettingsSearchIndex.KEY_CHAT_SWIPE,
-                toggle("Chat swipe actions",
+                toggle(orbitLocalized("Chat swipe actions", "Действия свайпами в чатах"),
                 "Swipe a chat left to delete it, or right to pin and unpin it. Deleting always "
                         + "offers Undo. With this off, chats scroll and open as normal and both "
                         + "actions stay on the chat's own menu.",
@@ -1247,11 +1252,11 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
 
     private void showBrowserSignInFailure(String message, boolean offerCodeSignIn) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                .setTitle("ChatGPT sign-in could not complete")
+                .setTitle(orbitLocalized("ChatGPT sign-in could not complete", "Не удалось войти в ChatGPT"))
                 .setMessage(message);
         if (offerCodeSignIn) {
-            builder.setPositiveButton("Use code sign-in", (d, w) -> startCodeSignIn())
-                    .setNegativeButton("Close", null);
+            builder.setPositiveButton(orbitLocalized("Use code sign-in", "Войти с помощью кода"), (d, w) -> startCodeSignIn())
+                    .setNegativeButton(orbitLocalized("Close", "Закрыть"), null);
         } else {
             builder.setPositiveButton("OK", null);
         }
@@ -1296,7 +1301,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
                 .setTitle("Sign in with ChatGPT")
                 .setMessage("Your one-time code is:\n\n" + code.userCode +
                         "\n\nIt has been copied to your clipboard. Open OpenAI's sign-in page, sign into your normal ChatGPT account, and enter this code. Orbit will finish connecting automatically.")
-                .setPositiveButton("Open ChatGPT sign-in", (d, which) -> {
+                .setPositiveButton(orbitLocalized("Open ChatGPT sign-in", "Открыть вход в ChatGPT"), (d, which) -> {
                     try { startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(code.verificationUrl))); }
                     catch (Exception e) { Toast.makeText(this, code.verificationUrl, Toast.LENGTH_LONG).show(); }
                 })
@@ -1305,7 +1310,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
                     if (cm != null) cm.setPrimaryClip(ClipData.newPlainText("Orbit ChatGPT code", code.userCode));
                     Toast.makeText(this, "Code copied", Toast.LENGTH_SHORT).show();
                 })
-                .setNegativeButton("Close", null)
+                .setNegativeButton(orbitLocalized("Close", "Закрыть"), null)
                 .create();
         styleOrbitDialog(dialog, false);
         dialog.show();
@@ -1477,7 +1482,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
             AlertDialog dialog = new AlertDialog.Builder(this)
                     .setTitle("Sign out of ChatGPT?")
                     .setMessage("Orbit forgets this ChatGPT connection on this phone. You can sign in again at any time.")
-                    .setNegativeButton("Cancel", null)
+                    .setNegativeButton(orbitLocalized("Cancel", "Отмена"), null)
                     .setPositiveButton("Sign out", (d, w) -> {
                         ChatGptAuth.logout(this);
                         updateChatGptStatus();
@@ -1561,7 +1566,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Quick Settings Routine")
                 .setView(scroll)
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(orbitLocalized("Cancel", "Отмена"), null)
                 .create();
         for (int i = 0; i < choices.getChildCount(); i++) {
             choices.getChildAt(i).setTag(dialog);
@@ -1645,7 +1650,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Restore Orbit backup?")
                 .setMessage(prepared.confirmationMessage())
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(orbitLocalized("Cancel", "Отмена"), null)
                 .setPositiveButton("Restore", (d, which) -> runRestore(prepared))
                 .create();
         styleOrbitDialog(dialog, true);
@@ -1688,7 +1693,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         assistantStatus.setText(active ? "✓ Orbit is your default assistant" : "○ Orbit is not the active assistant yet");
         assistantStatus.setTextColor(active ? UiKit.SUCCESS : UiKit.TEXT);
         if (assistantAction != null) {
-            assistantAction.setText(active ? "Manage default assistant" : "Make Orbit default assistant");
+            assistantAction.setText(active ? "Manage default assistant" : orbitLocalized("Make Orbit default assistant", "Назначить Orbit помощником по умолчанию"));
             assistantAction.setEnabled(true);
             assistantAction.setAlpha(1f);
         }
@@ -1990,7 +1995,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle(VAULT_DELETE_TITLE)
                 .setMessage(VAULT_DELETE_MESSAGE)
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(orbitLocalized("Cancel", "Отмена"), null)
                 .setPositiveButton("Delete all", (d, w) -> {
                     int removed = OrbitVaultStore.deleteAllData(this);
                     Toast.makeText(this, removed == 0
