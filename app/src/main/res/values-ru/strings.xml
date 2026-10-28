@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Orbit Assistant</string>
+    <string name="process_text_label">Спросить Orbit</string>
+    <string name="widget_ask_description">Открыть чат Orbit для ввода сообщения</string>
+    <string name="widget_routine_description">Запустить выбранную автоматизацию Orbit</string>
+    <string name="widget_quick_description">Использовать выбранные быстрые действия Orbit</string>
+</resources>
