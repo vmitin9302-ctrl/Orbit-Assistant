@@ -98,6 +98,8 @@ public final class RoutineActionCatalog {
         return String.format(Locale.US, count == 1 ? one : other, count);
     }
 
+    @Deprecated
+
     public static String labelForType(String type) {
         return labelForType(null, type);
     }
@@ -110,6 +112,8 @@ public final class RoutineActionCatalog {
         }
         return titleCase(c, type.replace('_', ' '));
     }
+
+    @Deprecated
 
     public static String title(AssistantReply.Action action) {
         return title(null, action);
@@ -180,6 +184,8 @@ public final class RoutineActionCatalog {
     private static String onOff(Context c, boolean on) {
         return on ? t(c, R.string.rcat_on, "On") : t(c, R.string.rcat_off, "Off");
     }
+
+    @Deprecated
 
     public static String summary(AssistantReply.Action action) {
         return summary(null, action);
@@ -389,6 +395,8 @@ public final class RoutineActionCatalog {
         return Math.max(0, Math.min(100, percent));
     }
 
+    @Deprecated
+
     public static String timeLabel(int hour24, int minute) {
         return timeLabel(null, hour24, minute);
     }
@@ -405,6 +413,8 @@ public final class RoutineActionCatalog {
         if (display == 0) display = 12;
         return String.format(Locale.US, "%d:%02d %s", display, m, ap);
     }
+
+    @Deprecated
 
     public static String minuteLabel(int minuteOfDay) {
         return minuteLabel(null, minuteOfDay);
@@ -431,6 +441,7 @@ public final class RoutineActionCatalog {
      * single-unit is decided once, by {@link DurationParser}, so this and the modifier form beneath
      * it can never disagree about whether 90 seconds is a minute and a half.
      */
+    @Deprecated
     public static String durationLabel(int seconds) {
         return durationLabel(null, seconds);
     }
@@ -475,6 +486,7 @@ public final class RoutineActionCatalog {
      * <p>A duration spanning units is delegated to {@link DurationParser#spokenModifier(long)},
      * which owns the one rule for saying a mixed duration out loud.
      */
+    @Deprecated
     public static String durationModifierLabel(int seconds) {
         return DurationParser.spokenModifier(Math.max(1, seconds));
     }

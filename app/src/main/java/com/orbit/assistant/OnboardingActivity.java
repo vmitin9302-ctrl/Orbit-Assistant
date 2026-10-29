@@ -475,7 +475,7 @@ public final class OnboardingActivity extends Activity {
 
     /** Positive capabilities, read from the provider layer so this copy cannot go stale. */
     private void addCapabilityLine(LinearLayout card, AiProvider provider) {
-        java.util.List<String> chips = AiProvidersActivity.capabilityChips(provider.capabilities());
+        java.util.List<String> chips = AiProvidersActivity.capabilityChips(this, provider.capabilities());
         if (chips.isEmpty()) return;
         TextView line = UiKit.text(this, String.join(" · ", chips), 12,
                 UiKit.withAlpha(UiKit.TEXT, 205), false);
@@ -1208,7 +1208,7 @@ public final class OnboardingActivity extends Activity {
         // Stated, not only drawn: a ring around a card of colours is exactly the kind of state that
         // disappears for anybody who cannot rely on colour to carry it.
         choice.setContentDescription(preset.name + getString(R.string.ui_orbit_preset_a2d9179f)
-                + (preset.note().isEmpty() ? "" : ", " + preset.note())
+                + (preset.note(this).isEmpty() ? "" : ", " + preset.note(this))
                 + (selected ? getString(R.string.ui_selected_bd44f3ef) : ""));
         UiKit.pressScale(choice);
         choice.setOnClickListener(v -> {
@@ -1410,7 +1410,7 @@ public final class OnboardingActivity extends Activity {
     private void confirmRestore(OrbitBackupManager.PreparedRestore prepared) {
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.ui_restore_orbit_backup_add4c9b6))
-                .setMessage(prepared.confirmationMessage())
+                .setMessage(prepared.confirmationMessage(this))
                 .setNegativeButton(getString(R.string.ui_cancel_19766ed6), null)
                 .setPositiveButton(getString(R.string.ui_restore_a76e13b9), (d, which) -> runRestore(prepared))
                 .create();

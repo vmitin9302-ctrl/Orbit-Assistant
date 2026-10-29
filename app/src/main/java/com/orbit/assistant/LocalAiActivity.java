@@ -189,7 +189,7 @@ public final class LocalAiActivity extends Activity {
         if (outcome == RemovalOutcome.CANCELLED) {
             // Still here. Either the user backed out, or Android refused — and in both cases the
             // honest thing is to change nothing and say so.
-            String reported = OrbitLocalUninstaller.message(lastRemovalStage(this));
+            String reported = OrbitLocalUninstaller.message(this, lastRemovalStage(this));
             removalMessage = reported.isEmpty()
                     ? getString(R.string.localai_not_removed) : reported;
             return;
@@ -438,7 +438,7 @@ public final class LocalAiActivity extends Activity {
                 UiKit.dp(this, 9), UiKit.dp(this, 9));
         dotLp.rightMargin = UiKit.dp(this, 8);
         row.addView(dot, dotLp);
-        row.addView(UiKit.text(this, assessment.tierLabel(), 16, UiKit.TEXT, true));
+        row.addView(UiKit.text(this, assessment.tierLabel(this), 16, UiKit.TEXT, true));
         card.addView(row);
 
         TextView summary = UiKit.text(this, assessment.summary, 13, UiKit.MUTED, false);
@@ -841,7 +841,7 @@ public final class LocalAiActivity extends Activity {
             pillLabel = getString(R.string.localai_active);
             accentPill = true;
         } else {
-            pillLabel = status.stateLabel();
+            pillLabel = status.stateLabel(this);
             accentPill = status.modelReady();
         }
         card.addView(titleRow(LocalModelStore.MODEL_DISPLAY_NAME, pillLabel, accentPill));
@@ -1147,7 +1147,7 @@ public final class LocalAiActivity extends Activity {
             pillLabel = enabled ? getString(R.string.localai_on) : getString(R.string.localai_off);
             accentPill = enabled;
         } else {
-            pillLabel = status.actionStateLabel();
+            pillLabel = status.actionStateLabel(this);
         }
         card.addView(titleRow(
                 status == null || status.actionModelDisplayName.isEmpty()
@@ -1499,7 +1499,7 @@ public final class LocalAiActivity extends Activity {
         } else {
             // Never silent again. The button did nothing, and the user is told so along with the
             // one thing they can do about it.
-            removalMessage = OrbitLocalUninstaller.message(
+            removalMessage = OrbitLocalUninstaller.message(this, 
                     OrbitLocalUninstaller.Stage.NOT_LAUNCHED);
         }
         rebuild();

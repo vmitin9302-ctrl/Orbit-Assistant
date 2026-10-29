@@ -433,7 +433,7 @@ public class RoutineTriggersActivity extends Activity {
                 android.text.format.DateFormat.getBestDateTimePattern(Locale.getDefault(), "EEEMMMd"),
                 Locale.getDefault()));
         return getString(R.string.d_rtrg_next, day,
-                RoutineActionCatalog.timeLabel(z.getHour(), z.getMinute()));
+                RoutineActionCatalog.timeLabel(this, z.getHour(), z.getMinute()));
     }
 
     private void showTriggerMenu(View anchor, RoutineTriggerStore.Trigger trigger) {

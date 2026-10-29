@@ -198,6 +198,8 @@ final class SmartVaultModel {
         return (int) Math.max(0, Math.min(100, done * 100 / TOTAL_BYTES));
     }
 
+    @Deprecated
+
     static String sizeLabel() {
         return String.format(Locale.US, "%.0f MB", TOTAL_BYTES / 1_000_000.0);
     }

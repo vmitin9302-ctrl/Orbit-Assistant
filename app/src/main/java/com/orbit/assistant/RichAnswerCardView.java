@@ -94,7 +94,7 @@ public final class RichAnswerCardView extends LinearLayout {
         view.setAdjustViewBounds(true);
         view.setScaleType(ImageView.ScaleType.CENTER_CROP);
         view.setMaxHeight(UiKit.dp(context, MAX_HEIGHT_DP));
-        view.setContentDescription(image.contentDescription());
+        view.setContentDescription(image.contentDescription(context));
         frame.addView(view, new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
@@ -112,7 +112,7 @@ public final class RichAnswerCardView extends LinearLayout {
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(context, PLACEHOLDER_HEIGHT_DP));
         card.addView(frame, frameLp);
 
-        String attribution = image.attributionLine();
+        String attribution = image.attributionLine(context);
         if (!attribution.isEmpty()) {
             TextView caption = UiKit.text(context, attribution,
                     Prefs.chatTextSp(context, 11.5f), UiKit.withAlpha(foreground, 190), false);
@@ -217,7 +217,7 @@ public final class RichAnswerCardView extends LinearLayout {
         frame.setBackground(UiKit.rounded(UiKit.SURFACE_2, 16, frame.getContext()));
         frame.setClickable(true);
         frame.setFocusable(true);
-        frame.setContentDescription(image.contentDescription());
+        frame.setContentDescription(image.contentDescription(frame.getContext()));
         frame.setOnClickListener(v -> {
             UiKit.haptic(v, HapticFeedbackConstants.CLOCK_TICK);
             openViewer(v, all, image);

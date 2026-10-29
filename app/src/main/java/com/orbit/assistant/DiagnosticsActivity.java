@@ -322,7 +322,7 @@ public final class DiagnosticsActivity extends Activity {
 
         proPreviewUpdate = () -> {
             String selected = Prefs.proPreview(this);
-            state.setText(getString(R.string.diag_pro_state, Prefs.proPreviewLabel(selected),
+            state.setText(getString(R.string.diag_pro_state, Prefs.proPreviewLabel(this, selected),
                     OrbitProEntitlement.status(this)));
             styleChoice(free, Prefs.PRO_PREVIEW_FREE.equals(selected));
             styleChoice(pro, Prefs.PRO_PREVIEW_PRO.equals(selected));
@@ -335,7 +335,7 @@ public final class DiagnosticsActivity extends Activity {
 
     /** One half of the two-option selector. Styling is applied by {@link #styleChoice}. */
     private TextView choiceControl(String value) {
-        TextView choice = UiKit.text(this, Prefs.proPreviewLabel(value), 14, UiKit.TEXT, true);
+        TextView choice = UiKit.text(this, Prefs.proPreviewLabel(this, value), 14, UiKit.TEXT, true);
         choice.setGravity(Gravity.CENTER);
         choice.setClickable(true);
         choice.setFocusable(true);

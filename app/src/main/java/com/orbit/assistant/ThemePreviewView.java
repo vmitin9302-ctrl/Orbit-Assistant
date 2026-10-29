@@ -137,12 +137,12 @@ public final class ThemePreviewView extends LinearLayout {
         userBubble.setTextColor(tokens.userBubbleInk);
         userBubble.setBackground(UiKit.bubbleSurface(c, tokens.userBubble, tokens.accent, style));
         userBubble.setContentDescription(c.getString(R.string.themeprev_user_bubble_desc,
-                OrbitColorName.of(tokens.userBubble), shapeDescription()));
+                OrbitColorName.of(getContext(), tokens.userBubble), shapeDescription()));
 
         assistantBubble.setBackground(
                 UiKit.bubbleSurface(c, tokens.assistantBubble, tokens.accent, style));
         assistantBubble.setContentDescription(c.getString(R.string.themeprev_reply_bubble_desc,
-                OrbitColorName.of(tokens.assistantBubble), shapeDescription()));
+                OrbitColorName.of(getContext(), tokens.assistantBubble), shapeDescription()));
         assistantHeading.setTextColor(tokens.assistantBubbleInk);
         assistantBody.setTextColor(tokens.assistantBubbleInk);
 
@@ -159,7 +159,7 @@ public final class ThemePreviewView extends LinearLayout {
         card.setBackground(UiKit.outlined(tokens.surface,
                 UiKit.withAlpha(tokens.accent, 44), UiKit.RADIUS_CARD, c));
         card.setContentDescription(c.getString(R.string.themeprev_card_desc,
-                OrbitColorName.of(tokens.surface)));
+                OrbitColorName.of(getContext(), tokens.surface)));
         cardTitle.setTextColor(tokens.text);
         cardSubtitle.setTextColor(tokens.muted);
 
@@ -171,7 +171,7 @@ public final class ThemePreviewView extends LinearLayout {
         tile.setBackground(OrbitFloatingSurface.surfaceDrawable(c,
                 OrbitGlass.Palette.of(tokens, style), UiKit.RADIUS_CARD));
         tile.setContentDescription(c.getString(R.string.themeprev_tile_desc,
-                OrbitTheme.materialLabel(c, material()), OrbitColorName.of(tokens.surface2)));
+                OrbitTheme.materialLabel(c, material()), OrbitColorName.of(getContext(), tokens.surface2)));
         tileMark.setImageTintList(ColorStateList.valueOf(tokens.accent));
         tileLabel.setTextColor(tokens.text);
     }
@@ -191,9 +191,9 @@ public final class ThemePreviewView extends LinearLayout {
         Context c = getContext();
         if (tokens == null) return c.getString(R.string.themeprev_desc_none);
         return c.getString(R.string.themeprev_desc,
-                OrbitColorName.of(tokens.background), OrbitColorName.of(tokens.surface),
-                OrbitColorName.of(tokens.accent), OrbitColorName.of(tokens.userBubble),
-                OrbitColorName.of(tokens.assistantBubble));
+                OrbitColorName.of(getContext(), tokens.background), OrbitColorName.of(getContext(), tokens.surface),
+                OrbitColorName.of(getContext(), tokens.accent), OrbitColorName.of(getContext(), tokens.userBubble),
+                OrbitColorName.of(getContext(), tokens.assistantBubble));
     }
 
     /** How the premium message shape reads aloud, or nothing when it is Orbit's own. */

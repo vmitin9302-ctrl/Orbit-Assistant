@@ -415,6 +415,7 @@ public final class OrbitVaultItem {
     public boolean bodyIsEditable() { return isText(); }
 
     /** The word a person reads for this kind of item. Display only; never stored. */
+    @Deprecated
     public String typeLabel() {
         switch (type) {
             case TYPE_LINK: return "Link";
@@ -448,6 +449,7 @@ public final class OrbitVaultItem {
     }
 
     /** "Page 7 of 388", "Page 7" when the length was not known, or "" for anything else. */
+    @Deprecated
     public String pageLabel() {
         if (!isDocumentPage()) return "";
         int human = pageIndex + 1;
@@ -502,6 +504,7 @@ public final class OrbitVaultItem {
     }
 
     /** "Saved 14 Aug 2026", in the device's own locale and format. */
+    @Deprecated
     public String savedLabel() {
         return "Saved " + DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date(createdAt));
     }
@@ -520,6 +523,7 @@ public final class OrbitVaultItem {
     }
 
     /** The same for the last edit, shown only when it genuinely differs from the save. */
+    @Deprecated
     public String modifiedLabel() {
         if (modifiedAt <= createdAt + 1000L) return "";
         return "Edited " + DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date(modifiedAt));

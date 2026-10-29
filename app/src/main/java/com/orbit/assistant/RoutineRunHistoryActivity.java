@@ -135,7 +135,7 @@ public class RoutineRunHistoryActivity extends Activity {
         top.addView(badge);
         card.addView(top);
 
-        TextView headline = UiKit.text(this, entry.headline(), 13, tone, false);
+        TextView headline = UiKit.text(this, entry.headline(this), 13, tone, false);
         headline.setPadding(0, UiKit.dp(this, 8), 0, 0);
         card.addView(headline);
 
@@ -148,7 +148,7 @@ public class RoutineRunHistoryActivity extends Activity {
 
         String when = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT)
                 .format(new Date(entry.runAt));
-        TextView meta = UiKit.text(this, when + " · " + entry.sourceLabel(), 11, UiKit.MUTED, false);
+        TextView meta = UiKit.text(this, when + " · " + entry.sourceLabel(this), 11, UiKit.MUTED, false);
         meta.setPadding(0, UiKit.dp(this, 7), 0, 0);
         card.addView(meta);
         return card;

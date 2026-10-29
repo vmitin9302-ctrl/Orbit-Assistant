@@ -481,8 +481,8 @@ public final class DocumentViewerActivity extends Activity {
 
     private void updateChrome() {
         if (model == null) return;
-        pageButton.setText(model.counterText());
-        pageButton.setContentDescription(getString(R.string.docview_counter_choose, model.counterText()));
+        pageButton.setText(model.counterText(this));
+        pageButton.setContentDescription(getString(R.string.docview_counter_choose, model.counterText(this)));
         previous.setEnabled(model.hasPrevious());
         previous.setAlpha(model.hasPrevious() ? 1f : 0.35f);
         next.setEnabled(model.hasNext());
@@ -496,7 +496,7 @@ public final class DocumentViewerActivity extends Activity {
         body.setOrientation(LinearLayout.VERTICAL);
         int pad = UiKit.dp(this, 20);
         body.setPadding(pad, UiKit.dp(this, 8), pad, 0);
-        TextView chosen = UiKit.text(this, model.counterText(), 15, UiKit.TEXT, true);
+        TextView chosen = UiKit.text(this, model.counterText(this), 15, UiKit.TEXT, true);
         chosen.setGravity(Gravity.CENTER);
         body.addView(chosen);
         SeekBar seek = new SeekBar(this);

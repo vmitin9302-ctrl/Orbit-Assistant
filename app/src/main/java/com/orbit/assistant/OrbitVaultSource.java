@@ -94,6 +94,7 @@ public final class OrbitVaultSource {
      * unchanged, and {@link #family} still decides every filter. A label is a thing one screen
      * draws; the vocabulary underneath it is closed and untouched.
      */
+    @Deprecated
     public static String displayLabel(String canonicalSource) {
         String family = family(canonicalSource);
         if (family.isEmpty()) return "";

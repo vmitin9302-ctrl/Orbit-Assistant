@@ -72,6 +72,7 @@ public final class OrbitVaultAttachment {
      * <p>Named so the user can tell which saved item is staged without opening anything, and never
      * by the internal id, which means nothing to a person and is not theirs to see.
      */
+    @Deprecated
     public static String label(OrbitVaultItem item) {
         if (item == null) return "Vault item";
         String title = item.displayTitle().trim();

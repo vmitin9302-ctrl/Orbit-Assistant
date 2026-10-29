@@ -111,6 +111,7 @@ public final class ResponseDetails {
     public boolean answeredByOrbit() { return provider.isEmpty() && model.isEmpty(); }
 
     /** "2.4 s", or "" when unknown. */
+    @Deprecated
     public String elapsedLabel() { return elapsedLabel(null); }
 
     /** As {@link #elapsedLabel()}, with the unit in the app language when a context is given. */
@@ -127,6 +128,7 @@ public final class ResponseDetails {
     }
 
     /** Label and value pairs, only for what is known, in display order. */
+    @Deprecated
     public List<String[]> rows() { return rows(null); }
 
     /** As {@link #rows()}, with labels in the app language when a context is given. */

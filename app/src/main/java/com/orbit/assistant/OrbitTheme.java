@@ -221,6 +221,7 @@ public final class OrbitTheme {
     }
 
     /** What each material is called. The selector shows these; storage never does. */
+    @Deprecated
     public static String materialLabel(String material) {
         String value = normalizeMaterial(material);
         if (MATERIAL_SOLID.equals(value)) return "Solid";
@@ -557,6 +558,7 @@ public final class OrbitTheme {
     }
 
     /** This theme's note, or "" when it has none. */
+    @Deprecated
     public String note() {
         return noteFor(id);
     }

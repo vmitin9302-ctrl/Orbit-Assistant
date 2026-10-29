@@ -284,6 +284,7 @@ public final class OrbitThemeFileCodec {
             "name", "accent", "userBubble", "assistantBubble", "surface", "background", "amoled"};
 
     /** A one-line description of an imported theme, for the confirmation that precedes adding it. */
+    @Deprecated
     public static String describe(OrbitTheme theme) {
         if (theme == null) return "";
         return String.format(Locale.US, "Accent %s · Background %s",
@@ -305,6 +306,8 @@ public final class OrbitThemeFileCodec {
                 ? context.getString(R.string.themefile_custom, token)
                 : context.getString(R.string.themefile_default);
     }
+
+    @Deprecated
 
     private static String surfaceLabel(String token) {
         return OrbitTheme.isHexToken(token) ? "custom " + token : "Orbit default";

@@ -52,6 +52,7 @@ public final class DocumentPageContext {
     }
 
     /** "Page 5 of 388" — the card's second line. */
+    @Deprecated
     public String pageLabel() {
         return pageCount > 0 ? "Page " + (page + 1) + " of " + pageCount : "Page " + (page + 1);
     }

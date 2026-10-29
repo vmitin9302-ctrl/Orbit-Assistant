@@ -179,7 +179,7 @@ public class TimeTriggerEditorActivity extends Activity {
     }
 
     private void refreshFields() {
-        timeButton.setText(RoutineActionCatalog.timeLabel(hour,minute));
+        timeButton.setText(RoutineActionCatalog.timeLabel(this, hour,minute));
         repeatButton.setText(repeatText());
         dateButton.setText(startDate.format(java.time.format.DateTimeFormatter.ofLocalizedDate(java.time.format.FormatStyle.MEDIUM)));
         enabledBox.setChecked(enabled);

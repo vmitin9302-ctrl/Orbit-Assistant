@@ -170,6 +170,7 @@ public final class OrbitFloatingSurface {
      * like a bug unless Orbit says why, and the stored values behind them are not being discarded -
      * which is the other half of what this sentence is for.
      */
+    @Deprecated
     public static String noGlassNote() {
         return "Solid uses no glass effects. Your glass settings are kept.";
     }
@@ -188,6 +189,7 @@ public final class OrbitFloatingSurface {
     }
 
     /** A short description of what a material is, for the selector's accessibility announcement. */
+    @Deprecated
     public static String materialDescription(String material) {
         String value = OrbitTheme.normalizeMaterial(material);
         if (OrbitTheme.MATERIAL_SOLID.equals(value)) return "Clean opaque controls, no glass";

@@ -159,6 +159,7 @@ public final class OrbitVaultActivity extends Activity {
      * bold. A meaning result quotes the passage it resembles but bolds nothing, because none of
      * the query's words were found there and bold would say they were.
      */
+    @Deprecated
     static CharSequence matchLine(SmartVaultRanker.Result reason, String query) {
         return matchLine(null, reason, query);
     }
@@ -763,6 +764,8 @@ public final class OrbitVaultActivity extends Activity {
         return c.getString(R.string.vault_capacity_near, total, OrbitVaultStore.MAX_ITEMS);
     }
 
+    @Deprecated
+
     static String capacityBody(int total) {
         if (total >= OrbitVaultStore.MAX_ITEMS) {
             return "Your Vault holds " + OrbitVaultStore.MAX_ITEMS + " items, its current limit. "
@@ -878,7 +881,7 @@ public final class OrbitVaultActivity extends Activity {
         filterBar.addView(typeSelector, selectorLp(true));
 
         boolean sourced = !filter.source.isEmpty();
-        String from = sourced ? OrbitVaultSource.displayLabel(filter.source)
+        String from = sourced ? OrbitVaultSource.displayLabel(this, filter.source)
                 : getString(R.string.vault_source_any);
         View sourceSelector = selector(from, sourced,
                 getString(R.string.vault_desc_source, from),
@@ -1021,7 +1024,7 @@ public final class OrbitVaultActivity extends Activity {
         labels[0] = getString(R.string.vault_source_any);
         int selected = 0;
         for (int i = 0; i < sources.size(); i++) {
-            labels[i + 1] = OrbitVaultSource.displayLabel(sources.get(i));
+            labels[i + 1] = OrbitVaultSource.displayLabel(this, sources.get(i));
             if (sources.get(i).equals(filter.source)) selected = i + 1;
         }
         UiKit.showOrbitMenu(this, anchor, labels, selected, (index, label) ->
@@ -1205,12 +1208,12 @@ public final class OrbitVaultActivity extends Activity {
         // for someone who cannot tell the accent from the muted text.
         StringBuilder meta = new StringBuilder();
         if (item.pinned) meta.append(getString(R.string.vault_pinned_label)).append(" · ");
-        meta.append(item.typeLabel());
+        meta.append(item.typeLabel(this));
         if (item.isLink() && !item.hostLabel().isEmpty()) meta.append(" · ").append(item.hostLabel());
-        if (!item.source.isEmpty() && !item.source.equals(item.typeLabel())) {
+        if (!item.source.isEmpty() && !item.source.equals(item.typeLabel(this))) {
             meta.append(" · ").append(item.source);
         }
-        meta.append(" · ").append(item.savedLabel());
+        meta.append(" · ").append(item.savedLabel(this));
         TextView metaText = UiKit.text(this, meta.toString(), 11, UiKit.MUTED, false);
         metaText.setPadding(0, UiKit.dp(this, 8), 0, 0);
         card.addView(metaText);
@@ -1218,7 +1221,7 @@ public final class OrbitVaultActivity extends Activity {
         card.setBackground(UiKit.rippleOutlined(UiKit.SURFACE,
                 UiKit.withAlpha(UiKit.accent(this), 34), UiKit.accent(this), 20, this));
         card.setContentDescription((item.pinned ? getString(R.string.vault_pinned_label) + " " : "")
-                + item.typeLabel() + ": " + item.displayTitle() + ". " + item.savedLabel());
+                + item.typeLabel(this) + ": " + item.displayTitle() + ". " + item.savedLabel(this));
         card.setOnClickListener(v -> open(item));
         card.setOnLongClickListener(v -> {
             UiKit.haptic(v, android.view.HapticFeedbackConstants.LONG_PRESS);

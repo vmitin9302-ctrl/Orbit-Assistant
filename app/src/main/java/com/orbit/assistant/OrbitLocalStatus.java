@@ -250,6 +250,8 @@ public final class OrbitLocalStatus {
                 actionModelBytes * 1000L / actionModelSizeBytes));
     }
 
+    @Deprecated
+
     public String actionStateLabel() { return labelFor(actionModelState); }
 
     /** As {@link #actionStateLabel()}, in the language of the given context. */
@@ -259,6 +261,7 @@ public final class OrbitLocalStatus {
     public String stateLabel(Context context) { return labelFor(context, modelState); }
 
     /** The short pill label the Orbit Local screen shows for the model. */
+    @Deprecated
     public String stateLabel() { return labelFor(modelState); }
 
     /** The same vocabulary as {@link #labelFor(String)}, from resources. */
@@ -278,6 +281,7 @@ public final class OrbitLocalStatus {
     }
 
     /** One vocabulary for both models, so the two cards can never describe a state differently. */
+    @Deprecated
     static String labelFor(String state) {
         switch (state == null ? "" : state) {
             case READY: return "Ready";

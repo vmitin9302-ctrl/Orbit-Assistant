@@ -199,7 +199,7 @@ public final class SmartVaultActivity extends Activity {
         LinearLayout search = card();
         meaningSwitch = new OrbitSwitch(this);
         search.addView(option(meaningSwitch, getString(MEANING_LABEL),
-                getString(MEANING_HELP, SmartVaultModel.sizeLabel()),
+                getString(MEANING_HELP, SmartVaultModel.sizeLabel(SmartVaultActivity.this)),
                 on ? Prefs.smartVaultMeaning(this) : choiceMeaning, Prefs.SMART_VAULT_MEANING,
                 v -> choiceMeaning = v));
         if (on) {
@@ -362,7 +362,7 @@ public final class SmartVaultActivity extends Activity {
             SmartVaultModel.Phase phase = SmartVaultModel.phase(SmartVaultActivity.this);
             int percent = SmartVaultModel.percent(SmartVaultActivity.this);
             String size = getString(R.string.d_sv_size_of,
-                    mb(SmartVaultModel.doneBytes(SmartVaultActivity.this)), SmartVaultModel.sizeLabel());
+                    mb(SmartVaultModel.doneBytes(SmartVaultActivity.this)), SmartVaultModel.sizeLabel(SmartVaultActivity.this));
             int accent = UiKit.accent(SmartVaultActivity.this);
             String titleText;
             String detailText;
@@ -374,7 +374,7 @@ public final class SmartVaultActivity extends Activity {
             switch (phase) {
                 case PREPARING:
                     titleText = getString(MODEL_PREPARING);
-                    detailText = getString(R.string.d_sv_preparing_detail, SmartVaultModel.sizeLabel());
+                    detailText = getString(R.string.d_sv_preparing_detail, SmartVaultModel.sizeLabel(SmartVaultActivity.this));
                     ring.setIndeterminate();
                     break;
                 case DOWNLOADING:
@@ -418,7 +418,7 @@ public final class SmartVaultActivity extends Activity {
                 case MISSING:
                 default:
                     titleText = getString(MODEL_MISSING);
-                    detailText = getString(R.string.d_sv_missing_detail, SmartVaultModel.sizeLabel());
+                    detailText = getString(R.string.d_sv_missing_detail, SmartVaultModel.sizeLabel(SmartVaultActivity.this));
                     showRing = false;
                     action = getString(ACTION_DOWNLOAD);
                     onAction = v -> {
@@ -525,7 +525,7 @@ public final class SmartVaultActivity extends Activity {
         int pad = UiKit.dp(this, 12);
         toggle.setPadding(UiKit.dp(this, 4), pad, UiKit.dp(this, 4), pad);
         toggle.setBackground(UiKit.ripple(android.graphics.Color.TRANSPARENT, UiKit.accent(this), 12, this));
-        TextView body = muted(getString(DETAILS_BODY, SmartVaultModel.sizeLabel()));
+        TextView body = muted(getString(DETAILS_BODY, SmartVaultModel.sizeLabel(SmartVaultActivity.this)));
         body.setPadding(UiKit.dp(this, 4), 0, UiKit.dp(this, 4), UiKit.dp(this, 6));
         Runnable apply = () -> {
             toggle.setText((detailsOpen ? "▾  " : "▸  ") + getString(DETAILS_LABEL));

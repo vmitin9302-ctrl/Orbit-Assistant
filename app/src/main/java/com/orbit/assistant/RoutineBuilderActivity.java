@@ -303,7 +303,7 @@ public class RoutineBuilderActivity extends Activity {
         steps.setPadding(0, UiKit.dp(this, 3), 0, UiKit.dp(this, 10));
         card.addView(steps);
 
-        List<String> summaries = draft.stepSummaries();
+        List<String> summaries = draft.stepSummaries(this);
         for (int i = 0; i < summaries.size(); i++) {
             TextView step = UiKit.text(this, "✓  " + summaries.get(i), 13, UiKit.TEXT, false);
             step.setContentDescription(getString(R.string.rbuild_step_cd, i + 1, summaries.get(i)));

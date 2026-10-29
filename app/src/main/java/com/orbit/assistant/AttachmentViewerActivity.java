@@ -198,7 +198,7 @@ public final class AttachmentViewerActivity extends Activity {
         unavailableLp.setMargins(UiKit.dp(this, 32), 0, UiKit.dp(this, 32), 0);
         container.addView(unavailable, unavailableLp);
 
-        container.setContentDescription(model.descriptionAt(position));
+        container.setContentDescription(model.descriptionAt(this, position));
         Page page = new Page(container, image, unavailable);
         pager.addPage(container, new AttachmentPagerView.Page() {
             @Override public boolean canPanHorizontally(int direction) {
@@ -496,12 +496,12 @@ public final class AttachmentViewerActivity extends Activity {
 
     private void updateChrome() {
         if (counter == null) return;
-        String text = model.counterText();
+        String text = model.counterText(this);
         counter.setText(text);
         counter.setVisibility(text.isEmpty() ? View.INVISIBLE : View.VISIBLE);
         if (remove != null) {
             remove.setVisibility(session.removable() ? View.VISIBLE : View.GONE);
-            remove.setContentDescription(model.removeDescription());
+            remove.setContentDescription(model.removeDescription(this));
         }
         boolean many = model.size() > 1;
         if (previous != null) {
@@ -511,7 +511,7 @@ public final class AttachmentViewerActivity extends Activity {
             next.setVisibility(many && model.hasNext() ? View.VISIBLE : View.INVISIBLE);
         }
         for (int i = 0; i < pages.size(); i++) {
-            pages.get(i).container.setContentDescription(model.descriptionAt(i));
+            pages.get(i).container.setContentDescription(model.descriptionAt(this, i));
         }
         updateSourceBar();
     }

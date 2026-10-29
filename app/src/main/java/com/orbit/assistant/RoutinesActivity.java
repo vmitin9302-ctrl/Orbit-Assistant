@@ -692,7 +692,7 @@ public class RoutinesActivity extends Activity {
         LinearLayout titleRow = new LinearLayout(this);
         titleRow.setGravity(Gravity.CENTER_VERTICAL);
         String prefix = handedOff ? "↗ " : (success && !reversibleOff) ? "✓ " : (success ? "○ " : "! ");
-        TextView title = UiKit.text(this, prefix + RoutineActionCatalog.title(action), 13, tone, true);
+        TextView title = UiKit.text(this, prefix + RoutineActionCatalog.title(this, action), 13, tone, true);
         titleRow.addView(title, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
 
         if (success && ReversibleActionHelper.canTurnOff(action)) {
@@ -769,7 +769,7 @@ public class RoutinesActivity extends Activity {
     private void showActionConfirmation(AssistantReply.Action action, Runnable onAllow, Runnable onCancel) {
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.rtn_confirm_title))
-                .setMessage(action == null ? getString(R.string.rtn_device_action) : RoutineActionCatalog.title(action))
+                .setMessage(action == null ? getString(R.string.rtn_device_action) : RoutineActionCatalog.title(this, action))
                 .setNegativeButton(getString(R.string.rtn_cancel), (d, w) -> onCancel.run())
                 .setPositiveButton(getString(R.string.rtn_continue), (d, w) -> onAllow.run())
                 .create();
@@ -848,7 +848,7 @@ public class RoutinesActivity extends Activity {
         int max = Math.min(3, routine.actions.size());
         for (int i = 0; i < max; i++) {
             if (i > 0) out.append("  →  ");
-            out.append(RoutineActionCatalog.title(routine.actions.get(i)));
+            out.append(RoutineActionCatalog.title(this, routine.actions.get(i)));
         }
         if (routine.actions.size() > max) out.append("  →  ").append(getString(R.string.rtn_more, routine.actions.size() - max));
         return out.toString();

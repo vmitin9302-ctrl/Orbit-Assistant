@@ -714,6 +714,7 @@ public final class Prefs {
     }
 
     /** How the selection reads to a person. */
+    @Deprecated
     public static String proPreviewLabel(String value) {
         return PRO_PREVIEW_PRO.equals(normalizeProPreview(value)) ? "Pro Preview" : "Free";
     }

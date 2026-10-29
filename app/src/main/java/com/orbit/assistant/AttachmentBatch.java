@@ -61,6 +61,7 @@ public final class AttachmentBatch {
      * <p>Counts and Orbit's own words only. The single-attachment case reads exactly as it always
      * did, because the overwhelmingly common outcome should not start announcing arithmetic.
      */
+    @Deprecated
     public String summary() {
         if (cancelled) return "";
         if (attachments.isEmpty()) return error;

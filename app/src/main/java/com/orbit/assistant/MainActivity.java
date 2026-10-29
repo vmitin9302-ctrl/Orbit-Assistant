@@ -926,7 +926,7 @@ public class MainActivity extends Activity {
         AssistantClient.History h = chat.messages.get(chat.messages.size()-1);
         // Display only. The stored message keeps its Markdown and still renders in full when the
         // conversation is opened; this just spends the card's characters on words, not syntax.
-        String body = OrbitMarkdown.toPreviewText(h.content, 100);
+        String body = OrbitMarkdown.toPreviewText(this, h.content, 100);
         if (body.isEmpty()) body = compact(h.content, 100);
         return body + (h.screenAttached ? getString(R.string.ui_screen_attached_f32d803b) : "");
     }

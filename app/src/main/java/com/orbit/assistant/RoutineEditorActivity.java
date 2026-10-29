@@ -404,7 +404,7 @@ public class RoutineEditorActivity extends Activity {
 
         LinearLayout text = new LinearLayout(this);
         text.setOrientation(LinearLayout.VERTICAL);
-        TextView title = UiKit.text(this, RoutineActionCatalog.title(action), 13, UiKit.TEXT, false);
+        TextView title = UiKit.text(this, RoutineActionCatalog.title(this, action), 13, UiKit.TEXT, false);
         title.setMaxLines(2);
         text.addView(title);
         row.addView(text, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
@@ -417,7 +417,7 @@ public class RoutineEditorActivity extends Activity {
 
     /** The condition's own description, without the branch bookkeeping the editor now owns. */
     private String conditionTitle(AssistantReply.Action condition) {
-        String title = RoutineActionCatalog.title(condition);
+        String title = RoutineActionCatalog.title(this, condition);
         int marker = title.indexOf(" · with ELSE");
         return marker < 0 ? title : title.substring(0, marker);
     }
@@ -444,10 +444,10 @@ public class RoutineEditorActivity extends Activity {
 
         LinearLayout text = new LinearLayout(this);
         text.setOrientation(LinearLayout.VERTICAL);
-        TextView title = UiKit.text(this, RoutineActionCatalog.title(action), 14, UiKit.TEXT, true);
+        TextView title = UiKit.text(this, RoutineActionCatalog.title(this, action), 14, UiKit.TEXT, true);
         title.setMaxLines(1);
         text.addView(title);
-        TextView summary = UiKit.text(this, RoutineActionCatalog.summary(action), 11, UiKit.MUTED, false);
+        TextView summary = UiKit.text(this, RoutineActionCatalog.summary(this, action), 11, UiKit.MUTED, false);
         summary.setMaxLines(2);
         summary.setPadding(0, UiKit.dp(this, 3), 0, 0);
         text.addView(summary);

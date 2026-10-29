@@ -120,7 +120,7 @@ public final class RoutineTemplatesActivity extends Activity {
         description.setPadding(0, UiKit.dp(this, 6), 0, UiKit.dp(this, 9));
         card.addView(description);
 
-        TextView summary = UiKit.text(this, RoutineTemplateCatalog.actionSummary(template),
+        TextView summary = UiKit.text(this, RoutineTemplateCatalog.actionSummary(this, template),
                 12, UiKit.TEXT, false);
         summary.setMaxLines(2);
         summary.setPadding(0, 0, 0, UiKit.dp(this, 12));
@@ -156,7 +156,7 @@ public final class RoutineTemplatesActivity extends Activity {
         for (int i = 0; i < template.actions.size(); i++) {
             AssistantReply.Action action = template.actions.get(i);
             TextView step = UiKit.text(this,
-                    (i + 1) + ".  " + RoutineActionCatalog.title(action),
+                    (i + 1) + ".  " + RoutineActionCatalog.title(this, action),
                     13, UiKit.TEXT, false);
             step.setPadding(0, UiKit.dp(this, 5), 0, 0);
             content.addView(step);

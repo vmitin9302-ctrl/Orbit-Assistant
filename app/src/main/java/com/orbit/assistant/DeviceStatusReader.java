@@ -95,6 +95,7 @@ public final class DeviceStatusReader {
      * <p>A plug Android names something Orbit has no word for produces no phrase at all, rather
      * than a bracketed code the reader has to interpret.
      */
+    @Deprecated
     static String chargingPhrase(int plugged) {
         String source = plugSource(plugged);
         if (source.isEmpty()) return "";

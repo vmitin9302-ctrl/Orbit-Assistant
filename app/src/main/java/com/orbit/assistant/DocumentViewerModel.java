@@ -14,6 +14,7 @@ public final class DocumentViewerModel {
     public int page() { return page; }
     public boolean hasPrevious() { return page > 0; }
     public boolean hasNext() { return page + 1 < pageCount; }
+    @Deprecated
     public String counterText() {
         return pageCount <= 0 ? "" : "Page " + (page + 1) + " of " + pageCount;
     }

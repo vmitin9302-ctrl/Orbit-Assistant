@@ -371,6 +371,7 @@ public final class AiProvidersActivity extends Activity {
     }
 
     /** Compact positive capabilities, in scanning order (English; screens use the Context overload). */
+    @Deprecated
     static List<String> capabilityChips(AiCapabilities caps) {
         List<String> chips = new ArrayList<>();
         if (caps.streaming) chips.add("Live replies");

@@ -287,6 +287,7 @@ public final class OrbitLocalActionRouter {
      * still reported afterwards by the executor's own result, so this claims an intention and the
      * action result claims the outcome.
      */
+    @Deprecated
     static String speak(AssistantReply.Action action) {
         return speak(null, action);
     }

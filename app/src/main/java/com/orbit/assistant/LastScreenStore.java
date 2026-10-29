@@ -30,6 +30,8 @@ public final class LastScreenStore {
 
         public Bitmap image() { return AttachmentStore.load(imagePath); }
 
+        @Deprecated
+
         public String ageLabel() { return ageLabel(null); }
 
         /** The age in the app language; a null context gives the English text. */

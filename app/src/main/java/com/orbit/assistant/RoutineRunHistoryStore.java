@@ -63,6 +63,7 @@ public final class RoutineRunHistoryStore {
         }
 
         /** "Completed 3 of 3 steps" / "Failed at action 2: Discord Webhook". */
+        @Deprecated
         public String headline() {
             if (success) {
                 return totalSteps <= 0 ? "Completed"
@@ -93,6 +94,8 @@ public final class RoutineRunHistoryStore {
             if (SOURCE_WIDGET.equals(source)) return context.getString(R.string.runhist_widget);
             return context.getString(R.string.runhist_manual);
         }
+
+        @Deprecated
 
         public String sourceLabel() {
             if (SOURCE_TRIGGER.equals(source)) return "Automatic trigger";

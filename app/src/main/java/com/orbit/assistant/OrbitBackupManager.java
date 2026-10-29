@@ -71,6 +71,8 @@ public final class OrbitBackupManager {
                     optionalArray(data, "vault").length());
         }
 
+        @Deprecated
+
         public String confirmationMessage() {
             return "This valid Orbit " + sourceVersion + " backup contains " +
                     data.optJSONArray("conversations").length() + " chats, " +

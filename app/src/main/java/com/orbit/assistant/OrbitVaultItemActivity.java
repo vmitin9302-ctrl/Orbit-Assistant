@@ -527,7 +527,7 @@ public final class OrbitVaultItemActivity extends Activity {
             }
             row.setBackground(UiKit.rippleOutlined(UiKit.SURFACE,
                     UiKit.withAlpha(UiKit.accent(this), 30), UiKit.accent(this), 18, this));
-            row.setContentDescription(getString(R.string.vitem_related_desc, other.typeLabel(),
+            row.setContentDescription(getString(R.string.vitem_related_desc, other.typeLabel(this),
                     other.displayTitle()));
             row.setOnClickListener(v -> {
                 startActivity(new Intent(this, OrbitVaultItemActivity.class)
@@ -588,7 +588,7 @@ public final class OrbitVaultItemActivity extends Activity {
                 22, UiKit.TEXT, true));
         // A suggested title is marked as Orbit's right under it, so it is never mistaken for one
         // the user chose.
-        titles.addView(UiKit.text(this, item == null ? getString(R.string.vitem_header_vault) : item.typeLabel()
+        titles.addView(UiKit.text(this, item == null ? getString(R.string.vitem_header_vault) : item.typeLabel(this)
                         + (item.titleIsSuggested()
                         ? getString(R.string.vitem_suggested_title_suffix) : ""),
                 12, UiKit.MUTED, false));
@@ -693,8 +693,8 @@ public final class OrbitVaultItemActivity extends Activity {
 
     private View detailsCard(OrbitVaultItem item) {
         LinearLayout card = card();
-        StringBuilder details = new StringBuilder(item.typeLabel());
-        if (!item.source.isEmpty() && !item.source.equals(item.typeLabel())) {
+        StringBuilder details = new StringBuilder(item.typeLabel(this));
+        if (!item.source.isEmpty() && !item.source.equals(item.typeLabel(this))) {
             details.append(" · ").append(item.source);
         }
         card.addView(UiKit.text(this, details.toString(), 12, UiKit.MUTED, false));
@@ -714,10 +714,10 @@ public final class OrbitVaultItemActivity extends Activity {
             from.setPadding(0, UiKit.dp(this, 4), 0, 0);
             card.addView(from);
         }
-        TextView saved = UiKit.text(this, item.savedLabel(), 12, UiKit.MUTED, false);
+        TextView saved = UiKit.text(this, item.savedLabel(this), 12, UiKit.MUTED, false);
         saved.setPadding(0, UiKit.dp(this, 4), 0, 0);
         card.addView(saved);
-        String edited = item.modifiedLabel();
+        String edited = item.modifiedLabel(this);
         if (!edited.isEmpty()) {
             TextView modified = UiKit.text(this, edited, 12, UiKit.MUTED, false);
             modified.setPadding(0, UiKit.dp(this, 4), 0, 0);

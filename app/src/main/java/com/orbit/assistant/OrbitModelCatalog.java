@@ -367,6 +367,7 @@ public final class OrbitModelCatalog {
      * What Orbit says when an account cannot reach a model. Truthful, keeps the user's choice, and
      * says how to pick another one; Orbit never quietly answers with a different model instead.
      */
+    @Deprecated
     public static String unavailableMessage(String modelId) {
         String name = displayName(modelId);
         if (name.isEmpty()) name = modelId == null || modelId.trim().isEmpty()

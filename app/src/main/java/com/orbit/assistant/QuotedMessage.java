@@ -40,6 +40,7 @@ public final class QuotedMessage {
     public boolean fromAssistant() { return "assistant".equals(role); }
 
     /** "Orbit" or "You". */
+    @Deprecated
     public String speaker() { return fromAssistant() ? "Orbit" : "You"; }
 
     /** Same, in the app language. */

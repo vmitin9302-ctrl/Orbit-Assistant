@@ -156,6 +156,7 @@ public final class CalendarConfirmation {
     }
 
     /** The short card title for a Calendar batch, e.g. {@code Calendar · 12 events}. */
+    @Deprecated
     public static String cardTitle(AssistantReply.Action action) {
         return cardTitle(null, action);
     }

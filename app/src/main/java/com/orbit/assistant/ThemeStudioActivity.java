@@ -475,8 +475,8 @@ public final class ThemeStudioActivity extends Activity {
         effectColourSwatch.setBackground(UiKit.outlined(effect,
                 UiKit.withAlpha(OrbitContrast.inkOn(effect), 70), 11, this));
         effectColourSummary.setText(OrbitTheme.ACCENT.equals(style.backgroundEffectColor)
-                ? getString(R.string.ts_effect_theme_accent, OrbitColorName.of(effect))
-                : OrbitColorName.of(effect) + " · " + OrbitPalette.labelFor(style.backgroundEffectColor));
+                ? getString(R.string.ts_effect_theme_accent, OrbitColorName.of(this, effect))
+                : OrbitColorName.of(this, effect) + " · " + OrbitPalette.labelFor(style.backgroundEffectColor));
     }
 
     /**
@@ -516,7 +516,7 @@ public final class ThemeStudioActivity extends Activity {
     private void syncMaterial() {
         if (materialSegment == null) return;
         materialSegment.setSelected(OrbitTheme.materialIndex(draft.material));
-        materialNote.setText(OrbitFloatingSurface.materialDescription(draft.material));
+        materialNote.setText(OrbitFloatingSurface.materialDescription(this, draft.material));
     }
 
     /**
@@ -854,7 +854,7 @@ public final class ThemeStudioActivity extends Activity {
         materialSegment.setTitle(getString(R.string.ts_floating));
         String[] materials = OrbitTheme.materials();
         String[] labels = new String[materials.length];
-        for (int i = 0; i < materials.length; i++) labels[i] = OrbitTheme.materialLabel(materials[i]);
+        for (int i = 0; i < materials.length; i++) labels[i] = OrbitTheme.materialLabel(this, materials[i]);
         materialSegment.setOptions(labels);
         materialSegment.setSelected(OrbitTheme.materialIndex(draft.material));
         materialSegment.setOnSelectListener((view, index) ->
@@ -862,7 +862,7 @@ public final class ThemeStudioActivity extends Activity {
         card.addView(materialSegment, matchWrap(8));
 
         materialNote = UiKit.text(this,
-                OrbitFloatingSurface.materialDescription(draft.material), 12, UiKit.MUTED, false);
+                OrbitFloatingSurface.materialDescription(this, draft.material), 12, UiKit.MUTED, false);
         materialNote.setLineSpacing(0, 1.15f);
         card.addView(materialNote, matchWrap(6));
         return card;
@@ -919,7 +919,7 @@ public final class ThemeStudioActivity extends Activity {
                 UiKit.withAlpha(UiKit.accent(this), 60), UiKit.accent(this), 16, this));
         row.setMinimumHeight(UiKit.dp(this, 62));
         row.setContentDescription(getString(R.string.ts_row_desc, title, description,
-                OrbitColorName.describe("", resolved), summary));
+                OrbitColorName.describe(this, "", resolved), summary));
         UiKit.pressScale(row);
         row.setOnClickListener(v -> {
             UiKit.haptic(v, HapticFeedbackConstants.VIRTUAL_KEY);
@@ -939,7 +939,7 @@ public final class ThemeStudioActivity extends Activity {
         labels.setOrientation(LinearLayout.VERTICAL);
         labels.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS);
         labels.addView(UiKit.text(this, title, 14.5f, UiKit.TEXT, true));
-        labels.addView(UiKit.text(this, OrbitColorName.of(resolved) + " · " + summary,
+        labels.addView(UiKit.text(this, OrbitColorName.of(this, resolved) + " · " + summary,
                 12, UiKit.MUTED, false));
         row.addView(labels, new LinearLayout.LayoutParams(0,
                 ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
@@ -1353,7 +1353,7 @@ public final class ThemeStudioActivity extends Activity {
                 (v, settled) -> editPro(draft.pro.withGlassEdge(v), settled)), matchWrap(12));
         glass.addView(glassControls, matchWrap(10));
 
-        noGlassNote = UiKit.text(this, OrbitFloatingSurface.noGlassNote(), 12, UiKit.MUTED, false);
+        noGlassNote = UiKit.text(this, OrbitFloatingSurface.noGlassNote(this), 12, UiKit.MUTED, false);
         noGlassNote.setLineSpacing(0, 1.15f);
         glass.addView(noGlassNote, matchWrap(10));
         proBody.addView(glass, matchWrap(14));
@@ -1392,7 +1392,7 @@ public final class ThemeStudioActivity extends Activity {
 
         // The note that explains why a configured effect is not on screen. Held rather than added and
         // removed, so turning AMOLED on does not change the height of this panel.
-        amoledBackgroundNote = UiKit.text(this, OrbitBackground.amoledSuppressionNote(),
+        amoledBackgroundNote = UiKit.text(this, OrbitBackground.amoledSuppressionNote(this),
                 12, UiKit.MUTED, false);
         amoledBackgroundNote.setLineSpacing(0, 1.15f);
         panel.addView(amoledBackgroundNote, matchWrap(10));
@@ -1604,7 +1604,7 @@ public final class ThemeStudioActivity extends Activity {
         editPro(draft.pro.withBackgroundMode(mode), true);
         if (!amoledToastShown && draft.amoled && draft.pro.hasBackgroundEffect()) {
             amoledToastShown = true;
-            Toast.makeText(this, OrbitBackground.amoledToast(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, OrbitBackground.amoledToast(this), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -1853,7 +1853,7 @@ public final class ThemeStudioActivity extends Activity {
                         : preset.builtIn ? getString(R.string.ts_spoken_preset)
                         : getString(R.string.ts_spoken_yours))
                 + (locked ? getString(R.string.ts_spoken_locked) : "")
-                + (preset.note().isEmpty() ? "" : ", " + preset.note());
+                + (preset.note(this).isEmpty() ? "" : ", " + preset.note(this));
         UiKit.pressScale(card);
         card.setOnClickListener(v -> {
             UiKit.haptic(v, HapticFeedbackConstants.VIRTUAL_KEY);
@@ -1887,7 +1887,7 @@ public final class ThemeStudioActivity extends Activity {
 
         // The one built-in note Orbit ships sits on this line rather than becoming a badge, so a
         // card stays a swatch strip, a name and one quiet line whatever theme it describes.
-        String note = preset.note();
+        String note = preset.note(this);
         // A premium card says what it is on the line every card already has, rather than growing a
         // badge. Locked is stated in words here and in the card's spoken description, so the state
         // never depends on noticing a colour.
@@ -1908,7 +1908,7 @@ public final class ThemeStudioActivity extends Activity {
         }
 
         String spokenTail = getString(R.string.ts_spoken_tail,
-                OrbitColorName.of(tokens.background), OrbitColorName.of(tokens.accent));
+                OrbitColorName.of(this, tokens.background), OrbitColorName.of(this, tokens.accent));
         // The selected state itself is left to syncPresetSelection, so there is exactly one place
         // that decides what a selected card looks like and says.
         return new PresetCard(preset, card, name, tick, spokenBase, spokenTail);
@@ -2197,7 +2197,7 @@ public final class ThemeStudioActivity extends Activity {
         TextView name = UiKit.text(this, imported.name, 15, UiKit.TEXT, true);
         name.setPadding(0, UiKit.dp(this, 13), 0, 0);
         body.addView(name);
-        body.addView(UiKit.text(this, OrbitThemeFileCodec.describe(imported), 12, UiKit.MUTED, false));
+        body.addView(UiKit.text(this, OrbitThemeFileCodec.describe(this, imported), 12, UiKit.MUTED, false));
 
         boolean dirty = isDirty();
         String note = getString(dirty ? R.string.ts_import_note_dirty : R.string.ts_import_note_clean);

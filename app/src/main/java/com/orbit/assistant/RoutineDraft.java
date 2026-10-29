@@ -406,6 +406,8 @@ public final class RoutineDraft {
         }
     }
 
+    @Deprecated
+
     public List<String> stepSummaries() {
         return stepSummaries(null);
     }

@@ -2392,7 +2392,7 @@ public class OrbitSession extends VoiceInteractionSession {
             return added.accepted + getContext().getString(R.string.ui_added_up_to_282e0aa8) + ComposerAttachments.MAX_PER_TURN
                     + getContext().getString(R.string.ui_attachments_per_message_79deb9e0);
         }
-        return batch.summary();
+        return batch.summary(getContext());
     }
 
     private void removeComposerAttachment(String id) {
@@ -3215,7 +3215,7 @@ public class OrbitSession extends VoiceInteractionSession {
             if (cm != null) cm.setPrimaryClip(ClipData.newPlainText(getContext().getString(R.string.ui_orbit_reply_c9eb8063), draft));
             copy.setText(getContext().getString(R.string.ui_copied_58d73ef4));
             stateTextSafe(kind == ReplyDraftOutcome.Kind.DRAFT
-                    ? ReplySurface.copiedMessage(surface, appLabel) : getContext().getString(R.string.ui_copied_8d525e5f));
+                    ? ReplySurface.copiedMessage(getContext(), surface, appLabel) : getContext().getString(R.string.ui_copied_8d525e5f));
             DiagnosticStore.recordReplyDestination(c,
                     ReplySurface.diagnosticsName(surface, false));
             if (Prefs.haptics(c)) vibrate(12);
@@ -3231,7 +3231,7 @@ public class OrbitSession extends VoiceInteractionSession {
         // reply: Orbit will not offer to send something it cannot vouch for.
         boolean offerInsert = kind == ReplyDraftOutcome.Kind.DRAFT && ReplySurface.canInsert(surface);
         if (offerInsert) {
-            Button use = tinyTextButton(ReplySurface.insertLabel(surface));
+            Button use = tinyTextButton(ReplySurface.insertLabel(getContext(), surface));
             use.setTextColor(UiKit.onAccent(c));
             use.setBackground(UiKit.ripple(UiKit.accent(c), UiKit.onAccent(c), 15, c));
             use.setPadding(UiKit.dp(c, 14), 0, UiKit.dp(c, 14), 0);
@@ -3257,7 +3257,7 @@ public class OrbitSession extends VoiceInteractionSession {
                     stateTextSafe(result);
                     use.setText(getContext().getString(R.string.ui_copied_instead_f4358811));
                     main.postDelayed(() -> {
-                        if (use != null) use.setText(ReplySurface.insertLabel(surface));
+                        if (use != null) use.setText(ReplySurface.insertLabel(getContext(), surface));
                         stateTextSafe(readyState());
                     }, 1700);
                 }
@@ -3758,7 +3758,7 @@ public class OrbitSession extends VoiceInteractionSession {
             titleRow.addView(grant, grantLp);
         }
         if (result != null
-                && CalendarActionExecutor.needsTargetChoice(action, result.status, result.message)) {
+                && CalendarActionExecutor.needsTargetChoice(getContext(), action, result.status, result.message)) {
             Button choose = actionCardControlButton(getContext().getString(R.string.ui_choose_calendar_c422fd93), UiKit.accent(c));
             choose.setOnClickListener(v -> chooseCalendarForCard(v, card, action, entry));
             LinearLayout.LayoutParams chooseLp = new LinearLayout.LayoutParams(
@@ -3831,7 +3831,7 @@ public class OrbitSession extends VoiceInteractionSession {
             case "DIAL_CONTACT": return getContext().getString(R.string.ui_call_8080d0e1) + clip(p.optString("name", getContext().getString(R.string.ui_contact_2b5c3d26)), 34);
             case "SMS_CONTACT": return getContext().getString(R.string.ui_message_894fb8fb) + clip(p.optString("name", getContext().getString(R.string.ui_contact_2b5c3d26)), 34);
             case "CREATE_EVENT": return getContext().getString(R.string.ui_calendar_composer_876c0d9f) + clip(p.optString("title", getContext().getString(R.string.ui_event_4e1f49a9)), 34);
-            case CalendarActionExecutor.ACTION_TYPE: return CalendarConfirmation.cardTitle(action);
+            case CalendarActionExecutor.ACTION_TYPE: return CalendarConfirmation.cardTitle(getContext(), action);
             case "FLASHLIGHT": return p.optBoolean("on", true) ? getContext().getString(R.string.ui_flashlight_on_efbf6bed) : getContext().getString(R.string.ui_flashlight_off_667a783b);
             case "SET_VOLUME": return getContext().getString(R.string.ui_media_volume_c20a2d77) + p.optInt("percent", 50) + "%";
             case "SET_BRIGHTNESS": return getContext().getString(R.string.ui_brightness_f04b5cd0) + p.optInt("percent", 50) + "%";
@@ -3918,7 +3918,7 @@ public class OrbitSession extends VoiceInteractionSession {
         messages.addView(card[0], bubbleLp(Gravity.START, UiKit.dp(c, 330)));
         scrollBottom();
         card[0].announceForAccessibility(
-                ProtectedDialConfirmationView.announcement(confirmation.displayNumber()));
+                ProtectedDialConfirmationView.announcement(getContext(), confirmation.displayNumber()));
     }
 
     /** The confirmation sheet itself, with the destination as an editable field inside it. */

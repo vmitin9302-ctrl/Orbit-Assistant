@@ -407,7 +407,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         categoryList.setVisibility(View.GONE);
         searchResults.setVisibility(View.VISIBLE);
 
-        List<SettingsSearchIndex.Entry> matches = SettingsSearchIndex.search(text);
+        List<SettingsSearchIndex.Entry> matches = SettingsSearchIndex.search(getResources(), text);
         if (matches.isEmpty()) {
             LinearLayout empty = card();
             empty.addView(UiKit.text(this, getString(R.string.ui_no_settings_found_3e4d15d4), 16, UiKit.TEXT, true));
@@ -535,7 +535,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
     /** For tests: the results currently drawn for a query, without touching the field. */
     java.util.List<String> searchResultTitlesForTest(String query) {
         java.util.List<String> titles = new java.util.ArrayList<>();
-        for (SettingsSearchIndex.Entry entry : SettingsSearchIndex.search(query)) {
+        for (SettingsSearchIndex.Entry entry : SettingsSearchIndex.search(getResources(), query)) {
             titles.add(entry.title);
         }
         return titles;
@@ -1644,7 +1644,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
     private void confirmRestore(OrbitBackupManager.PreparedRestore prepared) {
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle(getString(R.string.ui_restore_orbit_backup_add4c9b6))
-                .setMessage(prepared.confirmationMessage())
+                .setMessage(prepared.confirmationMessage(this))
                 .setNegativeButton(getString(R.string.ui_cancel_19766ed6), null)
                 .setPositiveButton(getString(R.string.ui_restore_a76e13b9), (d, which) -> runRestore(prepared))
                 .create();

@@ -317,7 +317,7 @@ public final class OrbitVaultPickerActivity extends Activity {
         title.setEllipsize(TextUtils.TruncateAt.END);
         words.addView(title);
 
-        StringBuilder meta = new StringBuilder(item.typeLabel());
+        StringBuilder meta = new StringBuilder(item.typeLabel(this));
         if (item.isLink() && !item.hostLabel().isEmpty()) meta.append(" · ").append(item.hostLabel());
         if (item.hasNote()) meta.append(" · ").append(getString(R.string.vaultpick_has_note));
         TextView metaText = UiKit.text(this, meta.toString(), 11, UiKit.MUTED, false);
@@ -344,7 +344,7 @@ public final class OrbitVaultPickerActivity extends Activity {
                 UiKit.withAlpha(UiKit.accent(this), selected ? 190 : 34),
                 UiKit.accent(this), 18, this));
         row.setContentDescription(getString(selected ? R.string.vaultpick_row_selected
-                : R.string.vaultpick_row_not_selected, item.typeLabel(), item.displayTitle()));
+                : R.string.vaultpick_row_not_selected, item.typeLabel(this), item.displayTitle()));
         row.setOnClickListener(v -> toggle(item));
         UiKit.pressScale(row);
         return row;

@@ -1131,7 +1131,7 @@ public class ChatActivity extends Activity {
             } else if (drawn < h.documents.size()) {
                 final DocumentReference document = h.documents.get(drawn);
                 image.setContentDescription(document.namesPage()
-                        ? getString(R.string.ui_open_b8039d1d) + document.label + ", " + document.pageLabel()
+                        ? getString(R.string.ui_open_b8039d1d) + document.label + ", " + document.pageLabel(this)
                         : getString(R.string.ui_open_b8039d1d) + document.label + getString(R.string.ui_in_document_viewer_6e8404a5));
                 image.setOnClickListener(v -> openDocumentAt(document));
                 UiKit.pressScale(image);
@@ -1208,7 +1208,7 @@ public class ChatActivity extends Activity {
         }
         if (kind.contains("pdf") || !h.documents.isEmpty()) {
             String page = !h.documents.isEmpty() && h.documents.get(0).namesPage()
-                    ? " · " + h.documents.get(0).pageLabel() : "";
+                    ? " · " + h.documents.get(0).pageLabel(context) : "";
             return "PDF" + page + (loaded ? context.getString(R.string.core_meta_text_loaded) : "");
         }
         if (kind.contains("text") || kind.contains("clipboard") || kind.contains("vault"))
@@ -2027,7 +2027,7 @@ public class ChatActivity extends Activity {
         });
         UiKit.styleOrbitDialog(dialog, this, false, new ColorDrawable(Color.TRANSPARENT), -1f,
                 () -> card.announceForAccessibility(
-                        ProtectedDialConfirmationView.announcement(confirmation.displayNumber())));
+                        ProtectedDialConfirmationView.announcement(this, confirmation.displayNumber())));
         dialog.show();
     }
 
@@ -2197,7 +2197,7 @@ public class ChatActivity extends Activity {
             grantLp.setMargins(UiKit.dp(this, 10), 0, 0, 0);
             titleRow.addView(grant, grantLp);
         }
-        if (CalendarActionExecutor.needsTargetChoice(action, entry.status, entry.message)) {
+        if (CalendarActionExecutor.needsTargetChoice(this, action, entry.status, entry.message)) {
             Button choose = actionCardControlButton(getString(R.string.ui_choose_calendar_c422fd93), UiKit.accent(this));
             choose.setOnClickListener(v -> chooseCalendarForCard(v, entry, action));
             LinearLayout.LayoutParams chooseLp = new LinearLayout.LayoutParams(
@@ -2314,7 +2314,7 @@ public class ChatActivity extends Activity {
             case "SET_ALARM": return getString(R.string.ui_alarm_f3b67957);
             case "NAVIGATE": return getString(R.string.ui_navigate_6ab4ceec) + p.optString("query", p.optString("destination", getString(R.string.ui_destination_293d404a)));
             case "CREATE_EVENT": return getString(R.string.ui_calendar_composer_876c0d9f) + p.optString("title", getString(R.string.ui_event_4e1f49a9));
-            case CalendarActionExecutor.ACTION_TYPE: return CalendarConfirmation.cardTitle(action);
+            case CalendarActionExecutor.ACTION_TYPE: return CalendarConfirmation.cardTitle(this, action);
             default:
                 String raw = type.toLowerCase(java.util.Locale.US).replace('_', ' ');
                 return raw.isEmpty() ? getString(R.string.ui_device_action_50816511) : raw.substring(0, 1).toUpperCase(java.util.Locale.US) + raw.substring(1);
@@ -2755,7 +2755,7 @@ public class ChatActivity extends Activity {
                 ? getString(R.string.ui_current_screen_87e519a5) : snapshot.appLabel;
         String context = snapshot.text == null ? "" : snapshot.text;
         setScreenAttachment(new ComposerAttachment("screen",
-                getString(R.string.ui_screen_eae0e9c3) + app + " · " + snapshot.ageLabel(), context, image));
+                getString(R.string.ui_screen_eae0e9c3) + app + " · " + snapshot.ageLabel(this), context, image));
     }
 
     private void openScreenSelection() {
@@ -2797,7 +2797,7 @@ public class ChatActivity extends Activity {
         pendingScreenSelectionPackage = snapshot.packageName;
         pendingScreenSelectionApp = snapshot.appLabel == null || snapshot.appLabel.trim().isEmpty()
                 ? getString(R.string.ui_current_screen_87e519a5) : snapshot.appLabel;
-        pendingScreenSelectionAge = snapshot.ageLabel();
+        pendingScreenSelectionAge = snapshot.ageLabel(this);
         screenSelectionOpening = true;
         Toast.makeText(this, getString(R.string.ui_opening_screen_selection_513a0263), Toast.LENGTH_SHORT).show();
         attachmentExecutor.execute(() -> {
@@ -2907,7 +2907,7 @@ public class ChatActivity extends Activity {
             }
         }
         refreshAttachmentStrip(true);
-        String message = batch.summary();
+        String message = batch.summary(this);
         if (added.hitLimit() || batch.rejected > batch.accepted() - added.accepted) {
             // The full sentence only appears when something really was left out, so an ordinary
             // selection is not made to announce arithmetic.
@@ -3803,7 +3803,7 @@ public class ChatActivity extends Activity {
         LinearLayout body = new LinearLayout(this);
         body.setOrientation(LinearLayout.VERTICAL);
         body.setPadding(UiKit.dp(this, 22), UiKit.dp(this, 6), UiKit.dp(this, 22), 0);
-        for (String[] row : details.rows()) {
+        for (String[] row : details.rows(this)) {
             LinearLayout line = new LinearLayout(this);
             line.setPadding(0, UiKit.dp(this, 5), 0, UiKit.dp(this, 5));
             TextView label = UiKit.text(this, row[0], 14, UiKit.MUTED, false);
@@ -3895,19 +3895,19 @@ public class ChatActivity extends Activity {
             quoteCard.setVisibility(View.GONE);
             return;
         }
-        quoteCardText.setText(pendingQuote.speaker() + ": " + pendingQuote.preview());
-        quoteCard.setContentDescription(getString(R.string.ui_replying_to_3d393bf1) + pendingQuote.speaker() + ": "
+        quoteCardText.setText(pendingQuote.speaker(this) + ": " + pendingQuote.preview());
+        quoteCard.setContentDescription(getString(R.string.ui_replying_to_3d393bf1) + pendingQuote.speaker(this) + ": "
                 + pendingQuote.preview());
         quoteCard.setVisibility(View.VISIBLE);
     }
 
     /** The small line above a sent message naming what it replied to. */
     private void addSentQuote(QuotedMessage quote) {
-        TextView line = UiKit.text(this, "↪ " + quote.speaker() + ": " + quote.preview(), 12,
+        TextView line = UiKit.text(this, "↪ " + quote.speaker(this) + ": " + quote.preview(), 12,
                 UiKit.MUTED, false);
         line.setMaxLines(1);
         line.setEllipsize(android.text.TextUtils.TruncateAt.END);
-        line.setContentDescription(getString(R.string.ui_in_reply_to_2d795379) + quote.speaker() + ": " + quote.preview());
+        line.setContentDescription(getString(R.string.ui_in_reply_to_2d795379) + quote.speaker(this) + ": " + quote.preview());
         line.setPadding(UiKit.dp(this, 12), UiKit.dp(this, 4), UiKit.dp(this, 6), 0);
         messages.addView(line, bubbleLp(Gravity.END, UiKit.dp(this, 300)));
     }
