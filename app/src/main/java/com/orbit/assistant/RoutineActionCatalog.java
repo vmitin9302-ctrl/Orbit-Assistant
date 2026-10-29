@@ -194,13 +194,16 @@ public final class RoutineActionCatalog {
             case IF_CONDITION: {
                 int next = RoutineConditionEvaluator.gatedSteps(action);
                 int otherwise = RoutineBranch.elseSteps(action);
-                String target = plural(c, R.plurals.rcat_next_steps, next,
-                        "the next step", "the next %d steps");
+                String target = next == 1 ? t(c, R.string.rcat_next_one, "the next step")
+                        : plural(c, R.plurals.rcat_next_steps, next,
+                                "the next %d step", "the next %d steps");
                 if (otherwise > 0) {
                     // With an ELSE the interesting fact is that exactly one path runs, so the
                     // summary describes the split rather than repeating the condition mode.
-                    String elseTarget = plural(c, R.plurals.rcat_steps_after, otherwise,
-                            "the step after", "the %d steps after");
+                    String elseTarget = otherwise == 1
+                            ? t(c, R.string.rcat_after_one, "the step after")
+                            : plural(c, R.plurals.rcat_steps_after, otherwise,
+                                    "the %d step after", "the %d steps after");
                     return t(c, R.string.rcat_sum_if_else,
                             "Runs %1$s when true, otherwise %2$s, then continues the routine",
                             target, elseTarget);
