@@ -104,7 +104,7 @@ public final class LocalCommandRouter {
                 if (relative.absolute) params.put("percent", relative.percent);
                 else params.put("delta", relative.delta);
                 return new ParsedCommand(action(relative.actionType(), params),
-                        relative.confirmation(), relative.summary());
+                        relative.confirmation(c), relative.summary(c));
             }
             Matcher brightness = Pattern.compile("(?:set|change|make|put|lower|raise|increase|decrease)?\\s*(?:my\\s+)?brightness(?:\\s*(?:to|at))?\\s*(\\d{1,3})\\s*%?").matcher(q);
             if (brightness.find()) {
@@ -243,7 +243,7 @@ public final class LocalCommandRouter {
         if (resolved.absolute) params.put("percent", resolved.percent);
         else params.put("delta", resolved.delta);
         return new ParsedCommand(action(resolved.actionType(), params),
-                resolved.confirmation(), resolved.summary());
+                resolved.confirmation(c), resolved.summary(c));
     }
 
     /**

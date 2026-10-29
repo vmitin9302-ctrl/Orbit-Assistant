@@ -1375,7 +1375,7 @@ public class ChatActivity extends Activity {
             UiKit.haptic(send, android.view.HapticFeedbackConstants.LONG_PRESS);
         }
         AiSelectorDialog.show(this, getString(R.string.ui_send_this_message_with_202df23c), currentSelection,
-                s -> getString(R.string.ui_send_with_c889ac71) + s.label(),
+                s -> getString(R.string.ui_send_with_c889ac71) + s.label(this),
                 chosen -> submit(false, SubmissionGate.SOURCE_BUTTON, chosen));
     }
 
@@ -3217,19 +3217,19 @@ public class ChatActivity extends Activity {
         if (s.isAuto()) {
             // Auto in the same pill an explicit model uses, and no strength pill beside it: Auto
             // chooses the strength per request. Nothing about routing is shown here.
-            modelPill.setText(AiSelection.AUTO_LABEL + " " + AiSelectorDialog.AUTO_MARK + "  ▾");
+            modelPill.setText(AiSelection.autoLabel(this) + " " + AiSelectorDialog.AUTO_MARK + "  ▾");
             modelPill.setMaxWidth(UiKit.dp(this, roomForProvider() ? 300 : narrowModelPillWidthDp()));
             modelPill.setContentDescription(getString(R.string.ui_ai_auto_orbit_chooses_the_model_and_reasoning_02dbb66f)
                     + getString(R.string.ui_level_for_each_request_tap_to_change_f15996c5));
             strengthPill.setVisibility(View.GONE);
             return;
         }
-        String model = roomForProvider() ? s.providerName() + " · " + s.modelName()
-                : s.modelName() + s.routeSuffix();
+        String model = roomForProvider() ? s.providerName() + " · " + s.modelName(this)
+                : s.modelName(this) + s.routeSuffix();
         modelPill.setText(model + "  ▾");
         modelPill.setMaxWidth(UiKit.dp(this,
                 roomForProvider() ? 300 : narrowModelPillWidthDp()));
-        modelPill.setContentDescription(getString(R.string.ui_ai_dd54be8d) + s.providerName() + ", " + s.modelName()
+        modelPill.setContentDescription(getString(R.string.ui_ai_dd54be8d) + s.providerName() + ", " + s.modelName(this)
                 + getString(R.string.ui_tap_to_change_provider_or_model_af8ec914));
         boolean strengths = s.strength != null;
         strengthPill.setVisibility(strengths ? View.VISIBLE : View.GONE);
@@ -3252,7 +3252,7 @@ public class ChatActivity extends Activity {
 
     private void showAiSelector() {
         AiSelectorDialog.show(this, getString(R.string.ui_ai_for_this_chat_1123aed6), currentSelection,
-                s -> getString(R.string.ui_use_bb33dbdb) + s.label(), this::applySelection);
+                s -> getString(R.string.ui_use_bb33dbdb) + s.label(this), this::applySelection);
     }
 
     /** Strength alone, straight from its pill: only what the selected model accepts. */
@@ -3283,7 +3283,7 @@ public class ChatActivity extends Activity {
         if (Prefs.haptics(this) && modelPill != null) {
             UiKit.haptic(modelPill, android.view.HapticFeedbackConstants.CLOCK_TICK);
         }
-        Toast.makeText(this, getString(R.string.ui_this_chat_now_uses_000ac347) + resolved.label(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.ui_this_chat_now_uses_000ac347) + resolved.label(this), Toast.LENGTH_SHORT).show();
     }
 
     private void addFailureStateIfNeeded() {
@@ -3609,7 +3609,7 @@ public class ChatActivity extends Activity {
                                     + user.attachmentCount() + getString(R.string.ui_original_images_774edc8f),
                     Toast.LENGTH_SHORT).show();
         } else if (override != null) {
-            Toast.makeText(this, getString(R.string.ui_retrying_with_343d3123) + selection.label(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.ui_retrying_with_343d3123) + selection.label(this), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -3638,7 +3638,7 @@ public class ChatActivity extends Activity {
             return;
         }
         AiSelectorDialog.show(this, getString(R.string.ui_retry_with_d009aa79), currentSelection,
-                s -> getString(R.string.ui_retry_with_143a8e70) + s.label(), this::retryLastResponse);
+                s -> getString(R.string.ui_retry_with_143a8e70) + s.label(this), this::retryLastResponse);
     }
 
     // ---- response actions ------------------------------------------------------------------------

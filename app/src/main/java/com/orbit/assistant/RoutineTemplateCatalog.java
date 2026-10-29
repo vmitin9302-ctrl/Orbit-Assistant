@@ -66,7 +66,6 @@ public final class RoutineTemplateCatalog {
         return TEMPLATES;
     }
 
-    @Deprecated
 
     public static String actionSummary(Template template) {
         if (template == null || template.actions.isEmpty()) return "No steps";
@@ -241,7 +240,6 @@ public final class RoutineTemplateCatalog {
         return RoutineActionCatalog.labelForType(context, action.type);
     }
 
-    @Deprecated
 
     private static String shortActionLabel(AssistantReply.Action action) {
         if (action == null || action.type == null) return "Action";

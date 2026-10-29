@@ -87,7 +87,6 @@ final class KeptContext {
     boolean isUsable() { return !text.trim().isEmpty() && isKeepable(kind); }
 
     /** "Document", "Text", "Vault item": what the sheet says this is, never a path. */
-    @Deprecated
     String typeLabel() {
         switch (kind) {
             case "pdf": return "PDF";

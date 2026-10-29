@@ -487,7 +487,7 @@ public final class ChatGptClient {
                 if (OrbitModelCatalog.looksUnavailable(model, friendly)) {
                     DiagnosticStore.recordModelUnavailable(context, model);
                     ModelAvailability.markUnavailable(context, sent.provider, model);
-                    cb.onError(OrbitModelCatalog.unavailableMessage(model));
+                    cb.onError(OrbitModelCatalog.unavailableMessage(context, model));
                     return;
                 }
                 cb.onError(friendly);

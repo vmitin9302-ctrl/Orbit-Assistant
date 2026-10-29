@@ -46,7 +46,6 @@ public final class DeviceCapabilityCheck {
             return summaryArg == null ? c.getString(summaryRes) : c.getString(summaryRes, summaryArg);
         }
 
-        @Deprecated
 
         public String tierLabel() {
             return label;

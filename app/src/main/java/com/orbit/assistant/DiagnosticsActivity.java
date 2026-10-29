@@ -701,7 +701,7 @@ public final class DiagnosticsActivity extends Activity {
 
     private String defaultSelectionLabel() {
         AiSelection s = AiSelections.globalDefault(this);
-        return s.providerName() + " · " + s.label();
+        return s.providerName() + " · " + s.label(this);
     }
 
     /**

@@ -764,6 +764,18 @@ public final class OrbitProStyle {
 
     // ---- how each value reads to a person ------------------------------------------------------------
 
+    public String bubbleRadiusLabel(android.content.Context context) { return context.getString(bubbleRadiusLabelRes()); }
+    public String bubbleOutlineLabel(android.content.Context context) { return context.getString(bubbleOutlineLabelRes()); }
+    public String glassOpacityLabel(android.content.Context context) { return context.getString(glassOpacityLabelRes()); }
+    public String glassTintLabel(android.content.Context context) { return context.getString(glassTintLabelRes()); }
+    public String glassEdgeLabel(android.content.Context context) { return context.getString(glassEdgeLabelRes()); }
+    public String backgroundModeLabel(android.content.Context context) { return context.getString(backgroundModeLabelRes()); }
+    public String directionLabel(android.content.Context context) { return context.getString(directionLabelRes()); }
+    public String glowPositionLabel(android.content.Context context) { return context.getString(glowPositionLabelRes()); }
+    public String glowStrengthLabel(android.content.Context context) { return context.getString(glowStrengthLabelRes()); }
+    public String gradientStrengthLabel(android.content.Context context) { return context.getString(gradientStrengthLabelRes()); }
+    public String glowSizeLabel(android.content.Context context) { return context.getString(glowSizeLabelRes()); }
+
     public String bubbleRadiusLabel() {
         if (bubbleRadiusDp <= 11) return "Squared";
         if (bubbleRadiusDp <= 15) return "Restrained";

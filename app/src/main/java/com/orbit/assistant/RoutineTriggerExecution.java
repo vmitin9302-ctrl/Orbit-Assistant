@@ -38,7 +38,7 @@ public final class RoutineTriggerExecution {
         int missingAccessIndex = firstKnownMissingAccess(c, routine, visible);
         if (missingAccessIndex >= 0) {
             AssistantReply.Action blocked = routine.actions.get(missingAccessIndex);
-            String actionName = RoutineActionCatalog.title(blocked);
+            String actionName = RoutineActionCatalog.title(c, blocked);
             String reason = c.getString(R.string.rtexec_grant, actionName);
             updateStatus(c, trigger.id, firedAt, c.getString(R.string.rtexec_needs_access, actionName));
             RoutineTriggerNotifier.notifyFailure(c, routine, trigger.id, missingAccessIndex, reason);
@@ -83,7 +83,7 @@ public final class RoutineTriggerExecution {
 
         if (allowed.isEmpty() && firstBlocked >= 0) {
             AssistantReply.Action blocked = routine.actions.get(firstBlocked);
-            String actionName = RoutineActionCatalog.title(blocked);
+            String actionName = RoutineActionCatalog.title(c, blocked);
             String state = blocked != null && blocked.requiresConfirmation
                     ? c.getString(R.string.rtexec_confirm, actionName)
                     : c.getString(R.string.rtexec_visible, actionName);
@@ -124,7 +124,7 @@ public final class RoutineTriggerExecution {
                         return;
                     }
                     if (firstBlocked >= 0) {
-                        String actionName = RoutineActionCatalog.title(routine.actions.get(firstBlocked));
+                        String actionName = RoutineActionCatalog.title(c, routine.actions.get(firstBlocked));
                         updateStatus(c, trigger.id, firedAt, c.getString(R.string.rtexec_partial, actionName));
                         RoutineTriggerNotifier.notifyNeedsContinuation(c, routine, trigger.id, firstBlocked,
                                 c.getString(R.string.rtexec_bg_done, firstBlocked + 1, actionName));

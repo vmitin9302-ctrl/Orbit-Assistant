@@ -89,13 +89,13 @@ public final class CalendarConfirmation {
             // Still a confirmation rather than a silent failure: the user sees why nothing will be
             // written, and Cancel and Continue both end with zero events added.
             lines.add(plan.error.isEmpty() ? context.getString(R.string.calconf_invalid) : plan.error);
-            return new Preview(context.getString(R.string.calconf_add_title), lines, resolved.selectorLabel(),
+            return new Preview(context.getString(R.string.calconf_add_title), lines, resolved.selectorLabel(context),
                     resolved.canChoose(), resolved.resolved(), resolved.needsChoice(), 0);
         }
 
         int count = plan.size();
         String title = context.getResources().getQuantityString(R.plurals.calconf_add_to,
-                count, count, resolved.destinationName());
+                count, count, resolved.destinationName(context));
 
         String range = plan.dateRange();
         if (!range.isEmpty()) lines.add(range);
@@ -121,13 +121,13 @@ public final class CalendarConfirmation {
         } else if (!resolved.permitted) {
             lines.add(context.getString(R.string.calconf_need_access));
         }
-        return new Preview(title, lines, resolved.selectorLabel(), resolved.canChoose(),
+        return new Preview(title, lines, resolved.selectorLabel(context), resolved.canChoose(),
                 resolved.resolved(), resolved.needsChoice(), count);
     }
 
     /** The calendar Orbit would use, named the way the confirmation and the result both name it. */
     public static String targetName(Context context) {
-        return CalendarTargetResolver.state(context).destinationName();
+        return CalendarTargetResolver.state(context).destinationName(context);
     }
 
     /**
@@ -156,7 +156,6 @@ public final class CalendarConfirmation {
     }
 
     /** The short card title for a Calendar batch, e.g. {@code Calendar · 12 events}. */
-    @Deprecated
     public static String cardTitle(AssistantReply.Action action) {
         return cardTitle(null, action);
     }

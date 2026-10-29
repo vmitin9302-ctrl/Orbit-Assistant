@@ -461,15 +461,15 @@ public final class ThemeStudioActivity extends Activity {
     private void syncProLabels() {
         if (bubbleRadiusValue == null) return;
         OrbitProStyle style = draft.pro;
-        bubbleRadiusValue.setText(style.bubbleRadiusLabel());
-        bubbleOutlineValue.setText(style.bubbleOutlineLabel());
-        glassOpacityValue.setText(style.glassOpacityLabel());
-        glassTintValue.setText(style.glassTintLabel());
-        glassEdgeValue.setText(style.glassEdgeLabel());
-        glowStrengthValue.setText(style.glowStrengthLabel());
-        glowSizeValue.setText(style.glowSizeLabel());
-        gradientStrengthValue.setText(style.gradientStrengthLabel());
-        directionValue.setText(style.directionLabel());
+        bubbleRadiusValue.setText(style.bubbleRadiusLabel(this));
+        bubbleOutlineValue.setText(style.bubbleOutlineLabel(this));
+        glassOpacityValue.setText(style.glassOpacityLabel(this));
+        glassTintValue.setText(style.glassTintLabel(this));
+        glassEdgeValue.setText(style.glassEdgeLabel(this));
+        glowStrengthValue.setText(style.glowStrengthLabel(this));
+        glowSizeValue.setText(style.glowSizeLabel(this));
+        gradientStrengthValue.setText(style.gradientStrengthLabel(this));
+        directionValue.setText(style.directionLabel(this));
 
         int effect = style.backgroundEffectColor(this, OrbitThemeTokens.resolve(this, draft).accent);
         effectColourSwatch.setBackground(UiKit.outlined(effect,
@@ -1300,15 +1300,15 @@ public final class ThemeStudioActivity extends Activity {
         messagePreview = new MessageStylePreview(this);
         messages.addView(messagePreview, matchWrap(10));
 
-        bubbleRadiusValue = valueLabel(draft.pro.bubbleRadiusLabel());
+        bubbleRadiusValue = valueLabel(draft.pro.bubbleRadiusLabel(this));
         bubbleRadiusSlider = new OrbitSlider(this);
         messages.addView(proControl(getString(R.string.ts_bubble_roundness), bubbleRadiusValue, bubbleRadiusSlider,
                 OrbitProStyle.BUBBLE_RADIUS_MIN, OrbitProStyle.BUBBLE_RADIUS_MAX,
                 draft.pro.bubbleRadiusDp,
-                v -> OrbitProStyle.DEFAULT.withBubbleRadiusDp(v).bubbleRadiusLabel(),
+                v -> OrbitProStyle.DEFAULT.withBubbleRadiusDp(v).bubbleRadiusLabel(this),
                 (v, settled) -> editPro(draft.pro.withBubbleRadiusDp(v), settled)), matchWrap(14));
 
-        bubbleOutlineValue = valueLabel(draft.pro.bubbleOutlineLabel());
+        bubbleOutlineValue = valueLabel(draft.pro.bubbleOutlineLabel(this));
         bubbleOutlineSlider = new OrbitSlider(this);
         messages.addView(proControl(getString(R.string.ts_bubble_outline), bubbleOutlineValue, bubbleOutlineSlider,
                 OrbitProStyle.OUTLINE_OFF, OrbitProStyle.OUTLINE_DEFINED,
@@ -1328,15 +1328,15 @@ public final class ThemeStudioActivity extends Activity {
         glassControls = new LinearLayout(this);
         glassControls.setOrientation(LinearLayout.VERTICAL);
 
-        glassOpacityValue = valueLabel(draft.pro.glassOpacityLabel());
+        glassOpacityValue = valueLabel(draft.pro.glassOpacityLabel(this));
         glassOpacitySlider = new OrbitSlider(this);
         glassControls.addView(proControl(getString(R.string.ts_glass_opacity), glassOpacityValue, glassOpacitySlider,
                 OrbitProStyle.GLASS_OPACITY_MIN, OrbitProStyle.GLASS_OPACITY_MAX,
                 draft.pro.glassOpacity,
-                v -> OrbitProStyle.DEFAULT.withGlassOpacity(v).glassOpacityLabel(),
+                v -> OrbitProStyle.DEFAULT.withGlassOpacity(v).glassOpacityLabel(this),
                 (v, settled) -> editPro(draft.pro.withGlassOpacity(v), settled)), matchWrap(4));
 
-        glassTintValue = valueLabel(draft.pro.glassTintLabel());
+        glassTintValue = valueLabel(draft.pro.glassTintLabel(this));
         glassTintSlider = new OrbitSlider(this);
         glassControls.addView(proControl(getString(R.string.ts_glass_tint), glassTintValue, glassTintSlider,
                 OrbitProStyle.GLASS_TINT_MIN, OrbitProStyle.GLASS_TINT_MAX,
@@ -1344,7 +1344,7 @@ public final class ThemeStudioActivity extends Activity {
                 OrbitProStyle::strengthLabel,
                 (v, settled) -> editPro(draft.pro.withGlassTint(v), settled)), matchWrap(12));
 
-        glassEdgeValue = valueLabel(draft.pro.glassEdgeLabel());
+        glassEdgeValue = valueLabel(draft.pro.glassEdgeLabel(this));
         glassEdgeSlider = new OrbitSlider(this);
         glassControls.addView(proControl(getString(R.string.ts_glass_edge), glassEdgeValue, glassEdgeSlider,
                 OrbitProStyle.GLASS_EDGE_MIN, OrbitProStyle.GLASS_EDGE_MAX,
@@ -1401,14 +1401,14 @@ public final class ThemeStudioActivity extends Activity {
         linearControls.setOrientation(LinearLayout.VERTICAL);
         linearControls.addView(effectColourRow(getString(R.string.ts_gradient_color),
                 getString(R.string.ts_gradient_color_d)), matchWrap(0));
-        directionValue = UiKit.text(this, draft.pro.directionLabel(), 14, UiKit.TEXT, true);
+        directionValue = UiKit.text(this, draft.pro.directionLabel(this), 14, UiKit.TEXT, true);
         directionRow = selectorRow(getString(R.string.ts_direction), directionValue, v -> chooseDirection(v));
         linearControls.addView(directionRow, matchWrap(10));
 
         // How far the gradient actually travels. The v0.8.0.0-beta.4 gradient was all or nothing, and
         // most pages want a colour cast rather than a two-colour sweep - so this is the control that
         // makes Linear usable on an everyday theme rather than only on a showcase one.
-        gradientStrengthValue = valueLabel(draft.pro.gradientStrengthLabel());
+        gradientStrengthValue = valueLabel(draft.pro.gradientStrengthLabel(this));
         gradientStrengthSlider = new OrbitSlider(this);
         linearControls.addView(proControl(getString(R.string.ts_gradient_strength), gradientStrengthValue,
                 gradientStrengthSlider,
@@ -1422,7 +1422,7 @@ public final class ThemeStudioActivity extends Activity {
         glowControls.setOrientation(LinearLayout.VERTICAL);
         glowControls.addView(effectColourRow(getString(R.string.ts_glow_color), getString(R.string.ts_glow_color_d)), matchWrap(0));
 
-        glowStrengthValue = valueLabel(draft.pro.glowStrengthLabel());
+        glowStrengthValue = valueLabel(draft.pro.glowStrengthLabel(this));
         glowStrengthSlider = new OrbitSlider(this);
         glowControls.addView(proControl(getString(R.string.ts_glow_strength), glowStrengthValue, glowStrengthSlider,
                 OrbitProStyle.GLOW_STRENGTH_MIN, OrbitProStyle.GLOW_STRENGTH_MAX,
@@ -1430,7 +1430,7 @@ public final class ThemeStudioActivity extends Activity {
                 OrbitProStyle::glowStrengthLabel,
                 (v, settled) -> editPro(draft.pro.withGlowStrength(v), settled)), matchWrap(12));
 
-        glowSizeValue = valueLabel(draft.pro.glowSizeLabel());
+        glowSizeValue = valueLabel(draft.pro.glowSizeLabel(this));
         glowSizeSlider = new OrbitSlider(this);
         glowControls.addView(proControl(getString(R.string.ts_glow_size), glowSizeValue, glowSizeSlider,
                 OrbitProStyle.GLOW_SIZE_MIN, OrbitProStyle.GLOW_SIZE_MAX,

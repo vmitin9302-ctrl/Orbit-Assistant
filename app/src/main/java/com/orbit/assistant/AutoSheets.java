@@ -22,7 +22,7 @@ final class AutoSheets {
 
     static final int INTRO_TITLE = R.string.auto_intro_title;
     static String introBody(Context c) {
-        return AiSelection.AUTO_DESCRIPTION + c.getString(R.string.auto_intro_rest);
+        return AiSelection.autoDescription(c) + c.getString(R.string.auto_intro_rest);
     }
     static final int METERED_NOTE = R.string.auto_metered_note;
 
@@ -50,7 +50,7 @@ final class AutoSheets {
         body.setPadding(pad, UiKit.dp(c, 4), pad, UiKit.dp(c, 8));
         scroll.addView(body);
 
-        TextView intro = UiKit.text(c, AiSelection.AUTO_DESCRIPTION, 13, UiKit.MUTED, false);
+        TextView intro = UiKit.text(c, AiSelection.autoDescription(c), 13, UiKit.MUTED, false);
         intro.setLineSpacing(0, 1.12f);
         intro.setPadding(0, 0, 0, UiKit.dp(c, 10));
         body.addView(intro);

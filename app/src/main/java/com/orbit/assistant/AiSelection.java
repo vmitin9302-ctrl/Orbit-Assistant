@@ -84,6 +84,33 @@ public final class AiSelection {
         return " · OpenRouter";
     }
 
+    /** What Auto is called everywhere it is shown, in the language of the given context. */
+    public static String autoLabel(android.content.Context context) {
+        return context.getString(R.string.sel_auto);
+    }
+
+    /** Auto's one-line description, in the language of the given context. */
+    public static String autoDescription(android.content.Context context) {
+        return context.getString(R.string.sel_auto_description);
+    }
+
+    /** As {@link #modelName()}, in the language of the given context. */
+    public String modelName(android.content.Context context) {
+        return isAuto() ? autoLabel(context) : modelName();
+    }
+
+    /** As {@link #label()}, in the language of the given context. */
+    public String label(android.content.Context context) {
+        String name = modelName(context) + routeSuffix();
+        return strength == null ? name : name + " · " + strength.label(context);
+    }
+
+    /** As {@link #shortLabel()}, in the language of the given context. */
+    public String shortLabel(android.content.Context context) {
+        String name = (isAuto() ? autoLabel(context) : shortModelName()) + routeSuffix();
+        return strength == null ? name : name + " · " + strength.label(context);
+    }
+
     /** "GPT-6.1 Sol · High", or just the model when there is no strength. */
     public String label() {
         String name = modelName() + routeSuffix();

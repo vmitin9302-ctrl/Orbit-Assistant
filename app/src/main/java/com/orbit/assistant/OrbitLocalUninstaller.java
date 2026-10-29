@@ -196,7 +196,6 @@ public final class OrbitLocalUninstaller {
     }
 
     /** The short sentence the Orbit Local screen shows for an outcome the user should see. */
-    @Deprecated
     static String message(Stage stage) { return message(null, stage); }
 
     /** As {@link #message(Stage)}, in the app language when a context is given. */

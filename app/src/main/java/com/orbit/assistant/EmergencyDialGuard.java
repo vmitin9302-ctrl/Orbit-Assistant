@@ -280,22 +280,18 @@ public final class EmergencyDialGuard {
      * this may be having the worst evening of their life, and a calm question is the respectful
      * thing to put in front of them.
      */
-    @Deprecated
     public static String titleFor(String number) {
         return "Call " + number + "?";
     }
 
     /** The confirmation's body. Says exactly what the button will do, and no more. */
-    @Deprecated
     public static String messageFor(String number) {
         return "Open the phone dialer for " + number + "?";
     }
 
     /** The affirmative button. Names the real consequence: a dialer opens, not a call is placed. */
-    @Deprecated
     public static String confirmLabel() { return "Open dialer"; }
 
-    @Deprecated
 
     public static String cancelLabel() { return "Cancel"; }
 

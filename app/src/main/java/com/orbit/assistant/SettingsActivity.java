@@ -875,7 +875,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         providersText.setOrientation(LinearLayout.VERTICAL);
         providersText.addView(UiKit.text(this, getString(R.string.ui_ai_providers_5aef60a9), 15, UiKit.TEXT, true));
         providerRowStatus = UiKit.text(this,
-                getString(R.string.ui_active_de2433e0) + activeProvider.displayName() + " · " + activeProvider.statusDetail(this),
+                getString(R.string.ui_active_de2433e0) + activeProvider.displayName(this) + " · " + activeProvider.statusDetail(this),
                 12, UiKit.MUTED, false);
         providerRowStatus.setPadding(0, UiKit.dp(this, 3), 0, 0);
         providersText.addView(providerRowStatus);
@@ -2513,7 +2513,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         field.addView(arrow);
         field.setContentDescription(getString(R.string.ui_default_ai_for_new_chats_34971bb9) + defaultAiText());
         field.setOnClickListener(v -> AiSelectorDialog.show(this, getString(R.string.ui_default_for_new_chats_89994150),
-                AiSelections.newChatSelection(this), s -> getString(R.string.ui_use_bb33dbdb) + s.label(), chosen -> {
+                AiSelections.newChatSelection(this), s -> getString(R.string.ui_use_bb33dbdb) + s.label(this), chosen -> {
                     AiSelections.setGlobalDefault(this, chosen);
                     value.setText(defaultAiText());
                     field.setContentDescription(getString(R.string.ui_default_ai_for_new_chats_34971bb9) + defaultAiText());
@@ -2523,9 +2523,9 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
     }
 
     private String defaultAiText() {
-        if (AiSelections.newChatsUseAuto(this)) return AiSelection.AUTO_LABEL;
+        if (AiSelections.newChatsUseAuto(this)) return AiSelection.autoLabel(this);
         AiSelection s = AiSelections.globalDefault(this);
-        return s.providerName() + " · " + s.label();
+        return s.providerName() + " · " + s.label(this);
     }
 
     /**

@@ -82,7 +82,6 @@ public final class OrbitColorName {
     }
 
     /** "Deep violet", "Pale sky blue", "Light grey". Always capitalised, never empty. */
-    @Deprecated
     public static String of(int color) {
         return of(ENGLISH, color);
     }
@@ -118,7 +117,6 @@ public final class OrbitColorName {
     }
 
     /** What a swatch announces: the name, then the value, so both are available. */
-    @Deprecated
     public static String describe(String role, int color) {
         String prefix = role == null || role.trim().isEmpty() ? "" : role.trim() + ", ";
         return prefix + of(color) + ", " + OrbitTheme.colorToken(color);

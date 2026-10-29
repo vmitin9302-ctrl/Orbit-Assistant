@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="prov_anthropic_description">Модели Claude через официальный API разработчика Anthropic.</string>
+    <string name="prov_openrouter_description">Множество моделей ИИ через один аккаунт OpenRouter. Использование списывается с вашего баланса OpenRouter.</string>
+    <string name="prov_local_description">Приватный ИИ прямо на телефоне, даже без сети. Модель компактная, поэтому ответы проще, чем у облачного ИИ.</string>
+    <string name="prov_relay_description">Дополнительный вариант: ваш собственный HTTPS-ретранслятор. Ключ API не попадает в Orbit.</string>
+    <string name="prov_relay_name">Ретранслятор API</string>
+    <string name="sel_auto">Авто</string>
+    <string name="sel_auto_description">Orbit сам выбирает модель и уровень рассуждений для каждого запроса.</string>
+    <string name="lead_currently_filtering">" Сейчас применён фильтр."</string>
+    <string name="lead_vault_type_all">Все элементы</string>
+    <string name="lead_vault_type_text">Текст</string>
+    <string name="lead_vault_type_links">Ссылки</string>
+    <string name="lead_vault_type_images">Изображения</string>
+    <string name="lead_vault_type_documents">Документы</string>
+    <string name="lead_vault_type_orbit">Ответы Orbit</string>
+</resources>

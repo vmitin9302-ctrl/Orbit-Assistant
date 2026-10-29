@@ -83,7 +83,6 @@ public final class ActionNarration {
     private ActionNarration() {}
 
     /** The only true thing to say about a protected dial nobody has confirmed yet. */
-    @Deprecated
     public static String awaitingConfirmationText(String number) {
         return awaitingConfirmationText(null, number);
     }
@@ -95,7 +94,6 @@ public final class ActionNarration {
     }
 
     /** Said after Android has actually been handed the Intent, and never before. */
-    @Deprecated
     public static String dialerOpenedText(String number) {
         return dialerOpenedText(null, number);
     }
@@ -115,7 +113,6 @@ public final class ActionNarration {
      * overlay saying the untrue thing, and a correction made in both would still miss the next
      * surface. Placed here, a provider Orbit has not written yet inherits it.
      */
-    @Deprecated
     public static AssistantClient.Callback guard(AssistantClient.Callback downstream) {
         return guard(null, downstream);
     }
@@ -147,7 +144,6 @@ public final class ActionNarration {
      * conditional sentence replaces it only when something was removed, so an answer that was
      * already careful is not padded with a line the confirmation card is about to say anyway.
      */
-    @Deprecated
     public static AssistantReply withTruthfulActionState(AssistantReply reply) {
         return withTruthfulActionState(null, reply);
     }
@@ -183,7 +179,6 @@ public final class ActionNarration {
      * produces the sort of half-rewritten prose that reads as broken; dropping the sentence leaves
      * an answer that still reads as though a person wrote it.
      */
-    @Deprecated
     public static String withoutExecutionClaims(String text, String number) {
         return withoutExecutionClaims(null, text, number);
     }

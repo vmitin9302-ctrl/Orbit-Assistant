@@ -58,7 +58,6 @@ public final class CalendarTargetResolver {
         public boolean canChoose() { return permitted && writable.size() > 1; }
 
         /** What the selector row reads, in every state including the unhappy ones. */
-        @Deprecated
         public String selectorLabel() {
             if (!permitted) return "Calendar access needed";
             if (writable.isEmpty()) return "No writable calendar";
@@ -82,7 +81,6 @@ public final class CalendarTargetResolver {
         }
 
         /** How the confirmation title names the destination. */
-        @Deprecated
         public String destinationName() {
             if (target != null) return target.label();
             if (permitted && writable.size() > 1) return "a calendar you choose";

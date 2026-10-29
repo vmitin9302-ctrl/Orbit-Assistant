@@ -1775,7 +1775,7 @@ public final class DeckActivity extends Activity {
                 if (DeckTileRegistry.isOfferable(this, definition)) offered.add(definition);
             }
             if (offered.isEmpty()) continue;
-            column.addView(sectionLabel(category.label.toUpperCase(Locale.US)));
+            column.addView(sectionLabel(category.label(this).toUpperCase(Locale.US)));
             for (DeckTileRegistry.Definition definition : offered) {
                 boolean placed = definition.singleton && DeckLayoutStore.contains(this, definition.type);
                 column.addView(addRow(definition, placed), rowLp());
@@ -1806,11 +1806,11 @@ public final class DeckActivity extends Activity {
 
         LinearLayout text = new LinearLayout(this);
         text.setOrientation(LinearLayout.VERTICAL);
-        TextView title = UiKit.text(this, definition.title, 15,
+        TextView title = UiKit.text(this, definition.title(this), 15,
                 alreadyPlaced ? UiKit.MUTED : UiKit.TEXT, true);
         text.addView(title);
         TextView desc = UiKit.text(this,
-                alreadyPlaced ? getString(R.string.deck_already_on_deck_cap) : definition.description,
+                alreadyPlaced ? getString(R.string.deck_already_on_deck_cap) : definition.description(this),
                 12, UiKit.MUTED, false);
         desc.setMaxLines(2);
         text.addView(desc);
@@ -1818,8 +1818,8 @@ public final class DeckActivity extends Activity {
         row.addView(text, new LinearLayout.LayoutParams(
                 0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
 
-        row.setContentDescription(definition.title + ", " + (alreadyPlaced
-                ? getString(R.string.deck_already_on_deck_desc) : definition.description));
+        row.setContentDescription(definition.title(this) + ", " + (alreadyPlaced
+                ? getString(R.string.deck_already_on_deck_desc) : definition.description(this)));
         row.setFocusable(true);
         row.setEnabled(!alreadyPlaced);
         if (!alreadyPlaced) row.setOnClickListener(v -> chooseTile(definition));

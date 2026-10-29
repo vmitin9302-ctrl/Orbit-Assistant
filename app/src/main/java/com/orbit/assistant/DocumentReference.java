@@ -38,7 +38,6 @@ public final class DocumentReference {
     public int openAt() { return namesPage() ? page : 0; }
 
     /** "Page 5 of 388", or the document's own size when no page is named. */
-    @Deprecated
     public String pageLabel() {
         if (pageCount <= 0) return "";
         if (namesPage()) return "Page " + (page + 1) + " of " + pageCount;

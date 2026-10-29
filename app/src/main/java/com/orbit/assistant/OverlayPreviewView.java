@@ -156,7 +156,7 @@ final class OverlayPreviewView extends FrameLayout {
         titles.addView(UiKit.text(c, UiKit.appTitle(c), s.titleSp * S, UiKit.TEXT, true));
         titles.addView(UiKit.text(c, c.getString(R.string.ui_ready_5fa7aac5), 11 * S, UiKit.MUTED, false));
         header.addView(titles, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
-        TextView chip = UiKit.text(c, "Auto  ▾", 10.5f * S, accent, true);
+        TextView chip = UiKit.text(c, AiSelection.autoLabel(c) + "  ▾", 10.5f * S, accent, true);
         chip.setGravity(Gravity.CENTER);
         chip.setPadding(px(10), 0, px(10), 0);
         chip.setBackground(UiKit.outlined(UiKit.blend(accent, UiKit.SURFACE_2, 0.08f),

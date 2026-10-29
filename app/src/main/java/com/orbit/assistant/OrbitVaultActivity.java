@@ -159,7 +159,6 @@ public final class OrbitVaultActivity extends Activity {
      * bold. A meaning result quotes the passage it resembles but bolds nothing, because none of
      * the query's words were found there and bold would say they were.
      */
-    @Deprecated
     static CharSequence matchLine(SmartVaultRanker.Result reason, String query) {
         return matchLine(null, reason, query);
     }
@@ -579,9 +578,9 @@ public final class OrbitVaultActivity extends Activity {
         } else if (filter.isNarrowed()) {
             // What is on screen, and how much of the collection that is, so a short list after a
             // filter never reads as a Vault that has lost things.
-            subtitle.setText(getString(R.string.vault_subtitle_of, shown.size(), counted, sort.label));
+            subtitle.setText(getString(R.string.vault_subtitle_of, shown.size(), counted, sort.label(this)));
         } else {
-            subtitle.setText(getString(R.string.vault_subtitle_total, counted, sort.label));
+            subtitle.setText(getString(R.string.vault_subtitle_total, counted, sort.label(this)));
         }
 
         if (total == 0) {
@@ -764,7 +763,6 @@ public final class OrbitVaultActivity extends Activity {
         return c.getString(R.string.vault_capacity_near, total, OrbitVaultStore.MAX_ITEMS);
     }
 
-    @Deprecated
 
     static String capacityBody(int total) {
         if (total >= OrbitVaultStore.MAX_ITEMS) {
@@ -875,8 +873,8 @@ public final class OrbitVaultActivity extends Activity {
         filterBar.removeAllViews();
 
         boolean typed = filter.type != OrbitVaultFilter.Type.ALL;
-        View typeSelector = selector(filter.type.label, typed,
-                getString(R.string.vault_desc_type, filter.type.label),
+        View typeSelector = selector(filter.type.label(this), typed,
+                getString(R.string.vault_desc_type, filter.type.label(this)),
                 v -> showTypeMenu(v, filter));
         filterBar.addView(typeSelector, selectorLp(true));
 
@@ -964,7 +962,7 @@ public final class OrbitVaultActivity extends Activity {
                 ? UiKit.ripple(UiKit.accent(this), UiKit.onAccent(this), 16, this)
                 : OrbitFloatingSurface.interactive(this, 16));
         box.setElevation(UiKit.dp(this, OrbitGlass.RESTING_ELEVATION_DP));
-        box.setContentDescription(description + (chosen ? " Currently filtering." : ""));
+        box.setContentDescription(description + (chosen ? getString(R.string.lead_currently_filtering) : ""));
         box.setOnClickListener(onClick);
         UiKit.pressScale(box);
         return box;
@@ -990,7 +988,7 @@ public final class OrbitVaultActivity extends Activity {
         String[] labels = new String[types.length];
         int selected = 0;
         for (int i = 0; i < types.length; i++) {
-            labels[i] = types[i].label;
+            labels[i] = types[i].label(this);
             if (types[i] == filter.type) selected = i;
         }
         UiKit.showOrbitMenu(this, anchor, labels, selected, (index, label) -> {
@@ -1425,7 +1423,7 @@ public final class OrbitVaultActivity extends Activity {
         int selected = 0;
         OrbitVaultStore.Sort current = Prefs.vaultSort(this);
         for (int i = 0; i < options.length; i++) {
-            labels[i] = options[i].label;
+            labels[i] = options[i].label(this);
             if (options[i] == current) selected = i;
         }
         UiKit.showOrbitMenu(this, anchor, labels, selected, (index, label) -> {

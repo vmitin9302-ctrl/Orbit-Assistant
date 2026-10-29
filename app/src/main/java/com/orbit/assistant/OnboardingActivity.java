@@ -337,7 +337,7 @@ public final class OnboardingActivity extends Activity {
         boolean active = Prefs.PROVIDER_CHATGPT.equals(Prefs.provider(this));
 
         LinearLayout card = card();
-        card.addView(providerHeading(provider.displayName(), getString(R.string.ui_recommended_d70604e8)));
+        card.addView(providerHeading(provider.displayName(this), getString(R.string.ui_recommended_d70604e8)));
         card.addView(providerStatusLine(connected, provider.statusDetail(this)));
         addCardDescription(card,
                 getString(R.string.ui_orbit_s_fullest_experience_stronger_answers_h_a7ced39f));
@@ -392,7 +392,7 @@ public final class OnboardingActivity extends Activity {
         boolean supported = status != AiProvider.Status.UNSUPPORTED;
 
         LinearLayout card = card();
-        card.addView(providerHeading(provider.displayName(), getString(R.string.ui_optional_59be7133)));
+        card.addView(providerHeading(provider.displayName(this), getString(R.string.ui_optional_59be7133)));
         card.addView(providerStatusLine(ready, provider.statusDetail(this)));
         addCardDescription(card,
                 getString(R.string.ui_runs_privately_on_this_phone_and_keeps_workin_98f90f9a));
@@ -442,7 +442,7 @@ public final class OnboardingActivity extends Activity {
     private LinearLayout openRouterCard() {
         AiProvider provider = AiProviders.byId(Prefs.PROVIDER_OPENROUTER);
         LinearLayout card = card();
-        card.addView(providerHeading(provider.displayName(), getString(R.string.ui_optional_59be7133)));
+        card.addView(providerHeading(provider.displayName(this), getString(R.string.ui_optional_59be7133)));
         boolean ready = provider.status(this) == AiProvider.Status.READY;
         card.addView(providerStatusLine(ready, provider.statusDetail(this)));
         addCardDescription(card,
@@ -788,11 +788,11 @@ public final class OnboardingActivity extends Activity {
             RoutineTemplateCatalog.Template template = findTemplate(id);
             if (template == null) continue;
             LinearLayout card = card();
-            card.addView(UiKit.text(this, template.displayName, 16, UiKit.TEXT, true));
-            addCardDescription(card, template.description);
-            if (!template.recommendedCommandPhrase.isEmpty()) {
+            card.addView(UiKit.text(this, template.displayName(this), 16, UiKit.TEXT, true));
+            addCardDescription(card, template.description(this));
+            if (!template.recommendedCommandPhrase(this).isEmpty()) {
                 TextView phrase = UiKit.text(this,
-                        getString(R.string.ui_suggested_custom_command_61f89281) + template.recommendedCommandPhrase + "”",
+                        getString(R.string.ui_suggested_custom_command_61f89281) + template.recommendedCommandPhrase(this) + "”",
                         11, UiKit.accent(this), true);
                 phrase.setPadding(0, 0, 0, UiKit.dp(this, 9));
                 card.addView(phrase);

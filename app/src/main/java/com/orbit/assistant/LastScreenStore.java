@@ -30,7 +30,6 @@ public final class LastScreenStore {
 
         public Bitmap image() { return AttachmentStore.load(imagePath); }
 
-        @Deprecated
 
         public String ageLabel() { return ageLabel(null); }
 

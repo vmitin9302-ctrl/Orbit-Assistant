@@ -164,7 +164,6 @@ public final class AttachmentViewerModel {
     }
 
     /** The counter, or empty when there is only one image and a counter would be noise. */
-    @Deprecated
     public String counterText() {
         return counterText(null);
     }
@@ -185,7 +184,6 @@ public final class AttachmentViewerModel {
      * aloud is cost without information, and the position is what actually locates a person in a
      * set. A document keeps its name, because for a document the name is the information.
      */
-    @Deprecated
     public String descriptionAt(int position) {
         return descriptionAt(null, position);
     }
@@ -200,14 +198,12 @@ public final class AttachmentViewerModel {
         return item.label.isEmpty() ? place : place + ", " + item.label;
     }
 
-    @Deprecated
 
     public String currentDescription() { return descriptionAt(index); }
 
     public String currentDescription(Context context) { return descriptionAt(context, index); }
 
     /** What the remove control is called, so which image is being removed is never ambiguous. */
-    @Deprecated
     public String removeDescription() {
         return removeDescription(null);
     }

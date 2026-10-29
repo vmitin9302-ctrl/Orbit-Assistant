@@ -132,7 +132,7 @@ public final class RoutineTriggerSchedule {
                     ? R.string.trig_leave : R.string.trig_arrive,
                     t.locationName, radiusLabel(context, t.radiusMeters));
         }
-        String time = RoutineActionCatalog.timeLabel(t.hour, t.minute);
+        String time = RoutineActionCatalog.timeLabel(context, t.hour, t.minute);
         switch (t.mode) {
             case RoutineTriggerStore.MODE_ONCE:
                 return context.getString(R.string.trig_once, shortDate(context, t), time);

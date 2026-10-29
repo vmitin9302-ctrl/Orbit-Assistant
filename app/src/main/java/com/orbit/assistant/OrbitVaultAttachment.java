@@ -55,8 +55,8 @@ public final class OrbitVaultAttachment {
         if (context.trim().isEmpty() && image == null) return null;
         // The card's second line says which page this is, so the composer shows "Page 7 of 388"
         // under the document's name rather than making the user open the item to find out.
-        String detail = item.isDocumentPage() && !item.pageLabel().isEmpty()
-                ? item.pageLabel() : item.typeLabel();
+        String detail = item.isDocumentPage() && !item.pageLabel(c).isEmpty()
+                ? item.pageLabel(c) : item.typeLabel(c);
         // Stated truthfully rather than assumed. A saved page whose text came out is full text; a
         // scanned page that only rendered is visual only, and the wording Orbit uses when the user
         // sends it with no message of their own has to match which of those it actually is.
@@ -72,7 +72,6 @@ public final class OrbitVaultAttachment {
      * <p>Named so the user can tell which saved item is staged without opening anything, and never
      * by the internal id, which means nothing to a person and is not theirs to see.
      */
-    @Deprecated
     public static String label(OrbitVaultItem item) {
         if (item == null) return "Vault item";
         String title = item.displayTitle().trim();

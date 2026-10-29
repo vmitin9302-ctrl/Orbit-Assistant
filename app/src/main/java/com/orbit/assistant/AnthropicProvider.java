@@ -12,6 +12,7 @@ final class AnthropicProvider implements AiProvider {
     @Override public String id() { return Prefs.PROVIDER_ANTHROPIC; }
     @Override public String displayName() { return "Anthropic Claude"; }
     @Override public String description() { return "Claude models through Anthropic's official developer API."; }
+    @Override public String description(Context context) { return context.getString(R.string.prov_anthropic_description); }
     @Override public AiCapabilities capabilities() { return CAPABILITIES; }
     @Override public Status status(Context context) {
         return SecureStore.hasAnthropicKey(context) ? Status.READY : Status.NEEDS_SETUP;

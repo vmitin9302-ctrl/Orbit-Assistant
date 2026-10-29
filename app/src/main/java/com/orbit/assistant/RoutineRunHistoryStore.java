@@ -63,7 +63,6 @@ public final class RoutineRunHistoryStore {
         }
 
         /** "Completed 3 of 3 steps" / "Failed at action 2: Discord Webhook". */
-        @Deprecated
         public String headline() {
             if (success) {
                 return totalSteps <= 0 ? "Completed"
@@ -95,7 +94,6 @@ public final class RoutineRunHistoryStore {
             return context.getString(R.string.runhist_manual);
         }
 
-        @Deprecated
 
         public String sourceLabel() {
             if (SOURCE_TRIGGER.equals(source)) return "Automatic trigger";
@@ -121,7 +119,7 @@ public final class RoutineRunHistoryStore {
                                            AssistantReply.Action failedAction, String reason) {
         if (c == null) return;
         try {
-            String label = failedAction == null ? "" : RoutineActionCatalog.title(failedAction);
+            String label = failedAction == null ? "" : RoutineActionCatalog.title(c, failedAction);
             int failedStep = failedIndex < 0 ? 0 : failedIndex + 1;
             List<Entry> entries = new ArrayList<>(stored(c));
             entries.add(new Entry(null, routineId, routineName, source, System.currentTimeMillis(),

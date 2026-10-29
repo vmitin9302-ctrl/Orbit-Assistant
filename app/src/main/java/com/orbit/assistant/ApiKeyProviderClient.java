@@ -77,7 +77,7 @@ final class ApiKeyProviderClient {
         try {
             AiModelSpec spec = OrbitModelCatalog.spec(provider, request.selection.model);
             if (spec == null || !spec.selectable()) {
-                callback.onError(OrbitModelCatalog.unavailableMessage(request.selection.model));
+                callback.onError(OrbitModelCatalog.unavailableMessage(c, request.selection.model));
                 return;
             }
             JSONObject body = Prefs.PROVIDER_ANTHROPIC.equals(provider)
@@ -288,7 +288,7 @@ final class ApiKeyProviderClient {
         }
         if (code == 401 || code == 403) return c.getString(R.string.d_api_key_invalid, name(provider));
         if (code == 404 || OrbitModelCatalog.looksUnavailable(model, raw))
-            return OrbitModelCatalog.unavailableMessage(model);
+            return OrbitModelCatalog.unavailableMessage(c, model);
         if (code == 413 || lower.contains("context") && (lower.contains("long") || lower.contains("limit")))
             return c.getString(R.string.d_api_too_large, modelLabel(c, model));
         if (code == 429) return c.getString(R.string.d_api_rate_limit, name(provider));

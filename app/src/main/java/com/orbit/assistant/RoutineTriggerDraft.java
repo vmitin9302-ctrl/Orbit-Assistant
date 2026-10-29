@@ -196,7 +196,7 @@ public final class RoutineTriggerDraft {
     /** Short human summary for the preview, e.g. "Weekdays at 11:00 PM". */
     public String summary(Context context) {
         if (isTime()) {
-            String when = RoutineActionCatalog.timeLabel(hour, minute);
+            String when = RoutineActionCatalog.timeLabel(context, hour, minute);
             switch (mode) {
                 case RoutineTriggerStore.MODE_ONCE: return context.getString(R.string.d_rtd_once_at, when);
                 case RoutineTriggerStore.MODE_DAILY: return context.getString(R.string.d_rtd_daily_at, when);

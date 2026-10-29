@@ -112,7 +112,7 @@ public final class DeviceActionExecutor {
         // protected number - and it names the number, because the whole complaint about the old
         // wording was that Orbit described this act before it had performed it.
         return Result.success(
-                ActionNarration.dialerOpenedText(EmergencyDialGuard.normalize(number)));
+                ActionNarration.dialerOpenedText(c, EmergencyDialGuard.normalize(number)));
     }
 
     public static String execute(Context c, AssistantReply.Action action) {

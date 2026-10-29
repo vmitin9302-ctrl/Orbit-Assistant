@@ -141,7 +141,6 @@ public final class ReplySurface {
     }
 
     /** The label for the control that inserts, where one exists. */
-    @Deprecated
     public static String insertLabel(Kind kind) {
         return kind == Kind.SMS ? "Use in chat" : "";
     }
@@ -167,7 +166,6 @@ public final class ReplySurface {
      * <p>Truthful about the one thing that actually happened. It never claims insertion, and it
      * never names the person — only the app, which the user is looking at anyway.
      */
-    @Deprecated
     public static String copiedMessage(Kind kind, String appLabel) {
         String app = appLabel == null ? "" : appLabel.trim();
         switch (kind) {

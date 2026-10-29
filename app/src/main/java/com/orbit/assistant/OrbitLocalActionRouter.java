@@ -233,10 +233,10 @@ public final class OrbitLocalActionRouter {
             // turn "never mind" into a change to the phone.
             if (!UNDO_WORDS.matcher(q).find()) return new Decision(null, "refused", "");
             if (RecentActionContext.isAmbiguous()) {
-                return new Decision(new AssistantReply(RecentActionContext.clarification()),
+                return new Decision(new AssistantReply(RecentActionContext.clarification(context)),
                         "clarify", "undo");
             }
-            RecentActionContext.Restore restore = RecentActionContext.restore();
+            RecentActionContext.Restore restore = RecentActionContext.restore(context);
             if (restore == null) return new Decision(null, "no-recent-action", "");
             List<AssistantReply.Action> actions = new ArrayList<>();
             actions.add(restore.action);
@@ -287,7 +287,6 @@ public final class OrbitLocalActionRouter {
      * still reported afterwards by the executor's own result, so this claims an intention and the
      * action result claims the outcome.
      */
-    @Deprecated
     static String speak(AssistantReply.Action action) {
         return speak(null, action);
     }

@@ -80,8 +80,8 @@ public final class MessageStylePreview extends LinearLayout {
         String outline = resolved.bubbleOutline == OrbitProStyle.OUTLINE_OFF
                 ? c.getString(R.string.stylepreview_no_outline)
                 : c.getString(R.string.stylepreview_outline,
-                        resolved.bubbleOutlineLabel().toLowerCase(java.util.Locale.US));
+                        resolved.bubbleOutlineLabel(getContext()).toLowerCase(java.util.Locale.US));
         setContentDescription(c.getString(R.string.stylepreview_cd,
-                resolved.bubbleRadiusLabel(), outline));
+                resolved.bubbleRadiusLabel(getContext()), outline));
     }
 }

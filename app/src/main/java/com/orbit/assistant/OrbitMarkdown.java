@@ -85,7 +85,6 @@ public final class OrbitMarkdown {
      * a short label only when a message is nothing but code. Normalization happens before the
      * length limit so the visible characters are spent on words rather than on syntax.
      */
-    @Deprecated
     public static String toPreviewText(String source, int maxChars) {
         return toPreviewText(source, maxChars, "Code snippet");
     }

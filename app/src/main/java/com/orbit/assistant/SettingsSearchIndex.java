@@ -217,7 +217,6 @@ public final class SettingsSearchIndex {
     private SettingsSearchIndex() {}
 
     /** Every indexed setting. Stable order, so equal-scoring results never shuffle. */
-    @Deprecated
     public static List<Entry> all() { return ENTRIES; }
 
     /**
@@ -228,7 +227,6 @@ public final class SettingsSearchIndex {
      * "swipe" reaching both swipe settings is the entire requirement, and a cleverer ranker would
      * be harder to predict without finding anything a simple one misses.
      */
-    @Deprecated
     public static List<Entry> search(String query) {
         return search(ENTRIES, query);
     }

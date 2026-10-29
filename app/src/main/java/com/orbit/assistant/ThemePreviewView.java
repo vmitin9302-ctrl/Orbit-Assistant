@@ -203,9 +203,9 @@ public final class ThemePreviewView extends LinearLayout {
         String outline = style.bubbleOutline == OrbitProStyle.OUTLINE_OFF
                 ? c.getString(R.string.themeprev_no_outline)
                 : c.getString(R.string.themeprev_outline,
-                        style.bubbleOutlineLabel().toLowerCase(java.util.Locale.US));
+                        style.bubbleOutlineLabel(getContext()).toLowerCase(java.util.Locale.US));
         return c.getString(R.string.themeprev_shape,
-                style.bubbleRadiusLabel().toLowerCase(java.util.Locale.US), outline);
+                style.bubbleRadiusLabel(getContext()).toLowerCase(java.util.Locale.US), outline);
     }
 
     // ---- construction ---------------------------------------------------------------------------

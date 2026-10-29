@@ -201,7 +201,6 @@ public final class RecentActionContext {
      * <p>Null whenever Orbit does not know exactly what "back" is: nothing recent, several changes,
      * or a level Orbit never read. Built by Orbit from recorded state only.
      */
-    @Deprecated
     static synchronized Restore restore() { return restore(null); }
 
     /** As {@link #restore()}, with Orbit's wording in the app language when a context is given. */
@@ -270,7 +269,6 @@ public final class RecentActionContext {
      * What Orbit asks when a follow-up could mean more than one recent change, or "" when it could
      * not. Names Orbit's own targets only.
      */
-    @Deprecated
     static synchronized String clarification() { return clarification(null); }
 
     /** As {@link #clarification()}, in the app language when a context is given. */
@@ -287,7 +285,6 @@ public final class RecentActionContext {
         return t(c, R.string.rac_clarify, "I just changed " + list + ". Which one do you mean?", list);
     }
 
-    @Deprecated
 
     static String name(Target target) { return name(null, target); }
 

@@ -103,10 +103,10 @@ public final class RoutineTemplatesActivity extends Activity {
 
         LinearLayout titleRow = new LinearLayout(this);
         titleRow.setGravity(Gravity.CENTER_VERTICAL);
-        TextView title = UiKit.text(this, template.displayName, 17, UiKit.TEXT, true);
+        TextView title = UiKit.text(this, template.displayName(this), 17, UiKit.TEXT, true);
         titleRow.addView(title, new LinearLayout.LayoutParams(
                 0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
-        TextView category = UiKit.text(this, template.category, 10, UiKit.accent(this), true);
+        TextView category = UiKit.text(this, template.categoryLabel(this), 10, UiKit.accent(this), true);
         category.setLetterSpacing(0.08f);
         category.setPadding(UiKit.dp(this, 9), UiKit.dp(this, 4),
                 UiKit.dp(this, 9), UiKit.dp(this, 4));
@@ -115,7 +115,7 @@ public final class RoutineTemplatesActivity extends Activity {
         titleRow.addView(category);
         card.addView(titleRow);
 
-        TextView description = UiKit.text(this, template.description, 13, UiKit.MUTED, false);
+        TextView description = UiKit.text(this, template.description(this), 13, UiKit.MUTED, false);
         description.setLineSpacing(0, 1.1f);
         description.setPadding(0, UiKit.dp(this, 6), 0, UiKit.dp(this, 9));
         card.addView(description);
@@ -146,7 +146,7 @@ public final class RoutineTemplatesActivity extends Activity {
         content.setPadding(horizontal, 0, horizontal, UiKit.dp(this, 4));
 
         TextView creates = UiKit.text(this,
-                getString(R.string.d_rtpl_creates, template.suggestedRoutineName),
+                getString(R.string.d_rtpl_creates, template.suggestedRoutineName(this)),
                 13, UiKit.MUTED, false);
         creates.setLineSpacing(0, 1.1f);
         creates.setPadding(0, 0, 0, UiKit.dp(this, 12));
@@ -174,15 +174,15 @@ public final class RoutineTemplatesActivity extends Activity {
             }
         }
 
-        if (!template.customizationNote.isEmpty()) {
-            TextView note = UiKit.text(this, template.customizationNote, 12, UiKit.MUTED, false);
+        if (!template.customizationNote(this).isEmpty()) {
+            TextView note = UiKit.text(this, template.customizationNote(this), 12, UiKit.MUTED, false);
             note.setLineSpacing(0, 1.08f);
             note.setPadding(0, UiKit.dp(this, 15), 0, 0);
             content.addView(note);
         }
-        if (!template.recommendedCommandPhrase.isEmpty()) {
+        if (!template.recommendedCommandPhrase(this).isEmpty()) {
             TextView shortcut = UiKit.text(this,
-                    getString(R.string.d_rtpl_suggested_command, template.recommendedCommandPhrase),
+                    getString(R.string.d_rtpl_suggested_command, template.recommendedCommandPhrase(this)),
                     12, UiKit.accent(this), true);
             shortcut.setPadding(0, UiKit.dp(this, 13), 0, 0);
             content.addView(shortcut);
@@ -195,7 +195,7 @@ public final class RoutineTemplatesActivity extends Activity {
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle(template.displayName)
+                .setTitle(template.displayName(this))
                 .setView(scroll)
                 .setNegativeButton(getString(R.string.ui_cancel_19766ed6), null)
                 .setPositiveButton(getString(R.string.d_rtpl_use), (d, which) -> useTemplate(template))
@@ -216,7 +216,7 @@ public final class RoutineTemplatesActivity extends Activity {
             Toast.makeText(activity, activity.getString(R.string.d_rtpl_limit), Toast.LENGTH_SHORT).show();
             return null;
         }
-        String name = RoutineTemplateCatalog.uniqueRoutineName(activity, template.suggestedRoutineName);
+        String name = RoutineTemplateCatalog.uniqueRoutineName(activity, template.suggestedRoutineName(activity));
         RoutineStore.Routine routine = RoutineStore.create(name, template.actions);
         if (!RoutineStore.upsert(activity, routine)) {
             Toast.makeText(activity, activity.getString(R.string.d_rtpl_create_failed), Toast.LENGTH_SHORT).show();

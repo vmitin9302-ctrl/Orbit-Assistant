@@ -1254,7 +1254,7 @@ public class OrbitSession extends VoiceInteractionSession {
         List<AiStrength> strengths = AiSelections.strengthsFor(s);
         List<AiProvider> providers = AiSelections.pickableProviders(c);
         List<String> labels = new ArrayList<>();
-        labels.add(AiSelection.AUTO_LABEL + " " + AiSelectorDialog.AUTO_MARK);
+        labels.add(AiSelection.autoLabel(getContext()) + " " + AiSelectorDialog.AUTO_MARK);
         int selected = s.isAuto() ? 0 : -1;
         for (AiModelSpec spec : models) {
             if (!s.isAuto() && spec.id.equals(s.model)) selected = labels.size();
@@ -1312,7 +1312,7 @@ public class OrbitSession extends VoiceInteractionSession {
         String[] labels = new String[providers.size()];
         int selected = -1;
         for (int i = 0; i < providers.size(); i++) {
-            labels[i] = providers.get(i).displayName();
+            labels[i] = providers.get(i).displayName(getContext());
             if (providers.get(i).id().equals(currentSelection.provider)) selected = i;
         }
         UiKit.showOrbitMenu(getContext(), aiMenuAnchor(), labels, selected, (index, label) ->
@@ -1347,7 +1347,7 @@ public class OrbitSession extends VoiceInteractionSession {
         for (int i = 0; i < choices.size(); i++) {
             AiSelection choice = choices.get(i);
             if (choice.isAuto()) {
-                labels[i] = getContext().getString(R.string.ui_send_with_c889ac71) + AiSelection.AUTO_LABEL + " " + AiSelectorDialog.AUTO_MARK;
+                labels[i] = getContext().getString(R.string.ui_send_with_c889ac71) + AiSelection.autoLabel(getContext()) + " " + AiSelectorDialog.AUTO_MARK;
                 continue;
             }
             AiModelSpec spec = OrbitModelCatalog.spec(choice.provider, choice.model);
@@ -1442,7 +1442,7 @@ public class OrbitSession extends VoiceInteractionSession {
         AiSelections.setForConversation(getContext(), conversationId, resolved);
         updateModeChip();
         if (Prefs.haptics(getContext())) vibrate(10);
-        stateTextSafe(getContext().getString(R.string.ui_now_using_90e657d6) + resolved.label());
+        stateTextSafe(getContext().getString(R.string.ui_now_using_90e657d6) + resolved.label(getContext()));
         main.postDelayed(() -> stateTextSafe(readyState()), 900);
     }
 
@@ -1450,13 +1450,13 @@ public class OrbitSession extends VoiceInteractionSession {
         if (modeChip == null) return;
         AiSelection s = currentSelection;
         if (s.isAuto()) {
-            modeChip.setText(AiSelection.AUTO_LABEL + " " + AiSelectorDialog.AUTO_MARK + "  ▾");
+            modeChip.setText(AiSelection.autoLabel(getContext()) + " " + AiSelectorDialog.AUTO_MARK + "  ▾");
             modeChip.setContentDescription(getContext().getString(R.string.ui_ai_auto_orbit_chooses_the_model_and_reasoning_0a51b830)
                     + getContext().getString(R.string.ui_for_each_request_tap_to_change_a1d54c8b));
             return;
         }
         modeChip.setText(s.shortLabel() + "  ▾");
-        modeChip.setContentDescription(getContext().getString(R.string.ui_ai_dd54be8d) + s.providerName() + ", " + s.label()
+        modeChip.setContentDescription(getContext().getString(R.string.ui_ai_dd54be8d) + s.providerName() + ", " + s.label(getContext())
                 + getContext().getString(R.string.ui_tap_to_change_d99928ba));
     }
 
@@ -1963,7 +1963,7 @@ public class OrbitSession extends VoiceInteractionSession {
                                     AppProfileStore.effectivePrivacy(getContext(), foregroundPackage))
                                     ? getContext().getString(R.string.ui_manual_only_be1016ce) : AppProfileStore.screenLabel(effectiveProfile.screenPolicy)),
                     AppProfileStore.screenshotAllowed(getContext(), foregroundPackage) ? getContext().getString(R.string.ui_allowed_1bb201d1) : getContext().getString(R.string.ui_blocked_18f2a094),
-                    currentSelection.label(),
+                    currentSelection.label(getContext()),
                     DiagnosticStore.prefs(getContext()).getString("app_effective_actions", getContext().getString(R.string.ui_waiting_for_screen_c1e06156)));
 
             if (blocked) {

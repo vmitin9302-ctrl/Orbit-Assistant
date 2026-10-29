@@ -117,7 +117,7 @@ public final class BackgroundStylePreview extends FrameLayout {
         // Asked of the renderer rather than recomputed here, so the sample cannot decide it is hidden
         // on different grounds from the page it is a sample of.
         boolean hidden = OrbitBackground.hiddenByAmoled(page);
-        note.setText(hidden ? OrbitBackground.amoledHiddenLabel() : "");
+        note.setText(hidden ? OrbitBackground.amoledHiddenLabel(c) : "");
         note.setTextColor(tokens.muted);
         // A chip rather than bare text. A muted sentence on a true-black sample reads as an empty
         // preview with a caption; a small enclosed label reads as the sample telling you its state.
@@ -130,17 +130,17 @@ public final class BackgroundStylePreview extends FrameLayout {
 
     private String describe(OrbitProStyle style, boolean hidden) {
         if (hidden) {
-            return getContext().getString(R.string.bgprev_desc_hidden, style.backgroundModeLabel());
+            return getContext().getString(R.string.bgprev_desc_hidden, style.backgroundModeLabel(getContext()));
         }
         if (style.backgroundMode == OrbitProStyle.BACKGROUND_LINEAR) {
             return getContext().getString(R.string.bgprev_desc_linear,
-                    style.directionLabel().toLowerCase(java.util.Locale.US));
+                    style.directionLabel(getContext()).toLowerCase(java.util.Locale.US));
         }
         if (style.backgroundMode == OrbitProStyle.BACKGROUND_GLOW) {
             return getContext().getString(R.string.bgprev_desc_glow,
-                    style.glowStrengthLabel().toLowerCase(java.util.Locale.US),
-                    style.glowSizeLabel().toLowerCase(java.util.Locale.US),
-                    style.glowPositionLabel().toLowerCase(java.util.Locale.US));
+                    style.glowStrengthLabel(getContext()).toLowerCase(java.util.Locale.US),
+                    style.glowSizeLabel(getContext()).toLowerCase(java.util.Locale.US),
+                    style.glowPositionLabel(getContext()).toLowerCase(java.util.Locale.US));
         }
         return getContext().getString(R.string.bgprev_desc_solid);
     }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="extb_developer_tools_name">Инструменты разработчика</string>
+    <string name="extb_developer_tools_desc">Публичные ресурсы для разработчиков Android и GitHub и безвредная проверка HTTPS GET.</string>
+    <string name="extb_developer_tools_open_android_developers_name">Открыть Android Developers</string>
+    <string name="extb_developer_tools_open_android_developers_desc">Открывает официальную документацию по разработке для Android.</string>
+    <string name="extb_developer_tools_open_github_actions_docs_name">Открыть документацию GitHub Actions</string>
+    <string name="extb_developer_tools_open_github_actions_docs_desc">Открывает официальную документацию GitHub Actions.</string>
+    <string name="extb_developer_tools_test_public_https_get_name">Проверить публичный HTTPS GET</string>
+    <string name="extb_developer_tools_test_public_https_get_desc">Выполняет ограниченный запрос GET без авторизации к публичной странице GitHub Zen.</string>
+    <string name="extb_discord_webhook_name">Вебхук Discord</string>
+    <string name="extb_discord_webhook_desc">Отправляет заданное сообщение в канал Discord через надёжно сохранённый адрес вебхука.</string>
+    <string name="extb_discord_webhook_send_message_name">Отправить сообщение в Discord</string>
+    <string name="extb_discord_webhook_send_message_desc">Публикует заданное сообщение автоматизации через сохранённый вебхук Discord.</string>
+    <string name="extb_ntfy_name">Уведомления ntfy</string>
+    <string name="extb_ntfy_desc">Публикует настраиваемое уведомление в тему ntfy через её публичный HTTPS API.</string>
+    <string name="extb_ntfy_send_notification_name">Отправить уведомление</string>
+    <string name="extb_ntfy_send_notification_desc">Публикует заголовок, сообщение и приоритет в настроенную тему ntfy.</string>
+    <string name="extb_web_tools_name">Веб-инструменты Orbit</string>
+    <string name="extb_web_tools_desc">Быстрый доступ к официальным публичным страницам Orbit на GitHub.</string>
+    <string name="extb_web_tools_open_orbit_releases_name">Открыть выпуски Orbit</string>
+    <string name="extb_web_tools_open_orbit_releases_desc">Открывает официальные загрузки выпусков Orbit.</string>
+    <string name="extb_web_tools_open_orbit_repository_name">Открыть репозиторий Orbit</string>
+    <string name="extb_web_tools_open_orbit_repository_desc">Открывает публичный репозиторий исходного кода Orbit Assistant.</string>
+    <string name="extb_web_tools_open_orbit_issues_name">Открыть обсуждения Orbit</string>
+    <string name="extb_web_tools_open_orbit_issues_desc">Открывает публичный трекер задач Orbit.</string>
+    <string name="extb_quick_links_name">Быстрые ссылки</string>
+    <string name="extb_quick_links_desc">Простые публичные ссылки на поиск, карты и справочники для повторно используемых автоматизаций.</string>
+    <string name="extb_quick_links_open_web_search_name">Открыть веб-поиск</string>
+    <string name="extb_quick_links_open_web_search_desc">Открывает главную страницу поиска Google.</string>
+    <string name="extb_quick_links_open_maps_name">Открыть карты</string>
+    <string name="extb_quick_links_open_maps_desc">Открывает публичную карту OpenStreetMap.</string>
+    <string name="extb_quick_links_open_reference_name">Открыть справочник</string>
+    <string name="extb_quick_links_open_reference_desc">Открывает публичный портал «Википедии».</string>
+</resources>

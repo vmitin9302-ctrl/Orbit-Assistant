@@ -104,7 +104,6 @@ public final class CalendarActionExecutor {
      * picking a calendar is the entire remaining step. Every other failure keeps its plain card,
      * because offering a chooser would not fix any of them.
      */
-    @Deprecated
     public static boolean needsTargetChoice(AssistantReply.Action action, String status,
                                             String message) {
         return isCalendarWrite(action)

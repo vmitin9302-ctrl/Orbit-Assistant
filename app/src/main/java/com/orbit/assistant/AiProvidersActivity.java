@@ -189,7 +189,7 @@ public final class AiProvidersActivity extends Activity {
 
         LinearLayout titleRow = new LinearLayout(this);
         titleRow.setGravity(Gravity.CENTER_VERTICAL);
-        titleRow.addView(UiKit.text(this, provider.displayName(), 17, UiKit.TEXT, true),
+        titleRow.addView(UiKit.text(this, provider.displayName(this), 17, UiKit.TEXT, true),
                 new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         if (active) {
             titleRow.addView(pill(getString(R.string.aiprov_active), UiKit.onAccent(this),
@@ -213,7 +213,7 @@ public final class AiProvidersActivity extends Activity {
                 new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         card.addView(statusRow);
 
-        TextView description = UiKit.text(this, provider.description(), 12.5f, UiKit.MUTED, false);
+        TextView description = UiKit.text(this, provider.description(this), 12.5f, UiKit.MUTED, false);
         description.setLineSpacing(0, 1.15f);
         description.setPadding(0, UiKit.dp(this, 8), 0, 0);
         card.addView(description);
@@ -315,7 +315,7 @@ public final class AiProvidersActivity extends Activity {
     private void runAction(AiProvider provider, String label) {
         if (ACTION_USE.equals(label)) {
             if (AiProviders.select(this, provider.id())) {
-                Toast.makeText(this, getString(R.string.aiprov_now_active, provider.displayName()),
+                Toast.makeText(this, getString(R.string.aiprov_now_active, provider.displayName(this)),
                         Toast.LENGTH_SHORT).show();
                 refreshCards();
             }
@@ -371,7 +371,6 @@ public final class AiProvidersActivity extends Activity {
     }
 
     /** Compact positive capabilities, in scanning order (English; screens use the Context overload). */
-    @Deprecated
     static List<String> capabilityChips(AiCapabilities caps) {
         List<String> chips = new ArrayList<>();
         if (caps.streaming) chips.add("Live replies");

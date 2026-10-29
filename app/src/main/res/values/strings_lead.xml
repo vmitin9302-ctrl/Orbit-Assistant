@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="prov_anthropic_description">Claude models through Anthropic\'s official developer API.</string>
+    <string name="prov_openrouter_description">Many AI models through one OpenRouter account. Usage is billed to your OpenRouter credits.</string>
+    <string name="prov_local_description">Private AI on this phone, even offline. A compact model, so answers are simpler than cloud AI.</string>
+    <string name="prov_relay_description">Advanced fallback: a private HTTPS relay you control. Your API key never enters Orbit.</string>
+    <string name="prov_relay_name">API relay</string>
+    <string name="sel_auto">Auto</string>
+    <string name="sel_auto_description">Orbit chooses the model and reasoning level for each request.</string>
+    <string name="lead_currently_filtering">" Currently filtering."</string>
+    <string name="lead_vault_type_all">All items</string>
+    <string name="lead_vault_type_text">Text</string>
+    <string name="lead_vault_type_links">Links</string>
+    <string name="lead_vault_type_images">Images</string>
+    <string name="lead_vault_type_documents">Documents</string>
+    <string name="lead_vault_type_orbit">Orbit answers</string>
+</resources>

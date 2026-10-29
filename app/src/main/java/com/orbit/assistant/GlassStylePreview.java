@@ -163,11 +163,11 @@ public final class GlassStylePreview extends FrameLayout {
         String material = tokens.theme == null
                 ? OrbitTheme.MATERIAL_DEFAULT : tokens.theme.material;
         String what = c.getString(R.string.d_glassprev_describe,
-                OrbitTheme.materialLabel(material)) + " ";
-        if (!OrbitTheme.isGlass(material)) return what + OrbitFloatingSurface.noGlassNote();
+                OrbitTheme.materialLabel(c, material)) + " ";
+        if (!OrbitTheme.isGlass(material)) return what + OrbitFloatingSurface.noGlassNote(c);
         return what + c.getString(R.string.d_glassprev_glass_detail,
-                resolved.glassOpacityLabel(),
-                resolved.glassTintLabel().toLowerCase(java.util.Locale.US),
-                resolved.glassEdgeLabel().toLowerCase(java.util.Locale.US));
+                resolved.glassOpacityLabel(c),
+                resolved.glassTintLabel(c).toLowerCase(java.util.Locale.US),
+                resolved.glassEdgeLabel(c).toLowerCase(java.util.Locale.US));
     }
 }

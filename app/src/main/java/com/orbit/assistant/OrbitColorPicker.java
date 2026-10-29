@@ -231,7 +231,7 @@ public final class OrbitColorPicker {
             View swatch = new View(c);
             swatch.setBackground(UiKit.outlined(color,
                     UiKit.withAlpha(OrbitContrast.inkOn(color), 60), 11, c));
-            swatch.setContentDescription(OrbitColorName.describe(c.getString(R.string.colorpick_use), color));
+            swatch.setContentDescription(OrbitColorName.describe(c, c.getString(R.string.colorpick_use), color));
             UiKit.pressScale(swatch);
             swatch.setOnClickListener(v -> {
                 UiKit.haptic(v, android.view.HapticFeedbackConstants.KEYBOARD_TAP);
@@ -274,7 +274,7 @@ public final class OrbitColorPicker {
 
         private void updateDescription() {
             setContentDescription(getContext().getString(R.string.colorpick_compare_cd,
-                    OrbitColorName.of(original), OrbitColorName.describe("", proposed)));
+                    OrbitColorName.of(getContext(), original), OrbitColorName.describe(getContext(), "", proposed)));
         }
 
         @Override protected void onDraw(Canvas canvas) {

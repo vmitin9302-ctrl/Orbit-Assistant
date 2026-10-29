@@ -44,6 +44,9 @@ public interface AiProvider {
     /** As {@link #description()}, in the language of the given context. */
     default String description(Context context) { return description(); }
 
+    /** As {@link #displayName()}, in the language of the given context. */
+    default String displayName(Context context) { return displayName(); }
+
     /** Fixed capability metadata. Never varies with sign-in state; that is {@link #status}. */
     AiCapabilities capabilities();
 

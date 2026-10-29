@@ -270,7 +270,7 @@ public final class ExtensionsActivity extends Activity {
         top.setGravity(Gravity.CENTER_VERTICAL);
         LinearLayout copy = new LinearLayout(this);
         copy.setOrientation(LinearLayout.VERTICAL);
-        copy.addView(UiKit.text(this, extension.name, 17, UiKit.TEXT, true));
+        copy.addView(UiKit.text(this, ExtensionText.name(this, extension), 17, UiKit.TEXT, true));
         copy.addView(UiKit.text(this,
                 "v" + extension.version + " · " + extension.author, 12, UiKit.MUTED, false));
         top.addView(copy, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
@@ -282,13 +282,13 @@ public final class ExtensionsActivity extends Activity {
         top.addView(state);
         card.addView(top);
 
-        TextView description = UiKit.text(this, extension.description, 13, UiKit.MUTED, false);
+        TextView description = UiKit.text(this, ExtensionText.description(this, extension), 13, UiKit.MUTED, false);
         description.setLineSpacing(0, 1.12f);
         description.setPadding(0, UiKit.dp(this, 9), 0, UiKit.dp(this, 7));
         card.addView(description);
         for (OrbitExtension.Action action : extension.actions) {
             TextView actionView = UiKit.text(this,
-                    "• " + action.name + " · " + action.capabilityLabel(),
+                    "• " + ExtensionText.actionName(this, extension, action) + " · " + action.capabilityLabel(),
                     12, UiKit.TEXT, false);
             actionView.setPadding(0, UiKit.dp(this, 3), 0, 0);
             card.addView(actionView);
@@ -296,7 +296,7 @@ public final class ExtensionsActivity extends Activity {
 
         if (requiresSetup) {
             Button configure = secondaryButton(getString(R.string.ext_setup_configure));
-            configure.setContentDescription(getString(R.string.ext_setup_configure_desc, extension.name));
+            configure.setContentDescription(getString(R.string.ext_setup_configure_desc, ExtensionText.name(this, extension)));
             configure.setOnClickListener(v -> showConfiguration(installed));
             LinearLayout.LayoutParams configureLp = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 44));
@@ -309,15 +309,15 @@ public final class ExtensionsActivity extends Activity {
         buttons.setPadding(0, extension.setupFields.isEmpty() ? UiKit.dp(this, 14) :
                 UiKit.dp(this, 9), 0, 0);
         Button toggle = installed.enabled ? warningButton(getString(R.string.ext_disable)) : primaryButton(getString(R.string.ext_enable));
-        toggle.setContentDescription(installed.enabled ? getString(R.string.ext_disable_desc, extension.name)
-                : getString(R.string.ext_enable_desc, extension.name));
+        toggle.setContentDescription(installed.enabled ? getString(R.string.ext_disable_desc, ExtensionText.name(this, extension))
+                : getString(R.string.ext_enable_desc, ExtensionText.name(this, extension)));
         toggle.setOnClickListener(v -> {
             if (OrbitExtensionStore.setEnabled(this, extension.id, !installed.enabled))
                 rebuildPreservingPosition();
         });
         buttons.addView(toggle, new LinearLayout.LayoutParams(0, UiKit.dp(this, 44), 1));
         Button remove = destructiveButton(getString(R.string.ext_remove));
-        remove.setContentDescription(getString(R.string.ext_remove_desc, extension.name));
+        remove.setContentDescription(getString(R.string.ext_remove_desc, ExtensionText.name(this, extension)));
         LinearLayout.LayoutParams removeLp = new LinearLayout.LayoutParams(0, UiKit.dp(this, 44), 1);
         removeLp.leftMargin = UiKit.dp(this, 9);
         buttons.addView(remove, removeLp);
@@ -334,7 +334,7 @@ public final class ExtensionsActivity extends Activity {
         top.setGravity(Gravity.CENTER_VERTICAL);
         LinearLayout copy = new LinearLayout(this);
         copy.setOrientation(LinearLayout.VERTICAL);
-        copy.addView(UiKit.text(this, extension.name, 16, UiKit.TEXT, true));
+        copy.addView(UiKit.text(this, ExtensionText.name(this, extension), 16, UiKit.TEXT, true));
         copy.addView(UiKit.text(this,
                 "v" + extension.version + " · " + extension.author, 12, UiKit.MUTED, false));
         top.addView(copy, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
@@ -348,7 +348,7 @@ public final class ExtensionsActivity extends Activity {
         top.addView(state);
         card.addView(top);
 
-        TextView description = UiKit.text(this, extension.description, 12, UiKit.MUTED, false);
+        TextView description = UiKit.text(this, ExtensionText.description(this, extension), 12, UiKit.MUTED, false);
         description.setLineSpacing(0, 1.12f);
         description.setPadding(0, UiKit.dp(this, 7), 0, UiKit.dp(this, 12));
         card.addView(description);
@@ -356,16 +356,16 @@ public final class ExtensionsActivity extends Activity {
         Button action;
         if (installed == null) {
             action = primaryButton(getString(R.string.ext_install));
-            action.setContentDescription(getString(R.string.ext_install_desc, extension.name));
+            action.setContentDescription(getString(R.string.ext_install_desc, ExtensionText.name(this, extension)));
             action.setOnClickListener(v -> showInstallReview(extension));
         } else {
             action = installedButton(!installed.enabled ? getString(R.string.ext_installed_disabled) :
                     requiresSetup ? getString(R.string.ext_installed_needs_setup)
                     : getString(R.string.ext_installed_enabled));
             action.setContentDescription(!installed.enabled
-                    ? getString(R.string.ext_installed_desc_disabled, extension.name)
-                    : requiresSetup ? getString(R.string.ext_installed_desc_needs_setup, extension.name)
-                    : getString(R.string.ext_installed_desc_enabled, extension.name));
+                    ? getString(R.string.ext_installed_desc_disabled, ExtensionText.name(this, extension))
+                    : requiresSetup ? getString(R.string.ext_installed_desc_needs_setup, ExtensionText.name(this, extension))
+                    : getString(R.string.ext_installed_desc_enabled, ExtensionText.name(this, extension)));
         }
         card.addView(action, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 44)));
@@ -404,10 +404,10 @@ public final class ExtensionsActivity extends Activity {
         review.setOrientation(LinearLayout.VERTICAL);
         review.setPadding(UiKit.dp(this, 22), UiKit.dp(this, 8),
                 UiKit.dp(this, 22), UiKit.dp(this, 4));
-        review.addView(UiKit.text(this, extension.name + " · v" + extension.version,
+        review.addView(UiKit.text(this, ExtensionText.name(this, extension) + " · v" + extension.version,
                 17, UiKit.TEXT, true));
         review.addView(spacedText(getString(R.string.ext_review_by, extension.author), UiKit.MUTED));
-        review.addView(spacedText(extension.description, UiKit.TEXT));
+        review.addView(spacedText(ExtensionText.description(this, extension), UiKit.TEXT));
 
         if (!extension.setupFields.isEmpty()) {
             TextView setupTitle = spacedText(getString(R.string.ext_requires_setup), UiKit.MUTED);
@@ -440,7 +440,7 @@ public final class ExtensionsActivity extends Activity {
                     "\n  " + getString(R.string.ext_routine_parameters, parameterLabels(action));
             String headers = action.headers.isEmpty() ? "" :
                     "\n  " + getString(R.string.ext_declared_headers, headerNames(action));
-            review.addView(spacedText("• " + action.name + " — " + action.capabilityLabel() +
+            review.addView(spacedText("• " + ExtensionText.actionName(this, extension, action) + " — " + action.capabilityLabel() +
                     "\n  " + action.url + parameters + headers + fixedBody, UiKit.TEXT));
         }
         List<String> hosts = extension.contactedHosts();
@@ -466,7 +466,7 @@ public final class ExtensionsActivity extends Activity {
                 .setNegativeButton(getString(R.string.ui_cancel_19766ed6), null)
                 .setPositiveButton(getString(R.string.ext_install), (d, w) -> {
                     if (OrbitExtensionStore.install(this, extension)) {
-                        Toast.makeText(this, getString(R.string.ext_installed_toast, extension.name), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.ext_installed_toast, ExtensionText.name(this, extension)), Toast.LENGTH_SHORT).show();
                         rebuildPreservingPosition();
                     } else {
                         showError(getString(R.string.ext_install_failed));
@@ -555,7 +555,7 @@ public final class ExtensionsActivity extends Activity {
         wrapper.addView(form);
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle(getString(initiallyConfigured ? R.string.ext_configure_title
-                        : R.string.ext_setup_title, extension.name))
+                        : R.string.ext_setup_title, ExtensionText.name(this, extension)))
                 .setView(wrapper)
                 .setNegativeButton(getString(R.string.ui_cancel_19766ed6), null)
                 .setPositiveButton(getString(R.string.ui_save_1509f561), null)
@@ -609,7 +609,7 @@ public final class ExtensionsActivity extends Activity {
                     return;
                 }
                 dialog.dismiss();
-                Toast.makeText(this, getString(R.string.ext_config_saved, extension.name),
+                Toast.makeText(this, getString(R.string.ext_config_saved, ExtensionText.name(this, extension)),
                         Toast.LENGTH_SHORT).show();
                 rebuildPreservingPosition();
             });
@@ -677,7 +677,7 @@ public final class ExtensionsActivity extends Activity {
 
     private void confirmRemove(OrbitExtension extension) {
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.ext_remove_title, extension.name))
+                .setTitle(getString(R.string.ext_remove_title, ExtensionText.name(this, extension)))
                 .setMessage(getString(R.string.ext_remove_msg))
                 .setNegativeButton(getString(R.string.ui_cancel_19766ed6), null)
                 .setPositiveButton(getString(R.string.ext_remove), (d, w) -> {

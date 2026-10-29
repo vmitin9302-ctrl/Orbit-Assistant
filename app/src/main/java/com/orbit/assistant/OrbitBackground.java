@@ -213,7 +213,6 @@ public final class OrbitBackground {
     }
 
     /** The one sentence Theme Studio shows when AMOLED is hiding a configured effect. */
-    @Deprecated
     public static String amoledSuppressionNote() {
         return "AMOLED uses true black, so background effects are hidden. "
                 + "Turn AMOLED off to see this effect.";
@@ -229,13 +228,11 @@ public final class OrbitBackground {
     public static String amoledToast(Context c) { return c.getString(R.string.obg_amoled_toast); }
 
     /** The short label the background sample carries when it is black for that reason. */
-    @Deprecated
     public static String amoledHiddenLabel() {
         return "Hidden by AMOLED";
     }
 
     /** What Orbit says once, as a toast, when an effect is chosen while AMOLED is already on. */
-    @Deprecated
     public static String amoledToast() {
         return "AMOLED keeps the page true black.";
     }

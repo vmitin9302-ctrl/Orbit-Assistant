@@ -81,6 +81,8 @@ final class OrbitLocalProvider implements AiProvider {
         return "Private AI on this phone, even offline. A compact model, so answers are simpler than cloud AI.";
     }
 
+    @Override public String description(Context context) { return context.getString(R.string.prov_local_description); }
+
     @Override public AiCapabilities capabilities() { return CAPABILITIES; }
 
     /** The cached component status, refreshed in the background when it goes stale. */

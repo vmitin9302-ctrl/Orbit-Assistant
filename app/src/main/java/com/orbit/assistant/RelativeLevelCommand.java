@@ -52,14 +52,12 @@ public final class RelativeLevelCommand {
         return target == Target.BRIGHTNESS ? "SET_BRIGHTNESS" : "SET_VOLUME";
     }
 
-    @Deprecated
 
     private String noun() {
         return target == Target.BRIGHTNESS ? "brightness" : "media volume";
     }
 
     /** What Orbit says it is doing, in the same voice as the existing local commands. */
-    @Deprecated
     public String confirmation() {
         if (absolute) {
             if (percent >= 100) return "Setting " + noun() + " to maximum.";
@@ -117,7 +115,6 @@ public final class RelativeLevelCommand {
     }
 
     /** Short description used where Orbit names the action it performed. */
-    @Deprecated
     public String summary() {
         if (absolute) {
             if (percent >= 100) return "set " + noun() + " to maximum";

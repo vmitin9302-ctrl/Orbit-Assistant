@@ -46,6 +46,8 @@ final class OpenRouterProvider implements AiProvider {
         return "Many AI models through one OpenRouter account. Usage is billed to your OpenRouter credits.";
     }
 
+    @Override public String description(Context context) { return context.getString(R.string.prov_openrouter_description); }
+
     @Override public AiCapabilities capabilities() { return CAPABILITIES; }
 
     @Override public Status status(Context context) {

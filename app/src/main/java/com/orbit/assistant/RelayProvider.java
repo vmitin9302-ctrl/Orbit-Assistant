@@ -59,6 +59,10 @@ final class RelayProvider implements AiProvider {
         return "Advanced fallback: a private HTTPS relay you control. Your API key never enters Orbit.";
     }
 
+    @Override public String description(Context context) { return context.getString(R.string.prov_relay_description); }
+
+    @Override public String displayName(Context context) { return context.getString(R.string.prov_relay_name); }
+
     @Override public AiCapabilities capabilities() { return CAPABILITIES; }
 
     @Override public Status status(Context context) {

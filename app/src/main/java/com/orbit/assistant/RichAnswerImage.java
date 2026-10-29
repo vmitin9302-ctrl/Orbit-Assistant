@@ -120,7 +120,6 @@ public final class RichAnswerImage {
     }
 
     /** The line drawn under the picture: the caption, the domain, or both. */
-    @Deprecated
     public String attributionLine() {
         if (isGenerated()) return "Generated image";
         if (sourceDomain.isEmpty()) return caption;
@@ -142,7 +141,6 @@ public final class RichAnswerImage {
     }
 
     /** What a screen reader is told about the picture itself. */
-    @Deprecated
     public String contentDescription() {
         if (!altText.isEmpty()) return altText;
         if (!caption.isEmpty()) return caption;

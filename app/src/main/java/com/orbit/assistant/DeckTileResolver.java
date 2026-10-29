@@ -104,15 +104,15 @@ public final class DeckTileResolver {
                 || DeckTileRegistry.TYPE_QUICK_CAPTURE.equals(tile.type)) {
             return vault(c, tile, definition);
         }
-        return destination(tile, definition);
+        return destination(c, tile, definition);
     }
 
     // ---- kinds ------------------------------------------------------------------------------------
 
-    private static Resolved destination(DeckTile tile, DeckTileRegistry.Definition definition) {
-        String title = title(tile, definition.title);
-        return new Resolved(title, definition.description, definition.iconRes, null,
-                DeckTile.Availability.AVAILABLE, describe(title, definition.roleLabel, ""));
+    private static Resolved destination(Context c, DeckTile tile, DeckTileRegistry.Definition definition) {
+        String title = title(tile, definition.title(c));
+        return new Resolved(title, definition.description(c), definition.iconRes, null,
+                DeckTile.Availability.AVAILABLE, describe(title, definition.roleLabel(c), ""));
     }
 
     /**
@@ -129,13 +129,13 @@ public final class DeckTileResolver {
      */
     private static Resolved vault(Context c, DeckTile tile,
                                   DeckTileRegistry.Definition definition) {
-        String title = title(tile, definition.title);
+        String title = title(tile, definition.title(c));
         if (c != null && !Prefs.vaultEnabled(c)) {
             return new Resolved(title, c.getString(R.string.d_deck_vault_off), definition.iconRes, null,
                     DeckTile.Availability.UNAVAILABLE,
                     c.getString(R.string.d_deck_vault_off_desc, title, c.getString(R.string.d_deck_vault_off)));
         }
-        return destination(tile, definition);
+        return destination(c, tile, definition);
     }
 
     /** What a Vault tile says, and what tapping one says, while the Vault is switched off. */
@@ -157,7 +157,7 @@ public final class DeckTileResolver {
         int steps = routine.actions == null ? 0 : routine.actions.size();
         String subtitle = c.getResources().getQuantityString(R.plurals.d_deck_routine_actions, steps, steps);
         return new Resolved(title, subtitle, definition.iconRes, null,
-                DeckTile.Availability.AVAILABLE, describe(title, definition.roleLabel, ""));
+                DeckTile.Availability.AVAILABLE, describe(title, definition.roleLabel(c), ""));
     }
 
     private static Resolved app(Context c, DeckTile tile, DeckTileRegistry.Definition definition) {
@@ -184,7 +184,7 @@ public final class DeckTileResolver {
             Drawable icon = null;
             try { icon = pm.getApplicationIcon(info); } catch (Exception ignored) {}
             return new Resolved(title, c.getString(R.string.d_deck_app_shortcut), definition.iconRes, icon,
-                    DeckTile.Availability.AVAILABLE, describe(title, definition.roleLabel, ""));
+                    DeckTile.Availability.AVAILABLE, describe(title, definition.roleLabel(c), ""));
         } catch (PackageManager.NameNotFoundException e) {
             // Uninstalled. The package name stays stored, so reinstalling restores the tile.
             return new Resolved(stored, c.getString(R.string.d_deck_app_not_installed), definition.iconRes, null,
@@ -208,12 +208,12 @@ public final class DeckTileResolver {
         // The prompt itself is the tile's secondary line, trimmed to one glanceable phrase. It is
         // shown here and nowhere else: it never reaches Diagnostics or any provider on its own.
         return new Resolved(title, preview(text), icon, null,
-                DeckTile.Availability.AVAILABLE, describe(title, definition.roleLabel, ""));
+                DeckTile.Availability.AVAILABLE, describe(title, definition.roleLabel(c), ""));
     }
 
     private static Resolved flashlight(Context c, DeckTile tile,
                                        DeckTileRegistry.Definition definition, LiveState live) {
-        String title = title(tile, definition.title);
+        String title = title(tile, definition.title(c));
         boolean hasFlash = c != null && c.getPackageManager()
                 .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
         if (!hasFlash) {
@@ -223,22 +223,22 @@ public final class DeckTileResolver {
         }
         // Null means Orbit could not read the torch. The tile still works; it simply does not
         // claim a state it does not know, which is why this falls back to the description.
-        String state = live.flashlightOn == null ? definition.description
+        String state = live.flashlightOn == null ? definition.description(c)
                 : c.getString(live.flashlightOn ? R.string.d_redit_on : R.string.d_redit_off);
         return new Resolved(title, state, definition.iconRes, null,
                 DeckTile.Availability.AVAILABLE,
-                describe(title, definition.roleLabel, live.flashlightOn == null ? "" : state),
+                describe(title, definition.roleLabel(c), live.flashlightOn == null ? "" : state),
                 live.flashlightOn != null);
     }
 
     private static Resolved media(Context c, DeckTile tile, DeckTileRegistry.Definition definition,
                                   LiveState live) {
-        String title = title(tile, definition.title);
+        String title = title(tile, definition.title(c));
         String state;
         String spoken;
         if (live.mediaPlaying == null) {
             // No readable session: a neutral tile rather than an invented "Paused".
-            state = definition.description;
+            state = definition.description(c);
             spoken = "";
         } else {
             String app = live.mediaApp.isEmpty() ? "" : " · " + live.mediaApp;
@@ -246,7 +246,7 @@ public final class DeckTileResolver {
             spoken = state;
         }
         return new Resolved(title, state, definition.iconRes, null,
-                DeckTile.Availability.AVAILABLE, describe(title, definition.roleLabel, spoken),
+                DeckTile.Availability.AVAILABLE, describe(title, definition.roleLabel(c), spoken),
                 live.mediaPlaying != null);
     }
 

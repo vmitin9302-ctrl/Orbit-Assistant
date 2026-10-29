@@ -129,7 +129,7 @@ final class AiSelectorDialog {
             providerScroll.setHorizontalScrollBarEnabled(false);
             providerScroll.addView(providerRow);
             for (AiProvider provider : providers) {
-                Button chip = chip(provider.displayName());
+                Button chip = chip(provider.displayName(context));
                 chip.setOnClickListener(v -> chooseProvider(provider.id(), v));
                 chip.setTag(provider.id());
                 providerChips.add(chip);
@@ -337,9 +337,9 @@ final class AiSelectorDialog {
         row.setFocusable(true);
         LinearLayout words = new LinearLayout(context);
         words.setOrientation(LinearLayout.VERTICAL);
-        words.addView(UiKit.text(context, AiSelection.AUTO_LABEL + "  " + AUTO_MARK, 15,
+        words.addView(UiKit.text(context, AiSelection.autoLabel(context) + "  " + AUTO_MARK, 15,
                 UiKit.TEXT, true));
-        words.addView(UiKit.text(context, AiSelection.AUTO_DESCRIPTION, 12, UiKit.MUTED, false));
+        words.addView(UiKit.text(context, AiSelection.autoDescription(context), 12, UiKit.MUTED, false));
         row.addView(words, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         TextView check = UiKit.text(context, "✓", 17, UiKit.accent(context), true);
         check.setTag("check");
@@ -451,8 +451,8 @@ final class AiSelectorDialog {
                             accent, 14, context));
             View check = autoRow.findViewWithTag("check");
             if (check != null) check.setVisibility(auto ? View.VISIBLE : View.INVISIBLE);
-            autoRow.setContentDescription(AiSelection.AUTO_LABEL + ". "
-                    + AiSelection.AUTO_DESCRIPTION + (auto ? context.getString(R.string.aisel_selected_sentence) : ""));
+            autoRow.setContentDescription(AiSelection.autoLabel(context) + ". "
+                    + AiSelection.autoDescription(context) + (auto ? context.getString(R.string.aisel_selected_sentence) : ""));
             autoRow.setSelected(auto);
         }
         if (autoProviders != null) autoProviders.setVisibility(auto ? View.VISIBLE : View.GONE);

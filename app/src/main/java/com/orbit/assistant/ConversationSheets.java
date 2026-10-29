@@ -140,9 +140,9 @@ final class ConversationSheets {
             name.setSingleLine(true);
             name.setEllipsize(TextUtils.TruncateAt.MIDDLE);
             text.addView(name);
-            text.addView(UiKit.text(a, a.getString(R.string.convsheet_kept_line, item.typeLabel(),
+            text.addView(UiKit.text(a, a.getString(R.string.convsheet_kept_line, item.typeLabel(a),
                     ContextEstimate.approx(ContextLedger.tokensFor(item.text))), 12, UiKit.MUTED, false));
-            text.setContentDescription(a.getString(R.string.convsheet_kept_desc, item.label, item.typeLabel()));
+            text.setContentDescription(a.getString(R.string.convsheet_kept_desc, item.label, item.typeLabel(a)));
             text.setOnClickListener(v -> inspect(a, item));
             text.setBackground(UiKit.ripple(Color.TRANSPARENT, UiKit.accent(a), 10, a));
             line.addView(text, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
@@ -170,7 +170,7 @@ final class ConversationSheets {
         String preview = text.length() > 1600 ? text.substring(0, 1600).trim() + "…" : text;
         AlertDialog dialog = new AlertDialog.Builder(a)
                 .setTitle(item.label)
-                .setMessage(item.typeLabel() + "\n\n" + preview)
+                .setMessage(item.typeLabel(a) + "\n\n" + preview)
                 .setPositiveButton(R.string.ui_done_11a6767d, null)
                 .create();
         UiKit.styleOrbitDialog(dialog, a, false);
