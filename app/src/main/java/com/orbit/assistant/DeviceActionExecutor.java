@@ -102,11 +102,10 @@ public final class DeviceActionExecutor {
         if (!EmergencyDialGuard.CATEGORY_NONE.equals(category)
                 && !EmergencyDialGuard.consumeGrant(number)) {
             DiagnosticStore.recordProtectedDial(c, category, "blocked");
-            return Result.unavailable("Orbit needs you to confirm before it opens the dialer for "
-                    + EmergencyDialGuard.normalize(number) + ".");
+            return Result.unavailable(c.getString(R.string.dae_dial_confirm, EmergencyDialGuard.normalize(number)));
         }
         start(c, new Intent(Intent.ACTION_DIAL, Uri.parse("tel:" + Uri.encode(number))));
-        if (EmergencyDialGuard.CATEGORY_NONE.equals(category)) return Result.success("Dialer opened");
+        if (EmergencyDialGuard.CATEGORY_NONE.equals(category)) return Result.success(c.getString(R.string.dae_dialer_opened));
         DiagnosticStore.recordProtectedDial(c, category, "confirmed");
         // Past tense, said here and only here. This line is written after the Intent has gone to
         // Android, which is the first moment at which "opened" is a true thing to say about a
@@ -121,14 +120,14 @@ public final class DeviceActionExecutor {
     }
 
     public static Result executeDetailed(Context c, AssistantReply.Action action) {
-        if (action == null) return Result.failed("No action to execute");
+        if (action == null) return Result.failed(c.getString(R.string.dae_no_action));
         try {
             JSONObject p = action.params == null ? new JSONObject() : action.params;
             Result result;
             switch (action.type.toUpperCase(Locale.US)) {
                 case "OPEN_SETTINGS":
                     start(c, new Intent(Settings.ACTION_SETTINGS));
-                    result = Result.success("Opened Settings");
+                    result = Result.success(c.getString(R.string.dae_opened_settings));
                     break;
                 case "OPEN_APP":
                     result = openApp(c, p.optString("app", p.optString("package", "")));
@@ -140,7 +139,7 @@ public final class DeviceActionExecutor {
                             .putExtra(AlarmClock.EXTRA_MESSAGE, p.optString("label", "Orbit timer"))
                             .putExtra(AlarmClock.EXTRA_SKIP_UI, true);
                     start(c, i);
-                    result = Result.success("Timer started");
+                    result = Result.success(c.getString(R.string.dae_timer_started));
                     break;
                 }
                 case "SET_ALARM": {
@@ -151,7 +150,7 @@ public final class DeviceActionExecutor {
                             .putExtra(AlarmClock.EXTRA_MESSAGE, p.optString("label", "Orbit alarm"))
                             .putExtra(AlarmClock.EXTRA_SKIP_UI, true);
                     start(c, i);
-                    result = Result.success("Alarm set");
+                    result = Result.success(c.getString(R.string.dae_alarm_set));
                     break;
                 }
                 case "SET_REMINDER": {
@@ -167,7 +166,7 @@ public final class DeviceActionExecutor {
                     if (begin > 0) i.putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, begin);
                     if (end > 0) i.putExtra(CalendarContract.EXTRA_EVENT_END_TIME, end);
                     start(c, i);
-                    result = Result.success("Calendar event composer opened");
+                    result = Result.success(c.getString(R.string.dae_event_composer));
                     break;
                 }
                 case "ADD_CALENDAR_EVENTS": {
@@ -183,7 +182,7 @@ public final class DeviceActionExecutor {
                     String query = p.optString("query", p.optString("destination", ""));
                     Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("google.navigation:q=" + Uri.encode(query)));
                     start(c, i);
-                    result = Result.success("Navigation opened");
+                    result = Result.success(c.getString(R.string.dae_navigation_opened));
                     break;
                 }
                 case "DIAL":
@@ -193,8 +192,8 @@ public final class DeviceActionExecutor {
                     String number = findPhoneNumber(c, p.optString("name", ""));
                     if (number == null) {
                         result = c.checkSelfPermission(android.Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED
-                                ? Result.unavailable("Could not find that contact")
-                                : Result.permission("Grant Contacts permission or use a phone number");
+                                ? Result.unavailable(c.getString(R.string.dae_contact_not_found))
+                                : Result.permission(c.getString(R.string.dae_grant_contacts));
                         break;
                     }
                     // A contact can resolve to a protected number, and the confirmation upstream
@@ -207,27 +206,27 @@ public final class DeviceActionExecutor {
                     Intent i = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + Uri.encode(p.optString("number", ""))));
                     i.putExtra("sms_body", p.optString("body", ""));
                     start(c, i);
-                    result = Result.success("Message composer opened");
+                    result = Result.success(c.getString(R.string.dae_message_composer));
                     break;
                 }
                 case "SMS_CONTACT": {
                     String number = findPhoneNumber(c, p.optString("name", ""));
                     if (number == null) {
                         result = c.checkSelfPermission(android.Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED
-                                ? Result.unavailable("Could not find that contact")
-                                : Result.permission("Grant Contacts permission or use a phone number");
+                                ? Result.unavailable(c.getString(R.string.dae_contact_not_found))
+                                : Result.permission(c.getString(R.string.dae_grant_contacts));
                         break;
                     }
                     Intent i = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + Uri.encode(number)));
                     i.putExtra("sms_body", p.optString("body", ""));
                     start(c, i);
-                    result = Result.success("Message composer opened");
+                    result = Result.success(c.getString(R.string.dae_message_composer));
                     break;
                 }
                 case "SET_VOLUME": {
                     AudioManager am = (AudioManager) c.getSystemService(Context.AUDIO_SERVICE);
                     if (am == null) {
-                        result = Result.unavailable("Audio service unavailable");
+                        result = Result.unavailable(c.getString(R.string.dae_audio_unavailable));
                         break;
                     }
                     int max = am.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
@@ -252,7 +251,7 @@ public final class DeviceActionExecutor {
                     }
                     int previousPercent = max <= 0 ? -1 : Math.round((current / (float) max) * 100f);
                     am.setStreamVolume(AudioManager.STREAM_MUSIC, level, AudioManager.FLAG_SHOW_UI);
-                    result = Result.success("Media volume set to " + percent + "%");
+                    result = Result.success(c.getString(R.string.dae_volume_set, percent));
                     // The level before the change is a real reading, which is what makes
                     // "put it back" possible without inventing history.
                     RecentActionContext.recordLevel(RecentActionContext.Target.VOLUME, previousPercent);
@@ -283,7 +282,7 @@ public final class DeviceActionExecutor {
                     // model, routine step - reaches the same one.
                     MediaControl.Command command = MediaControl.parse(p.optString("command", ""));
                     if (command == null) {
-                        result = Result.failed("That is not a media command Orbit has");
+                        result = Result.failed(c.getString(R.string.dae_not_media_command));
                         break;
                     }
                     result = MediaControl.execute(c, command);
@@ -297,34 +296,34 @@ public final class DeviceActionExecutor {
                 }
                 case "OPEN_INTERNET_PANEL":
                     start(c, new Intent(Settings.Panel.ACTION_INTERNET_CONNECTIVITY));
-                    result = Result.success("Internet controls opened");
+                    result = Result.success(c.getString(R.string.dae_internet_opened));
                     break;
                 case "OPEN_BLUETOOTH_SETTINGS":
                     start(c, new Intent(Settings.ACTION_BLUETOOTH_SETTINGS));
-                    result = Result.success("Bluetooth settings opened");
+                    result = Result.success(c.getString(R.string.dae_bluetooth_opened));
                     break;
                 case "WEB_SEARCH": {
                     Intent i = new Intent(Intent.ACTION_WEB_SEARCH).putExtra(SearchManager.QUERY, p.optString("query", ""));
                     start(c, i);
-                    result = Result.success("Search opened");
+                    result = Result.success(c.getString(R.string.dae_search_opened));
                     break;
                 }
                 case "OPEN_URL":
                     start(c, new Intent(Intent.ACTION_VIEW, Uri.parse(p.optString("url", "https://www.google.com"))));
-                    result = Result.success("Link opened");
+                    result = Result.success(c.getString(R.string.dae_link_opened));
                     break;
                 case "SHARE": {
                     Intent i = new Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, p.optString("text", ""));
-                    Intent chooser = Intent.createChooser(i, "Share with");
+                    Intent chooser = Intent.createChooser(i, c.getString(R.string.dae_share_with));
                     chooser.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     c.startActivity(chooser);
-                    result = Result.success("Share sheet opened");
+                    result = Result.success(c.getString(R.string.dae_share_opened));
                     break;
                 }
                 case "COPY": {
                     ClipboardManager cm = (ClipboardManager) c.getSystemService(Context.CLIPBOARD_SERVICE);
                     if (cm != null) cm.setPrimaryClip(ClipData.newPlainText("Orbit", p.optString("text", "")));
-                    result = Result.success("Copied to clipboard");
+                    result = Result.success(c.getString(R.string.dae_copied));
                     break;
                 }
                 case "FLASHLIGHT": {
@@ -336,7 +335,7 @@ public final class DeviceActionExecutor {
                     break;
                 }
                 default:
-                    result = Result.unavailable("Unsupported action: " + action.type);
+                    result = Result.unavailable(c.getString(R.string.dae_unsupported, action.type));
                     break;
             }
             boolean continueOnFailure = p.optBoolean("continueOnFailure", false);
@@ -345,12 +344,12 @@ public final class DeviceActionExecutor {
             }
             return result;
         } catch (SecurityException e) {
-            return Result.permission("Orbit does not currently have permission to complete that phone action.");
+            return Result.permission(c.getString(R.string.dae_no_permission));
         } catch (Exception e) {
             String message = e.getMessage();
             if (message == null || message.trim().isEmpty()) message = e.getClass().getSimpleName();
             if (message.length() > 140) message = message.substring(0, 137) + "…";
-            return Result.failed("Action failed: " + message);
+            return Result.failed(c.getString(R.string.dae_action_failed, message));
         }
     }
 
@@ -364,15 +363,15 @@ public final class DeviceActionExecutor {
         String destination = ReminderDestination.forAction(c, p);
         boolean samsung = ReminderDestination.SAMSUNG.equals(destination);
         if (!samsung && !ReminderNotifier.notificationsAllowed(c)) {
-            return Result.permission("Allow Orbit notifications so the reminder can alert you.");
+            return Result.permission(c.getString(R.string.dae_allow_notifications));
         }
-        String message = p.optString("message", p.optString("label", "Reminder")).trim();
-        if (message.isEmpty()) message = "Reminder";
+        String message = p.optString("message", p.optString("label", c.getString(R.string.dae_reminder_default))).trim();
+        if (message.isEmpty()) message = c.getString(R.string.dae_reminder_default);
         String repeat = p.optString("repeat", "").trim().toLowerCase(Locale.US);
         if (repeat.equals("none") || repeat.equals("once")) repeat = "";
         if (!samsung && !repeat.isEmpty() && !ReminderStore.isSupportedRepeat(repeat)) {
             // Said out loud rather than quietly creating a one-time reminder in its place.
-            return Result.failed("Orbit reminders can repeat daily or weekly, not " + repeat + ".");
+            return Result.failed(c.getString(R.string.dae_repeat_unsupported, repeat));
         }
 
         long triggerAt = p.optLong("triggerAtMillis", 0L);
@@ -384,7 +383,7 @@ public final class DeviceActionExecutor {
             int minute = p.optInt("minute", -1);
             if (year <= 0 || month < 1 || month > 12 || day < 1 || day > 31 ||
                     hour < 0 || hour > 23 || minute < 0 || minute > 59) {
-                return Result.failed("Reminder date or time is incomplete");
+                return Result.failed(c.getString(R.string.dae_reminder_incomplete));
             }
             Calendar cal = Calendar.getInstance();
             cal.setLenient(false);
@@ -397,10 +396,10 @@ public final class DeviceActionExecutor {
             cal.set(Calendar.SECOND, 0);
             cal.set(Calendar.MILLISECOND, 0);
             try { triggerAt = cal.getTimeInMillis(); }
-            catch (Exception e) { return Result.failed("That reminder date is not valid"); }
+            catch (Exception e) { return Result.failed(c.getString(R.string.dae_reminder_bad_date)); }
         }
         if (triggerAt <= System.currentTimeMillis() + 500L) {
-            return Result.failed("Reminder time must be in the future");
+            return Result.failed(c.getString(R.string.dae_reminder_future));
         }
         String when = DateFormat.getDateTimeInstance(DateFormat.MEDIUM, DateFormat.SHORT)
                 .format(new Date(triggerAt));
@@ -414,9 +413,9 @@ public final class DeviceActionExecutor {
         try { p.put("reminderId", item.id).put("triggerAtMillis", triggerAt).put("message", message); }
         catch (Exception ignored) {}
 
-        String repeats = repeat.isEmpty() ? "" : ", repeating " + repeat;
-        String suffix = scheduled.exact ? "" : " (approximate timing)";
-        return Result.success("Reminder set for " + when + repeats + suffix);
+        String repeats = repeat.isEmpty() ? "" : c.getString(R.string.dae_reminder_repeating, repeatWord(c, repeat));
+        String suffix = scheduled.exact ? "" : " " + c.getString(R.string.dae_reminder_approx);
+        return Result.success(c.getString(R.string.dae_reminder_set, when) + repeats + suffix);
     }
 
     /**
@@ -426,19 +425,17 @@ public final class DeviceActionExecutor {
      */
     private static Result openSamsungReminder(Context c, String message, long triggerAt,
                                               String when, String repeat) {
-        String repeatNote = repeat.isEmpty() ? "" : " Set it to repeat " + repeat + " there too.";
+        String repeatNote = repeat.isEmpty() ? ""
+                : " " + c.getString(R.string.dae_samsung_repeat_note, repeatWord(c, repeat));
         switch (ReminderDestination.samsungSupport(c)) {
             case ReminderDestination.FULL:
                 start(c, ReminderDestination.fullIntent(message, triggerAt));
-                return Result.handedOff("Samsung Reminder opened for " + when
-                        + ". Tap Save there to keep it." + repeatNote);
+                return Result.handedOff(c.getString(R.string.dae_samsung_full, when) + repeatNote);
             case ReminderDestination.SHARE:
                 start(c, ReminderDestination.shareIntent(message));
-                return Result.handedOff("Samsung Reminder opened with the text. Set the time to "
-                        + when + " and tap Save there." + repeatNote);
+                return Result.handedOff(c.getString(R.string.dae_samsung_share, when) + repeatNote);
             default:
-                return Result.unavailable("Samsung Reminder is not available on this phone, so "
-                        + "nothing was created. You can use Orbit Reminders instead.");
+                return Result.unavailable(c.getString(R.string.dae_samsung_unavailable));
         }
     }
 
@@ -461,27 +458,27 @@ public final class DeviceActionExecutor {
      * and the caller falls back to the clipboard.
      */
     public static String openSmsReplyComposer(Context c, String screenText, String body) {
-        if (body == null || body.trim().isEmpty()) return "Nothing to insert";
+        if (body == null || body.trim().isEmpty()) return c.getString(R.string.dae_nothing_to_insert);
         if (c.checkSelfPermission(android.Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-            return "Copied instead · grant Contacts permission for Use in chat";
+            return c.getString(R.string.dae_copied_contacts_perm);
         }
 
         String contactName = findVisibleContactName(c, screenText);
         if (contactName == null) {
-            return "Copied instead · I couldn't identify the current SMS/RCS recipient";
+            return c.getString(R.string.dae_copied_no_recipient);
         }
         String number = findPhoneNumber(c, contactName);
         if (number == null) {
-            return "Copied instead · I couldn't resolve " + contactName + " in Contacts";
+            return c.getString(R.string.dae_copied_no_contact, contactName);
         }
 
         try {
             Intent i = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + Uri.encode(number)));
             i.putExtra("sms_body", body.trim());
             start(c, i);
-            return "OPENED:Reply ready for " + contactName;
+            return "OPENED:" + c.getString(R.string.dae_reply_ready, contactName);
         } catch (Exception e) {
-            return "Copied instead · your current messaging app did not accept a prefilled reply";
+            return c.getString(R.string.dae_copied_app_rejected);
         }
     }
 
@@ -513,16 +510,16 @@ public final class DeviceActionExecutor {
 
     private static Result setBrightness(Context c, int percent) {
         if (!Settings.System.canWrite(c)) {
-            return Result.permission("Allow Modify system settings to let Orbit change brightness");
+            return Result.permission(c.getString(R.string.dae_brightness_permission));
         }
         try {
             Settings.System.putInt(c.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS_MODE,
                     Settings.System.SCREEN_BRIGHTNESS_MODE_MANUAL);
             int value = Math.max(1, Math.min(255, Math.round((percent / 100f) * 255f)));
             Settings.System.putInt(c.getContentResolver(), Settings.System.SCREEN_BRIGHTNESS, value);
-            return Result.success("Brightness set to " + percent + "%");
+            return Result.success(c.getString(R.string.dae_brightness_set, percent));
         } catch (Exception e) {
-            return Result.failed("Could not change brightness");
+            return Result.failed(c.getString(R.string.dae_brightness_failed));
         }
     }
 
@@ -548,36 +545,49 @@ public final class DeviceActionExecutor {
             case "silent": case "mute": case "muted": case "off":
                 mode = AudioManager.RINGER_MODE_SILENT; break;
             default:
-                return Result.failed("That is not a ringer mode Orbit has");
+                return Result.failed(c.getString(R.string.dae_not_ringer_mode));
         }
 
         AudioManager am = (AudioManager) c.getSystemService(Context.AUDIO_SERVICE);
-        if (am == null) return Result.unavailable("Audio service unavailable");
+        if (am == null) return Result.unavailable(c.getString(R.string.dae_audio_unavailable));
 
         NotificationManager nm = (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
         boolean policyGranted = nm != null && nm.isNotificationPolicyAccessGranted();
         if (!policyGranted && mode != AudioManager.RINGER_MODE_NORMAL) {
             // Android refuses a quiet mode without this access, and refuses it by throwing. Asking
             // first means the user is told what to grant instead of shown a failure.
-            return Result.permission(
-                    "Grant Do Not Disturb access to let Orbit silence or vibrate the ringer");
+            return Result.permission(c.getString(R.string.dae_ringer_dnd_quiet));
         }
         try {
             am.setRingerMode(mode);
         } catch (SecurityException e) {
-            return Result.permission(
-                    "Grant Do Not Disturb access to let Orbit change the ringer mode");
+            return Result.permission(c.getString(R.string.dae_ringer_dnd_change));
         } catch (Exception e) {
-            return Result.failed("Could not change the ringer mode");
+            return Result.failed(c.getString(R.string.dae_ringer_failed));
         }
 
         String actual = DeviceStatusReader.ringerModeName(c);
-        if (actual.isEmpty()) return Result.failed("Orbit could not confirm the ringer mode");
+        if (actual.isEmpty()) return Result.failed(c.getString(R.string.dae_ringer_unconfirmed));
         if (!actual.equalsIgnoreCase(modeName(mode))) {
             // The call went through and the phone is somewhere else. Say where it actually is.
-            return Result.failed("Android kept the ringer on " + actual);
+            return Result.failed(c.getString(R.string.dae_ringer_kept, ringerLabel(c, actual)));
         }
-        return Result.success("Ringer set to " + actual);
+        return Result.success(c.getString(R.string.dae_ringer_set, ringerLabel(c, actual)));
+    }
+
+    /** The ringer mode name Android reported, in the app language. */
+    private static String ringerLabel(Context c, String name) {
+        if ("Normal".equalsIgnoreCase(name)) return c.getString(R.string.dae_mode_normal);
+        if ("Vibrate".equalsIgnoreCase(name)) return c.getString(R.string.dae_mode_vibrate);
+        if ("Silent".equalsIgnoreCase(name)) return c.getString(R.string.dae_mode_silent);
+        return name;
+    }
+
+    /** A stored reminder repeat ("daily", "weekly") in the app language. */
+    private static String repeatWord(Context c, String repeat) {
+        if (ReminderStore.REPEAT_DAILY.equals(repeat)) return c.getString(R.string.dae_repeat_daily);
+        if (ReminderStore.REPEAT_WEEKLY.equals(repeat)) return c.getString(R.string.dae_repeat_weekly);
+        return repeat;
     }
 
     private static String modeName(int mode) {
@@ -610,17 +620,17 @@ public final class DeviceActionExecutor {
 
     private static Result setDoNotDisturb(Context c, boolean enabled) {
         NotificationManager nm = (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (nm == null) return Result.unavailable("Notification service unavailable");
+        if (nm == null) return Result.unavailable(c.getString(R.string.dae_notif_service));
         if (!nm.isNotificationPolicyAccessGranted()) {
-            return Result.permission("Grant Do Not Disturb access to let Orbit change DND");
+            return Result.permission(c.getString(R.string.dae_dnd_change_access));
         }
         try {
             nm.setInterruptionFilter(enabled
                     ? NotificationManager.INTERRUPTION_FILTER_PRIORITY
                     : NotificationManager.INTERRUPTION_FILTER_ALL);
-            return Result.success(enabled ? "Do Not Disturb enabled" : "Do Not Disturb disabled");
+            return Result.success(c.getString(enabled ? R.string.dae_dnd_enabled : R.string.dae_dnd_disabled));
         } catch (Exception e) {
-            return Result.failed("Could not change Do Not Disturb");
+            return Result.failed(c.getString(R.string.dae_dnd_failed));
         }
     }
 
@@ -675,18 +685,18 @@ public final class DeviceActionExecutor {
 
     private static void start(Context c, Intent intent) {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        if (intent.resolveActivity(c.getPackageManager()) == null) throw new IllegalStateException("No compatible app installed");
+        if (intent.resolveActivity(c.getPackageManager()) == null) throw new IllegalStateException(c.getString(R.string.dae_no_compatible_app));
         c.startActivity(intent);
     }
 
     private static Result openApp(Context c, String wanted) {
-        if (wanted == null || wanted.trim().isEmpty()) return Result.failed("No app specified");
+        if (wanted == null || wanted.trim().isEmpty()) return Result.failed(c.getString(R.string.dae_no_app_specified));
         PackageManager pm = c.getPackageManager();
         String w = wanted.trim().toLowerCase(Locale.US);
         Intent direct = pm.getLaunchIntentForPackage(wanted.trim());
         if (direct != null) {
             start(c, direct);
-            return Result.success("Opened app");
+            return Result.success(c.getString(R.string.dae_opened_app));
         }
         Intent launcher = new Intent(Intent.ACTION_MAIN).addCategory(Intent.CATEGORY_LAUNCHER);
         List<ResolveInfo> infos = pm.queryIntentActivities(launcher, 0);
@@ -696,11 +706,11 @@ public final class DeviceActionExecutor {
             if (label.equals(w)) { best = info; break; }
             if (best == null && (label.contains(w) || w.contains(label))) best = info;
         }
-        if (best == null) return Result.unavailable("Could not find " + wanted);
+        if (best == null) return Result.unavailable(c.getString(R.string.dae_could_not_find, wanted));
         Intent i = pm.getLaunchIntentForPackage(best.activityInfo.packageName);
-        if (i == null) return Result.unavailable("Could not launch " + wanted);
+        if (i == null) return Result.unavailable(c.getString(R.string.dae_could_not_launch, wanted));
         start(c, i);
-        return Result.success("Opened " + best.loadLabel(pm));
+        return Result.success(c.getString(R.string.dae_opened, best.loadLabel(pm)));
     }
 
     private static String findPhoneNumber(Context c, String name) {
@@ -727,17 +737,17 @@ public final class DeviceActionExecutor {
 
     private static Result torch(Context c, boolean on) throws Exception {
         CameraManager cm = (CameraManager) c.getSystemService(Context.CAMERA_SERVICE);
-        if (cm == null) return Result.unavailable("Camera service unavailable");
+        if (cm == null) return Result.unavailable(c.getString(R.string.dae_camera_unavailable));
         for (String id : cm.getCameraIdList()) {
             CameraCharacteristics cc = cm.getCameraCharacteristics(id);
             Boolean flash = cc.get(CameraCharacteristics.FLASH_INFO_AVAILABLE);
             Integer facing = cc.get(CameraCharacteristics.LENS_FACING);
             if (Boolean.TRUE.equals(flash) && facing != null && facing == CameraCharacteristics.LENS_FACING_BACK) {
                 cm.setTorchMode(id, on);
-                return Result.success(on ? "Flashlight on" : "Flashlight off");
+                return Result.success(c.getString(on ? R.string.dae_flash_on : R.string.dae_flash_off));
             }
         }
-        return Result.unavailable("No flashlight found");
+        return Result.unavailable(c.getString(R.string.dae_no_flashlight));
     }
 
     private static int clampPercent(int value) {

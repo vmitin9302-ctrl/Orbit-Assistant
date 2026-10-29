@@ -65,14 +65,14 @@ public final class DeviceStatusReader {
             status = c.getApplicationContext().registerReceiver(null,
                     new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         } catch (Exception e) {
-            return Reading.unavailable("I couldn't read your battery level.");
+            return Reading.unavailable(c.getString(R.string.devstat_battery_unreadable));
         }
-        if (status == null) return Reading.unavailable("I couldn't read your battery level.");
+        if (status == null) return Reading.unavailable(c.getString(R.string.devstat_battery_unreadable));
 
         int level = status.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
         int scale = status.getIntExtra(BatteryManager.EXTRA_SCALE, -1);
         if (level < 0 || scale <= 0) {
-            return Reading.unavailable("Android didn't report a battery level on this phone.");
+            return Reading.unavailable(c.getString(R.string.devstat_battery_unreported));
         }
         int percent = Math.max(0, Math.min(100, Math.round(level * 100f / scale)));
 
@@ -83,10 +83,10 @@ public final class DeviceStatusReader {
                 || plugged != 0;
         boolean full = state == BatteryManager.BATTERY_STATUS_FULL;
 
-        if (!charging) return Reading.of("Your battery is at " + percent + "% and isn't charging.");
-        String how = chargingPhrase(plugged);
-        if (full) return Reading.of("Your battery is at " + percent + "% and fully charged" + how + ".");
-        return Reading.of("Your battery is at " + percent + "% and charging" + how + ".");
+        if (!charging) return Reading.of(c.getString(R.string.devstat_battery_not_charging, percent));
+        String how = chargingPhrase(c, plugged);
+        if (full) return Reading.of(c.getString(R.string.devstat_battery_full, percent, how));
+        return Reading.of(c.getString(R.string.devstat_battery_charging, percent, how));
     }
 
     /**
@@ -100,6 +100,15 @@ public final class DeviceStatusReader {
         if (source.isEmpty()) return "";
         if ("wireless".equals(source)) return " wirelessly";
         return " over " + source;
+    }
+
+    /** As {@link #chargingPhrase(int)}, in the app language. */
+    static String chargingPhrase(Context c, int plugged) {
+        String source = plugSource(plugged);
+        if (source.isEmpty()) return "";
+        if ("wireless".equals(source)) return " " + c.getString(R.string.devstat_charge_wireless);
+        if ("USB".equals(source)) return " " + c.getString(R.string.devstat_charge_usb);
+        return " " + c.getString(R.string.devstat_charge_mains);
     }
 
     /** The plug Android named, or "" when it named one Orbit has no word for. */
@@ -117,12 +126,12 @@ public final class DeviceStatusReader {
         if (c == null) return Reading.unavailable("I couldn't read your screen brightness.");
         int percent = DeviceActionExecutor.currentBrightnessPercent(c, -1);
         if (percent < 0) {
-            return Reading.unavailable("Android didn't report a screen brightness on this phone.");
+            return Reading.unavailable(c.getString(R.string.devstat_bright_unreported));
         }
-        String line = "Your brightness is at " + percent + "%.";
+        String line = c.getString(R.string.devstat_bright_at, percent);
         if (adaptiveBrightness(c)) {
             // A single reading of an adaptive screen is true right now and will not stay true.
-            line += " Adaptive brightness is on, so that can change automatically.";
+            line += c.getString(R.string.devstat_bright_adaptive);
         }
         return Reading.of(line);
     }
@@ -142,9 +151,9 @@ public final class DeviceStatusReader {
     /** The media stream, as the percentage Orbit's own volume commands work in. */
     public static Reading mediaVolume(Context c) {
         int percent = mediaVolumePercent(c);
-        if (percent < 0) return Reading.unavailable("I couldn't read your media volume.");
-        if (percent == 0) return Reading.of("Your media volume is all the way down, so media is silent.");
-        return Reading.of("Your media volume is at " + percent + "%.");
+        if (percent < 0) return Reading.unavailable(c == null ? "I couldn't read your media volume." : c.getString(R.string.devstat_vol_unreadable));
+        if (percent == 0) return Reading.of(c.getString(R.string.devstat_vol_zero));
+        return Reading.of(c.getString(R.string.devstat_vol_at, percent));
     }
 
     /** The media stream as a percentage, or -1 when it cannot be read. */
@@ -167,11 +176,11 @@ public final class DeviceStatusReader {
     /** The ringer mode, which Android reports without any special access. */
     public static Reading ringer(Context c) {
         String mode = ringerModeName(c);
-        if (mode.isEmpty()) return Reading.unavailable("I couldn't read your ringer mode.");
+        if (mode.isEmpty()) return Reading.unavailable(c == null ? "I couldn't read your ringer mode." : c.getString(R.string.devstat_ringer_unreadable));
         switch (mode) {
-            case "Vibrate": return Reading.of("Your phone is on vibrate.");
-            case "Silent": return Reading.of("Your phone is on silent.");
-            default: return Reading.of("Your ringer is on.");
+            case "Vibrate": return Reading.of(c.getString(R.string.devstat_ringer_vibrate));
+            case "Silent": return Reading.of(c.getString(R.string.devstat_ringer_silent));
+            default: return Reading.of(c.getString(R.string.devstat_ringer_on));
         }
     }
 
@@ -205,28 +214,27 @@ public final class DeviceStatusReader {
         if (c == null) return Reading.unavailable("I couldn't read Do Not Disturb.");
         NotificationManager nm =
                 (NotificationManager) c.getSystemService(Context.NOTIFICATION_SERVICE);
-        if (nm == null) return Reading.unavailable("I couldn't read Do Not Disturb.");
+        if (nm == null) return Reading.unavailable(c.getString(R.string.devstat_dnd_unreadable));
         if (!nm.isNotificationPolicyAccessGranted()) {
             // The one reading that genuinely needs an access, so the sentence keeps naming it.
-            return Reading.blocked("I can't see Do Not Disturb without Do Not Disturb access. "
-                    + "You can grant it in Settings > Voice, context & permissions.");
+            return Reading.blocked(c.getString(R.string.devstat_dnd_blocked));
         }
         try {
             int filter = nm.getCurrentInterruptionFilter();
             switch (filter) {
                 case NotificationManager.INTERRUPTION_FILTER_ALL:
-                    return Reading.of("Do Not Disturb is off.");
+                    return Reading.of(c.getString(R.string.devstat_dnd_off));
                 case NotificationManager.INTERRUPTION_FILTER_NONE:
-                    return Reading.of("Do Not Disturb is on, and nothing is getting through.");
+                    return Reading.of(c.getString(R.string.devstat_dnd_none));
                 case NotificationManager.INTERRUPTION_FILTER_PRIORITY:
-                    return Reading.of("Do Not Disturb is on, with priority interruptions allowed.");
+                    return Reading.of(c.getString(R.string.devstat_dnd_priority));
                 case NotificationManager.INTERRUPTION_FILTER_ALARMS:
-                    return Reading.of("Do Not Disturb is on, with alarms allowed.");
+                    return Reading.of(c.getString(R.string.devstat_dnd_alarms));
                 default:
-                    return Reading.unavailable("Android didn't report a Do Not Disturb state.");
+                    return Reading.unavailable(c.getString(R.string.devstat_dnd_unreported));
             }
         } catch (Exception e) {
-            return Reading.unavailable("I couldn't read Do Not Disturb.");
+            return Reading.unavailable(c.getString(R.string.devstat_dnd_unreadable));
         }
     }
 }

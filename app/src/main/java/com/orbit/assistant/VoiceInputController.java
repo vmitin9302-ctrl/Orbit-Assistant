@@ -84,7 +84,7 @@ public final class VoiceInputController {
                 cancelFinalize();
                 finalizing = true;
                 notifyState();
-                callback.onStatus("Finishing voice…");
+                callback.onStatus(context.getString(R.string.ui_finishing_voice_2c96f4ae));
                 try { recognizer.stopListening(); }
                 catch (Exception ignored) { finishVoice(); }
             } else {
@@ -254,7 +254,8 @@ public final class VoiceInputController {
                 @Override public void onEndOfSpeech() {
                     if (!voiceTurn.hasLiveTurn()) return;
                     callback.onStatus(Prefs.voicePauseFriendly(context)
-                            ? "Listening · pause when you need" : "Finishing voice…");
+                            ? context.getString(R.string.voice_listening_pause)
+                            : context.getString(R.string.ui_finishing_voice_2c96f4ae));
                 }
                 @Override public void onError(int error) {
                     // Belongs to a turn the user has left; the composer is theirs now.
@@ -272,7 +273,7 @@ public final class VoiceInputController {
                             error != SpeechRecognizer.ERROR_SPEECH_TIMEOUT &&
                             error != SpeechRecognizer.ERROR_RECOGNIZER_BUSY) {
                         active = false;
-                        callback.onStatus("Voice input unavailable");
+                        callback.onStatus(context.getString(R.string.ui_voice_input_unavailable_59516e88));
                         notifyState();
                     } else {
                         active = false;
@@ -323,7 +324,7 @@ public final class VoiceInputController {
         if (!active) return;
         if (recognizer == null) {
             active = false;
-            callback.onStatus("Speech recognition unavailable");
+            callback.onStatus(context.getString(R.string.ui_speech_recognition_unavailable_27121d96));
             notifyState();
             return;
         }
@@ -427,7 +428,7 @@ public final class VoiceInputController {
                 && liveUtteranceId.equals(utteranceId);
     }
 
-    private void statusListening() { callback.onStatus("Listening · pause when you need"); }
+    private void statusListening() { callback.onStatus(context.getString(R.string.voice_listening_pause)); }
 
     private void notifyState() { callback.onStateChanged(listening, finalizing, speaking); }
 
@@ -442,7 +443,7 @@ public final class VoiceInputController {
                 tts.setOnUtteranceProgressListener(new UtteranceProgressListener() {
                     @Override public void onStart(String utteranceId) {
                         speaking = true;
-                        main.post(() -> { callback.onStatus("Speaking · tap mic to interrupt"); notifyState(); });
+                        main.post(() -> { callback.onStatus(context.getString(R.string.ui_speaking_tap_mic_to_interrupt_cc97ae3c)); notifyState(); });
                     }
                     @Override public void onDone(String utteranceId) {
                         speaking = false;

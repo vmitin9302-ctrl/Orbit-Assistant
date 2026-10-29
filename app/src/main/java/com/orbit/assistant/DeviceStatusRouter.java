@@ -140,7 +140,7 @@ public final class DeviceStatusRouter {
             case MEDIA_VOLUME: return DeviceStatusReader.mediaVolume(context);
             case DO_NOT_DISTURB: return DeviceStatusReader.doNotDisturb(context);
             case RINGER: return DeviceStatusReader.ringer(context);
-            default: return DeviceStatusReader.Reading.unavailable("I couldn't read that.");
+            default: return DeviceStatusReader.Reading.unavailable(context.getString(R.string.devstat_unreadable_generic));
         }
     }
 

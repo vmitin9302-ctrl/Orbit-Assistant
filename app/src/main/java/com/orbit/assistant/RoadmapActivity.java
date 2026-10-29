@@ -58,7 +58,7 @@ public final class RoadmapActivity extends Activity {
         back.setImageResource(R.drawable.ic_back);
         back.setImageTintList(ColorStateList.valueOf(UiKit.accent(this)));
         back.setBackground(UiKit.ripple(UiKit.SURFACE_2, UiKit.accent(this), 18, this));
-        back.setContentDescription("Back to About & updates");
+        back.setContentDescription(getString(R.string.roadmap_back_desc));
         back.setPadding(UiKit.dp(this, 10), UiKit.dp(this, 10),
                 UiKit.dp(this, 10), UiKit.dp(this, 10));
         back.setOnClickListener(v -> navigation.performBack());
@@ -68,14 +68,14 @@ public final class RoadmapActivity extends Activity {
         LinearLayout titles = new LinearLayout(this);
         titles.setOrientation(LinearLayout.VERTICAL);
         titles.setPadding(UiKit.dp(this, 13), 0, 0, 0);
-        titles.addView(UiKit.text(this, "Roadmap", 24, UiKit.TEXT, true));
-        titles.addView(UiKit.text(this, "What's next for Orbit", 13, UiKit.MUTED, false));
+        titles.addView(UiKit.text(this, getString(R.string.roadmap_title), 24, UiKit.TEXT, true));
+        titles.addView(UiKit.text(this, getString(R.string.roadmap_subtitle), 13, UiKit.MUTED, false));
         header.addView(titles, new LinearLayout.LayoutParams(
                 0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         page.addView(header);
 
         TextView intro = UiKit.text(this,
-                "Orbit's roadmap is a direction, not a promise of dates or release numbers. It starts with what is being built now. Shipped features stay in What's New; this page remains future-only.",
+                getString(R.string.roadmap_intro),
                 13, UiKit.MUTED, false);
         intro.setLineSpacing(0, 1.14f);
         LinearLayout.LayoutParams introLp = new LinearLayout.LayoutParams(
@@ -123,43 +123,34 @@ public final class RoadmapActivity extends Activity {
         // permissions. It is release history too, so this page still lists only what is ahead.
         // v0.8.3.0 made AI Control Stable. It stays NOW for the work still ahead, and the entry
         // already listed only that, so its text is unchanged.
-        addGroup(page, "NOW - ON THE WAY TO 0.9", new String[][]{
-                {OrbitRoadmap.CURRENT, "Direct control over the AI that answers you. Still ahead "
-                        + "in later Betas: a visual view of a chat's branches and comparing models "
-                        + "side by side."},
-                {OrbitRoadmap.ORBIT_LOCAL_2, "More of Orbit working privately on your phone. Still "
-                        + "ahead: a choice of a larger Enhanced model on capable phones, and more "
-                        + "on-device abilities as they can be done honestly. A request sent to "
-                        + "Orbit Local always stays on the phone."},
-                {OrbitRoadmap.SMART_VAULT, "What comes next for the Vault's search and suggestions: "
-                        + "suggestions from more AI providers, tappable sources in Ask Vault "
-                        + "answers, Ask Vault from the Side button, richer retrieval across whole "
-                        + "saved documents, and room for more than 300 items. Always explicit, "
-                        + "never automatic, and always Free."}
+        addGroup(page, getString(R.string.roadmap_group_now), new String[][]{
+                {getString(R.string.roadmap_ms_ai_control), getString(R.string.roadmap_ai_control_text)},
+                {getString(R.string.roadmap_ms_orbit_local), getString(R.string.roadmap_orbit_local_text)},
+                {getString(R.string.roadmap_ms_smart_vault), getString(R.string.roadmap_smart_vault_text)}
         });
-        addGroup(page, "LATER", new String[][]{
-                {"Vault Pro organization", "Optional advanced organization built on top of the Free Vault."},
-                {"Backup and export Pro", "Additional power-user backup and export controls without removing the Free backup path."},
-                {"Play distribution and Billing", "A real entitlement provider only when Orbit is ready for store distribution."},
-                {"Local device actions", "Growing what Orbit Local can act on by itself, beyond the safe set of controls it understands today."},
-                {"Calendar awareness", "Orbit reading your day back to you, and changing or removing events it added for you."},
-                {"More branch points & conditions", "Several decision points in one Routine, and conditions beyond time and place."},
-                {"Stronger Custom Commands", "Personal phrases that accept variation and detail, beyond today's exact wording."},
-                {"Deeper Android actions", "Broader device controls through supported Android surfaces."},
-                {"More local models", "A choice of on-device models sized to different phones and needs."},
-                {"Cook with Orbit", "A cooking session you start on purpose and end when you're done, following a recipe with you step by step."},
-                {"Kitchen hands-free", "Short spoken commands while cooking, on the Voice you already use: next, back, repeat, how much."},
-                {"Recipe intelligence", "Reading a whole recipe, scaling all of it at once, suggesting substitutions and a sensible order of work."},
-                {"Orbit-managed timers", "An optional alternative to your Clock app for several named timers at once. Off by default; your Clock app stays."}
+        addGroup(page, getString(R.string.roadmap_group_later), new String[][]{
+                {getString(R.string.roadmap_l1_t), getString(R.string.roadmap_l1_d)},
+                {getString(R.string.roadmap_l2_t), getString(R.string.roadmap_l2_d)},
+                {getString(R.string.roadmap_l3_t), getString(R.string.roadmap_l3_d)},
+                {getString(R.string.roadmap_l4_t), getString(R.string.roadmap_l4_d)},
+                {getString(R.string.roadmap_l5_t), getString(R.string.roadmap_l5_d)},
+                {getString(R.string.roadmap_l6_t), getString(R.string.roadmap_l6_d)},
+                {getString(R.string.roadmap_l7_t), getString(R.string.roadmap_l7_d)},
+                {getString(R.string.roadmap_l8_t), getString(R.string.roadmap_l8_d)},
+                {getString(R.string.roadmap_l9_t), getString(R.string.roadmap_l9_d)},
+                {getString(R.string.roadmap_l10_t), getString(R.string.roadmap_l10_d)},
+                {getString(R.string.roadmap_l11_t), getString(R.string.roadmap_l11_d)},
+                {getString(R.string.roadmap_l12_t), getString(R.string.roadmap_l12_d)},
+                {getString(R.string.roadmap_l13_t), getString(R.string.roadmap_l13_d)}
         });
         // v0.8.3.0-beta.6 shipped OpenRouter: browser sign-in, its model catalog in the Model
         // Library, and an opt-in place in Auto. It was the only DEFERRED entry, so that group is
         // gone; OpenRouter is release history now, not a promise.
-        addGroup(page, "EXPLORING", new String[][]{
-                {"Hybrid Auto", "Orbit choosing on-device or cloud by itself, from the task, what is available, and your preference."},
-                {"Proactive screen intelligence", "Helpful context-aware assistance that remains transparent and controllable."},
-                {"Hands-busy help beyond cooking", "The same guided sessions for repairs, cleaning, assembly, and anything else done with full hands."},
-                {"Food safety guidance", "Careful answers on cooking temperatures, storage and reheating, written to be trustworthy rather than alarming."}
+        addGroup(page, getString(R.string.roadmap_group_exploring), new String[][]{
+                {getString(R.string.roadmap_e1_t), getString(R.string.roadmap_e1_d)},
+                {getString(R.string.roadmap_e2_t), getString(R.string.roadmap_e2_d)},
+                {getString(R.string.roadmap_e3_t), getString(R.string.roadmap_e3_d)},
+                {getString(R.string.roadmap_e4_t), getString(R.string.roadmap_e4_d)}
         });
 
         UiKit.applyTypography(page);

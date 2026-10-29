@@ -196,7 +196,21 @@ public final class OrbitLocalUninstaller {
     }
 
     /** The short sentence the Orbit Local screen shows for an outcome the user should see. */
-    static String message(Stage stage) {
+    static String message(Stage stage) { return message(null, stage); }
+
+    /** As {@link #message(Stage)}, in the app language when a context is given. */
+    static String message(Context context, Stage stage) {
+        if (context != null) {
+            switch (stage) {
+                case SUCCEEDED: return context.getString(R.string.localun_removed);
+                case CANCELLED: return context.getString(R.string.localun_cancelled);
+                case REFUSED: return context.getString(R.string.localun_refused);
+                case CONFIRM_MISSING:
+                case NOT_LAUNCHED: return context.getString(R.string.localun_not_launched);
+                case NOT_INSTALLED: return context.getString(R.string.localun_not_installed);
+                default: return "";
+            }
+        }
         switch (stage) {
             case SUCCEEDED: return "Orbit Local was removed.";
             case CANCELLED: return "Orbit Local was not removed. Nothing was deleted.";
