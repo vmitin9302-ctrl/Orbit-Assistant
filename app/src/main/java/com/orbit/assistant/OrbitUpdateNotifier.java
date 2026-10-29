@@ -42,10 +42,10 @@ public final class OrbitUpdateNotifier {
         // Stable release reaching a Beta-channel user is still an ordinary Orbit update and is
         // announced as one.
         boolean beta = release.isBeta();
-        String title = beta ? "Orbit Beta update available" : "Orbit update available";
+        String title = context.getString(beta ? R.string.updnotif_beta_title : R.string.updnotif_title);
         String text = beta
-                ? "Orbit Assistant " + release.displayName() + " is available"
-                : "Orbit Assistant v" + release.versionName + " is available";
+                ? context.getString(R.string.updnotif_beta_text, release.displayName())
+                : context.getString(R.string.updnotif_text, release.versionName);
         Notification.Builder builder = Build.VERSION.SDK_INT >= 26
                 ? new Notification.Builder(context, CHANNEL)
                 : new Notification.Builder(context);

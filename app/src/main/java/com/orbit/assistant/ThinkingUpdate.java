@@ -1,5 +1,8 @@
 package com.orbit.assistant;
 
+import android.content.Context;
+import androidx.annotation.StringRes;
+
 import java.util.Locale;
 
 /**
@@ -43,26 +46,28 @@ public final class ThinkingUpdate {
      */
     public enum Stage {
         /** A request is running and Orbit knows nothing more specific yet. */
-        WORKING(Source.ORBIT_PROGRESS, "Thinking…"),
+        WORKING(Source.ORBIT_PROGRESS, "Thinking…", R.string.thinking_working),
         /** Screen text or a screenshot was genuinely attached to this request. */
-        SCREEN_CONTEXT(Source.ORBIT_PROGRESS, "Using your screen for context…"),
+        SCREEN_CONTEXT(Source.ORBIT_PROGRESS, "Using your screen for context…", R.string.thinking_screen),
         /** A cloud request has been sent at a known reasoning level. Text names the model. */
-        MODEL_REASONING(Source.ORBIT_PROGRESS, ""),
+        MODEL_REASONING(Source.ORBIT_PROGRESS, "", 0),
         /** The provider's hosted search tool reported that it started a search. */
-        WEB_SEARCH(Source.ORBIT_PROGRESS, "Searching the web…"),
+        WEB_SEARCH(Source.ORBIT_PROGRESS, "Searching the web…", R.string.thinking_web_search),
         /** That search reported completion, so results are what the model is working from. */
-        WEB_RESULTS(Source.ORBIT_PROGRESS, "Reading the search results…"),
+        WEB_RESULTS(Source.ORBIT_PROGRESS, "Reading the search results…", R.string.thinking_web_results),
         /** Generation is running on this phone. */
-        LOCAL_INFERENCE(Source.ORBIT_PROGRESS, "Running on your phone…"),
+        LOCAL_INFERENCE(Source.ORBIT_PROGRESS, "Running on your phone…", R.string.thinking_local),
         /** Text the provider published as a user-facing reasoning summary. */
-        PROVIDER_REASONING_SUMMARY(Source.PROVIDER_SUMMARY, "");
+        PROVIDER_REASONING_SUMMARY(Source.PROVIDER_SUMMARY, "", 0);
 
         private final Source source;
         private final String defaultText;
+        @StringRes private final int defaultTextRes;
 
-        Stage(Source source, String defaultText) {
+        Stage(Source source, String defaultText, @StringRes int defaultTextRes) {
             this.source = source;
             this.defaultText = defaultText;
+            this.defaultTextRes = defaultTextRes;
         }
 
         public Source source() { return source; }
@@ -82,10 +87,31 @@ public final class ThinkingUpdate {
 
     public final Stage stage;
     public final String text;
+    /** Resource of Orbit's own wording for {@link #text}, or 0 when the text came from elsewhere. */
+    @StringRes private final int textRes;
+    private final Object[] textArgs;
 
     private ThinkingUpdate(Stage stage, String text) {
+        this(stage, text, 0, null);
+    }
+
+    private ThinkingUpdate(Stage stage, String text, @StringRes int textRes, Object[] textArgs) {
         this.stage = stage;
         this.text = text;
+        this.textRes = textRes;
+        this.textArgs = textArgs;
+    }
+
+    /**
+     * The text in the app language. Orbit's own wording is resolved from resources; a provider's
+     * reasoning summary and caller-supplied text are returned as they are.
+     */
+    public String text(Context context) {
+        if (context == null || textRes == 0) return text;
+        String localized = textArgs == null ? context.getString(textRes)
+                : context.getString(textRes, textArgs);
+        String clean = sanitize(localized);
+        return clean.isEmpty() ? text : clean;
     }
 
     public Source source() { return stage.source(); }
@@ -100,7 +126,9 @@ public final class ThinkingUpdate {
      */
     public static ThinkingUpdate progress(Stage stage) {
         if (stage == null) return null;
-        return progress(stage, stage.defaultText());
+        ThinkingUpdate update = progress(stage, stage.defaultText());
+        return update == null || stage.defaultTextRes == 0 ? update
+                : new ThinkingUpdate(stage, update.text, stage.defaultTextRes, null);
     }
 
     /** An Orbit-progress update with wording the caller supplies, e.g. a resolved model name. */
@@ -202,7 +230,10 @@ public final class ThinkingUpdate {
      */
     public static ThinkingUpdate modelReasoning(String modelId) {
         String name = modelDisplayName(modelId);
-        return name.isEmpty() ? null : progress(Stage.MODEL_REASONING, "Reasoning with " + name + "…");
+        if (name.isEmpty()) return null;
+        ThinkingUpdate update = progress(Stage.MODEL_REASONING, "Reasoning with " + name + "…");
+        return update == null ? null : new ThinkingUpdate(Stage.MODEL_REASONING, update.text,
+                R.string.thinking_reasoning_with, new Object[]{name});
     }
 
     /**

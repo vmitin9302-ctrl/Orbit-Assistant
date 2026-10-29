@@ -202,6 +202,11 @@ final class SmartVaultModel {
         return String.format(Locale.US, "%.0f MB", TOTAL_BYTES / 1_000_000.0);
     }
 
+    /** As {@link #sizeLabel()}, with the unit in the app language. */
+    static String sizeLabel(Context c) {
+        return c.getString(R.string.svm_size, TOTAL_BYTES / 1_000_000.0);
+    }
+
     /** Asks for the download. Runs once there is a connection, and survives the app closing. */
     static void requestDownload(Context c) {
         if (isReady(c)) return;
@@ -261,7 +266,7 @@ final class SmartVaultModel {
      */
     static String download(Context c, ProgressListener listener) {
         File d = dir(c);
-        if (!d.isDirectory() && !d.mkdirs()) return "Orbit could not create the model folder.";
+        if (!d.isDirectory() && !d.mkdirs()) return c.getString(R.string.svm_err_folder);
         long done = 0L;
         for (Asset asset : new Asset[]{VOCAB, WEIGHTS}) {
             File target = new File(d, asset.name);
@@ -271,7 +276,7 @@ final class SmartVaultModel {
                 continue;
             }
             File part = new File(d, asset.name + ".part");
-            String error = fetch(BASE + asset.name, part, asset.size, done, listener);
+            String error = fetch(c, BASE + asset.name, part, asset.size, done, listener);
             if (!error.isEmpty()) {
                 //noinspection ResultOfMethodCallIgnored
                 part.delete();
@@ -280,22 +285,21 @@ final class SmartVaultModel {
             if (!sha256(part).equalsIgnoreCase(asset.sha256)) {
                 //noinspection ResultOfMethodCallIgnored
                 part.delete();
-                return "The downloaded model did not match Orbit's pinned checksum, so it was "
-                        + "discarded.";
+                return c.getString(R.string.svm_err_checksum);
             }
             //noinspection ResultOfMethodCallIgnored
             target.delete();
-            if (!part.renameTo(target)) return "Orbit could not store the model.";
+            if (!part.renameTo(target)) return c.getString(R.string.svm_err_store);
             done += asset.size;
             // The small vocabulary finishes below the reporting step, so report each file whole.
             if (listener != null) listener.onProgress(done);
         }
         try {
             if (!new File(d, VERIFIED_MARKER).createNewFile() && !new File(d, VERIFIED_MARKER).exists()) {
-                return "Orbit could not store the model.";
+                return c.getString(R.string.svm_err_store);
             }
         } catch (Exception e) {
-            return "Orbit could not store the model.";
+            return c.getString(R.string.svm_err_store);
         }
         return "";
     }
@@ -304,7 +308,7 @@ final class SmartVaultModel {
         void onProgress(long doneBytes);
     }
 
-    private static String fetch(String address, File part, long expected, long before,
+    private static String fetch(Context c, String address, File part, long expected, long before,
                                 ProgressListener listener) {
         HttpURLConnection connection = null;
         try {
@@ -316,11 +320,11 @@ final class SmartVaultModel {
                     "OrbitAssistant/" + BuildConfig.VERSION_NAME + " (Android; Smart Vault)");
             int status = connection.getResponseCode();
             if (status < 200 || status >= 300) {
-                return "The model server answered " + status + ". Try again later.";
+                return c.getString(R.string.svm_err_status, status);
             }
             // A redirect may only ever land on another https address.
             if (!"https".equalsIgnoreCase(connection.getURL().getProtocol())) {
-                return "The model download was redirected somewhere unsafe, so Orbit stopped.";
+                return c.getString(R.string.svm_err_redirect);
             }
             long written = 0L;
             try (InputStream in = connection.getInputStream();
@@ -330,7 +334,7 @@ final class SmartVaultModel {
                 long lastReport = 0L;
                 while ((read = in.read(buffer)) != -1) {
                     written += read;
-                    if (written > expected) return "The model download was larger than expected.";
+                    if (written > expected) return c.getString(R.string.svm_err_larger);
                     out.write(buffer, 0, read);
                     if (listener != null && written - lastReport > 512 * 1024) {
                         lastReport = written;
@@ -338,12 +342,12 @@ final class SmartVaultModel {
                     }
                 }
             }
-            if (written != expected) return "The model download was incomplete. Try again.";
+            if (written != expected) return c.getString(R.string.svm_err_incomplete);
             return "";
         } catch (java.net.UnknownHostException e) {
-            return "No connection to the model server. Orbit will try again when you are online.";
+            return c.getString(R.string.svm_err_no_connection);
         } catch (Exception e) {
-            return "The model download failed. Try again later.";
+            return c.getString(R.string.svm_err_failed);
         } finally {
             if (connection != null) connection.disconnect();
         }
@@ -386,7 +390,7 @@ final class SmartVaultModel {
                 SmartVault.scheduleIndexing(c);
                 return Result.success();
             }
-            if (getRunAttemptCount() < 3 && error.startsWith("No connection")) {
+            if (getRunAttemptCount() < 3 && error.equals(c.getString(R.string.svm_err_no_connection))) {
                 markWaiting(c);
                 return Result.retry();
             }

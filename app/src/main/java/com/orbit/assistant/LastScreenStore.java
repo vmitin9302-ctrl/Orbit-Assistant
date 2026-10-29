@@ -30,12 +30,20 @@ public final class LastScreenStore {
 
         public Bitmap image() { return AttachmentStore.load(imagePath); }
 
-        public String ageLabel() {
+        public String ageLabel() { return ageLabel(null); }
+
+        /** The age in the app language; a null context gives the English text. */
+        public String ageLabel(Context context) {
             long age = Math.max(0, System.currentTimeMillis() - capturedAt);
             long mins = age / 60000L;
-            if (mins < 1) return "just now";
-            if (mins == 1) return "1 min ago";
-            return mins + " min ago";
+            if (context == null) {
+                if (mins < 1) return "just now";
+                if (mins == 1) return "1 min ago";
+                return mins + " min ago";
+            }
+            if (mins < 1) return context.getString(R.string.lastscreen_just_now);
+            return context.getResources().getQuantityString(
+                    R.plurals.lastscreen_min_ago, (int) Math.min(mins, Integer.MAX_VALUE), (int) Math.min(mins, Integer.MAX_VALUE));
         }
     }
 

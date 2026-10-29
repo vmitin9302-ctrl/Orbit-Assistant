@@ -13,13 +13,13 @@ public final class OrbitRoutineTileService extends TileService {
         Tile tile = getQsTile();
         if (tile == null) return;
         RoutineStore.Routine routine = QuickSettingsTiles.assignedRoutine(this);
-        tile.setLabel("Orbit Routine");
+        tile.setLabel(getString(R.string.routinetile_label));
         tile.setState(routine == null ? Tile.STATE_INACTIVE : Tile.STATE_ACTIVE);
         if (Build.VERSION.SDK_INT >= 29) {
-            tile.setSubtitle(routine == null ? "Choose a Routine" : routine.name);
+            tile.setSubtitle(routine == null ? getString(R.string.routinetile_choose) : routine.name);
         }
         if (Build.VERSION.SDK_INT >= 30) {
-            tile.setStateDescription(routine == null ? "No Routine assigned" : "Run " + routine.name);
+            tile.setStateDescription(routine == null ? getString(R.string.routinetile_none_assigned) : getString(R.string.routinetile_run, routine.name));
         }
         tile.updateTile();
     }

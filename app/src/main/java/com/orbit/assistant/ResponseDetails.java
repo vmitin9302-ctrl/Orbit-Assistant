@@ -1,5 +1,7 @@
 package com.orbit.assistant;
 
+import android.content.Context;
+
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -109,39 +111,52 @@ public final class ResponseDetails {
     public boolean answeredByOrbit() { return provider.isEmpty() && model.isEmpty(); }
 
     /** "2.4 s", or "" when unknown. */
-    public String elapsedLabel() {
+    public String elapsedLabel() { return elapsedLabel(null); }
+
+    /** As {@link #elapsedLabel()}, with the unit in the app language when a context is given. */
+    public String elapsedLabel(Context context) {
         if (elapsedMs < 0) return "";
-        if (elapsedMs < 10_000) return String.format(Locale.US, "%.1f s", elapsedMs / 1000.0);
-        return Math.round(elapsedMs / 1000.0) + " s";
+        String number = elapsedMs < 10_000
+                ? String.format(Locale.US, "%.1f", elapsedMs / 1000.0)
+                : String.valueOf(Math.round(elapsedMs / 1000.0));
+        return context == null ? number + " s" : context.getString(R.string.respdet_seconds, number);
+    }
+
+    private static String text(Context context, int res, String english) {
+        return context == null ? english : context.getString(res);
     }
 
     /** Label and value pairs, only for what is known, in display order. */
-    public List<String[]> rows() {
+    public List<String[]> rows() { return rows(null); }
+
+    /** As {@link #rows()}, with labels in the app language when a context is given. */
+    public List<String[]> rows(Context context) {
         List<String[]> rows = new ArrayList<>();
         if (answeredByOrbit()) {
-            rows.add(new String[]{"Answered by", "Orbit, on this phone"});
+            rows.add(new String[]{text(context, R.string.respdet_answered_by, "Answered by"),
+                    text(context, R.string.respdet_orbit_phone, "Orbit, on this phone")});
         } else {
             if (autoRouted()) {
-                rows.add(new String[]{"Selection", AiSelection.AUTO_LABEL});
+                rows.add(new String[]{text(context, R.string.respdet_selection, "Selection"), AiSelection.AUTO_LABEL});
             } else if (openRouterAuto(provider, model)) {
-                rows.add(new String[]{"Selection", "OpenRouter Auto"});
+                rows.add(new String[]{text(context, R.string.respdet_selection, "Selection"), "OpenRouter Auto"});
             }
-            if (!provider.isEmpty()) rows.add(new String[]{"Provider", AiProviders.byId(provider).displayName()});
+            if (!provider.isEmpty()) rows.add(new String[]{text(context, R.string.respdet_provider, "Provider"), AiProviders.byId(provider).displayName()});
             String name = modelName.isEmpty() ? OrbitModelCatalog.displayName(model) : modelName;
-            if (!model.isEmpty()) rows.add(new String[]{"Model", name.isEmpty() ? model : name});
+            if (!model.isEmpty()) rows.add(new String[]{text(context, R.string.respdet_model, "Model"), name.isEmpty() ? model : name});
             if (!servedBy.isEmpty()) {
                 String served = OrbitModelCatalog.displayName(servedBy);
-                rows.add(new String[]{"Answered by", served.isEmpty() ? servedBy : served});
+                rows.add(new String[]{text(context, R.string.respdet_answered_by, "Answered by"), served.isEmpty() ? servedBy : served});
             }
             AiStrength s = AiStrength.fromId(strength);
-            if (s != null) rows.add(new String[]{"Strength", s.label});
-            if (autoRouted() && !routeReason.isEmpty()) rows.add(new String[]{"Why", routeReason});
+            if (s != null) rows.add(new String[]{text(context, R.string.respdet_strength, "Strength"), context == null ? s.label : s.label(context)});
+            if (autoRouted() && !routeReason.isEmpty()) rows.add(new String[]{text(context, R.string.respdet_why, "Why"), routeReason});
             if (autoRouted() && routerPolicy > 0) {
-                rows.add(new String[]{"Router policy", String.valueOf(routerPolicy)});
+                rows.add(new String[]{text(context, R.string.respdet_router_policy, "Router policy"), String.valueOf(routerPolicy)});
             }
         }
-        String time = elapsedLabel();
-        if (!time.isEmpty()) rows.add(new String[]{"Response time", time});
+        String time = elapsedLabel(context);
+        if (!time.isEmpty()) rows.add(new String[]{text(context, R.string.respdet_response_time, "Response time"), time});
         return rows;
     }
 

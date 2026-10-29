@@ -63,7 +63,7 @@ public final class DeckSuggestionEngine {
         /** The tile "Add to Deck" would place, or null when it does not map to a permanent one. */
         public final DeckTile addable;
 
-        Suggestion(String id, String title, String subtitle, int iconRes,
+        Suggestion(Context context, String id, String title, String subtitle, int iconRes,
                    DeckTile action, DeckTile addable) {
             this.id = id;
             this.title = title;
@@ -72,7 +72,8 @@ public final class DeckSuggestionEngine {
             this.action = action;
             this.addable = addable;
             this.contentDescription = title
-                    + (this.subtitle.isEmpty() ? "" : ", " + this.subtitle) + ", suggested";
+                    + (this.subtitle.isEmpty() ? "" : ", " + this.subtitle)
+                    + ", " + context.getString(R.string.decksug_suggested);
         }
     }
 
@@ -90,7 +91,7 @@ public final class DeckSuggestionEngine {
         if (c == null || !Prefs.deckSuggestions(c)) return out;
         if (live == null) live = DeckTileResolver.LiveState.unknown();
 
-        addMedia(out, live, deck);
+        addMedia(out, c, live, deck);
         addRecentApp(out, c, deck, now);
         addRecentRoutine(out, c, deck, now);
 
@@ -113,13 +114,14 @@ public final class DeckSuggestionEngine {
      * resumes something they stopped an hour ago is noise. Playing right now is the one moment this
      * is the most useful control on the screen.
      */
-    private static void addMedia(List<Suggestion> out, DeckTileResolver.LiveState live,
+    private static void addMedia(List<Suggestion> out, Context c, DeckTileResolver.LiveState live,
                                  List<DeckTile> deck) {
         if (!Boolean.TRUE.equals(live.mediaPlaying)) return;
         if (contains(deck, DeckTileRegistry.TYPE_MEDIA)) return;
         DeckTile tile = DeckTile.of(DeckTileRegistry.TYPE_MEDIA, DeckTile.Size.STANDARD);
-        out.add(new Suggestion("media", "Pause",
-                live.mediaApp.isEmpty() ? "Playing now" : "Playing in " + live.mediaApp,
+        out.add(new Suggestion(c, "media", c.getString(R.string.decksug_pause),
+                live.mediaApp.isEmpty() ? c.getString(R.string.decksug_playing_now)
+                        : c.getString(R.string.decksug_playing_in, live.mediaApp),
                 R.drawable.ic_deck_media, tile, tile));
     }
 
@@ -150,7 +152,7 @@ public final class DeckSuggestionEngine {
 
         DeckTile tile = DeckTile.of(DeckTileRegistry.TYPE_APP, DeckTile.Size.STANDARD)
                 .withConfig(DeckTile.CONFIG_PACKAGE, packageName);
-        out.add(new Suggestion("recent_app", label, "Recently used",
+        out.add(new Suggestion(c, "recent_app", label, c.getString(R.string.decksug_recent_app),
                 R.drawable.ic_deck_app, tile, tile));
     }
 
@@ -167,7 +169,7 @@ public final class DeckSuggestionEngine {
         if (best == null) return;
         DeckTile tile = DeckTile.of(DeckTileRegistry.TYPE_ROUTINE, DeckTile.Size.STANDARD)
                 .withConfig(DeckTile.CONFIG_ROUTINE_ID, best.id);
-        out.add(new Suggestion("recent_routine", best.name, "Ran recently",
+        out.add(new Suggestion(c, "recent_routine", best.name, c.getString(R.string.decksug_recent_routine),
                 R.drawable.ic_routine_tile, tile, tile));
     }
 
