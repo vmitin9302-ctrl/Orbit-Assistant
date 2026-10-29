@@ -689,7 +689,8 @@ public final class OrbitVaultBeta4Test {
         Activity editor = screenSelectionEditor();
         View vault = vaultControl(editor);
         assertTrue(vault instanceof Button);
-        assertEquals(ScreenSelectionActivity.SAVE_TO_VAULT, ((Button) vault).getText().toString());
+        assertEquals(editor.getString(ScreenSelectionActivity.SAVE_TO_VAULT),
+                ((Button) vault).getText().toString());
         assertNotNull("with Orbit's own Vault glyph beside the word",
                 ((Button) vault).getCompoundDrawablesRelative()[0]);
         assertTrue("and enough room to read it",

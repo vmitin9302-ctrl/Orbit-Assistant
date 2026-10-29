@@ -95,21 +95,21 @@ public class RoutineTriggersActivity extends Activity {
 
         LinearLayout header = new LinearLayout(this);
         header.setGravity(Gravity.CENTER_VERTICAL);
-        ImageButton back = iconButton(R.drawable.ic_back, "Back");
+        ImageButton back = iconButton(R.drawable.ic_back, getString(R.string.ui_back_76900f1b));
         back.setOnClickListener(v -> navigation.performBack());
         LinearLayout.LayoutParams backLp = new LinearLayout.LayoutParams(UiKit.dp(this, 48), UiKit.dp(this, 48));
         backLp.rightMargin = UiKit.dp(this, 12);
         header.addView(back, backLp);
         LinearLayout titles = new LinearLayout(this);
         titles.setOrientation(LinearLayout.VERTICAL);
-        titles.addView(UiKit.text(this, "Automatic triggers", 25, UiKit.TEXT, true));
+        titles.addView(UiKit.text(this, getString(R.string.d_rtrg_title), 25, UiKit.TEXT, true));
         titles.addView(UiKit.text(this, routine.name, 12, UiKit.MUTED, false));
         header.addView(titles, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         page.addView(header);
 
         TextView intro = UiKit.text(this, OrbitDistribution.supportsLocationTriggers()
-                ? "Run this routine automatically on a schedule or when your phone arrives at or leaves a saved area. Every trigger keeps the routine's existing step order and uses Orbit's shared Action Engine."
-                : "Run this routine automatically on a schedule. Every trigger keeps the routine's existing step order and uses Orbit's shared Action Engine.",
+                ? getString(R.string.d_rtrg_intro_location)
+                : getString(R.string.d_rtrg_intro),
                 14, UiKit.MUTED, false);
         intro.setLineSpacing(0, 1.13f);
         LinearLayout.LayoutParams introLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -122,26 +122,26 @@ public class RoutineTriggersActivity extends Activity {
         locationAccessCard = card();
         page.addView(locationAccessCard, cardLp());
 
-        Button addTime = primaryButton("+  New time trigger");
+        Button addTime = primaryButton(getString(R.string.d_rtrg_new_time));
         addTime.setOnClickListener(v -> openNewTimeTrigger());
         page.addView(addTime, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 50)));
 
         // Only where location triggers exist. The Play edition explains their absence in
         // locationAccessCard instead of offering a button that could never arm anything.
         if (OrbitDistribution.supportsLocationTriggers()) {
-            Button addLocation = secondaryButton("+  New location trigger");
+            Button addLocation = secondaryButton(getString(R.string.d_rtrg_new_location));
             addLocation.setOnClickListener(v -> openNewLocationTrigger());
             LinearLayout.LayoutParams locationAddLp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 50));
             locationAddLp.topMargin = UiKit.dp(this, 9);
             page.addView(addLocation, locationAddLp);
         }
 
-        page.addView(sectionTitle("TIME TRIGGERS"));
+        page.addView(sectionTitle(getString(R.string.d_rtrg_time_section)));
         timeTriggerList = new LinearLayout(this);
         timeTriggerList.setOrientation(LinearLayout.VERTICAL);
         page.addView(timeTriggerList);
 
-        locationSectionTitle = sectionTitle("LOCATION TRIGGERS");
+        locationSectionTitle = sectionTitle(getString(R.string.d_rtrg_location_section));
         page.addView(locationSectionTitle);
         locationTriggerList = new LinearLayout(this);
         locationTriggerList.setOrientation(LinearLayout.VERTICAL);
@@ -163,7 +163,7 @@ public class RoutineTriggersActivity extends Activity {
 
     private boolean canAddTrigger() {
         if (RoutineTriggerStore.listForRoutine(this, routineId).size() >= RoutineTriggerStore.MAX_TRIGGERS_PER_ROUTINE) {
-            Toast.makeText(this, "This routine already has the maximum number of triggers.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.d_rtrg_max), Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -196,10 +196,10 @@ public class RoutineTriggersActivity extends Activity {
     private void renderTriggerGroup(LinearLayout list, List<RoutineTriggerStore.Trigger> triggers, boolean location) {
         if (triggers.isEmpty()) {
             LinearLayout empty = card();
-            empty.addView(UiKit.text(this, location ? "No location triggers" : "No time triggers", 16, UiKit.TEXT, true));
+            empty.addView(UiKit.text(this, getString(location ? R.string.d_rtrg_no_location : R.string.d_rtrg_no_time), 16, UiKit.TEXT, true));
             TextView note = UiKit.text(this, location
-                            ? "Add an arrive or leave trigger for places such as Home, Work, or the gym."
-                            : "Add a schedule such as daily, weekdays, weekly, biweekly/fortnightly, or a custom interval.",
+                            ? getString(R.string.d_rtrg_empty_location)
+                            : getString(R.string.d_rtrg_empty_time),
                     13, UiKit.MUTED, false);
             note.setPadding(0, UiKit.dp(this, 6), 0, 0);
             empty.addView(note);
@@ -213,16 +213,16 @@ public class RoutineTriggersActivity extends Activity {
         if (precisionCard == null) return;
         precisionCard.removeAllViews();
         boolean exact = RoutineTriggerScheduler.canScheduleExact(this);
-        precisionCard.addView(UiKit.text(this, exact ? "Precise timing ready" : "Approximate timing", 14,
+        precisionCard.addView(UiKit.text(this, getString(exact ? R.string.d_rtrg_precise_ready : R.string.d_rtrg_approx), 14,
                 exact ? UiKit.SUCCESS : UiKit.TEXT, true));
         TextView detail = UiKit.text(this, exact
-                        ? "Android allows Orbit to schedule time triggers at the selected minute."
-                        : "Time triggers still run, but Android may delay them, particularly while the phone is idle. Allow Alarms & reminders for minute-level scheduling.",
+                        ? getString(R.string.d_rtrg_precise_detail)
+                        : getString(R.string.d_rtrg_approx_detail),
                 12, UiKit.MUTED, false);
         detail.setPadding(0, UiKit.dp(this, 5), 0, 0);
         precisionCard.addView(detail);
         if (!exact) {
-            Button allow = secondaryButton("Allow precise timing");
+            Button allow = secondaryButton(getString(R.string.d_rtrg_allow_precise));
             allow.setOnClickListener(v -> RoutineTriggerScheduler.openExactAlarmAccess(this));
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 42));
             lp.topMargin = UiKit.dp(this, 10);
@@ -231,19 +231,19 @@ public class RoutineTriggersActivity extends Activity {
         boolean notifications = RoutineTriggerNotifier.notificationsAllowed(this);
         boolean runtimeNotifications = RoutineTriggerNotifier.runtimePermissionGranted(this);
         TextView notifyState = UiKit.text(this, notifications
-                        ? "Trigger alerts ready · Orbit can notify you when an automatic routine needs a foreground step."
-                        : "Trigger alerts are off · fully background-safe routines can still run. Routines that need a tap are skipped rather than partially applied.",
+                        ? getString(R.string.d_rtrg_alerts_ready)
+                        : getString(R.string.d_rtrg_alerts_off),
                 11, UiKit.MUTED, false);
         notifyState.setPadding(0, UiKit.dp(this, 9), 0, 0);
         precisionCard.addView(notifyState);
         if (!notifications) {
             Button alertSettings;
             if (!runtimeNotifications && Build.VERSION.SDK_INT >= 33) {
-                alertSettings = secondaryButton("Allow trigger alerts");
+                alertSettings = secondaryButton(getString(R.string.d_rtrg_allow_alerts));
                 alertSettings.setOnClickListener(v -> requestPermissions(
                         new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQ_TRIGGER_ALERTS));
             } else {
-                alertSettings = secondaryButton("Open trigger alert settings");
+                alertSettings = secondaryButton(getString(R.string.d_rtrg_open_alert_settings));
                 alertSettings.setOnClickListener(v -> RoutineTriggerNotifier.openAlertSettings(this));
             }
             LinearLayout.LayoutParams nlp = new LinearLayout.LayoutParams(
@@ -257,7 +257,7 @@ public class RoutineTriggersActivity extends Activity {
         if (locationAccessCard == null) return;
         locationAccessCard.removeAllViews();
         if (!OrbitDistribution.supportsLocationTriggers()) {
-            locationAccessCard.addView(UiKit.text(this, "Location triggers", 14, UiKit.TEXT, true));
+            locationAccessCard.addView(UiKit.text(this, getString(R.string.d_rtrg_location_triggers), 14, UiKit.TEXT, true));
             TextView unavailable = UiKit.text(this, OrbitDistribution.LOCATION_TRIGGERS_UNAVAILABLE,
                     12, UiKit.MUTED, false);
             unavailable.setPadding(0, UiKit.dp(this, 6), 0, 0);
@@ -268,23 +268,23 @@ public class RoutineTriggersActivity extends Activity {
         boolean background = RoutineLocationTriggerScheduler.hasBackgroundLocation(this);
         boolean locationOn = RoutineLocationTriggerScheduler.isLocationEnabled(this);
         boolean ready = fine && background && locationOn;
-        locationAccessCard.addView(UiKit.text(this, ready ? "Location triggers ready" : "Location setup needed", 14,
+        locationAccessCard.addView(UiKit.text(this, getString(ready ? R.string.d_rtrg_location_ready : R.string.d_rtrg_location_setup), 14,
                 ready ? UiKit.SUCCESS : UiKit.TEXT, true));
         String detail;
         String button;
         if (!fine) {
-            detail = "Arrive/leave automation needs precise location so Orbit can detect a saved radius.";
-            button = "Allow precise location";
+            detail = getString(R.string.d_rtrg_need_precise);
+            button = getString(R.string.d_rtrg_allow_precise_location);
         } else if (!background) {
             String option = RoutineLocationTriggerScheduler.backgroundPermissionLabel(this);
-            detail = "To work while Orbit is closed, Android requires Location permission set to “" + option + "”.";
-            button = "Allow background location";
+            detail = getString(R.string.d_rtrg_need_background, option);
+            button = getString(R.string.d_rtrg_allow_background);
         } else if (!locationOn) {
-            detail = "Android location services are off. Turn them on to monitor arrive/leave triggers.";
-            button = "Turn on location";
+            detail = getString(R.string.d_rtrg_location_off);
+            button = getString(R.string.d_rtrg_turn_on_location);
         } else {
-            detail = "Precise and background location are available. Enabled location triggers can be monitored while Orbit is closed.";
-            button = "Manage location access";
+            detail = getString(R.string.d_rtrg_all_available);
+            button = getString(R.string.d_rtrg_manage_access);
         }
         TextView note = UiKit.text(this, detail, 12, UiKit.MUTED, false);
         note.setPadding(0, UiKit.dp(this, 5), 0, UiKit.dp(this, 10));
@@ -318,10 +318,10 @@ public class RoutineTriggersActivity extends Activity {
     private void showBackgroundLocationExplanation() {
         String option = RoutineLocationTriggerScheduler.backgroundPermissionLabel(this);
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Allow background location")
-                .setMessage("Android requires background access for location automation. Open Orbit's app settings, choose Permissions → Location, then select “" + option + "”.")
-                .setNegativeButton("Not now", null)
-                .setPositiveButton("Open settings", (d, w) -> RoutineLocationTriggerScheduler.openAppLocationSettings(this))
+                .setTitle(getString(R.string.d_rtrg_allow_background))
+                .setMessage(getString(R.string.d_rtrg_background_explain, option))
+                .setNegativeButton(getString(R.string.d_rtrg_not_now), null)
+                .setPositiveButton(getString(R.string.d_rtrg_open_settings), (d, w) -> RoutineLocationTriggerScheduler.openAppLocationSettings(this))
                 .create();
         styleOrbitDialog(dialog, false);
         dialog.show();
@@ -345,8 +345,8 @@ public class RoutineTriggersActivity extends Activity {
             // A saved location trigger in the Play edition: no switch, because nothing it could
             // switch on would ever run, and its stored on/off state is left for a GitHub install.
             // Deleting it is the one thing that still means something.
-            ImageButton more = iconButton(R.drawable.ic_more, "Trigger options");
-            more.setOnClickListener(v -> UiKit.showOrbitMenu(this, more, new String[]{"Delete"}, -1,
+            ImageButton more = iconButton(R.drawable.ic_more, getString(R.string.d_rtrg_options));
+            more.setOnClickListener(v -> UiKit.showOrbitMenu(this, more, new String[]{getString(R.string.ui_delete_e2d0a549)}, -1,
                     (index, label) -> confirmDelete(trigger)));
             top.addView(more, new LinearLayout.LayoutParams(UiKit.dp(this, 44), UiKit.dp(this, 44)));
             card.addView(top);
@@ -355,13 +355,13 @@ public class RoutineTriggersActivity extends Activity {
 
         OrbitSwitch enabled = new OrbitSwitch(this);
         enabled.setChecked(trigger.enabled, false);
-        enabled.setContentDescription(trigger.enabled ? "Disable trigger" : "Enable trigger");
+        enabled.setContentDescription(getString(trigger.enabled ? R.string.d_rtrg_disable : R.string.d_rtrg_enable));
         enabled.setOnCheckedChangeListener((button, checked) -> {
             RoutineTriggerStore.Trigger latest = RoutineTriggerStore.findById(this, trigger.id);
             if (latest == null || latest.enabled == checked) return;
             RoutineTriggerStore.Trigger changed = latest.withEnabled(checked);
             if (checked && RoutineTriggerStore.hasEnabledScheduleConflict(this, changed)) {
-                Toast.makeText(this, "An enabled trigger with this exact setup already exists.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.d_rtrg_conflict), Toast.LENGTH_LONG).show();
                 refresh();
                 return;
             }
@@ -370,12 +370,12 @@ public class RoutineTriggersActivity extends Activity {
                     if (RoutineTriggerStore.TYPE_LOCATION.equals(changed.type)) {
                         boolean scheduled = RoutineLocationTriggerScheduler.schedule(this, changed);
                         if (!scheduled && !RoutineLocationTriggerScheduler.ready(this)) {
-                            Toast.makeText(this, "Trigger enabled, but Location setup is still required before Android can monitor it.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(this, getString(R.string.d_rtrg_enabled_needs_setup), Toast.LENGTH_LONG).show();
                         }
                     } else {
                         long scheduled = RoutineTriggerScheduler.schedule(this, changed);
                         if (scheduled <= 0L && RoutineTriggerStore.MODE_ONCE.equals(changed.mode)) {
-                            Toast.makeText(this, "That one-time schedule has already passed. Edit its date or time to enable it again.", Toast.LENGTH_LONG).show();
+                            Toast.makeText(this, getString(R.string.d_rtrg_passed), Toast.LENGTH_LONG).show();
                         }
                     }
                 } else {
@@ -389,13 +389,13 @@ public class RoutineTriggersActivity extends Activity {
         top.addView(enabled, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        ImageButton more = iconButton(R.drawable.ic_more, "Trigger options");
+        ImageButton more = iconButton(R.drawable.ic_more, getString(R.string.d_rtrg_options));
         more.setOnClickListener(v -> showTriggerMenu(more, trigger));
         top.addView(more, new LinearLayout.LayoutParams(UiKit.dp(this, 44), UiKit.dp(this, 44)));
         card.addView(top);
 
         if (!trigger.lastResult.isEmpty()) {
-            TextView status = UiKit.text(this, "Last: " + trigger.lastResult, 11,
+            TextView status = UiKit.text(this, getString(R.string.d_rtrg_last, trigger.lastResult), 11,
                     trigger.lastResult.toLowerCase(Locale.US).contains("completed") ? UiKit.SUCCESS : UiKit.MUTED, false);
             status.setPadding(0, UiKit.dp(this, 8), 0, 0);
             card.addView(status);
@@ -408,33 +408,36 @@ public class RoutineTriggersActivity extends Activity {
             if (!OrbitDistribution.supportsLocationTriggers()) {
                 return OrbitDistribution.LOCATION_TRIGGER_UNAVAILABLE_STATE;
             }
-            if (!trigger.enabled) return "Off";
-            if (!RoutineLocationTriggerScheduler.hasFineLocation(this)) return "Needs precise location access";
-            if (!RoutineLocationTriggerScheduler.hasBackgroundLocation(this)) return "Needs background location access";
-            if (!RoutineLocationTriggerScheduler.isLocationEnabled(this)) return "Phone location is off";
-            return "Ready for background monitoring";
+            if (!trigger.enabled) return getString(R.string.d_rtrg_off);
+            if (!RoutineLocationTriggerScheduler.hasFineLocation(this)) return getString(R.string.d_rtrg_state_precise);
+            if (!RoutineLocationTriggerScheduler.hasBackgroundLocation(this)) return getString(R.string.d_rtrg_state_background);
+            if (!RoutineLocationTriggerScheduler.isLocationEnabled(this)) return getString(R.string.d_rtrg_state_phone_off);
+            return getString(R.string.d_rtrg_state_ready);
         }
         return nextTimeLabel(trigger);
     }
 
     private String nextTimeLabel(RoutineTriggerStore.Trigger t) {
         if (!t.enabled) {
-            if (RoutineTriggerStore.MODE_ONCE.equals(t.mode) && t.lastRunAt > 0L) return "Finished";
-            return "Off";
+            if (RoutineTriggerStore.MODE_ONCE.equals(t.mode) && t.lastRunAt > 0L) return getString(R.string.d_rtrg_finished);
+            return getString(R.string.d_rtrg_off);
         }
-        if (t.nextRunAt <= 0) return RoutineTriggerStore.MODE_ONCE.equals(t.mode) ? "Finished" : "Not scheduled";
+        if (t.nextRunAt <= 0) return getString(RoutineTriggerStore.MODE_ONCE.equals(t.mode) ? R.string.d_rtrg_finished : R.string.d_rtrg_not_scheduled);
         ZonedDateTime z = Instant.ofEpochMilli(t.nextRunAt).atZone(ZoneId.systemDefault());
         LocalDate d = z.toLocalDate();
         LocalDate today = LocalDate.now();
         String day;
-        if (d.equals(today)) day = "Today";
-        else if (d.equals(today.plusDays(1))) day = "Tomorrow";
-        else day = z.format(DateTimeFormatter.ofPattern("EEE, MMM d", Locale.US));
-        return "Next · " + day + " at " + RoutineActionCatalog.timeLabel(z.getHour(), z.getMinute());
+        if (d.equals(today)) day = getString(R.string.d_rtrg_today);
+        else if (d.equals(today.plusDays(1))) day = getString(R.string.d_rtrg_tomorrow);
+        else day = z.format(DateTimeFormatter.ofPattern(
+                android.text.format.DateFormat.getBestDateTimePattern(Locale.getDefault(), "EEEMMMd"),
+                Locale.getDefault()));
+        return getString(R.string.d_rtrg_next, day,
+                RoutineActionCatalog.timeLabel(z.getHour(), z.getMinute()));
     }
 
     private void showTriggerMenu(View anchor, RoutineTriggerStore.Trigger trigger) {
-        String[] labels = {"Edit", "Duplicate", "Delete"};
+        String[] labels = {getString(R.string.d_rtrg_edit), getString(R.string.d_rtrg_duplicate), getString(R.string.ui_delete_e2d0a549)};
         UiKit.showOrbitMenu(this, anchor, labels, -1, (index, label) -> {
             if (index == 0) openEditor(trigger);
             else if (index == 1) duplicate(trigger);
@@ -455,18 +458,19 @@ public class RoutineTriggersActivity extends Activity {
                     source.weekdayMask, source.intervalCount, source.intervalUnit).withEnabled(false);
         }
         if (RoutineTriggerStore.upsert(this, copy)) {
-            Toast.makeText(this, "Trigger duplicated · off until you enable it.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.d_rtrg_duplicated), Toast.LENGTH_SHORT).show();
             refresh();
         }
     }
 
     private void confirmDelete(RoutineTriggerStore.Trigger trigger) {
-        String kind = RoutineTriggerStore.TYPE_LOCATION.equals(trigger.type) ? "location trigger" : "time trigger";
+        int title = RoutineTriggerStore.TYPE_LOCATION.equals(trigger.type)
+                ? R.string.d_rtrg_delete_location_title : R.string.d_rtrg_delete_time_title;
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Delete " + kind + "?")
+                .setTitle(getString(title))
                 .setMessage(RoutineTriggerSchedule.summary(trigger))
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Delete", (d, w) -> {
+                .setNegativeButton(getString(R.string.ui_cancel_19766ed6), null)
+                .setPositiveButton(getString(R.string.ui_delete_e2d0a549), (d, w) -> {
                     RoutineTriggerScheduler.cancel(this, trigger.id);
                     RoutineTriggerStore.delete(this, trigger.id);
                     refresh();

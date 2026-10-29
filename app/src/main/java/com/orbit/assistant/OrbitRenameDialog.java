@@ -31,9 +31,9 @@ final class OrbitRenameDialog {
         input.setSingleLine(true);
         input.setTextColor(UiKit.TEXT);
         input.setHintTextColor(UiKit.MUTED);
-        input.setHint("Chat name");
+        input.setHint(a.getString(R.string.d_rename_chat_name));
         input.setBackgroundTintList(ColorStateList.valueOf(UiKit.accent(a)));
-        input.setContentDescription("Chat name");
+        input.setContentDescription(a.getString(R.string.d_rename_chat_name));
 
         FrameLayout inset = new FrameLayout(a);
         int side = UiKit.dp(a, CONTENT_INSET_DP);
@@ -42,9 +42,9 @@ final class OrbitRenameDialog {
                 FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.WRAP_CONTENT));
 
         AlertDialog dialog = new AlertDialog.Builder(a)
-                .setTitle("Rename chat").setView(inset)
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Save", (d, w) -> onSave.onSave(input.getText().toString()))
+                .setTitle(a.getString(R.string.ui_rename_chat_26076241)).setView(inset)
+                .setNegativeButton(a.getString(R.string.ui_cancel_19766ed6), null)
+                .setPositiveButton(a.getString(R.string.ui_save_1509f561), (d, w) -> onSave.onSave(input.getText().toString()))
                 .create();
         UiKit.styleOrbitDialog(dialog, a, false);
         dialog.show();

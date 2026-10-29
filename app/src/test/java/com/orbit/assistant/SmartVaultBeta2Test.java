@@ -216,10 +216,10 @@ public final class SmartVaultBeta2Test {
         SmartVaultActivity screen = Robolectric.buildActivity(SmartVaultActivity.class).setup().get();
         View root = screen.getWindow().getDecorView();
         String[][] rows = {
-                {SmartVaultActivity.OCR_LABEL, Prefs.SMART_VAULT_OCR},
-                {SmartVaultActivity.MEANING_LABEL, Prefs.SMART_VAULT_MEANING},
-                {SmartVaultActivity.LINKS_LABEL, Prefs.SMART_VAULT_READ_LINKS},
-                {SmartVaultActivity.AI_LABEL, Prefs.SMART_VAULT_AI_NEW},
+                {context.getString(SmartVaultActivity.OCR_LABEL), Prefs.SMART_VAULT_OCR},
+                {context.getString(SmartVaultActivity.MEANING_LABEL), Prefs.SMART_VAULT_MEANING},
+                {context.getString(SmartVaultActivity.LINKS_LABEL), Prefs.SMART_VAULT_READ_LINKS},
+                {context.getString(SmartVaultActivity.AI_LABEL), Prefs.SMART_VAULT_AI_NEW},
         };
         for (String[] row : rows) {
             OrbitSwitch control = switchLabelled(root, row[0]);
@@ -238,7 +238,7 @@ public final class SmartVaultBeta2Test {
     @Test public void beforeTurningOnASwitchOnlyRecordsTheChoice() {
         SmartVaultActivity screen = Robolectric.buildActivity(SmartVaultActivity.class).setup().get();
         OrbitSwitch links = switchLabelled(screen.getWindow().getDecorView(),
-                SmartVaultActivity.LINKS_LABEL);
+                context.getString(SmartVaultActivity.LINKS_LABEL));
         links.toggle();
         assertTrue(links.isChecked());
         assertFalse(Prefs.smartVaultEnabled(context));
@@ -251,10 +251,10 @@ public final class SmartVaultBeta2Test {
         SmartVault.enable(context, false, false, true, true);
         View root = Robolectric.buildActivity(SmartVaultActivity.class).setup().get()
                 .getWindow().getDecorView();
-        assertFalse(switchLabelled(root, SmartVaultActivity.OCR_LABEL).isChecked());
-        assertFalse(switchLabelled(root, SmartVaultActivity.MEANING_LABEL).isChecked());
-        assertTrue(switchLabelled(root, SmartVaultActivity.LINKS_LABEL).isChecked());
-        assertTrue(switchLabelled(root, SmartVaultActivity.AI_LABEL).isChecked());
+        assertFalse(switchLabelled(root, context.getString(SmartVaultActivity.OCR_LABEL)).isChecked());
+        assertFalse(switchLabelled(root, context.getString(SmartVaultActivity.MEANING_LABEL)).isChecked());
+        assertTrue(switchLabelled(root, context.getString(SmartVaultActivity.LINKS_LABEL)).isChecked());
+        assertTrue(switchLabelled(root, context.getString(SmartVaultActivity.AI_LABEL)).isChecked());
     }
 
     @Test public void switchesSettleInstantlyWithAnimationsOff() throws Exception {
@@ -263,7 +263,7 @@ public final class SmartVaultBeta2Test {
         SmartVault.enable(context, true, false, false, false);
         SmartVaultActivity screen = Robolectric.buildActivity(SmartVaultActivity.class).setup().get();
         OrbitSwitch ocr = switchLabelled(screen.getWindow().getDecorView(),
-                SmartVaultActivity.OCR_LABEL);
+                context.getString(SmartVaultActivity.OCR_LABEL));
         ocr.toggle();
         assertFalse(ocr.isChecked());
         assertFalse(Prefs.smartVaultOcr(context));
@@ -323,7 +323,7 @@ public final class SmartVaultBeta2Test {
                 System.currentTimeMillis());
         SmartVaultActivity screen = Robolectric.buildActivity(SmartVaultActivity.class).setup().get();
         View root = screen.getWindow().getDecorView();
-        TextView title = textStartingWith(root, SmartVaultActivity.MODEL_DOWNLOADING);
+        TextView title = textStartingWith(root, context.getString(SmartVaultActivity.MODEL_DOWNLOADING));
         assertNotNull(title);
         assertTrue(anyContains(texts(root), "42%"));
 
@@ -331,7 +331,7 @@ public final class SmartVaultBeta2Test {
                 System.currentTimeMillis());
         screen.refreshLive();
         assertSame("updated in place", title,
-                textStartingWith(root, SmartVaultActivity.MODEL_DOWNLOADING));
+                textStartingWith(root, context.getString(SmartVaultActivity.MODEL_DOWNLOADING)));
         assertTrue(anyContains(texts(root), "80%"));
         assertFalse(anyContains(texts(root), "42%"));
     }
@@ -354,8 +354,8 @@ public final class SmartVaultBeta2Test {
         View root = Robolectric.buildActivity(SmartVaultActivity.class).setup().get()
                 .getWindow().getDecorView();
         List<String> shown = texts(root);
-        assertTrue(anyContains(shown, SmartVaultActivity.MODEL_READY));
-        assertFalse(anyContains(shown, SmartVaultActivity.MODEL_DOWNLOADING));
+        assertTrue(anyContains(shown, context.getString(SmartVaultActivity.MODEL_READY)));
+        assertFalse(anyContains(shown, context.getString(SmartVaultActivity.MODEL_DOWNLOADING)));
         assertFalse(anyContains(shown, "%"));
     }
 
@@ -366,7 +366,7 @@ public final class SmartVaultBeta2Test {
                 System.currentTimeMillis() - SmartVaultModel.STALL_MS - 5_000);
         View root = Robolectric.buildActivity(SmartVaultActivity.class).setup().get()
                 .getWindow().getDecorView();
-        assertTrue(anyContains(texts(root), SmartVaultActivity.MODEL_WAITING));
+        assertTrue(anyContains(texts(root), context.getString(SmartVaultActivity.MODEL_WAITING)));
     }
 
     // ---- the page and the shortcut ----------------------------------------------------------------
@@ -377,9 +377,9 @@ public final class SmartVaultBeta2Test {
         SmartVaultActivity screen = Robolectric.buildActivity(SmartVaultActivity.class).setup().get();
         View root = screen.getWindow().getDecorView();
         List<String> shown = texts(root);
-        for (String section : new String[]{SmartVaultActivity.SECTION_SEARCH,
-                SmartVaultActivity.SECTION_CAPTURE, SmartVaultActivity.SECTION_AI,
-                SmartVaultActivity.SECTION_ITEMS, SmartVaultActivity.SECTION_MANAGE}) {
+        for (String section : new String[]{context.getString(SmartVaultActivity.SECTION_SEARCH),
+                context.getString(SmartVaultActivity.SECTION_CAPTURE), context.getString(SmartVaultActivity.SECTION_AI),
+                context.getString(SmartVaultActivity.SECTION_ITEMS), context.getString(SmartVaultActivity.SECTION_MANAGE)}) {
             assertTrue(section, shown.contains(section));
         }
         assertTrue(anyContains(shown, "Google Play services"));
@@ -388,7 +388,7 @@ public final class SmartVaultBeta2Test {
         assertTrue(anyContains(shown, "AI allowance"));
         assertTrue(anyContains(shown, "Provider: "));
         assertFalse("secondary detail is folded away", anyContains(shown, "MIT licence"));
-        textStartingWith(root, "▸  " + SmartVaultActivity.DETAILS_LABEL).performClick();
+        textStartingWith(root, "▸  " + context.getString(SmartVaultActivity.DETAILS_LABEL)).performClick();
         assertTrue(anyContains(texts(root), "MIT licence"));
         assertTrue(anyContains(texts(root), "anonymous statistics"));
     }
