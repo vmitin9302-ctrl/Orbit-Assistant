@@ -177,11 +177,11 @@ public final class OrbitLocalService extends Service {
             if (callback == null) return;
             Context c = getApplicationContext();
             if (!ComponentModelStore.isReady(c)) {
-                safeError(callback, "the local model is not installed");
+                safeError(callback, c.getString(R.string.local_err_chat_not_installed));
                 return;
             }
             if (prompt == null || prompt.trim().isEmpty()) {
-                safeError(callback, "the request was empty");
+                safeError(callback, c.getString(R.string.local_err_empty_request));
                 return;
             }
             LocalLlmEngine.generate(c, prompt, new LocalLlmEngine.StreamCallback() {
@@ -239,11 +239,11 @@ public final class OrbitLocalService extends Service {
             if (callback == null) return;
             Context c = getApplicationContext();
             if (!ComponentModelStore.isReady(c, ComponentModelSpec.ACTION)) {
-                safeError(callback, "the local action model is not installed");
+                safeError(callback, c.getString(R.string.local_err_action_not_installed));
                 return;
             }
             if (prompt == null || prompt.trim().isEmpty()) {
-                safeError(callback, "the request was empty");
+                safeError(callback, c.getString(R.string.local_err_empty_request));
                 return;
             }
             // Identical plumbing to chat, on purpose. The component runs a model and streams text;

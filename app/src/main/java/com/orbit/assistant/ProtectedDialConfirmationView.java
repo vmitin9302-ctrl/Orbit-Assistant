@@ -74,12 +74,12 @@ public final class ProtectedDialConfirmationView {
         // Cancel first in reading order, in focus order, and in the order a thumb sweeps. The safe
         // answer is the one reached without effort.
         Button cancel = ghostButton(c, EmergencyDialGuard.cancelLabel(), compact);
-        cancel.setContentDescription(EmergencyDialGuard.cancelLabel()
-                + ", close this without opening the dialer");
+        cancel.setContentDescription(c.getString(R.string.h_dial_cancel_desc,
+                EmergencyDialGuard.cancelLabel()));
         actions.addView(cancel);
 
         Button confirm = accentPillButton(c, EmergencyDialGuard.confirmLabel(), compact);
-        confirm.setContentDescription(EmergencyDialGuard.confirmLabel() + " for " + number);
+        confirm.setContentDescription(c.getString(R.string.h_dial_confirm_desc, EmergencyDialGuard.confirmLabel(), number));
         LinearLayout.LayoutParams confirmLp = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         confirmLp.setMarginStart(UiKit.dp(c, 6));
