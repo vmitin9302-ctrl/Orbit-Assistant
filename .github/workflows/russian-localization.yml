@@ -8,9 +8,11 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -18,10 +20,44 @@ jobs:
       - uses: android-actions/setup-android@v3
         with:
           packages: ''
-      - run: sdkmanager "platforms;android-36" "build-tools;35.0.0"
-      - run: chmod +x gradlew && ./gradlew --no-daemon assembleDebug testDebugUnitTest
-      - uses: actions/upload-artifact@v4
+      - name: Install required Android SDK packages
+        run: sdkmanager "platform-tools" "platforms;android-36" "build-tools;35.0.0"
+      - name: Validate localization and presentation-only changes
+        run: python3 tools/validate_localization.py --base origin/main
+      - name: Build signed debug APKs
+        run: chmod +x gradlew && ./gradlew --no-daemon :app:assembleDebug :local:assembleDebug
+      - name: Verify APK metadata and signatures
+        shell: bash
+        run: |
+          mkdir -p artifacts
+          cp app/build/outputs/apk/debug/app-debug.apk artifacts/Orbit-Assistant-RU.apk
+          cp local/build/outputs/apk/debug/local-debug.apk artifacts/Orbit-Local-RU.apk
+          for apk in artifacts/*.apk; do
+            "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs "$apk" > "$apk.signature.txt"
+            "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$apk" > "$apk.metadata.txt"
+            unzip -t "$apk" > "$apk.zip-test.txt"
+            sha256sum "$apk" > "$apk.sha256"
+          done
+          grep -q "package: name='com.orbit.assistant'" artifacts/Orbit-Assistant-RU.apk.metadata.txt
+          grep -q "versionName='0.8.5.0-beta.1'" artifacts/Orbit-Assistant-RU.apk.metadata.txt
+          grep -q "sdkVersion:'29'" artifacts/Orbit-Assistant-RU.apk.metadata.txt
+          grep -q "targetSdkVersion:'36'" artifacts/Orbit-Assistant-RU.apk.metadata.txt
+      - name: Upload installable test APKs and verification evidence
+        uses: actions/upload-artifact@v4
         with:
-          name: orbit-russian-debug-apk
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: Orbit-RU-test-apks
+          path: artifacts/
           if-no-files-found: error
+      - name: Run all debug unit tests
+        run: ./gradlew --no-daemon :app:testDebugUnitTest :local:testDebugUnitTest
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Orbit-RU-test-results
+          path: |
+            app/build/reports/tests/
+            app/build/test-results/
+            local/build/reports/tests/
+            local/build/test-results/
+          if-no-files-found: warn

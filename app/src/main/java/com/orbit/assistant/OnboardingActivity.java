@@ -65,7 +65,7 @@ public final class OnboardingActivity extends Activity {
             runOnUiThread(() -> {
                 if (!canUpdateUi()) return;
                 Toast.makeText(OnboardingActivity.this,
-                        "ChatGPT connected to Orbit", Toast.LENGTH_LONG).show();
+                        getString(R.string.ui_chatgpt_connected_to_orbit_61c51250), Toast.LENGTH_LONG).show();
                 render();
             });
         }
@@ -74,7 +74,7 @@ public final class OnboardingActivity extends Activity {
             runOnUiThread(() -> {
                 if (!canUpdateUi()) return;
                 render();
-                showMessage("ChatGPT sign-in could not complete", message);
+                showMessage(getString(R.string.ui_chatgpt_sign_in_could_not_complete_2ffa82b4), message);
             });
         }
     };
@@ -83,7 +83,7 @@ public final class OnboardingActivity extends Activity {
     private final ChatGptBrowserAuth.Listener browserListener = new ChatGptBrowserAuth.Listener() {
          public void onSignedIn(ChatGptAuth.AccountInfo account) {
             if (!canUpdateUi()) return;
-            Toast.makeText(OnboardingActivity.this, "ChatGPT connected to Orbit", Toast.LENGTH_LONG).show();
+            Toast.makeText(OnboardingActivity.this, getString(R.string.ui_chatgpt_connected_to_orbit_61c51250), Toast.LENGTH_LONG).show();
             render();
         }
 
@@ -91,10 +91,10 @@ public final class OnboardingActivity extends Activity {
             if (!canUpdateUi()) return;
             render();
             AlertDialog dialog = new AlertDialog.Builder(OnboardingActivity.this)
-                    .setTitle("ChatGPT sign-in could not complete")
+                    .setTitle(getString(R.string.ui_chatgpt_sign_in_could_not_complete_2ffa82b4))
                     .setMessage(message)
-                    .setPositiveButton("Use code sign-in", (d, w) -> startCodeSignIn())
-                    .setNegativeButton("Close", null)
+                    .setPositiveButton(getString(R.string.ui_use_code_sign_in_25c62930), (d, w) -> startCodeSignIn())
+                    .setNegativeButton(getString(R.string.ui_close_7d9eb7ac), null)
                     .create();
             UiKit.styleOrbitDialog(dialog, OnboardingActivity.this, false);
             dialog.show();
@@ -164,7 +164,7 @@ public final class OnboardingActivity extends Activity {
         ChatGptBrowserAuth.attach(browserListener);
         if (step == 1 && !ChatGptAuth.isSignedIn(this) &&
                 ChatGptAuth.resumePendingDeviceCode(this, loginCallback)) {
-            Toast.makeText(this, "Finishing secure ChatGPT sign-in…", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.ui_finishing_secure_chatgpt_sign_in_7777d7c7), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -253,7 +253,7 @@ public final class OnboardingActivity extends Activity {
 
         LinearLayout progress = new LinearLayout(this);
         progress.setOrientation(LinearLayout.VERTICAL);
-        progress.addView(UiKit.text(this, step < 7 ? (step + 1) + " of 7" : "SETUP COMPLETE",
+        progress.addView(UiKit.text(this, step < 7 ? (step + 1) + getString(R.string.ui_of_7_42c4647a) : getString(R.string.ui_setup_complete_d0e3858f),
                 11, UiKit.accent(this), true));
         TextView bar = UiKit.text(this, progressDots(), 16, UiKit.MUTED, false);
         bar.setLetterSpacing(.08f);
@@ -261,7 +261,7 @@ public final class OnboardingActivity extends Activity {
         header.addView(progress, new LinearLayout.LayoutParams(0,
                 ViewGroup.LayoutParams.WRAP_CONTENT, 1));
 
-        Button skip = quietButton(manual ? "Exit setup" : "Skip setup");
+        Button skip = quietButton(manual ? getString(R.string.ui_exit_setup_a8b459d5) : getString(R.string.ui_skip_setup_59e693cd));
         skip.setOnClickListener(v -> {
             if (manual) confirmExitSetup(); else confirmSkip();
         });
@@ -280,19 +280,19 @@ public final class OnboardingActivity extends Activity {
     }
 
     private void buildWelcome(LinearLayout page) {
-        addTitle(page, "Welcome to Orbit",
-                "A customizable Android assistant for quick answers, screen context, device actions, Routines, reminders, and more.");
+        addTitle(page, getString(R.string.ui_welcome_to_orbit_9c4a3ca1),
+                getString(R.string.ui_a_customizable_android_assistant_for_quick_an_26b8d046));
         LinearLayout card = card();
-        card.addView(feature("Ask quickly", "Use the app, Quick Settings, or your system assistant gesture."));
-        card.addView(feature("Act locally", "Run device actions, reminders, and editable Routines."));
-        card.addView(feature("Keep control", "Choose what Orbit can access and change it later in Settings."));
+        card.addView(feature(getString(R.string.ui_ask_quickly_110e1409), getString(R.string.ui_use_the_app_quick_settings_or_your_system_ass_e45e0cde)));
+        card.addView(feature(getString(R.string.ui_act_locally_c0e2f78d), getString(R.string.ui_run_device_actions_reminders_and_editable_rou_2737e70c)));
+        card.addView(feature(getString(R.string.ui_keep_control_7971a6c2), getString(R.string.ui_choose_what_orbit_can_access_and_change_it_la_dabef9e7)));
         page.addView(card, cardLp());
 
-        Button restore = secondaryButton("Restore Orbit backup");
+        Button restore = secondaryButton(getString(R.string.ui_restore_orbit_backup_f0a34e16));
         restore.setOnClickListener(v -> chooseBackup());
         page.addView(restore, buttonLp());
         TextView note = UiKit.text(this,
-                "A restored backup brings back supported local data and appearance. ChatGPT credentials, Android permissions, and default-assistant status are intentionally not restored.",
+                getString(R.string.ui_a_restored_backup_brings_back_supported_local_dcfde50f),
                 12, UiKit.MUTED, false);
         note.setPadding(UiKit.dp(this, 3), UiKit.dp(this, 8), UiKit.dp(this, 3), 0);
         page.addView(note);
@@ -311,13 +311,13 @@ public final class OnboardingActivity extends Activity {
      * the curated sentences; the provider layer decides whether they are currently true.
      */
     private void buildConnect(LinearLayout page) {
-        addTitle(page, "Connect Orbit",
-                "Choose how Orbit thinks. ChatGPT is the recommended full experience. Orbit Local is optional, private, and can be added later.");
+        addTitle(page, getString(R.string.ui_connect_orbit_51a3d76f),
+                getString(R.string.ui_choose_how_orbit_thinks_chatgpt_is_the_recomm_7f0fb2f0));
         page.addView(chatGptCard(), cardLp());
         page.addView(orbitLocalCard(), cardLp());
 
         Button more = quietButton(advancedExpanded
-                ? "Hide more provider options" : "More provider options");
+                ? getString(R.string.ui_hide_more_provider_options_e2abd48f) : getString(R.string.ui_more_provider_options_3fa79cbc));
         more.setOnClickListener(v -> {
             advancedExpanded = !advancedExpanded;
             render();
@@ -337,22 +337,22 @@ public final class OnboardingActivity extends Activity {
         boolean active = Prefs.PROVIDER_CHATGPT.equals(Prefs.provider(this));
 
         LinearLayout card = card();
-        card.addView(providerHeading(provider.displayName(), "Recommended"));
+        card.addView(providerHeading(provider.displayName(), getString(R.string.ui_recommended_d70604e8)));
         card.addView(providerStatusLine(connected, provider.statusDetail(this)));
         addCardDescription(card,
-                "Orbit's fullest experience: stronger answers, hosted web search, screen and image context, and device-action planning.");
+                getString(R.string.ui_orbit_s_fullest_experience_stronger_answers_h_a7ced39f));
         addCapabilityLine(card, provider);
 
         TextView help = UiKit.text(this, connected
-                ? "Orbit keeps using the securely stored session already on this phone."
-                : "Your browser handles authorization. Orbit never asks for your ChatGPT password.",
+                ? getString(R.string.ui_orbit_keeps_using_the_securely_stored_session_aabaafe4)
+                : getString(R.string.ui_your_browser_handles_authorization_orbit_neve_ad28b253),
                 12, UiKit.MUTED, false);
         help.setPadding(0, 0, 0, UiKit.dp(this, 12));
         card.addView(help);
 
         Button action = primaryButton(connected
-                ? (active ? "ChatGPT active" : "Use ChatGPT")
-                : "Sign in with ChatGPT");
+                ? (active ? getString(R.string.ui_chatgpt_active_a6ed644f) : getString(R.string.ui_use_chatgpt_f8f99c44))
+                : getString(R.string.ui_sign_in_with_chatgpt_f6de6480));
         action.setEnabled(!connected || !active);
         action.setAlpha(connected && active ? .68f : 1f);
         action.setOnClickListener(v -> {
@@ -365,7 +365,7 @@ public final class OnboardingActivity extends Activity {
         if (!connected) {
             // The fallback, quiet and always present: never the recommended path, never hidden.
             Button code = new Button(this);
-            code.setText("Having trouble? Use code sign-in");
+            code.setText(getString(R.string.ui_having_trouble_use_code_sign_in_62f97b7e));
             code.setAllCaps(false);
             code.setTextSize(13);
             code.setTextColor(UiKit.accent(this));
@@ -392,10 +392,10 @@ public final class OnboardingActivity extends Activity {
         boolean supported = status != AiProvider.Status.UNSUPPORTED;
 
         LinearLayout card = card();
-        card.addView(providerHeading(provider.displayName(), "Optional"));
+        card.addView(providerHeading(provider.displayName(), getString(R.string.ui_optional_59be7133)));
         card.addView(providerStatusLine(ready, provider.statusDetail(this)));
         addCardDescription(card,
-                "Runs privately on this phone and keeps working offline once it is set up. It uses a small model, so answers are simpler than cloud AI.");
+                getString(R.string.ui_runs_privately_on_this_phone_and_keeps_workin_98f90f9a));
         addCapabilityLine(card, provider);
 
         String missing = missingCapabilitySentence(provider.capabilities());
@@ -416,8 +416,8 @@ public final class OnboardingActivity extends Activity {
             return card;
         }
 
-        Button action = primaryButton(active ? "Orbit Local active"
-                : ready ? "Use Orbit Local" : "Set up Orbit Local");
+        Button action = primaryButton(active ? getString(R.string.ui_orbit_local_active_38d55fa2)
+                : ready ? getString(R.string.ui_use_orbit_local_144ca50f) : getString(R.string.ui_set_up_orbit_local_6660808d));
         action.setEnabled(!active);
         action.setAlpha(active ? .68f : 1f);
         action.setOnClickListener(v -> {
@@ -442,12 +442,12 @@ public final class OnboardingActivity extends Activity {
     private LinearLayout openRouterCard() {
         AiProvider provider = AiProviders.byId(Prefs.PROVIDER_OPENROUTER);
         LinearLayout card = card();
-        card.addView(providerHeading(provider.displayName(), "Optional"));
+        card.addView(providerHeading(provider.displayName(), getString(R.string.ui_optional_59be7133)));
         boolean ready = provider.status(this) == AiProvider.Status.READY;
         card.addView(providerStatusLine(ready, provider.statusDetail(this)));
         addCardDescription(card,
-                "Many AI models through one OpenRouter account. Usage is billed to your OpenRouter credits, separately from ChatGPT. Sign in any time from AI Providers.");
-        Button manage = secondaryButton(ready ? "Open provider settings" : "Set up OpenRouter");
+                getString(R.string.ui_many_ai_models_through_one_openrouter_account_d936f413));
+        Button manage = secondaryButton(ready ? getString(R.string.ui_open_provider_settings_bbcae464) : getString(R.string.ui_set_up_openrouter_b9f8c5d0));
         manage.setOnClickListener(v -> startActivity(new Intent(this, AiProvidersActivity.class)));
         card.addView(manage, new LinearLayout.LayoutParams(-1, UiKit.dp(this, 46)));
         return card;
@@ -506,22 +506,22 @@ public final class OnboardingActivity extends Activity {
 
     private void buildRelayFallback(LinearLayout page) {
         LinearLayout relayCard = card();
-        relayCard.addView(providerHeading("Private API relay", "Advanced"));
+        relayCard.addView(providerHeading(getString(R.string.ui_private_api_relay_d6ca6fb6), getString(R.string.ui_advanced_9f088dbe)));
         boolean configured = Prefs.relayConfigured(this);
         boolean relayActive = Prefs.PROVIDER_RELAY.equals(Prefs.provider(this)) && configured;
         relayCard.addView(providerStatusLine(configured, relayActive
-                ? "Active provider" : configured ? "Relay saved" : "Relay URL required"));
+                ? getString(R.string.ui_active_provider_4cee0d82) : configured ? getString(R.string.ui_relay_saved_29654bda) : getString(R.string.ui_relay_url_required_68955a3c)));
         addCardDescription(relayCard,
-                "For advanced users running their own HTTPS relay. Orbit talks to your server; your API key stays on it and never enters Orbit.");
+                getString(R.string.ui_for_advanced_users_running_their_own_https_re_6d06e9df));
 
         EditText url = field("https://your-relay.example.com", Prefs.backendUrl(this), false);
         relayCard.addView(url, new LinearLayout.LayoutParams(-1, UiKit.dp(this, 52)));
-        EditText token = field("Relay access token (optional)", Prefs.token(this), true);
+        EditText token = field(getString(R.string.ui_relay_access_token_optional_dffc0006), Prefs.token(this), true);
         LinearLayout.LayoutParams tokenLp = new LinearLayout.LayoutParams(-1, UiKit.dp(this, 52));
         tokenLp.topMargin = UiKit.dp(this, 9);
         relayCard.addView(token, tokenLp);
 
-        Button save = secondaryButton("Save and use private relay");
+        Button save = secondaryButton(getString(R.string.ui_save_and_use_private_relay_cfc7865b));
         LinearLayout.LayoutParams saveLp = new LinearLayout.LayoutParams(-1, UiKit.dp(this, 46));
         saveLp.topMargin = UiKit.dp(this, 11);
         relayCard.addView(save, saveLp);
@@ -529,7 +529,7 @@ public final class OnboardingActivity extends Activity {
             try {
                 String requestedUrl = url.getText().toString().trim();
                 if (requestedUrl.isEmpty()) {
-                    Toast.makeText(this, "Enter an HTTPS relay URL first.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getString(R.string.ui_enter_an_https_relay_url_first_a096cb2f), Toast.LENGTH_LONG).show();
                     return;
                 }
                 String error = Prefs.saveRelaySettings(this, requestedUrl,
@@ -539,47 +539,47 @@ public final class OnboardingActivity extends Activity {
                     return;
                 }
                 AiProviders.select(this, Prefs.PROVIDER_RELAY);
-                Toast.makeText(this, "Private relay saved and selected", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.ui_private_relay_saved_and_selected_64aea371), Toast.LENGTH_SHORT).show();
                 render();
             } catch (Exception error) {
-                showMessage("Could not save relay settings",
-                        "Orbit could not securely save the optional relay access token.");
+                showMessage(getString(R.string.ui_could_not_save_relay_settings_d1d62e26),
+                        getString(R.string.ui_orbit_could_not_securely_save_the_optional_re_3b8093b1));
             }
         });
         page.addView(relayCard, cardLp());
     }
 
     private void buildAssistant(LinearLayout page) {
-        addTitle(page, "Make Orbit your assistant",
-                "Choosing Orbit as Android's digital assistant lets supported buttons and gestures open it system-wide.");
+        addTitle(page, getString(R.string.ui_make_orbit_your_assistant_25633010),
+                getString(R.string.ui_choosing_orbit_as_android_s_digital_assistant_3fda0183));
         boolean active = OrbitSetupHelper.isOrbitAssistantActive(this);
         LinearLayout card = card();
-        card.addView(UiKit.text(this, active ? "✓ Orbit is your default assistant" :
-                "○ Orbit is not currently your default assistant", 16,
+        card.addView(UiKit.text(this, active ? getString(R.string.ui_orbit_is_your_default_assistant_7bea32a3) :
+                getString(R.string.ui_orbit_is_not_currently_your_default_assistant_fd04f0b1), 16,
                 active ? UiKit.SUCCESS : UiKit.TEXT, true));
         TextView help = UiKit.text(this,
-                "Android controls this setting. Available button and gesture choices vary by device.",
+                getString(R.string.ui_android_controls_this_setting_available_butto_98cf13fd),
                 13, UiKit.MUTED, false);
         help.setPadding(0, UiKit.dp(this, 7), 0, UiKit.dp(this, 13));
         card.addView(help);
-        Button action = primaryButton(active ? "Manage assistant settings" : "Open assistant settings");
+        Button action = primaryButton(active ? getString(R.string.ui_manage_assistant_settings_66c4945b) : getString(R.string.ui_open_assistant_settings_44fda956));
         action.setOnClickListener(v -> {
             if (!OrbitSetupHelper.openAssistantSettings(this, REQ_ASSISTANT_SETTINGS, true))
-                showMessage("Assistant settings unavailable",
-                        "Android could not open a supported default-assistant settings screen on this device.");
+                showMessage(getString(R.string.ui_assistant_settings_unavailable_7db001cf),
+                        getString(R.string.ui_android_could_not_open_a_supported_default_as_c372b8db));
         });
         card.addView(action, new LinearLayout.LayoutParams(-1, UiKit.dp(this, 48)));
         page.addView(card, cardLp());
     }
 
     private void buildQuickAccess(LinearLayout page) {
-        addTitle(page, "Choose how to open Orbit",
-                "Pick the access methods that fit your phone. None are required to continue.");
+        addTitle(page, getString(R.string.ui_choose_how_to_open_orbit_583ded88),
+                getString(R.string.ui_pick_the_access_methods_that_fit_your_phone_n_90ea8df6));
         LinearLayout ask = card();
-        ask.addView(UiKit.text(this, "Ask Orbit Quick Settings tile", 16, UiKit.TEXT, true));
-        addCardDescription(ask, "Open Orbit instantly from Android Quick Settings.");
+        ask.addView(UiKit.text(this, getString(R.string.ui_ask_orbit_quick_settings_tile_cf969c5f), 16, UiKit.TEXT, true));
+        addCardDescription(ask, getString(R.string.ui_open_orbit_instantly_from_android_quick_setti_ceaa1bcf));
         Button add = primaryButton(OnboardingState.askTileConfirmed(this) ?
-                "Orbit tile added" : "Add Orbit tile");
+                getString(R.string.ui_orbit_tile_added_bd0fc37f) : getString(R.string.ui_add_orbit_tile_b63bc190));
         add.setOnClickListener(v -> QuickSettingsTiles.requestAddAskTile(this, confirmed -> {
             if (confirmed) OnboardingState.setAskTileConfirmed(this, true);
             runOnUiThread(() -> { if (canUpdateUi()) render(); });
@@ -588,13 +588,13 @@ public final class OnboardingActivity extends Activity {
         page.addView(ask, cardLp());
 
         LinearLayout routine = card();
-        routine.addView(UiKit.text(this, "Routine tile", 16, UiKit.TEXT, true));
+        routine.addView(UiKit.text(this, getString(R.string.ui_routine_tile_6ce3113a), 16, UiKit.TEXT, true));
         addCardDescription(routine,
-                "You can assign a saved Routine to the Routine Quick Settings tile later from Settings → Assistant setup.");
+                getString(R.string.ui_you_can_assign_a_saved_routine_to_the_routine_d47c9435));
         page.addView(routine, cardLp());
 
         TextView widgetNote = UiKit.text(this,
-                "Orbit also supports home-screen widgets. Add them later from your launcher or Orbit Settings.",
+                getString(R.string.ui_orbit_also_supports_home_screen_widgets_add_t_e478c9a8),
                 12, UiKit.MUTED, false);
         widgetNote.setLineSpacing(0, 1.12f);
         LinearLayout.LayoutParams widgetNoteLp = new LinearLayout.LayoutParams(
@@ -604,82 +604,82 @@ public final class OnboardingActivity extends Activity {
         page.addView(widgetNote, widgetNoteLp);
 
         LinearLayout side = card();
-        side.addView(UiKit.text(this, "Side button and assistant gesture", 16, UiKit.TEXT, true));
+        side.addView(UiKit.text(this, getString(R.string.ui_side_button_and_assistant_gesture_22694cb5), 16, UiKit.TEXT, true));
         addCardDescription(side, OrbitSetupHelper.isOrbitAssistantActive(this)
-                ? "Orbit is selected as your assistant. Your device's supported assistant gesture can now invoke it."
-                : "After choosing Orbit as the default assistant, use whichever assistant button or gesture Android exposes on your device.");
+                ? getString(R.string.ui_orbit_is_selected_as_your_assistant_your_devi_47ec47a0)
+                : getString(R.string.ui_after_choosing_orbit_as_the_default_assistant_b3cab39f));
         page.addView(side, cardLp());
     }
 
     private void buildCapabilities(LinearLayout page) {
-        addTitle(page, "Choose what Orbit can do",
-                "Set up only the access you want. Every action stays on this setup step when you return from Android Settings.");
+        addTitle(page, getString(R.string.ui_choose_what_orbit_can_do_74f9a229),
+                getString(R.string.ui_set_up_only_the_access_you_want_every_action__5fc768b0));
 
-        LinearLayout recommended = capabilityCard(page, "RECOMMENDED ACCESS");
-        addCapability(recommended, "Notifications",
-                "Reminders, Routine alerts, updates, and background results.",
+        LinearLayout recommended = capabilityCard(page, getString(R.string.ui_recommended_access_a5d8e826));
+        addCapability(recommended, getString(R.string.ui_notifications_78801183),
+                getString(R.string.ui_reminders_routine_alerts_updates_and_backgrou_bbd63bc8),
                 ReminderNotifier.notificationsAllowed(this), v ->
                         CapabilityAccessHelper.requestOrManageNotifications(this, REQ_NOTIFICATIONS));
-        addRuntimeCapability(recommended, "Microphone", "Used for Orbit Voice.",
+        addRuntimeCapability(recommended, getString(R.string.ui_microphone_186352a8), getString(R.string.ui_used_for_orbit_voice_33d1df94),
                 Manifest.permission.RECORD_AUDIO, REQ_MICROPHONE);
-        addRuntimeCapability(recommended, "Approximate location",
-                "Local weather and location-aware features.",
+        addRuntimeCapability(recommended, getString(R.string.ui_approximate_location_a3162151),
+                getString(R.string.ui_local_weather_and_location_aware_features_cd8c9a09),
                 Manifest.permission.ACCESS_COARSE_LOCATION, REQ_LOCATION);
-        addRuntimeCapability(recommended, "Flashlight control",
-                "Android Camera access lets Orbit control the flashlight.",
+        addRuntimeCapability(recommended, getString(R.string.ui_flashlight_control_2b1b2637),
+                getString(R.string.ui_android_camera_access_lets_orbit_control_the__6bc49b66),
                 Manifest.permission.CAMERA, REQ_CAMERA);
 
-        LinearLayout context = capabilityCard(page, "CONTEXT");
-        context.addView(capabilityToggle("Allow Orbit to read current-screen text",
+        LinearLayout context = capabilityCard(page, getString(R.string.ui_context_a8bf80b5));
+        context.addView(capabilityToggle(getString(R.string.ui_allow_orbit_to_read_current_screen_text_560f7375),
                 Prefs.SCREEN_CONTEXT, Prefs.screenContext(this)));
-        context.addView(capabilityToggle("Allow screenshots for visual context and screen selection",
+        context.addView(capabilityToggle(getString(R.string.ui_allow_screenshots_for_visual_context_and_scre_13e63642),
                 Prefs.SCREENSHOT, Prefs.screenshot(this)));
-        addCapability(context, "Notification intelligence",
-                "Understand notifications only when this access is enabled.",
+        addCapability(context, getString(R.string.ui_notification_intelligence_b32b4ba2),
+                getString(R.string.ui_understand_notifications_only_when_this_acces_60483955),
                 NotificationAccess.enabled(this), v ->
                         CapabilityAccessHelper.openNotificationIntelligence(this));
 
-        LinearLayout controls = capabilityCard(page, "DEVICE CONTROLS");
-        addCapability(controls, "Brightness control",
-                "Allows Orbit to change system brightness.",
+        LinearLayout controls = capabilityCard(page, getString(R.string.ui_device_controls_1c1afb89));
+        addCapability(controls, getString(R.string.ui_brightness_control_fcfe685e),
+                getString(R.string.ui_allows_orbit_to_change_system_brightness_d3f28a3b),
                 OrbitPermissionHelper.canWriteSystemSettings(this), v ->
                         CapabilityAccessHelper.openWriteSettings(this));
-        addCapability(controls, "Do Not Disturb control",
-                "Allows Orbit to control Do Not Disturb.",
+        addCapability(controls, getString(R.string.ui_do_not_disturb_control_eaafd178),
+                getString(R.string.ui_allows_orbit_to_control_do_not_disturb_376b1b83),
                 OrbitPermissionHelper.hasDndAccess(this), v ->
                         CapabilityAccessHelper.openDndAccess(this));
-        addRuntimeCapability(controls, "Contact lookup",
-                "Resolve saved contact names for voice and device commands.",
+        addRuntimeCapability(controls, getString(R.string.ui_contact_lookup_e8d9dae8),
+                getString(R.string.ui_resolve_saved_contact_names_for_voice_and_dev_6c039701),
                 Manifest.permission.READ_CONTACTS, REQ_CONTACTS);
 
-        LinearLayout automation = capabilityCard(page, "AUTOMATION");
+        LinearLayout automation = capabilityCard(page, getString(R.string.ui_automation_9273c578));
         boolean exact = RoutineTriggerScheduler.canScheduleExact(this);
-        addCapability(automation, "Precise timing",
-                "Accurate reminders and Routine time triggers.", exact, v ->
+        addCapability(automation, getString(R.string.ui_precise_timing_ffd890c4),
+                getString(R.string.ui_accurate_reminders_and_routine_time_triggers_ac0b3cea), exact, v ->
                         CapabilityAccessHelper.openExactAlarmAccess(this));
         // Arrive/leave triggers need background location, which the Google Play edition does not
         // request, so a first run there is not asked to set up something it cannot use.
         if (OrbitDistribution.supportsLocationTriggers()) {
             boolean locationReady = RoutineLocationTriggerScheduler.ready(this);
-            automation.addView(capabilityRow("Location automation",
-                    "Arrival and leave Routine triggers.",
+            automation.addView(capabilityRow(getString(R.string.ui_location_automation_3a5979c6),
+                    getString(R.string.ui_arrival_and_leave_routine_triggers_e3e3e201),
                     CapabilityAccessHelper.locationAutomationStatus(this), locationReady, v ->
                             CapabilityAccessHelper.setupLocationAutomation(this,
                                     REQ_ROUTINE_FINE_LOCATION, REQ_ROUTINE_BACKGROUND_LOCATION)));
         }
-        addCapability(automation, "Trigger alerts",
-                "Visible handoffs when an automatic Routine needs attention.",
+        addCapability(automation, getString(R.string.ui_trigger_alerts_db53cdd6),
+                getString(R.string.ui_visible_handoffs_when_an_automatic_routine_ne_b040e40b),
                 RoutineTriggerNotifier.notificationsAllowed(this), v ->
                         CapabilityAccessHelper.requestOrManageTriggerAlerts(this, REQ_TRIGGER_ALERTS));
 
-        Button all = secondaryButton("View full capabilities dashboard");
+        Button all = secondaryButton(getString(R.string.ui_view_full_capabilities_dashboard_9786e312));
         all.setOnClickListener(v -> openCapabilities());
         page.addView(all, buttonLp());
     }
 
     /** The line that tells a first-run user where the rest of the appearance controls live. */
     static final String THEME_STUDIO_NOTE =
-            "You can fine-tune colors, messages, cards and backgrounds later in Theme Studio.";
+            getString(R.string.ui_you_can_fine_tune_colors_messages_cards_and_b_e08c6dc3);
 
     /**
      * Choose a good starting appearance quickly.
@@ -703,14 +703,14 @@ public final class OnboardingActivity extends Activity {
      * settings most likely to matter before somebody has read anything.
      */
     private void buildPersonalize(LinearLayout page) {
-        addTitle(page, "Make Orbit yours",
-                "Pick a starting look. Everything here can be changed later in Settings.");
+        addTitle(page, getString(R.string.ui_make_orbit_yours_d8e930a7),
+                getString(R.string.ui_pick_a_starting_look_everything_here_can_be_c_bc1b22df));
 
         OrbitTheme active = OrbitThemeStore.active(this);
 
         LinearLayout presetCard = card();
-        presetCard.addView(UiKit.text(this, "Choose a preset", 16, UiKit.TEXT, true));
-        addCardDescription(presetCard, "Orbit's own themes. Pick the one you like the look of.");
+        presetCard.addView(UiKit.text(this, getString(R.string.ui_choose_a_preset_2f311e68), 16, UiKit.TEXT, true));
+        addCardDescription(presetCard, getString(R.string.ui_orbit_s_own_themes_pick_the_one_you_like_the__280953e3));
         presetCard.addView(presetGrid(active), matchWrapMargin(2));
 
         // AMOLED is its own switch rather than a second row of near-identical cards. A true-black
@@ -724,8 +724,8 @@ public final class OnboardingActivity extends Activity {
             // turning AMOLED on never quietly swaps them for a different-looking preset.
             applyOnboardingAppearance(OrbitThemeStore.active(this).withAmoled(checked));
         });
-        LinearLayout amoledRow = UiKit.switchRow(this, "Use true black AMOLED backgrounds",
-                "Works with any preset.", amoled);
+        LinearLayout amoledRow = UiKit.switchRow(this, getString(R.string.ui_use_true_black_amoled_backgrounds_ebcfe7fb),
+                getString(R.string.ui_works_with_any_preset_fc69d41c), amoled);
         LinearLayout.LayoutParams amoledLp = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         amoledLp.setMargins(0, UiKit.dp(this, 6), 0, 0);
@@ -738,12 +738,12 @@ public final class OnboardingActivity extends Activity {
         page.addView(presetCard, cardLp());
 
         LinearLayout readingCard = card();
-        readingCard.addView(UiKit.text(this, "Text and readability", 16, UiKit.TEXT, true));
+        readingCard.addView(UiKit.text(this, getString(R.string.ui_text_and_readability_b4345cc3), 16, UiKit.TEXT, true));
         addCardDescription(readingCard,
-                "How Orbit's words are set. These are independent of the preset above.");
-        readingCard.addView(UiKit.text(this, "App font", 12, UiKit.MUTED, true));
+                getString(R.string.ui_how_orbit_s_words_are_set_these_are_independe_b8b6bc90));
+        readingCard.addView(UiKit.text(this, getString(R.string.ui_app_font_cad0292d), 12, UiKit.MUTED, true));
         String[] fontKeys = {"orbit_default", "times_new_roman", "light", "condensed", "monospace", "casual"};
-        String[] fontLabels = {"Orbit Default", "Times New Roman", "Light", "Condensed", "Monospace", "Casual"};
+        String[] fontLabels = {getString(R.string.ui_orbit_default_85a4dcf3), "Times New Roman", getString(R.string.ui_light_dbcd5e7b), getString(R.string.ui_condensed_ec5ac7c3), getString(R.string.ui_monospace_64c223c2), getString(R.string.ui_casual_f32445a7)};
         int selectedFont = indexOf(fontKeys, Prefs.appFont(this));
         Button selector = secondaryButton(fontLabels[selectedFont] + "  ▾");
         selector.setOnClickListener(v -> UiKit.showOrbitFontMenu(this, selector,
@@ -754,36 +754,36 @@ public final class OnboardingActivity extends Activity {
                 }));
         readingCard.addView(selector, new LinearLayout.LayoutParams(-1, UiKit.dp(this, 46)));
 
-        TextView chatSizeLabel = UiKit.text(this, "Chat text size", 12, UiKit.MUTED, true);
+        TextView chatSizeLabel = UiKit.text(this, getString(R.string.ui_chat_text_size_dff7935f), 12, UiKit.MUTED, true);
         chatSizeLabel.setPadding(0, UiKit.dp(this, 12), 0, 0);
         readingCard.addView(chatSizeLabel);
         String[] chatSizeKeys = {Prefs.CHAT_TEXT_SMALL, Prefs.CHAT_TEXT_DEFAULT,
                 Prefs.CHAT_TEXT_LARGE, Prefs.CHAT_TEXT_EXTRA_LARGE};
-        String[] chatSizeLabels = {"Small", "Default", "Large", "Extra large"};
+        String[] chatSizeLabels = {getString(R.string.ui_small_5263293f), getString(R.string.ui_default_21b111cb), getString(R.string.ui_large_ab80540d), getString(R.string.ui_extra_large_cc16912b)};
         readingCard.addView(preferenceSelector(chatSizeKeys, chatSizeLabels,
                 Prefs.chatTextSize(this), Prefs.CHAT_TEXT_SIZE));
         page.addView(readingCard, cardLp());
 
         LinearLayout everydayCard = card();
-        everydayCard.addView(UiKit.text(this, "Everyday preferences", 16, UiKit.TEXT, true));
+        everydayCard.addView(UiKit.text(this, getString(R.string.ui_everyday_preferences_5a70e1a5), 16, UiKit.TEXT, true));
         addCardDescription(everydayCard,
-                "Choose the apps and units Orbit uses for everyday requests.");
-        everydayCard.addView(UiKit.text(this, "Gallery app", 12, UiKit.MUTED, true));
+                getString(R.string.ui_choose_the_apps_and_units_orbit_uses_for_ever_c3b5c812));
+        everydayCard.addView(UiKit.text(this, getString(R.string.ui_gallery_app_eabbd23f), 12, UiKit.MUTED, true));
         everydayCard.addView(galleryAppSelector());
-        TextView weatherUnitsLabel = UiKit.text(this, "Weather units", 12, UiKit.MUTED, true);
+        TextView weatherUnitsLabel = UiKit.text(this, getString(R.string.ui_weather_units_4887463b), 12, UiKit.MUTED, true);
         weatherUnitsLabel.setPadding(0, UiKit.dp(this, 12), 0, 0);
         everydayCard.addView(weatherUnitsLabel);
         String[] weatherUnitKeys = {Prefs.WEATHER_UNITS_SYSTEM,
                 Prefs.WEATHER_UNITS_FAHRENHEIT, Prefs.WEATHER_UNITS_CELSIUS};
-        String[] weatherUnitLabels = {"System default", "Fahrenheit (°F)", "Celsius (°C)"};
+        String[] weatherUnitLabels = {getString(R.string.ui_system_default_b0459211), getString(R.string.ui_fahrenheit_f_9c9497df), getString(R.string.ui_celsius_c_400b949d)};
         everydayCard.addView(preferenceSelector(weatherUnitKeys, weatherUnitLabels,
                 Prefs.weatherUnits(this), Prefs.WEATHER_UNITS));
         page.addView(everydayCard, cardLp());
     }
 
     private void buildStarterRoutine(LinearLayout page) {
-        addTitle(page, "Start with something useful",
-                "Templates create normal editable Routines. Nothing runs during setup.");
+        addTitle(page, getString(R.string.ui_start_with_something_useful_e4bb6568),
+                getString(R.string.ui_templates_create_normal_editable_routines_not_2de69d9b));
         for (String id : new String[]{"gaming", "bedtime", "focus", "morning"}) {
             RoutineTemplateCatalog.Template template = findTemplate(id);
             if (template == null) continue;
@@ -792,12 +792,12 @@ public final class OnboardingActivity extends Activity {
             addCardDescription(card, template.description);
             if (!template.recommendedCommandPhrase.isEmpty()) {
                 TextView phrase = UiKit.text(this,
-                        "Suggested Custom Command: “" + template.recommendedCommandPhrase + "”",
+                        getString(R.string.ui_suggested_custom_command_61f89281) + template.recommendedCommandPhrase + "”",
                         11, UiKit.accent(this), true);
                 phrase.setPadding(0, 0, 0, UiKit.dp(this, 9));
                 card.addView(phrase);
             }
-            Button use = secondaryButton("Use template");
+            Button use = secondaryButton(getString(R.string.ui_use_template_351dd54e));
             use.setOnClickListener(v -> {
                 RoutineStore.Routine routine = RoutineTemplatesActivity.createAndEdit(this, template);
                 if (routine != null) OnboardingState.setStarterRoutineId(this, routine.id);
@@ -805,23 +805,23 @@ public final class OnboardingActivity extends Activity {
             card.addView(use, new LinearLayout.LayoutParams(-1, UiKit.dp(this, 44)));
             page.addView(card, cardLp());
         }
-        Button all = secondaryButton("See all templates");
+        Button all = secondaryButton(getString(R.string.ui_see_all_templates_b852c331));
         all.setOnClickListener(v -> startActivity(new Intent(this, RoutineTemplatesActivity.class)));
         page.addView(all, buttonLp());
     }
 
     private void buildFinish(LinearLayout page) {
-        addTitle(page, "Orbit is ready",
-                "You're all set. Orbit is ready when you are.");
+        addTitle(page, getString(R.string.ui_orbit_is_ready_539e6f58),
+                getString(R.string.ui_you_re_all_set_orbit_is_ready_when_you_are_9d102dc1));
         LinearLayout summary = card();
         List<String> items = new ArrayList<>();
-        if (ChatGptAuth.isSignedIn(this)) items.add("✓ ChatGPT connected");
-        if (OrbitSetupHelper.isOrbitAssistantActive(this)) items.add("✓ Orbit set as assistant");
-        if (OnboardingState.askTileConfirmed(this)) items.add("✓ Quick Settings tile added");
+        if (ChatGptAuth.isSignedIn(this)) items.add(getString(R.string.ui_chatgpt_connected_eafcf1bf));
+        if (OrbitSetupHelper.isOrbitAssistantActive(this)) items.add(getString(R.string.ui_orbit_set_as_assistant_bdc4052f));
+        if (OnboardingState.askTileConfirmed(this)) items.add(getString(R.string.ui_quick_settings_tile_added_01e46d5c));
         RoutineStore.Routine starter = RoutineStore.findById(this,
                 OnboardingState.starterRoutineId(this));
-        if (starter != null) items.add("✓ " + starter.name + " Routine created");
-        if (items.isEmpty()) items.add("Orbit is ready to configure at your pace");
+        if (starter != null) items.add("✓ " + starter.name + getString(R.string.ui_routine_created_db380da8));
+        if (items.isEmpty()) items.add(getString(R.string.ui_orbit_is_ready_to_configure_at_your_pace_93e58d65));
         for (String item : items) {
             TextView row = UiKit.text(this, item, 14,
                     item.startsWith("✓") ? UiKit.SUCCESS : UiKit.TEXT, true);
@@ -831,10 +831,10 @@ public final class OnboardingActivity extends Activity {
         page.addView(summary, cardLp());
 
         LinearLayout examples = card();
-        examples.addView(UiKit.text(this, "Try asking", 16, UiKit.TEXT, true));
-        for (String example : new String[]{"“What's on my screen?”",
-                "“Remind me in 20 minutes to check the oven”",
-                "“Run my Gaming mode Routine”"}) {
+        examples.addView(UiKit.text(this, getString(R.string.ui_try_asking_695b5a73), 16, UiKit.TEXT, true));
+        for (String example : new String[]{getString(R.string.ui_what_s_on_my_screen_f2f68c6f),
+                getString(R.string.ui_remind_me_in_20_minutes_to_check_the_oven_3a9d7d7a),
+                getString(R.string.ui_run_my_gaming_mode_routine_b5063e7b)}) {
             TextView text = UiKit.text(this, example, 13, UiKit.MUTED, false);
             text.setPadding(0, UiKit.dp(this, 9), 0, 0);
             examples.addView(text);
@@ -960,12 +960,12 @@ public final class OnboardingActivity extends Activity {
         LinearLayout.LayoutParams navLp = new LinearLayout.LayoutParams(-1, -2);
         navLp.setMargins(0, UiKit.dp(this, 18), 0, 0);
         if (step > 0 && step < 7) {
-            Button back = secondaryButton("Back");
+            Button back = secondaryButton(getString(R.string.ui_back_76900f1b));
             back.setOnClickListener(v -> onBackPressed());
             nav.addView(back, new LinearLayout.LayoutParams(0, UiKit.dp(this, 48), .36f));
         }
-        Button next = primaryButton(step == 0 ? "Get started" : step == 7 ?
-                "Start using Orbit" : adaptiveNavigationLabel());
+        Button next = primaryButton(step == 0 ? getString(R.string.ui_get_started_61e8d44a) : step == 7 ?
+                getString(R.string.ui_start_using_orbit_4fd85706) : adaptiveNavigationLabel());
         next.setOnClickListener(v -> {
             if (step == 7) completeAndExit();
             else {
@@ -981,11 +981,11 @@ public final class OnboardingActivity extends Activity {
     }
 
     private String adaptiveNavigationLabel() {
-        if (step == 1 && !connectionConfigured()) return "Skip for now";
-        if (step == 2 && !OrbitSetupHelper.isOrbitAssistantActive(this)) return "Skip for now";
+        if (step == 1 && !connectionConfigured()) return getString(R.string.ui_skip_for_now_b58eb52c);
+        if (step == 2 && !OrbitSetupHelper.isOrbitAssistantActive(this)) return getString(R.string.ui_skip_for_now_b58eb52c);
         if (step == 6 && RoutineStore.findById(this,
-                OnboardingState.starterRoutineId(this)) == null) return "Skip for now";
-        return "Continue";
+                OnboardingState.starterRoutineId(this)) == null) return getString(R.string.ui_skip_for_now_b58eb52c);
+        return getString(R.string.ui_continue_31fbef16);
     }
 
     private boolean connectionConfigured() {
@@ -1036,7 +1036,7 @@ public final class OnboardingActivity extends Activity {
 
     private void addCapability(LinearLayout group, String title, String description,
                                boolean ready, View.OnClickListener listener) {
-        group.addView(capabilityRow(title, description, ready ? "Ready" : "Needs access",
+        group.addView(capabilityRow(title, description, ready ? getString(R.string.ui_ready_5fa7aac5) : getString(R.string.ui_needs_access_67b0e137),
                 ready, listener));
     }
 
@@ -1054,7 +1054,7 @@ public final class OnboardingActivity extends Activity {
         copy.addView(UiKit.text(this, status,
                 11, ready ? UiKit.SUCCESS : UiKit.MUTED, true));
         row.addView(copy, new LinearLayout.LayoutParams(0, -2, 1));
-        Button action = quietButton(ready ? "Manage" : "Set up");
+        Button action = quietButton(ready ? getString(R.string.ui_manage_5a234448) : getString(R.string.ui_set_up_4da10f1f));
         action.setOnClickListener(listener);
         LinearLayout.LayoutParams actionLp = new LinearLayout.LayoutParams(-2, UiKit.dp(this, 42));
         actionLp.leftMargin = UiKit.dp(this, 8);
@@ -1207,9 +1207,9 @@ public final class OnboardingActivity extends Activity {
                 UiKit.accent(this), 16, this));
         // Stated, not only drawn: a ring around a card of colours is exactly the kind of state that
         // disappears for anybody who cannot rely on colour to carry it.
-        choice.setContentDescription(preset.name + ", Orbit preset"
+        choice.setContentDescription(preset.name + getString(R.string.ui_orbit_preset_a2d9179f)
                 + (preset.note().isEmpty() ? "" : ", " + preset.note())
-                + (selected ? ", selected" : ""));
+                + (selected ? getString(R.string.ui_selected_bd44f3ef) : ""));
         UiKit.pressScale(choice);
         choice.setOnClickListener(v -> {
             UiKit.haptic(v, HapticFeedbackConstants.VIRTUAL_KEY);
@@ -1337,7 +1337,7 @@ public final class OnboardingActivity extends Activity {
                     .addCategory(Intent.CATEGORY_BROWSABLE));
         } catch (Exception e) {
             ChatGptBrowserAuth.cancel();
-            browserListener.onFailed("Orbit could not open a web browser on this phone.", true);
+            browserListener.onFailed(getString(R.string.ui_orbit_could_not_open_a_web_browser_on_this_ph_3ed952a5), true);
         }
     }
 
@@ -1351,7 +1351,7 @@ public final class OnboardingActivity extends Activity {
 
             @Override public void onError(String message) {
                 runOnUiThread(() -> { if (canUpdateUi())
-                    showMessage("Could not start ChatGPT sign-in", message); });
+                    showMessage(getString(R.string.ui_could_not_start_chatgpt_sign_in_41b65366), message); });
             }
         });
     }
@@ -1359,21 +1359,21 @@ public final class OnboardingActivity extends Activity {
     private void showDeviceCode(ChatGptAuth.DeviceCode code) {
         ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
         if (clipboard != null)
-            clipboard.setPrimaryClip(ClipData.newPlainText("Orbit ChatGPT code", code.userCode));
+            clipboard.setPrimaryClip(ClipData.newPlainText(getString(R.string.ui_orbit_chatgpt_code_30d0c7fe), code.userCode));
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Sign in with ChatGPT")
-                .setMessage("Your one-time code is:\n\n" + code.userCode +
-                        "\n\nIt has been copied. Complete authorization in your browser, then return to Orbit.")
-                .setPositiveButton("Open ChatGPT sign-in", (d, which) -> {
+                .setTitle(getString(R.string.ui_sign_in_with_chatgpt_f6de6480))
+                .setMessage(getString(R.string.ui_your_one_time_code_is_fe769007) + code.userCode +
+                        getString(R.string.ui_it_has_been_copied_complete_authorization_in__e08721d9))
+                .setPositiveButton(getString(R.string.ui_open_chatgpt_sign_in_d7f07761), (d, which) -> {
                     try { startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(code.verificationUrl))); }
                     catch (Exception e) { Toast.makeText(this, code.verificationUrl, Toast.LENGTH_LONG).show(); }
                 })
-                .setNeutralButton("Copy code", (d, which) -> {
+                .setNeutralButton(getString(R.string.ui_copy_code_49a0053f), (d, which) -> {
                     ClipboardManager cm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
                     if (cm != null) cm.setPrimaryClip(
-                            ClipData.newPlainText("Orbit ChatGPT code", code.userCode));
+                            ClipData.newPlainText(getString(R.string.ui_orbit_chatgpt_code_30d0c7fe), code.userCode));
                 })
-                .setNegativeButton("Close", null)
+                .setNegativeButton(getString(R.string.ui_close_7d9eb7ac), null)
                 .create();
         UiKit.styleOrbitDialog(dialog, this, false);
         dialog.show();
@@ -1402,24 +1402,24 @@ public final class OnboardingActivity extends Activity {
                 runOnUiThread(() -> { if (canUpdateUi()) confirmRestore(prepared); });
             } catch (Exception e) {
                 runOnUiThread(() -> { if (canUpdateUi())
-                    showMessage("Could not open backup", safeError(e)); });
+                    showMessage(getString(R.string.ui_could_not_open_backup_7902f459), safeError(e)); });
             }
         }, "orbit-onboarding-backup-validate").start();
     }
 
     private void confirmRestore(OrbitBackupManager.PreparedRestore prepared) {
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Restore Orbit backup?")
+                .setTitle(getString(R.string.ui_restore_orbit_backup_add4c9b6))
                 .setMessage(prepared.confirmationMessage())
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Restore", (d, which) -> runRestore(prepared))
+                .setNegativeButton(getString(R.string.ui_cancel_19766ed6), null)
+                .setPositiveButton(getString(R.string.ui_restore_a76e13b9), (d, which) -> runRestore(prepared))
                 .create();
         UiKit.styleOrbitDialog(dialog, this, true);
         dialog.show();
     }
 
     private void runRestore(OrbitBackupManager.PreparedRestore prepared) {
-        Toast.makeText(this, "Restoring Orbit backup…", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.ui_restoring_orbit_backup_0f159073), Toast.LENGTH_SHORT).show();
         new Thread(() -> {
             try {
                 OrbitBackupManager.restore(getApplicationContext(), prepared);
@@ -1427,13 +1427,13 @@ public final class OnboardingActivity extends Activity {
                     if (!canUpdateUi()) return;
                     UiKit.syncTheme(this);
                     Toast.makeText(this,
-                            "Backup restored. Continue setup to reconnect account and Android access.",
+                            getString(R.string.ui_backup_restored_continue_setup_to_reconnect_a_3fb2aa17),
                             Toast.LENGTH_LONG).show();
                     render();
                 });
             } catch (Exception e) {
                 runOnUiThread(() -> { if (canUpdateUi())
-                    showMessage("Could not restore backup", safeError(e)); });
+                    showMessage(getString(R.string.ui_could_not_restore_backup_eaf9f738), safeError(e)); });
             }
         }, "orbit-onboarding-backup-restore").start();
     }
@@ -1455,10 +1455,10 @@ public final class OnboardingActivity extends Activity {
 
     private void confirmSkip() {
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Skip setup?")
-                .setMessage("You can finish setup anytime from Settings → Assistant setup.")
-                .setNegativeButton("Keep setting up", null)
-                .setPositiveButton("Skip setup", (d, which) -> completeAndExit())
+                .setTitle(getString(R.string.ui_skip_setup_ef1de933))
+                .setMessage(getString(R.string.ui_you_can_finish_setup_anytime_from_settings_as_9df1931d))
+                .setNegativeButton(getString(R.string.ui_keep_setting_up_f0000e34), null)
+                .setPositiveButton(getString(R.string.ui_skip_setup_59e693cd), (d, which) -> completeAndExit())
                 .create();
         UiKit.styleOrbitDialog(dialog, this, true);
         dialog.show();
@@ -1466,10 +1466,10 @@ public final class OnboardingActivity extends Activity {
 
     private void confirmExitSetup() {
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Exit setup?")
-                .setMessage("Your current Orbit settings are already saved. You can return to setup anytime from Assistant setup.")
-                .setNegativeButton("Keep setting up", null)
-                .setPositiveButton("Exit setup", (d, which) -> finish())
+                .setTitle(getString(R.string.ui_exit_setup_3f28c148))
+                .setMessage(getString(R.string.ui_your_current_orbit_settings_are_already_saved_f9d771fc))
+                .setNegativeButton(getString(R.string.ui_keep_setting_up_f0000e34), null)
+                .setPositiveButton(getString(R.string.ui_exit_setup_a8b459d5), (d, which) -> finish())
                 .create();
         UiKit.styleOrbitDialog(dialog, this, true);
         dialog.show();
@@ -1477,7 +1477,7 @@ public final class OnboardingActivity extends Activity {
 
     private void showMessage(String title, String message) {
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle(title).setMessage(message).setPositiveButton("OK", null).create();
+                .setTitle(title).setMessage(message).setPositiveButton(getString(R.string.ui_ok_565339bc), null).create();
         UiKit.styleOrbitDialog(dialog, this, false);
         dialog.show();
     }
@@ -1497,6 +1497,6 @@ public final class OnboardingActivity extends Activity {
 
     private String safeError(Exception error) {
         return error == null || error.getMessage() == null || error.getMessage().trim().isEmpty()
-                ? "Orbit could not complete this operation." : error.getMessage();
+                ? getString(R.string.ui_orbit_could_not_complete_this_operation_9507ae61) : error.getMessage();
     }
 }
