@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="core_missing_web_search">веб-поиск</string>
+    <string name="core_missing_images">экраны и изображения</string>
+    <string name="core_missing_device_actions">действия на устройстве</string>
+    <string name="core_missing_routine_planning">планирование автоматизаций</string>
+    <string name="core_missing_prefix">"В этом режиме пока недоступно: "</string>
+    <string name="core_list_separator">", "</string>
+    <string name="core_list_last_separator">" или "</string>
+    <string name="core_attachment">Вложение</string>
+    <string name="core_multiple_attachments">Несколько вложений</string>
+    <string name="core_meta_text_loaded">" · Текст загружен"</string>
+    <string name="core_meta_loaded">" · Загружено"</string>
+    <string name="core_text">Текст</string>
+    <string name="core_image">Изображение</string>
+    <string name="core_text_loaded">Текст · Загружено</string>
+    <string name="core_attach_camera">Камера</string>
+    <string name="core_attach_gallery">Галерея</string>
+    <string name="core_attach_file">Файл</string>
+    <string name="core_attach_screen">Экран</string>
+    <string name="core_attach_clipboard">Буфер обмена</string>
+    <string name="core_attach_vault">Хранилище</string>
+    <string name="core_device_action">Действие на устройстве</string>
+    <string name="core_saved_chat">Сохранённый чат</string>
+    <plurals name="core_attachments_count">
+        <item quantity="one">%d вложение</item>
+        <item quantity="few">%d вложения</item>
+        <item quantity="many">%d вложений</item>
+        <item quantity="other">%d вложения</item>
+    </plurals>
+</resources>

@@ -304,8 +304,6 @@
     <string name="ui_keyboard_aware_assistant_invocation_701c19ae" formatted="false">"Учитывать клавиатуру при вызове помощника"</string>
     <string name="ui_large_ab80540d" formatted="false">"Большой"</string>
     <string name="ui_later_73b6e48a" formatted="false">"Позже"</string>
-    <string name="ui_lelo_mode_hidden_again_94c91442" formatted="false">"Режим Lelo снова скрыт"</string>
-    <string name="ui_lelo_mode_unlocked_6baa72d6" formatted="false">"Режим Lelo открыт ✨"</string>
     <string name="ui_let_orbit_do_this_765280bf" formatted="false">"Разрешить Orbit это действие?"</string>
     <string name="ui_level_for_each_request_tap_to_change_f15996c5" formatted="false">"для каждого запроса. Нажмите для изменения."</string>
     <string name="ui_light_dbcd5e7b" formatted="false">"Тонкий"</string>
