@@ -492,7 +492,8 @@ public final class AskOrbitProcessTextTest {
         if (dialog == null || !dialog.isShowing()) return;
         Button ask = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
         assertNotNull("the destination dialog must offer Ask Orbit", ask);
-        assertEquals(ProcessTextToOrbitActivity.ASK_ORBIT, ask.getText().toString());
+        assertEquals(org.robolectric.RuntimeEnvironment.getApplication().getString(ProcessTextToOrbitActivity.ASK_ORBIT),
+                ask.getText().toString());
         ask.performClick();
         // An AlertDialog button press is dispatched through a Handler, so nothing happens until
         // the looper runs.

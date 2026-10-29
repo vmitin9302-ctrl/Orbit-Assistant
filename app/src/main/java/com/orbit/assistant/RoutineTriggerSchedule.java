@@ -1,5 +1,7 @@
 package com.orbit.assistant;
 
+import android.content.Context;
+
 import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -123,86 +125,101 @@ public final class RoutineTriggerSchedule {
         return (mask & bitFor(day)) != 0;
     }
 
-    public static String summary(RoutineTriggerStore.Trigger t) {
-        if (t == null) return "Automatic trigger";
+    public static String summary(Context context, RoutineTriggerStore.Trigger t) {
+        if (t == null) return context.getString(R.string.trig_automatic);
         if (RoutineTriggerStore.TYPE_LOCATION.equals(t.type)) {
-            String verb = RoutineTriggerStore.LOCATION_EXIT.equals(t.locationTransition) ? "Leave" : "Arrive at";
-            return verb + " " + t.locationName + " · " + radiusLabel(t.radiusMeters);
+            return context.getString(RoutineTriggerStore.LOCATION_EXIT.equals(t.locationTransition)
+                    ? R.string.trig_leave : R.string.trig_arrive,
+                    t.locationName, radiusLabel(context, t.radiusMeters));
         }
         String time = RoutineActionCatalog.timeLabel(t.hour, t.minute);
         switch (t.mode) {
             case RoutineTriggerStore.MODE_ONCE:
-                return "Once · " + shortDate(t) + " · " + time;
+                return context.getString(R.string.trig_once, shortDate(context, t), time);
             case RoutineTriggerStore.MODE_DAILY:
-                return "Daily · " + time;
+                return context.getString(R.string.trig_daily, time);
             case RoutineTriggerStore.MODE_WEEKDAYS:
-                return "Weekdays · " + time;
+                return context.getString(R.string.trig_weekdays, time);
             case RoutineTriggerStore.MODE_WEEKENDS:
-                return "Weekends · " + time;
+                return context.getString(R.string.trig_weekends, time);
             case RoutineTriggerStore.MODE_WEEKLY:
-                if (t.intervalCount == 2) return "Every 2 weeks · " + weekdaySummary(t.weekdayMask) + " · " + time;
-                if (t.intervalCount > 1) return "Every " + t.intervalCount + " weeks · " + weekdaySummary(t.weekdayMask) + " · " + time;
-                return "Weekly · " + weekdaySummary(t.weekdayMask) + " · " + time;
+                if (t.intervalCount == 2) return context.getString(R.string.trig_every_2_weeks,
+                        weekdaySummary(context, t.weekdayMask), time);
+                if (t.intervalCount > 1) return context.getResources().getQuantityString(
+                        R.plurals.trig_every_n_weeks, t.intervalCount, t.intervalCount,
+                        weekdaySummary(context, t.weekdayMask), time);
+                return context.getString(R.string.trig_weekly, weekdaySummary(context, t.weekdayMask), time);
             case RoutineTriggerStore.MODE_CUSTOM:
                 if (RoutineTriggerStore.UNIT_DAYS.equals(t.intervalUnit)) {
-                    return "Every " + t.intervalCount + (t.intervalCount == 1 ? " day" : " days") + " · " + time;
+                    return context.getResources().getQuantityString(R.plurals.trig_every_n_days,
+                            t.intervalCount, t.intervalCount, time);
                 }
                 if (RoutineTriggerStore.UNIT_WEEKS.equals(t.intervalUnit)) {
-                    return "Every " + t.intervalCount + (t.intervalCount == 1 ? " week" : " weeks") + " · " + weekdaySummary(t.weekdayMask) + " · " + time;
+                    return context.getResources().getQuantityString(R.plurals.trig_every_n_weeks,
+                            t.intervalCount, t.intervalCount, weekdaySummary(context, t.weekdayMask), time);
                 }
-                if (t.intervalCount == 1) return "Monthly · day " + t.startDay + " · " + time;
-                return "Every " + t.intervalCount + " months · day " + t.startDay + " · " + time;
+                if (t.intervalCount == 1) return context.getString(R.string.trig_monthly, t.startDay, time);
+                return context.getResources().getQuantityString(R.plurals.trig_every_n_months,
+                        t.intervalCount, t.intervalCount, t.startDay, time);
             default:
-                return "Time trigger · " + time;
+                return context.getString(R.string.trig_time_trigger, time);
         }
     }
 
-    public static String repeatLabel(RoutineTriggerStore.Trigger t) {
-        if (t == null) return "Daily";
+    public static String repeatLabel(Context context, RoutineTriggerStore.Trigger t) {
+        return context.getString(repeatLabelRes(t));
+    }
+
+    private static int repeatLabelRes(RoutineTriggerStore.Trigger t) {
+        if (t == null) return R.string.trig_repeat_daily;
         switch (t.mode) {
-            case RoutineTriggerStore.MODE_ONCE: return "Once";
-            case RoutineTriggerStore.MODE_DAILY: return "Daily";
-            case RoutineTriggerStore.MODE_WEEKDAYS: return "Weekdays";
-            case RoutineTriggerStore.MODE_WEEKENDS: return "Weekends";
+            case RoutineTriggerStore.MODE_ONCE: return R.string.trig_repeat_once;
+            case RoutineTriggerStore.MODE_DAILY: return R.string.trig_repeat_daily;
+            case RoutineTriggerStore.MODE_WEEKDAYS: return R.string.trig_repeat_weekdays;
+            case RoutineTriggerStore.MODE_WEEKENDS: return R.string.trig_repeat_weekends;
             case RoutineTriggerStore.MODE_WEEKLY:
-                return t.intervalCount == 2 ? "Every 2 weeks" : "Weekly";
+                return t.intervalCount == 2 ? R.string.trig_repeat_every_2_weeks : R.string.trig_repeat_weekly;
             case RoutineTriggerStore.MODE_CUSTOM:
-                if (RoutineTriggerStore.UNIT_MONTHS.equals(t.intervalUnit) && t.intervalCount == 1) return "Monthly";
-                return "Custom interval";
-            default: return "Daily";
+                if (RoutineTriggerStore.UNIT_MONTHS.equals(t.intervalUnit) && t.intervalCount == 1) return R.string.trig_repeat_monthly;
+                return R.string.trig_repeat_custom;
+            default: return R.string.trig_repeat_daily;
         }
     }
 
-    public static String weekdaySummary(int mask) {
-        if (mask == 0b00011111) return "Mon–Fri";
-        if (mask == 0b01100000) return "Sat–Sun";
-        String[] shortNames = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+    public static String weekdaySummary(Context context, int mask) {
+        if (mask == 0b00011111) return context.getString(R.string.trig_mon_fri);
+        if (mask == 0b01100000) return context.getString(R.string.trig_sat_sun);
+        String[] shortNames = context.getResources().getStringArray(R.array.trig_weekdays_short);
         StringBuilder out = new StringBuilder();
         for (int i = 0; i < 7; i++) {
             if ((mask & (1 << i)) == 0) continue;
             if (out.length() > 0) out.append(", ");
             out.append(shortNames[i]);
         }
-        return out.length() == 0 ? "Choose days" : out.toString();
+        return out.length() == 0 ? context.getString(R.string.trig_choose_days) : out.toString();
     }
 
 
-    public static String radiusLabel(float meters) {
+    public static String radiusLabel(Context context, float meters) {
         if (meters >= 1000f) {
             float km = meters / 1000f;
-            if (Math.abs(km - Math.round(km)) < 0.01f) return Math.round(km) + " km radius";
-            return String.format(Locale.US, "%.1f km radius", km);
+            if (Math.abs(km - Math.round(km)) < 0.01f) {
+                return context.getString(R.string.trig_radius_km, Math.round(km));
+            }
+            return context.getString(R.string.trig_radius_km_decimal, String.format(Locale.US, "%.1f", km));
         }
-        return Math.round(meters) + " m radius";
+        return context.getString(R.string.trig_radius_m, Math.round(meters));
     }
 
-    private static String shortDate(RoutineTriggerStore.Trigger t) {
+    private static String shortDate(Context context, RoutineTriggerStore.Trigger t) {
         try {
             LocalDate d = LocalDate.of(t.startYear, t.startMonth, t.startDay);
-            return d.getMonth().getDisplayName(java.time.format.TextStyle.SHORT, Locale.US) + " " +
-                    d.getDayOfMonth() + ", " + d.getYear();
+            return context.getString(R.string.trig_date,
+                    d.getMonth().getDisplayName(java.time.format.TextStyle.SHORT,
+                            context.getResources().getConfiguration().getLocales().get(0)),
+                    d.getDayOfMonth(), d.getYear());
         } catch (Exception e) {
-            return "date";
+            return context.getString(R.string.trig_date_unknown);
         }
     }
 }

@@ -56,13 +56,13 @@ public final class MediaControl {
 
     /** Runs one transport command and reports what Orbit could actually observe. */
     public static DeviceActionExecutor.Result execute(Context c, Command command) {
-        if (c == null || command == null) return DeviceActionExecutor.Result.failed("No media command");
+        if (c == null || command == null) return DeviceActionExecutor.Result.failed(c.getString(R.string.media_no_command));
 
         MediaController controller = activeController(c);
         if (controller == null) {
             if (!NotificationAccess.enabled(c)) return dispatchKey(c, command);
             // Orbit can see every session there is, and there are none.
-            return DeviceActionExecutor.Result.unavailable("Nothing is playing right now.");
+            return DeviceActionExecutor.Result.unavailable(c.getString(R.string.media_nothing_playing));
         }
 
         String app = appLabel(c, controller.getPackageName());
@@ -76,16 +76,16 @@ public final class MediaControl {
                     break;
                 case NEXT: controls.skipToNext(); break;
                 case PREVIOUS: controls.skipToPrevious(); break;
-                default: return DeviceActionExecutor.Result.failed("No media command");
+                default: return DeviceActionExecutor.Result.failed(c.getString(R.string.media_no_command));
             }
         } catch (SecurityException e) {
             return DeviceActionExecutor.Result.permission(
-                    "Android would not let Orbit control " + app + ".");
+                    c.getString(R.string.media_not_allowed, app));
         } catch (Exception e) {
-            return DeviceActionExecutor.Result.failed("Could not reach " + app + ".");
+            return DeviceActionExecutor.Result.failed(c.getString(R.string.media_unreachable, app));
         }
 
-        return confirm(controller, command, app);
+        return confirm(c, controller, command, app);
     }
 
     /**
@@ -96,7 +96,7 @@ public final class MediaControl {
      * the state alone would prove nothing. Either way, an unconfirmed command is reported as sent,
      * never as done.
      */
-    private static DeviceActionExecutor.Result confirm(MediaController controller,
+    private static DeviceActionExecutor.Result confirm(Context c, MediaController controller,
                                                        Command command, String app) {
         boolean wantPlaying = command == Command.PLAY
                 || (command == Command.PLAY_PAUSE && !isPlaying(controller));
@@ -106,15 +106,16 @@ public final class MediaControl {
         while (System.currentTimeMillis() < deadline) {
             switch (command) {
                 case PLAY:
-                    if (isPlaying(controller)) return DeviceActionExecutor.Result.success("Playing in " + app);
+                    if (isPlaying(controller)) return DeviceActionExecutor.Result.success(c.getString(R.string.media_playing_in, app));
                     break;
                 case PAUSE:
-                    if (!isPlaying(controller)) return DeviceActionExecutor.Result.success("Paused " + app);
+                    if (!isPlaying(controller)) return DeviceActionExecutor.Result.success(c.getString(R.string.media_paused, app));
                     break;
                 case PLAY_PAUSE:
                     if (isPlaying(controller) == wantPlaying) {
                         return DeviceActionExecutor.Result.success(
-                                wantPlaying ? "Playing in " + app : "Paused " + app);
+                                c.getString(wantPlaying ? R.string.media_playing_in
+                                        : R.string.media_paused, app));
                     }
                     break;
                 case NEXT:
@@ -122,8 +123,8 @@ public final class MediaControl {
                     String now = trackIdentity(controller);
                     if (!now.isEmpty() && !now.equals(before)) {
                         return DeviceActionExecutor.Result.success(
-                                (command == Command.NEXT ? "Skipped to the next track in "
-                                        : "Went back a track in ") + app);
+                                c.getString(command == Command.NEXT ? R.string.media_skipped_next
+                                        : R.string.media_went_back, app));
                     }
                     break;
                 }
@@ -134,17 +135,26 @@ public final class MediaControl {
             catch (InterruptedException e) { Thread.currentThread().interrupt(); break; }
         }
         // Sent, and not observed. That is what Orbit says.
-        return DeviceActionExecutor.Result.success(sentWording(command) + " to " + app
-                + ", but it did not report the change back.");
+        return DeviceActionExecutor.Result.success(c.getString(sentToAppRes(command), app));
     }
 
-    private static String sentWording(Command command) {
+    private static int sentToAppRes(Command command) {
         switch (command) {
-            case PLAY: return "Sent play";
-            case PAUSE: return "Sent pause";
-            case PLAY_PAUSE: return "Sent play/pause";
-            case NEXT: return "Sent next track";
-            default: return "Sent previous track";
+            case PLAY: return R.string.media_sent_play_to_app;
+            case PAUSE: return R.string.media_sent_pause_to_app;
+            case PLAY_PAUSE: return R.string.media_sent_play_pause_to_app;
+            case NEXT: return R.string.media_sent_next_to_app;
+            default: return R.string.media_sent_previous_to_app;
+        }
+    }
+
+    private static int sentKeyRes(Command command) {
+        switch (command) {
+            case PLAY: return R.string.media_sent_play_key;
+            case PAUSE: return R.string.media_sent_pause_key;
+            case PLAY_PAUSE: return R.string.media_sent_play_pause_key;
+            case NEXT: return R.string.media_sent_next_key;
+            default: return R.string.media_sent_previous_key;
         }
     }
 
@@ -160,17 +170,16 @@ public final class MediaControl {
      */
     private static DeviceActionExecutor.Result dispatchKey(Context c, Command command) {
         AudioManager am = (AudioManager) c.getSystemService(Context.AUDIO_SERVICE);
-        if (am == null) return DeviceActionExecutor.Result.unavailable("Audio service unavailable");
+        if (am == null) return DeviceActionExecutor.Result.unavailable(c.getString(R.string.media_audio_unavailable));
         int code = keyCode(command);
         try {
             long now = android.os.SystemClock.uptimeMillis();
             am.dispatchMediaKeyEvent(new KeyEvent(now, now, KeyEvent.ACTION_DOWN, code, 0));
             am.dispatchMediaKeyEvent(new KeyEvent(now, now, KeyEvent.ACTION_UP, code, 0));
         } catch (Exception e) {
-            return DeviceActionExecutor.Result.failed("Could not send the media command.");
+            return DeviceActionExecutor.Result.failed(c.getString(R.string.media_send_failed));
         }
-        return DeviceActionExecutor.Result.success(sentWording(command)
-                + " to whatever is playing. Orbit cannot confirm it without notification access.");
+        return DeviceActionExecutor.Result.success(c.getString(sentKeyRes(command)));
     }
 
     static int keyCode(Command command) {
@@ -246,14 +255,14 @@ public final class MediaControl {
 
     /** The player's own name, for a sentence a person can read. */
     static String appLabel(Context c, String packageName) {
-        if (packageName == null || packageName.isEmpty()) return "the player";
+        if (packageName == null || packageName.isEmpty()) return c.getString(R.string.media_the_player);
         try {
             android.content.pm.PackageManager pm = c.getPackageManager();
             CharSequence label = pm.getApplicationLabel(pm.getApplicationInfo(packageName, 0));
             String name = label == null ? "" : label.toString().trim();
-            return name.isEmpty() ? "the player" : name;
+            return name.isEmpty() ? c.getString(R.string.media_the_player) : name;
         } catch (Exception e) {
-            return "the player";
+            return c.getString(R.string.media_the_player);
         }
     }
 }

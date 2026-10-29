@@ -85,7 +85,7 @@ public final class ComponentInstallHandoffTest {
         } catch (Exception e) {
             assertEquals("a correctly placed component must never be refused by Orbit's own "
                             + "checks; it may only fail at the platform handoff",
-                    OrbitLocalInstaller.InstallStage.FILEPROVIDER_URI.message, e.getMessage());
+                    OrbitLocalInstaller.InstallStage.FILEPROVIDER_URI.message(activity), e.getMessage());
         }
     }
 
@@ -134,9 +134,9 @@ public final class ComponentInstallHandoffTest {
     @Test public void everyStageHasItsOwnConciseMessage() {
         java.util.Set<String> messages = new java.util.HashSet<>();
         for (OrbitLocalInstaller.InstallStage stage : OrbitLocalInstaller.InstallStage.values()) {
-            assertFalse(stage + " needs a message", stage.message.trim().isEmpty());
-            assertTrue(stage + " must stay one short sentence", stage.message.length() < 90);
-            assertTrue("distinct stages must not share wording", messages.add(stage.message));
+            assertFalse(stage + " needs a message", stage.message(context).trim().isEmpty());
+            assertTrue(stage + " must stay one short sentence", stage.message(context).length() < 90);
+            assertTrue("distinct stages must not share wording", messages.add(stage.message(context)));
         }
         assertEquals("the stages are: missing APK, outside the directory, FileProvider, no "
                 + "installer, and launch", 5, OrbitLocalInstaller.InstallStage.values().length);
@@ -145,7 +145,7 @@ public final class ComponentInstallHandoffTest {
     /** No filesystem detail ever reaches the user-facing text. */
     @Test public void noStageMessageLeaksAPath() {
         for (OrbitLocalInstaller.InstallStage stage : OrbitLocalInstaller.InstallStage.values()) {
-            String message = stage.message;
+            String message = stage.message(context);
             assertFalse(message, message.contains("/"));
             assertFalse(message, message.contains("\\"));
             assertFalse(message, message.contains("cache"));

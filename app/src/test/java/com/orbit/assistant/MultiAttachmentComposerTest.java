@@ -219,8 +219,7 @@ public final class MultiAttachmentComposerTest {
         if (position < 0) throw new AssertionError("no such attachment is staged");
         // Asked of the same helper the strip labels its controls with, so this finds the control
         // rather than restating its wording - which is what this test is actually about.
-        String wanted = AttachmentLabels.removeDescription(
-                staged.get(position), position + 1, staged.size());
+        String wanted = AttachmentLabels.removeDescription(activity, staged.get(position), position + 1, staged.size());
         for (View v : descendants(activity.getWindow().getDecorView())) {
             CharSequence description = v.getContentDescription();
             if (description != null && wanted.contentEquals(description)) return v;

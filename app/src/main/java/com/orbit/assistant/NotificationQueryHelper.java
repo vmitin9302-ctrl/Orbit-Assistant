@@ -58,12 +58,12 @@ public final class NotificationQueryHelper {
 
         if (!NotificationAccess.enabled(c)) {
             return new Prepared(true, "", new AssistantReply(
-                    "Notification access is not enabled yet. Open Orbit > Notifications, then tap Open notification access."));
+                    c.getString(R.string.notifq_no_access)));
         }
 
         if (!Prefs.notificationAiEnabled(c)) {
             return new Prepared(true, "", new AssistantReply(
-                    "Notification intelligence is turned off. You can enable it in Orbit > Notifications."));
+                    c.getString(R.string.notifq_ai_off)));
         }
 
         long now = System.currentTimeMillis();
@@ -73,14 +73,14 @@ public final class NotificationQueryHelper {
 
         if (found.isEmpty()) {
             return new Prepared(true, "", new AssistantReply(
-                    "I do not have any matching notification history for that time period."));
+                    c.getString(R.string.notifq_no_history)));
         }
 
         List<NotificationStore.Item> ranked = prioritize(found, prompt);
         String context = buildContext(ranked, range, now);
         if (context.isEmpty()) {
             return new Prepared(true, "", new AssistantReply(
-                    "I have notification history, but there was not enough usable text to summarize."));
+                    c.getString(R.string.notifq_not_enough)));
         }
 
         if (record) Prefs.get(c).edit().putLong("notification_last_query_time", now).apply();

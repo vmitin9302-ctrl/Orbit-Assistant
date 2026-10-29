@@ -571,8 +571,8 @@ public final class OrbitVaultBeta2Test {
     @Test public void anemptyPickerExplainsItself() {
         Activity picker = Robolectric.buildActivity(OrbitVaultPickerActivity.class).setup().get();
         List<String> drawn = textOf(picker.getWindow().getDecorView());
-        assertTrue(drawn.contains(OrbitVaultPickerActivity.EMPTY_TITLE));
-        assertTrue(drawn.contains(OrbitVaultPickerActivity.EMPTY_BODY));
+        assertTrue(drawn.contains(picker.getString(OrbitVaultPickerActivity.EMPTY_TITLE)));
+        assertTrue(drawn.contains(picker.getString(OrbitVaultPickerActivity.EMPTY_BODY)));
     }
 
     /**

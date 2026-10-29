@@ -333,7 +333,7 @@ public class RoutineTriggersActivity extends Activity {
         top.setGravity(Gravity.CENTER_VERTICAL);
         LinearLayout text = new LinearLayout(this);
         text.setOrientation(LinearLayout.VERTICAL);
-        TextView schedule = UiKit.text(this, RoutineTriggerSchedule.summary(trigger), 15, UiKit.TEXT, true);
+        TextView schedule = UiKit.text(this, RoutineTriggerSchedule.summary(this, trigger), 15, UiKit.TEXT, true);
         text.addView(schedule);
         TextView next = UiKit.text(this, triggerStateLabel(trigger), 12, UiKit.MUTED, false);
         next.setPadding(0, UiKit.dp(this, 4), 0, 0);
@@ -464,7 +464,7 @@ public class RoutineTriggersActivity extends Activity {
         String kind = RoutineTriggerStore.TYPE_LOCATION.equals(trigger.type) ? "location trigger" : "time trigger";
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("Delete " + kind + "?")
-                .setMessage(RoutineTriggerSchedule.summary(trigger))
+                .setMessage(RoutineTriggerSchedule.summary(this, trigger))
                 .setNegativeButton("Cancel", null)
                 .setPositiveButton("Delete", (d, w) -> {
                     RoutineTriggerScheduler.cancel(this, trigger.id);

@@ -111,10 +111,10 @@ public final class DiagnosticsActivity extends Activity {
 
         LinearLayout header = new LinearLayout(this);
         header.setGravity(Gravity.CENTER_VERTICAL);
-        Button back = button("Back");
+        Button back = button(getString(R.string.ui_back_76900f1b));
         back.setOnClickListener(v -> navigation.performBack());
         header.addView(back, new LinearLayout.LayoutParams(UiKit.dp(this, 90), UiKit.dp(this, 44)));
-        TextView title = UiKit.text(this, "Orbit Diagnostics", 24, UiKit.TEXT, true);
+        TextView title = UiKit.text(this, getString(R.string.diag_title), 24, UiKit.TEXT, true);
         title.setPadding(UiKit.dp(this, 12), 0, 0, 0);
         header.addView(title, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         page.addView(header);
@@ -127,13 +127,13 @@ public final class DiagnosticsActivity extends Activity {
         // Developer and Beta builds only. See addProPreview.
         addProPreview();
 
-        TextView sectionsCaption = UiKit.text(this, "DETAILS", 11, UiKit.MUTED, true);
+        TextView sectionsCaption = UiKit.text(this, getString(R.string.diag_details_caption), 11, UiKit.MUTED, true);
         sectionsCaption.setLetterSpacing(0.09f);
         sectionsCaption.setPadding(UiKit.dp(this, 4), UiKit.dp(this, 10), 0, UiKit.dp(this, 2));
         page.addView(sectionsCaption);
 
         boolean anyOpen = !expanded.isEmpty();
-        toggleAll = quietButton(anyOpen ? "Collapse all" : "Expand all");
+        toggleAll = quietButton(getString(anyOpen ? R.string.diag_collapse_all : R.string.diag_expand_all));
         toggleAll.setOnClickListener(v -> {
             if (expanded.isEmpty()) for (Section s : sections()) expanded.add(s.title);
             else expanded.clear();
@@ -152,38 +152,38 @@ public final class DiagnosticsActivity extends Activity {
         View planner = rawPlannerCard();
         if (planner != null) page.addView(planner, cardLp());
 
-        Button copySummary = button("Copy summary");
+        Button copySummary = button(getString(R.string.diag_copy_summary));
         copySummary.setOnClickListener(v ->
-                copy("Orbit diagnostics summary", summaryReport(), "Summary copied"));
+                copy("Orbit diagnostics summary", summaryReport(), getString(R.string.diag_summary_copied)));
         page.addView(copySummary, buttonLp(0));
 
-        Button copyFull = button("Copy full diagnostics");
+        Button copyFull = button(getString(R.string.diag_copy_full));
         copyFull.setOnClickListener(v ->
-                copy("Orbit diagnostics", fullReport(), "Full diagnostics copied"));
+                copy("Orbit diagnostics", fullReport(), getString(R.string.diag_full_copied)));
         page.addView(copyFull, buttonLp(10));
 
         // Composer/input-method trace for diagnosing typing failures on real hardware. Records
         // state transitions only, never message content. Reproduce the problem, then copy this.
-        Button copyTyping = button("Copy typing diagnostics");
+        Button copyTyping = button(getString(R.string.diag_copy_typing));
         copyTyping.setOnClickListener(v ->
-                copy("Orbit typing diagnostics", ComposerTrace.report(), "Typing diagnostics copied"));
+                copy("Orbit typing diagnostics", ComposerTrace.report(), getString(R.string.diag_typing_copied)));
         page.addView(copyTyping, buttonLp(10));
 
         // Persistent Side-button launch trace. Unlike the typing trace this survives process death
         // and reboots, because the failure it exists for may end the process before anyone can get
         // here. Lifecycle milestones and state only, never conversation or screen content.
-        Button copyOverlay = button("Copy overlay launch diagnostics");
+        Button copyOverlay = button(getString(R.string.diag_copy_overlay));
         copyOverlay.setOnClickListener(v -> copy("Orbit overlay launch diagnostics",
-                OverlayLaunchTrace.report(this), "Overlay launch diagnostics copied"));
+                OverlayLaunchTrace.report(this), getString(R.string.diag_overlay_copied)));
         page.addView(copyOverlay, buttonLp(10));
 
         // The Rich Answers trace, which is far too long for the full report and is exactly what
         // somebody needs after a visual answer came back without a picture. Stage transitions,
         // hosts, statuses and sizes only - never the question that was asked or the answer given.
-        Button copyRich = button("Copy Rich Answers diagnostics");
+        Button copyRich = button(getString(R.string.diag_copy_rich));
         copyRich.setOnClickListener(v -> copy("Orbit Rich Answers diagnostics",
                 RichAnswerTrace.report(this) + "\n\nHosted search\n" + hostedSearch(),
-                "Rich Answers diagnostics copied"));
+                getString(R.string.diag_rich_copied)));
         page.addView(copyRich, buttonLp(10));
     }
 
@@ -208,7 +208,7 @@ public final class DiagnosticsActivity extends Activity {
 
         LinearLayout head = new LinearLayout(this);
         head.setGravity(Gravity.CENTER_VERTICAL);
-        head.addView(UiKit.text(this, section.title, 16, UiKit.TEXT, true),
+        head.addView(UiKit.text(this, shown(section.title), 16, UiKit.TEXT, true),
                 new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         TextView overviewCopy = copyControl(section);
         head.addView(overviewCopy);
@@ -290,7 +290,7 @@ public final class DiagnosticsActivity extends Activity {
     private void addProPreview() {
         if (!OrbitProEntitlement.previewAvailable()) return;
 
-        TextView caption = UiKit.text(this, "ORBIT PRO PREVIEW", 11, UiKit.MUTED, true);
+        TextView caption = UiKit.text(this, getString(R.string.diag_pro_caption), 11, UiKit.MUTED, true);
         caption.setLetterSpacing(0.09f);
         caption.setPadding(UiKit.dp(this, 4), UiKit.dp(this, 14), 0, UiKit.dp(this, 2));
         page.addView(caption);
@@ -302,8 +302,7 @@ public final class DiagnosticsActivity extends Activity {
         card.addView(state);
 
         TextView note = UiKit.text(this,
-                "Testing override for this build only. Stable ignores it, and nothing here is a "
-                        + "purchase.", 12, UiKit.MUTED, false);
+                getString(R.string.diag_pro_note), 12, UiKit.MUTED, false);
         note.setLineSpacing(0, 1.15f);
         LinearLayout.LayoutParams noteLp = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -323,8 +322,8 @@ public final class DiagnosticsActivity extends Activity {
 
         proPreviewUpdate = () -> {
             String selected = Prefs.proPreview(this);
-            state.setText("Selected: " + Prefs.proPreviewLabel(selected)
-                    + "\nEffective: " + OrbitProEntitlement.status(this));
+            state.setText(getString(R.string.diag_pro_state, Prefs.proPreviewLabel(selected),
+                    OrbitProEntitlement.status(this)));
             styleChoice(free, Prefs.PRO_PREVIEW_FREE.equals(selected));
             styleChoice(pro, Prefs.PRO_PREVIEW_PRO.equals(selected));
             if (overviewBody != null) overviewBody.setText(bodyText(new Section("Overview", overview())));
@@ -361,7 +360,8 @@ public final class DiagnosticsActivity extends Activity {
                     UiKit.withAlpha(UiKit.accent(this), 90), UiKit.accent(this), 16, this));
             choice.setTextColor(UiKit.TEXT);
         }
-        choice.setContentDescription(choice.getText() + (selected ? ", selected" : ""));
+        choice.setContentDescription(selected
+                ? getString(R.string.diag_cd_selected, choice.getText()) : choice.getText());
         choice.setSelected(selected);
     }
 
@@ -403,8 +403,9 @@ public final class DiagnosticsActivity extends Activity {
         head.setClickable(true);
         head.setFocusable(true);
         head.setBackground(UiKit.ripple(Color.TRANSPARENT, UiKit.accent(this), 12, this));
-        head.setContentDescription(section.title + (open ? ", expanded" : ", collapsed"));
-        TextView label = UiKit.text(this, section.title, 15, UiKit.TEXT, true);
+        head.setContentDescription(getString(open ? R.string.diag_cd_expanded : R.string.diag_cd_collapsed,
+                shown(section.title)));
+        TextView label = UiKit.text(this, shown(section.title), 15, UiKit.TEXT, true);
         head.addView(label, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         // Its own target inside the header. A child that handles the tap consumes it, so Copy
         // never also expands the section, and the rest of the header still toggles it.
@@ -428,13 +429,15 @@ public final class DiagnosticsActivity extends Activity {
     }
 
     private void updateToggleAll() {
-        toggleAll.setText(expanded.isEmpty() ? "Expand all" : "Collapse all");
+        toggleAll.setText(getString(expanded.isEmpty()
+                ? R.string.diag_expand_all : R.string.diag_collapse_all));
     }
 
     private void updateSection(LinearLayout card, View head, TextView chevron, Section section) {
         boolean open = expanded.contains(section.title);
         chevron.setText(open ? "▾" : "▸");
-        head.setContentDescription(section.title + (open ? ", expanded" : ", collapsed"));
+        head.setContentDescription(getString(open ? R.string.diag_cd_expanded : R.string.diag_cd_collapsed,
+                shown(section.title)));
         if (open && card.getChildCount() == 1) {
             TextView body = UiKit.text(this, bodyText(currentSection(section)), 13, UiKit.TEXT, false);
             body.setTextIsSelectable(true);
@@ -443,6 +446,28 @@ public final class DiagnosticsActivity extends Activity {
             card.addView(body);
         } else if (!open && card.getChildCount() > 1) {
             card.removeViewAt(1);
+        }
+    }
+
+    /** The title as the person sees it; {@link Section#title} stays the stable English key. */
+    private String shown(String title) {
+        switch (title) {
+            case "Overview": return getString(R.string.diag_sec_overview);
+            case "Request flow": return getString(R.string.diag_sec_request_flow);
+            case "Thinking updates": return getString(R.string.diag_sec_thinking);
+            case "AI selection": return getString(R.string.diag_sec_ai_selection);
+            case "Screen & app context": return getString(R.string.diag_sec_screen);
+            case "Memory": return getString(R.string.diag_sec_memory);
+            case "Calendar": return getString(R.string.diag_sec_calendar);
+            case "Rich Answers": return getString(R.string.diag_sec_rich);
+            case "Hosted search": return getString(R.string.diag_sec_hosted);
+            case "Orbit Local": return getString(R.string.diag_sec_local);
+            case "Actions & utilities": return getString(R.string.diag_sec_actions);
+            case "Routines": return getString(R.string.diag_sec_routines);
+            case "Orbit Deck": return getString(R.string.diag_sec_deck);
+            case "Gestures": return getString(R.string.diag_sec_gestures);
+            case "Advanced": return getString(R.string.diag_sec_advanced);
+            default: return title;
         }
     }
 
@@ -481,16 +506,16 @@ public final class DiagnosticsActivity extends Activity {
      * control and stays out of every generic copy path.
      */
     private TextView copyControl(Section section) {
-        TextView copy = UiKit.text(this, "Copy", 12, UiKit.accent(this), false);
+        TextView copy = UiKit.text(this, getString(R.string.ui_copy_e21f935f), 12, UiKit.accent(this), false);
         copy.setGravity(Gravity.CENTER);
         copy.setClickable(true);
         copy.setFocusable(true);
         copy.setBackground(UiKit.rippleOutlined(Color.TRANSPARENT,
                 UiKit.withAlpha(UiKit.accent(this), 90), UiKit.accent(this), 14, this));
-        copy.setContentDescription("Copy " + section.title + " diagnostics");
+        copy.setContentDescription(getString(R.string.diag_cd_copy_section, shown(section.title)));
         copy.setOnClickListener(v -> copy("Orbit diagnostics — " + section.title,
                 sectionReport(section.title, currentSection(section).body),
-                section.title + " diagnostics copied"));
+                getString(R.string.diag_section_copied, shown(section.title))));
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 UiKit.dp(this, 62), UiKit.dp(this, 34));
         lp.leftMargin = UiKit.dp(this, 8);
@@ -537,12 +562,13 @@ public final class DiagnosticsActivity extends Activity {
         head.setClickable(true);
         head.setFocusable(true);
         head.setBackground(UiKit.ripple(Color.TRANSPARENT, UiKit.accent(this), 12, this));
-        head.setContentDescription(RAW_PLANNER + (open ? ", expanded" : ", collapsed"));
+        head.setContentDescription(getString(open ? R.string.diag_cd_expanded : R.string.diag_cd_collapsed,
+                getString(R.string.diag_sec_raw_planner)));
         LinearLayout labels = new LinearLayout(this);
         labels.setOrientation(LinearLayout.VERTICAL);
-        labels.addView(UiKit.text(this, RAW_PLANNER, 15, UiKit.TEXT, true));
+        labels.addView(UiKit.text(this, getString(R.string.diag_sec_raw_planner), 15, UiKit.TEXT, true));
         TextView note = UiKit.text(this,
-                "May contain your routine wording. Not included in either copied report.",
+                getString(R.string.diag_planner_note),
                 11, UiKit.MUTED, false);
         note.setPadding(0, UiKit.dp(this, 2), 0, 0);
         labels.addView(note);
@@ -563,9 +589,9 @@ public final class DiagnosticsActivity extends Activity {
             body.setLineSpacing(0, 1.15f);
             body.setPadding(0, UiKit.dp(this, 8), 0, UiKit.dp(this, 10));
             card.addView(body);
-            Button copyRaw = button("Copy raw planner response");
+            Button copyRaw = button(getString(R.string.diag_copy_raw_planner));
             copyRaw.setOnClickListener(v -> copy("Orbit raw planner response", raw,
-                    "Raw planner response copied"));
+                    getString(R.string.diag_raw_planner_copied)));
             card.addView(copyRaw, new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 44)));
         }
