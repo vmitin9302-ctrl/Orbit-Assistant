@@ -68,15 +68,15 @@ public final class RoutineTemplatesActivity extends Activity {
         LinearLayout titles = new LinearLayout(this);
         titles.setOrientation(LinearLayout.VERTICAL);
         titles.setPadding(UiKit.dp(this, 13), 0, 0, 0);
-        titles.addView(UiKit.text(this, "Routine Templates", 24, UiKit.TEXT, true));
-        titles.addView(UiKit.text(this, "Start with a useful setup, then make it yours.",
+        titles.addView(UiKit.text(this, getString(R.string.d_rtpl_title), 24, UiKit.TEXT, true));
+        titles.addView(UiKit.text(this, getString(R.string.d_rtpl_subtitle),
                 12, UiKit.MUTED, false));
         header.addView(titles, new LinearLayout.LayoutParams(
                 0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         page.addView(header);
 
         TextView explanation = UiKit.text(this,
-                "Templates use only actions Orbit already supports. Choosing one creates a normal saved Routine that you can rename, reorder, expand with IF conditions, and schedule like any other Routine.",
+                getString(R.string.d_rtpl_explanation),
                 13, UiKit.MUTED, false);
         explanation.setLineSpacing(0, 1.12f);
         LinearLayout.LayoutParams explanationLp = new LinearLayout.LayoutParams(
@@ -89,7 +89,7 @@ public final class RoutineTemplatesActivity extends Activity {
         }
 
         TextView footer = UiKit.text(this,
-                "Templates are built into Orbit and do not run until you create and run the resulting Routine.",
+                getString(R.string.d_rtpl_footer),
                 11, UiKit.MUTED, false);
         footer.setGravity(Gravity.CENTER);
         footer.setPadding(UiKit.dp(this, 8), UiKit.dp(this, 7), UiKit.dp(this, 8), 0);
@@ -127,10 +127,10 @@ public final class RoutineTemplatesActivity extends Activity {
         card.addView(summary);
 
         LinearLayout actions = new LinearLayout(this);
-        Button preview = secondaryButton("Preview");
+        Button preview = secondaryButton(getString(R.string.d_rtpl_preview));
         preview.setOnClickListener(v -> showPreview(template));
         actions.addView(preview, new LinearLayout.LayoutParams(0, UiKit.dp(this, 42), 1));
-        Button use = primaryButton("Use template");
+        Button use = primaryButton(getString(R.string.d_rtpl_use));
         use.setOnClickListener(v -> useTemplate(template));
         LinearLayout.LayoutParams useLp = new LinearLayout.LayoutParams(0, UiKit.dp(this, 42), 1);
         useLp.leftMargin = UiKit.dp(this, 9);
@@ -146,13 +146,13 @@ public final class RoutineTemplatesActivity extends Activity {
         content.setPadding(horizontal, 0, horizontal, UiKit.dp(this, 4));
 
         TextView creates = UiKit.text(this,
-                "Creates a normal editable Routine named “" + template.suggestedRoutineName + "”.",
+                getString(R.string.d_rtpl_creates, template.suggestedRoutineName),
                 13, UiKit.MUTED, false);
         creates.setLineSpacing(0, 1.1f);
         creates.setPadding(0, 0, 0, UiKit.dp(this, 12));
         content.addView(creates);
 
-        content.addView(dialogLabel("STEPS"));
+        content.addView(dialogLabel(getString(R.string.d_rtpl_steps)));
         for (int i = 0; i < template.actions.size(); i++) {
             AssistantReply.Action action = template.actions.get(i);
             TextView step = UiKit.text(this,
@@ -164,7 +164,7 @@ public final class RoutineTemplatesActivity extends Activity {
 
         List<String> capabilities = RoutineTemplateCatalog.capabilityNotes(this, template);
         if (!capabilities.isEmpty()) {
-            TextView capabilityLabel = dialogLabel("CAPABILITIES");
+            TextView capabilityLabel = dialogLabel(getString(R.string.d_rtpl_capabilities));
             capabilityLabel.setPadding(0, UiKit.dp(this, 16), 0, UiKit.dp(this, 2));
             content.addView(capabilityLabel);
             for (String note : capabilities) {
@@ -182,7 +182,7 @@ public final class RoutineTemplatesActivity extends Activity {
         }
         if (!template.recommendedCommandPhrase.isEmpty()) {
             TextView shortcut = UiKit.text(this,
-                    "Suggested Custom Command: “" + template.recommendedCommandPhrase + "”",
+                    getString(R.string.d_rtpl_suggested_command, template.recommendedCommandPhrase),
                     12, UiKit.accent(this), true);
             shortcut.setPadding(0, UiKit.dp(this, 13), 0, 0);
             content.addView(shortcut);
@@ -197,8 +197,8 @@ public final class RoutineTemplatesActivity extends Activity {
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle(template.displayName)
                 .setView(scroll)
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Use template", (d, which) -> useTemplate(template))
+                .setNegativeButton(getString(R.string.ui_cancel_19766ed6), null)
+                .setPositiveButton(getString(R.string.d_rtpl_use), (d, which) -> useTemplate(template))
                 .create();
         UiKit.styleOrbitDialog(dialog, this, false);
         dialog.show();
@@ -213,13 +213,13 @@ public final class RoutineTemplatesActivity extends Activity {
                                                        RoutineTemplateCatalog.Template template) {
         if (activity == null || template == null) return null;
         if (RoutineStore.list(activity).size() >= RoutineStore.MAX_ROUTINES) {
-            Toast.makeText(activity, "Routine limit reached.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, activity.getString(R.string.d_rtpl_limit), Toast.LENGTH_SHORT).show();
             return null;
         }
         String name = RoutineTemplateCatalog.uniqueRoutineName(activity, template.suggestedRoutineName);
         RoutineStore.Routine routine = RoutineStore.create(name, template.actions);
         if (!RoutineStore.upsert(activity, routine)) {
-            Toast.makeText(activity, "Orbit could not create this Routine.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, activity.getString(R.string.d_rtpl_create_failed), Toast.LENGTH_SHORT).show();
             return null;
         }
         activity.startActivity(new Intent(activity, RoutineEditorActivity.class)
@@ -256,7 +256,7 @@ public final class RoutineTemplatesActivity extends Activity {
         button.setImageResource(R.drawable.ic_back);
         button.setImageTintList(ColorStateList.valueOf(UiKit.accent(this)));
         button.setBackground(UiKit.ripple(UiKit.SURFACE_2, UiKit.accent(this), 18, this));
-        button.setContentDescription("Back");
+        button.setContentDescription(getString(R.string.ui_back_76900f1b));
         button.setPadding(UiKit.dp(this, 10), UiKit.dp(this, 10),
                 UiKit.dp(this, 10), UiKit.dp(this, 10));
         UiKit.pressScale(button);

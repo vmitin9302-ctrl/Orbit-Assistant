@@ -109,31 +109,31 @@ public class TimeTriggerEditorActivity extends Activity {
         scroll.addView(page, new ScrollView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         LinearLayout header = new LinearLayout(this); header.setGravity(Gravity.CENTER_VERTICAL);
-        ImageButton back = iconButton(R.drawable.ic_back, "Back"); back.setOnClickListener(v -> onBackPressed());
+        ImageButton back = iconButton(R.drawable.ic_back, getString(R.string.ui_back_76900f1b)); back.setOnClickListener(v -> onBackPressed());
         LinearLayout.LayoutParams blp = new LinearLayout.LayoutParams(UiKit.dp(this,48),UiKit.dp(this,48)); blp.rightMargin=UiKit.dp(this,12); header.addView(back,blp);
         LinearLayout titles = new LinearLayout(this); titles.setOrientation(LinearLayout.VERTICAL);
-        titles.addView(UiKit.text(this, original == null ? "New time trigger" : "Edit time trigger", 25, UiKit.TEXT, true));
+        titles.addView(UiKit.text(this, getString(original == null ? R.string.d_tte_new : R.string.d_tte_edit), 25, UiKit.TEXT, true));
         titles.addView(UiKit.text(this, routine.name, 12, UiKit.MUTED, false));
         header.addView(titles,new LinearLayout.LayoutParams(0,ViewGroup.LayoutParams.WRAP_CONTENT,1)); page.addView(header);
 
         TextView intro = UiKit.text(this,
-                "Choose when Orbit should run this routine. Use a simple schedule, the every-2-weeks biweekly/fortnightly preset, or a custom interval such as every 3 days or every 2 months.",
+                getString(R.string.d_tte_intro),
                 14, UiKit.MUTED, false);
         intro.setLineSpacing(0,1.13f); LinearLayout.LayoutParams ilp=new LinearLayout.LayoutParams(-1,-2); ilp.setMargins(2,UiKit.dp(this,16),2,UiKit.dp(this,14)); page.addView(intro,ilp);
 
         LinearLayout schedule = card();
-        schedule.addView(label("TIME"));
+        schedule.addView(label(getString(R.string.d_tte_time)));
         timeButton = selectorButton(""); timeButton.setOnClickListener(v -> showTimeDialog()); schedule.addView(timeButton, selectorLp());
-        schedule.addView(label("REPEAT"));
+        schedule.addView(label(getString(R.string.d_tte_repeat)));
         repeatButton = selectorButton(""); repeatButton.setOnClickListener(v -> showRepeatMenu()); schedule.addView(repeatButton, selectorLp());
-        schedule.addView(label("START DATE"));
+        schedule.addView(label(getString(R.string.d_tte_start_date)));
         dateButton = selectorButton(""); dateButton.setOnClickListener(v -> showDateDialog()); schedule.addView(dateButton, selectorLp());
 
         weeklyBox = new LinearLayout(this); weeklyBox.setOrientation(LinearLayout.VERTICAL); weeklyBox.setPadding(0,UiKit.dp(this,10),0,0);
-        weeklyBox.addView(label("RUN ON")); weeklyBox.addView(buildWeekdayRows()); schedule.addView(weeklyBox);
+        weeklyBox.addView(label(getString(R.string.d_tte_run_on))); weeklyBox.addView(buildWeekdayRows()); schedule.addView(weeklyBox);
 
         customBox = new LinearLayout(this); customBox.setOrientation(LinearLayout.VERTICAL); customBox.setPadding(0,UiKit.dp(this,10),0,0);
-        customBox.addView(label("EVERY"));
+        customBox.addView(label(getString(R.string.d_tte_every)));
         LinearLayout intervalRow = new LinearLayout(this); intervalRow.setGravity(Gravity.CENTER_VERTICAL);
         intervalField = new EditText(this); intervalField.setTextColor(UiKit.TEXT); intervalField.setHintTextColor(UiKit.MUTED); intervalField.setTextSize(14); intervalField.setSingleLine(true);
         intervalField.setInputType(InputType.TYPE_CLASS_NUMBER); intervalField.setPadding(UiKit.dp(this,14),0,UiKit.dp(this,14),0);
@@ -142,25 +142,25 @@ public class TimeTriggerEditorActivity extends Activity {
         intervalRow.addView(intervalField,new LinearLayout.LayoutParams(0,UiKit.dp(this,50),0.36f));
         unitButton = selectorButton(""); unitButton.setOnClickListener(v -> showUnitMenu());
         LinearLayout.LayoutParams ulp=new LinearLayout.LayoutParams(0,UiKit.dp(this,50),0.64f); ulp.leftMargin=UiKit.dp(this,9); intervalRow.addView(unitButton,ulp); customBox.addView(intervalRow);
-        TextView customHelp=UiKit.text(this,"Weeks can use one or more selected weekdays. Monthly schedules use the start date's day, or the month's last day when needed.",11,UiKit.MUTED,false);
+        TextView customHelp=UiKit.text(this,getString(R.string.d_tte_custom_help),11,UiKit.MUTED,false);
         customHelp.setPadding(0,UiKit.dp(this,7),0,0); customBox.addView(customHelp); schedule.addView(customBox);
 
-        enabledBox = new CheckBox(this); enabledBox.setText("Enabled"); enabledBox.setTextColor(UiKit.TEXT); enabledBox.setTextSize(14); enabledBox.setButtonTintList(ColorStateList.valueOf(UiKit.accent(this)));
+        enabledBox = new CheckBox(this); enabledBox.setText(R.string.d_tte_enabled); enabledBox.setTextColor(UiKit.TEXT); enabledBox.setTextSize(14); enabledBox.setButtonTintList(ColorStateList.valueOf(UiKit.accent(this)));
         enabledBox.setPadding(0,UiKit.dp(this,10),0,0); enabledBox.setOnCheckedChangeListener((b,c)->{ if(enabled!=c){enabled=c;dirty=true;} }); UiKit.pressScale(enabledBox); schedule.addView(enabledBox);
         page.addView(schedule, cardLp());
 
         LinearLayout note = card();
-        note.addView(UiKit.text(this,"Background behavior",14,UiKit.TEXT,true));
-        TextView body=UiKit.text(this,"Brightness, Do Not Disturb, and media volume can run automatically in the background. Steps that need a visible app, Android screen, confirmation, or durable flashlight control pause in order and send a notification you can tap to continue.",12,UiKit.MUTED,false);
+        note.addView(UiKit.text(this,getString(R.string.d_tte_bg_title),14,UiKit.TEXT,true));
+        TextView body=UiKit.text(this,getString(R.string.d_tte_bg_body),12,UiKit.MUTED,false);
         body.setPadding(0,UiKit.dp(this,6),0,0); note.addView(body); page.addView(note,cardLp());
 
-        Button save=primaryButton(original==null?"Save trigger":"Save changes"); save.setOnClickListener(v->save()); page.addView(save,new LinearLayout.LayoutParams(-1,UiKit.dp(this,50)));
+        Button save=primaryButton(getString(original==null?R.string.d_tte_save_trigger:R.string.d_tte_save_changes)); save.setOnClickListener(v->save()); page.addView(save,new LinearLayout.LayoutParams(-1,UiKit.dp(this,50)));
         return scroll;
     }
 
     private View buildWeekdayRows() {
         LinearLayout wrap = new LinearLayout(this); wrap.setOrientation(LinearLayout.VERTICAL);
-        String[] names={"Mon","Tue","Wed","Thu","Fri","Sat","Sun"};
+        String[] names={getString(R.string.d_tte_mon),getString(R.string.d_tte_tue),getString(R.string.d_tte_wed),getString(R.string.d_tte_thu),getString(R.string.d_tte_fri),getString(R.string.d_tte_sat),getString(R.string.d_tte_sun)};
         for(int row=0;row<2;row++){
             LinearLayout line=new LinearLayout(this); line.setGravity(Gravity.CENTER_VERTICAL);
             int start=row==0?0:4, end=row==0?4:7;
@@ -181,7 +181,7 @@ public class TimeTriggerEditorActivity extends Activity {
     private void refreshFields() {
         timeButton.setText(RoutineActionCatalog.timeLabel(hour,minute));
         repeatButton.setText(repeatText());
-        dateButton.setText(startDate.getMonth().getDisplayName(java.time.format.TextStyle.SHORT,java.util.Locale.US)+" "+startDate.getDayOfMonth()+", "+startDate.getYear());
+        dateButton.setText(startDate.format(java.time.format.DateTimeFormatter.ofLocalizedDate(java.time.format.FormatStyle.MEDIUM)));
         enabledBox.setChecked(enabled);
         boolean weekly = RoutineTriggerStore.MODE_WEEKLY.equals(mode) || (RoutineTriggerStore.MODE_CUSTOM.equals(mode) && RoutineTriggerStore.UNIT_WEEKS.equals(intervalUnit));
         weeklyBox.setVisibility(weekly?View.VISIBLE:View.GONE);
@@ -198,18 +198,20 @@ public class TimeTriggerEditorActivity extends Activity {
     }
 
     private String repeatText(){
-        if(RoutineTriggerStore.MODE_ONCE.equals(mode))return "Once";
-        if(RoutineTriggerStore.MODE_DAILY.equals(mode))return "Daily";
-        if(RoutineTriggerStore.MODE_WEEKDAYS.equals(mode))return "Weekdays";
-        if(RoutineTriggerStore.MODE_WEEKENDS.equals(mode))return "Weekends";
-        if(RoutineTriggerStore.MODE_WEEKLY.equals(mode)) return intervalCount==2?"Every 2 weeks":"Weekly";
-        if(RoutineTriggerStore.MODE_CUSTOM.equals(mode) && RoutineTriggerStore.UNIT_MONTHS.equals(intervalUnit) && intervalCount==1) return "Monthly";
-        return "Custom interval";
+        if(RoutineTriggerStore.MODE_ONCE.equals(mode))return getString(R.string.d_tte_once);
+        if(RoutineTriggerStore.MODE_DAILY.equals(mode))return getString(R.string.d_tte_daily);
+        if(RoutineTriggerStore.MODE_WEEKDAYS.equals(mode))return getString(R.string.d_tte_weekdays);
+        if(RoutineTriggerStore.MODE_WEEKENDS.equals(mode))return getString(R.string.d_tte_weekends);
+        if(RoutineTriggerStore.MODE_WEEKLY.equals(mode)) return getString(intervalCount==2?R.string.d_tte_every_2_weeks:R.string.d_tte_weekly);
+        if(RoutineTriggerStore.MODE_CUSTOM.equals(mode) && RoutineTriggerStore.UNIT_MONTHS.equals(intervalUnit) && intervalCount==1) return getString(R.string.d_tte_monthly);
+        return getString(R.string.d_tte_custom_interval);
     }
-    private String unitLabel(){ if(RoutineTriggerStore.UNIT_WEEKS.equals(intervalUnit))return "Weeks"; if(RoutineTriggerStore.UNIT_MONTHS.equals(intervalUnit))return "Months"; return "Days"; }
+    private String unitLabel(){ if(RoutineTriggerStore.UNIT_WEEKS.equals(intervalUnit))return getString(R.string.d_tte_weeks); if(RoutineTriggerStore.UNIT_MONTHS.equals(intervalUnit))return getString(R.string.d_tte_months); return getString(R.string.d_tte_days); }
+
+    private String unitPlural(){ if(RoutineTriggerStore.UNIT_WEEKS.equals(intervalUnit))return getString(R.string.d_tte_weeks_plural); if(RoutineTriggerStore.UNIT_MONTHS.equals(intervalUnit))return getString(R.string.d_tte_months_plural); return getString(R.string.d_tte_days_plural); }
 
     private void showRepeatMenu(){
-        String[] labels={"Once","Daily","Weekdays","Weekends","Weekly","Monthly","Every 2 weeks","Custom interval"};
+        String[] labels={getString(R.string.d_tte_once),getString(R.string.d_tte_daily),getString(R.string.d_tte_weekdays),getString(R.string.d_tte_weekends),getString(R.string.d_tte_weekly),getString(R.string.d_tte_monthly),getString(R.string.d_tte_every_2_weeks),getString(R.string.d_tte_custom_interval)};
         int selected=repeatIndex();
         UiKit.showOrbitMenu(this,repeatButton,labels,selected,(i,l)->{
             if(i==0)mode=RoutineTriggerStore.MODE_ONCE;
@@ -225,40 +227,40 @@ public class TimeTriggerEditorActivity extends Activity {
     }
     private int repeatIndex(){ if(RoutineTriggerStore.MODE_ONCE.equals(mode))return 0;if(RoutineTriggerStore.MODE_DAILY.equals(mode))return 1;if(RoutineTriggerStore.MODE_WEEKDAYS.equals(mode))return 2;if(RoutineTriggerStore.MODE_WEEKENDS.equals(mode))return 3;if(RoutineTriggerStore.MODE_WEEKLY.equals(mode)&&intervalCount==2)return 6;if(RoutineTriggerStore.MODE_WEEKLY.equals(mode))return 4;if(RoutineTriggerStore.MODE_CUSTOM.equals(mode)&&RoutineTriggerStore.UNIT_MONTHS.equals(intervalUnit)&&intervalCount==1)return 5;return 7; }
 
-    private void showUnitMenu(){ String[] labels={"Days","Weeks","Months"}; int selected=RoutineTriggerStore.UNIT_WEEKS.equals(intervalUnit)?1:RoutineTriggerStore.UNIT_MONTHS.equals(intervalUnit)?2:0;
+    private void showUnitMenu(){ String[] labels={getString(R.string.d_tte_days),getString(R.string.d_tte_weeks),getString(R.string.d_tte_months)}; int selected=RoutineTriggerStore.UNIT_WEEKS.equals(intervalUnit)?1:RoutineTriggerStore.UNIT_MONTHS.equals(intervalUnit)?2:0;
         UiKit.showOrbitMenu(this,unitButton,labels,selected,(i,l)->{ intervalUnit=i==1?RoutineTriggerStore.UNIT_WEEKS:i==2?RoutineTriggerStore.UNIT_MONTHS:RoutineTriggerStore.UNIT_DAYS; if(RoutineTriggerStore.UNIT_WEEKS.equals(intervalUnit)&&weekdayMask==0)weekdayMask=RoutineTriggerSchedule.bitFor(startDate.getDayOfWeek()); dirty=true; refreshFields(); }); }
 
     private void showTimeDialog(){
-        LinearLayout form=dialogForm(); form.addView(dialogLabel("Hour (1–12)")); EditText h=numeric(String.valueOf(displayHour(hour))); form.addView(h,fieldLp());
-        form.addView(dialogLabel("Minute (0–59)")); EditText m=numeric(String.valueOf(minute)); form.addView(m,fieldLp());
+        LinearLayout form=dialogForm(); form.addView(dialogLabel(getString(R.string.d_tte_hour))); EditText h=numeric(String.valueOf(displayHour(hour))); form.addView(h,fieldLp());
+        form.addView(dialogLabel(getString(R.string.d_tte_minute))); EditText m=numeric(String.valueOf(minute)); form.addView(m,fieldLp());
         final int[] ap={hour>=12?1:0}; Button apButton=selectorButton(ap[0]==0?"AM":"PM"); apButton.setOnClickListener(v->UiKit.showOrbitMenu(this,apButton,new String[]{"AM","PM"},ap[0],(i,l)->{ap[0]=i;apButton.setText(l);})); form.addView(apButton,selectorLp());
-        AlertDialog d=new AlertDialog.Builder(this).setTitle("Choose time").setView(form).setNegativeButton("Cancel",null).setPositiveButton("Set",null).create();
-        UiKit.styleOrbitDialog(d,this,false,()->d.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v->{Integer hv=parse(h.getText().toString()),mv=parse(m.getText().toString());if(hv==null||hv<1||hv>12||mv==null||mv<0||mv>59){Toast.makeText(this,"Use a valid time.",Toast.LENGTH_SHORT).show();return;}hour=hv%12+(ap[0]==1?12:0);minute=mv;dirty=true;refreshFields();d.dismiss();})); d.show();
+        AlertDialog d=new AlertDialog.Builder(this).setTitle(getString(R.string.d_tte_choose_time)).setView(form).setNegativeButton(getString(R.string.ui_cancel_19766ed6),null).setPositiveButton(getString(R.string.d_tte_set),null).create();
+        UiKit.styleOrbitDialog(d,this,false,()->d.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v->{Integer hv=parse(h.getText().toString()),mv=parse(m.getText().toString());if(hv==null||hv<1||hv>12||mv==null||mv<0||mv>59){Toast.makeText(this,getString(R.string.d_tte_invalid_time),Toast.LENGTH_SHORT).show();return;}hour=hv%12+(ap[0]==1?12:0);minute=mv;dirty=true;refreshFields();d.dismiss();})); d.show();
     }
 
     private void showDateDialog(){
-        LinearLayout form=dialogForm(); form.addView(dialogLabel("Month (1–12)")); EditText mo=numeric(String.valueOf(startDate.getMonthValue())); form.addView(mo,fieldLp());
-        form.addView(dialogLabel("Day")); EditText da=numeric(String.valueOf(startDate.getDayOfMonth())); form.addView(da,fieldLp());
-        form.addView(dialogLabel("Year")); EditText yr=numeric(String.valueOf(startDate.getYear())); form.addView(yr,fieldLp());
-        AlertDialog d=new AlertDialog.Builder(this).setTitle("Choose start date").setView(form).setNegativeButton("Cancel",null).setPositiveButton("Set",null).create();
-        UiKit.styleOrbitDialog(d,this,false,()->d.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v->{Integer y=parse(yr.getText().toString()),m=parse(mo.getText().toString()),day=parse(da.getText().toString());try{LocalDate chosen=LocalDate.of(y==null?0:y,m==null?0:m,day==null?0:day);startDate=chosen;if(weekdayMask==0)weekdayMask=RoutineTriggerSchedule.bitFor(chosen.getDayOfWeek());dirty=true;refreshFields();d.dismiss();}catch(Exception e){Toast.makeText(this,"Use a valid calendar date.",Toast.LENGTH_SHORT).show();}})); d.show();
+        LinearLayout form=dialogForm(); form.addView(dialogLabel(getString(R.string.d_tte_month))); EditText mo=numeric(String.valueOf(startDate.getMonthValue())); form.addView(mo,fieldLp());
+        form.addView(dialogLabel(getString(R.string.d_tte_day))); EditText da=numeric(String.valueOf(startDate.getDayOfMonth())); form.addView(da,fieldLp());
+        form.addView(dialogLabel(getString(R.string.d_tte_year))); EditText yr=numeric(String.valueOf(startDate.getYear())); form.addView(yr,fieldLp());
+        AlertDialog d=new AlertDialog.Builder(this).setTitle(getString(R.string.d_tte_choose_date)).setView(form).setNegativeButton(getString(R.string.ui_cancel_19766ed6),null).setPositiveButton(getString(R.string.d_tte_set),null).create();
+        UiKit.styleOrbitDialog(d,this,false,()->d.getButton(AlertDialog.BUTTON_POSITIVE).setOnClickListener(v->{Integer y=parse(yr.getText().toString()),m=parse(mo.getText().toString()),day=parse(da.getText().toString());try{LocalDate chosen=LocalDate.of(y==null?0:y,m==null?0:m,day==null?0:day);startDate=chosen;if(weekdayMask==0)weekdayMask=RoutineTriggerSchedule.bitFor(chosen.getDayOfWeek());dirty=true;refreshFields();d.dismiss();}catch(Exception e){Toast.makeText(this,getString(R.string.d_tte_invalid_date),Toast.LENGTH_SHORT).show();}})); d.show();
     }
 
     private void save(){
-        if(RoutineTriggerStore.MODE_CUSTOM.equals(mode)){Integer n=parse(intervalField.getText().toString());int max=RoutineTriggerStore.UNIT_WEEKS.equals(intervalUnit)?52:RoutineTriggerStore.UNIT_MONTHS.equals(intervalUnit)?60:365;if(n==null||n<1||n>max){Toast.makeText(this,"Use an interval from 1 to "+max+" "+unitLabel().toLowerCase()+".",Toast.LENGTH_SHORT).show();return;}intervalCount=n;}
+        if(RoutineTriggerStore.MODE_CUSTOM.equals(mode)){Integer n=parse(intervalField.getText().toString());int max=RoutineTriggerStore.UNIT_WEEKS.equals(intervalUnit)?52:RoutineTriggerStore.UNIT_MONTHS.equals(intervalUnit)?60:365;if(n==null||n<1||n>max){Toast.makeText(this,getString(R.string.d_tte_interval_range,max,unitPlural()),Toast.LENGTH_SHORT).show();return;}intervalCount=n;}
         boolean weeks=RoutineTriggerStore.MODE_WEEKLY.equals(mode)||(RoutineTriggerStore.MODE_CUSTOM.equals(mode)&&RoutineTriggerStore.UNIT_WEEKS.equals(intervalUnit));
-        if(weeks&&weekdayMask==0){Toast.makeText(this,"Choose at least one weekday.",Toast.LENGTH_SHORT).show();return;}
+        if(weeks&&weekdayMask==0){Toast.makeText(this,getString(R.string.d_tte_need_weekday),Toast.LENGTH_SHORT).show();return;}
         RoutineTriggerStore.Trigger trigger;
         if(original==null) trigger=RoutineTriggerStore.createTime(routineId,mode,hour,minute,startDate.getYear(),startDate.getMonthValue(),startDate.getDayOfMonth(),weekdayMask,intervalCount,intervalUnit).withEnabled(enabled);
         else trigger=original.withSchedule(enabled,mode,hour,minute,startDate.getYear(),startDate.getMonthValue(),startDate.getDayOfMonth(),weekdayMask,intervalCount,intervalUnit);
         long next=enabled?RoutineTriggerSchedule.nextRun(trigger,System.currentTimeMillis()+500L):0L;
-        if(enabled&&next<=0){Toast.makeText(this,"That schedule has no future run. Check the date and time.",Toast.LENGTH_LONG).show();return;}
-        if(RoutineTriggerStore.hasEnabledScheduleConflict(this,trigger)){Toast.makeText(this,"An enabled trigger with this exact schedule already exists for this routine.",Toast.LENGTH_LONG).show();return;}
-        if(!RoutineTriggerStore.upsert(this,trigger)){Toast.makeText(this,"Could not save this trigger.",Toast.LENGTH_SHORT).show();return;}
+        if(enabled&&next<=0){Toast.makeText(this,getString(R.string.d_tte_no_future_run),Toast.LENGTH_LONG).show();return;}
+        if(RoutineTriggerStore.hasEnabledScheduleConflict(this,trigger)){Toast.makeText(this,getString(R.string.d_tte_conflict),Toast.LENGTH_LONG).show();return;}
+        if(!RoutineTriggerStore.upsert(this,trigger)){Toast.makeText(this,getString(R.string.d_tte_save_failed),Toast.LENGTH_SHORT).show();return;}
         RoutineTriggerScheduler.schedule(this,trigger); dirty=false; finish();
     }
 
-    private void confirmDiscard(){ AlertDialog d=new AlertDialog.Builder(this).setTitle("Discard trigger changes?").setMessage("Your unsaved schedule changes will be lost.").setNegativeButton("Keep editing",null).setPositiveButton("Discard",(x,w)->{dirty=false;finish();}).create();styleDialog(d,true);d.show(); }
+    private void confirmDiscard(){ AlertDialog d=new AlertDialog.Builder(this).setTitle(getString(R.string.d_tte_discard_title)).setMessage(getString(R.string.d_tte_discard_message)).setNegativeButton(getString(R.string.d_tte_keep_editing),null).setPositiveButton(getString(R.string.d_tte_discard),(x,w)->{dirty=false;finish();}).create();styleDialog(d,true);d.show(); }
 
     private int displayHour(int h){int x=h%12;return x==0?12:x;}
     private Integer parse(String s){try{return Integer.parseInt(s.trim());}catch(Exception e){return null;}}

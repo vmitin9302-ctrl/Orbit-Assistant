@@ -86,20 +86,20 @@ public final class DeckTileResolver {
     }
 
     public static Resolved resolve(Context c, DeckTile tile, LiveState live) {
-        if (tile == null) return unresolved("Unavailable tile", "", R.drawable.ic_deck);
+        if (tile == null) return unresolved(c, c.getString(R.string.d_deck_unavailable_tile), "", R.drawable.ic_deck);
         if (live == null) live = LiveState.unknown();
 
         DeckTileRegistry.Definition definition = DeckTileRegistry.definition(tile.type);
         // A type this build has never heard of. Kept, shown honestly, and removable.
         if (definition == null) {
-            return unresolved("Unavailable tile", "Not supported in this version", R.drawable.ic_deck);
+            return unresolved(c, c.getString(R.string.d_deck_unavailable_tile), c.getString(R.string.d_deck_unsupported), R.drawable.ic_deck);
         }
 
         if (DeckTileRegistry.TYPE_ROUTINE.equals(tile.type)) return routine(c, tile, definition);
         if (DeckTileRegistry.TYPE_APP.equals(tile.type)) return app(c, tile, definition);
-        if (DeckTileRegistry.TYPE_PROMPT.equals(tile.type)) return prompt(tile, definition);
+        if (DeckTileRegistry.TYPE_PROMPT.equals(tile.type)) return prompt(c, tile, definition);
         if (DeckTileRegistry.TYPE_FLASHLIGHT.equals(tile.type)) return flashlight(c, tile, definition, live);
-        if (DeckTileRegistry.TYPE_MEDIA.equals(tile.type)) return media(tile, definition, live);
+        if (DeckTileRegistry.TYPE_MEDIA.equals(tile.type)) return media(c, tile, definition, live);
         if (DeckTileRegistry.TYPE_VAULT.equals(tile.type)
                 || DeckTileRegistry.TYPE_QUICK_CAPTURE.equals(tile.type)) {
             return vault(c, tile, definition);
@@ -131,9 +131,9 @@ public final class DeckTileResolver {
                                   DeckTileRegistry.Definition definition) {
         String title = title(tile, definition.title);
         if (c != null && !Prefs.vaultEnabled(c)) {
-            return new Resolved(title, VAULT_OFF, definition.iconRes, null,
+            return new Resolved(title, c.getString(R.string.d_deck_vault_off), definition.iconRes, null,
                     DeckTile.Availability.UNAVAILABLE,
-                    title + ", Orbit shortcut, " + VAULT_OFF + ".");
+                    c.getString(R.string.d_deck_vault_off_desc, title, c.getString(R.string.d_deck_vault_off)));
         }
         return destination(tile, definition);
     }
@@ -145,28 +145,28 @@ public final class DeckTileResolver {
         String routineId = tile.config(DeckTile.CONFIG_ROUTINE_ID);
         RoutineStore.Routine routine = routineId.isEmpty() ? null : RoutineStore.findById(c, routineId);
         if (routine == null) {
-            String named = title(tile, "Routine");
-            return new Resolved(named, "Routine deleted", definition.iconRes, null,
+            String named = title(tile, c.getString(R.string.d_deck_routine));
+            return new Resolved(named, c.getString(R.string.d_deck_routine_deleted), definition.iconRes, null,
                     DeckTile.Availability.UNRESOLVED,
-                    named + ", Routine, no longer available. Tap to choose another or remove it.");
+                    c.getString(R.string.d_deck_routine_gone_desc, named));
         }
         // The Routine's own name wins over the stored one: renaming a Routine should rename its
         // tile, because the tile is a pointer to it rather than a copy of it.
         String title = tile.hasConfig(DeckTile.CONFIG_TITLE)
                 ? tile.config(DeckTile.CONFIG_TITLE) : routine.name;
         int steps = routine.actions == null ? 0 : routine.actions.size();
-        String subtitle = steps == 1 ? "1 action · Routine" : steps + " actions · Routine";
+        String subtitle = c.getResources().getQuantityString(R.plurals.d_deck_routine_actions, steps, steps);
         return new Resolved(title, subtitle, definition.iconRes, null,
                 DeckTile.Availability.AVAILABLE, describe(title, definition.roleLabel, ""));
     }
 
     private static Resolved app(Context c, DeckTile tile, DeckTileRegistry.Definition definition) {
         String packageName = tile.config(DeckTile.CONFIG_PACKAGE);
-        String stored = title(tile, "App");
+        String stored = title(tile, c.getString(R.string.d_deck_app));
         if (packageName.isEmpty() || c == null) {
-            return new Resolved(stored, "Not set up", definition.iconRes, null,
+            return new Resolved(stored, c.getString(R.string.d_deck_not_set_up), definition.iconRes, null,
                     DeckTile.Availability.UNRESOLVED,
-                    stored + ", app shortcut, not set up. Tap to choose an app.");
+                    c.getString(R.string.d_deck_app_not_set_up_desc, stored));
         }
         PackageManager pm = c.getPackageManager();
         try {
@@ -174,36 +174,36 @@ public final class DeckTileResolver {
             // Installed is not the same as launchable: a package with no launcher entry cannot be
             // opened, so it is unresolved rather than available.
             if (pm.getLaunchIntentForPackage(packageName) == null) {
-                return new Resolved(stored, "Cannot be opened", definition.iconRes, null,
+                return new Resolved(stored, c.getString(R.string.d_deck_cannot_open), definition.iconRes, null,
                         DeckTile.Availability.UNRESOLVED,
-                        stored + ", app shortcut, cannot be opened. Tap to choose another or remove it.");
+                        c.getString(R.string.d_deck_app_cannot_open_desc, stored));
             }
             String label = String.valueOf(pm.getApplicationLabel(info));
             String title = tile.hasConfig(DeckTile.CONFIG_TITLE)
                     ? tile.config(DeckTile.CONFIG_TITLE) : label;
             Drawable icon = null;
             try { icon = pm.getApplicationIcon(info); } catch (Exception ignored) {}
-            return new Resolved(title, "App shortcut", definition.iconRes, icon,
+            return new Resolved(title, c.getString(R.string.d_deck_app_shortcut), definition.iconRes, icon,
                     DeckTile.Availability.AVAILABLE, describe(title, definition.roleLabel, ""));
         } catch (PackageManager.NameNotFoundException e) {
             // Uninstalled. The package name stays stored, so reinstalling restores the tile.
-            return new Resolved(stored, "App not installed", definition.iconRes, null,
+            return new Resolved(stored, c.getString(R.string.d_deck_app_not_installed), definition.iconRes, null,
                     DeckTile.Availability.UNRESOLVED,
-                    stored + ", app shortcut, app not installed. Tap to choose another or remove it.");
+                    c.getString(R.string.d_deck_app_not_installed_desc, stored));
         } catch (Exception e) {
-            return new Resolved(stored, "Unavailable", definition.iconRes, null,
-                    DeckTile.Availability.UNRESOLVED, stored + ", app shortcut, unavailable.");
+            return new Resolved(stored, c.getString(R.string.d_deck_unavailable), definition.iconRes, null,
+                    DeckTile.Availability.UNRESOLVED, c.getString(R.string.d_deck_app_unavailable_desc, stored));
         }
     }
 
-    private static Resolved prompt(DeckTile tile, DeckTileRegistry.Definition definition) {
+    private static Resolved prompt(Context c, DeckTile tile, DeckTileRegistry.Definition definition) {
         String text = tile.config(DeckTile.CONFIG_PROMPT);
-        String title = title(tile, "Prompt");
+        String title = title(tile, c.getString(R.string.d_deck_prompt));
         int icon = DeckIcons.resFor(tile.config(DeckTile.CONFIG_ICON));
         if (text.isEmpty()) {
-            return new Resolved(title, "No prompt yet", icon, null,
+            return new Resolved(title, c.getString(R.string.d_deck_no_prompt), icon, null,
                     DeckTile.Availability.UNRESOLVED,
-                    title + ", prompt shortcut, not set up. Tap to write its prompt.");
+                    c.getString(R.string.d_deck_prompt_not_set_up_desc, title));
         }
         // The prompt itself is the tile's secondary line, trimmed to one glanceable phrase. It is
         // shown here and nowhere else: it never reaches Diagnostics or any provider on its own.
@@ -217,21 +217,21 @@ public final class DeckTileResolver {
         boolean hasFlash = c != null && c.getPackageManager()
                 .hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
         if (!hasFlash) {
-            return new Resolved(title, "Not on this device", definition.iconRes, null,
+            return new Resolved(title, c.getString(R.string.d_deck_not_on_device), definition.iconRes, null,
                     DeckTile.Availability.UNAVAILABLE,
-                    title + ", action, not available on this device.");
+                    c.getString(R.string.d_deck_not_on_device_desc, title));
         }
         // Null means Orbit could not read the torch. The tile still works; it simply does not
         // claim a state it does not know, which is why this falls back to the description.
         String state = live.flashlightOn == null ? definition.description
-                : (live.flashlightOn ? "On" : "Off");
+                : c.getString(live.flashlightOn ? R.string.d_redit_on : R.string.d_redit_off);
         return new Resolved(title, state, definition.iconRes, null,
                 DeckTile.Availability.AVAILABLE,
                 describe(title, definition.roleLabel, live.flashlightOn == null ? "" : state),
                 live.flashlightOn != null);
     }
 
-    private static Resolved media(DeckTile tile, DeckTileRegistry.Definition definition,
+    private static Resolved media(Context c, DeckTile tile, DeckTileRegistry.Definition definition,
                                   LiveState live) {
         String title = title(tile, definition.title);
         String state;
@@ -242,7 +242,7 @@ public final class DeckTileResolver {
             spoken = "";
         } else {
             String app = live.mediaApp.isEmpty() ? "" : " · " + live.mediaApp;
-            state = (live.mediaPlaying ? "Playing" : "Paused") + app;
+            state = c.getString(live.mediaPlaying ? R.string.d_deck_playing : R.string.d_deck_paused) + app;
             spoken = state;
         }
         return new Resolved(title, state, definition.iconRes, null,
@@ -252,9 +252,9 @@ public final class DeckTileResolver {
 
     // ---- helpers ----------------------------------------------------------------------------------
 
-    private static Resolved unresolved(String title, String subtitle, int icon) {
+    private static Resolved unresolved(Context c, String title, String subtitle, int icon) {
         return new Resolved(title, subtitle, icon, null, DeckTile.Availability.UNRESOLVED,
-                title + ", unavailable. Tap to remove it.");
+                c.getString(R.string.d_deck_unresolved_desc, title));
     }
 
     private static String title(DeckTile tile, String fallback) {

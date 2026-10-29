@@ -36,51 +36,38 @@ import java.util.Locale;
  */
 public final class SmartVaultActivity extends Activity {
 
-    static final String TITLE = "Smart Vault";
-    static final String TURN_ON = "Turn on Smart Vault";
-    static final String TURN_OFF = "Turn off Smart Vault";
+    static final int TITLE = R.string.d_sv_title;
+    static final int TURN_ON = R.string.d_sv_turn_on;
+    static final int TURN_OFF = R.string.d_sv_turn_off;
 
-    static final String SECTION_SEARCH = "SEARCH";
-    static final String SECTION_CAPTURE = "CAPTURE";
-    static final String SECTION_AI = "AI SUGGESTIONS";
-    static final String SECTION_ITEMS = "SAVED ITEMS";
-    static final String SECTION_MANAGE = "MANAGE";
+    static final int SECTION_SEARCH = R.string.d_sv_section_search;
+    static final int SECTION_CAPTURE = R.string.d_sv_section_capture;
+    static final int SECTION_AI = R.string.d_sv_section_ai;
+    static final int SECTION_ITEMS = R.string.d_sv_section_items;
+    static final int SECTION_MANAGE = R.string.d_sv_section_manage;
 
-    static final String OCR_LABEL = "Read text in pictures";
-    static final String OCR_HELP = "Reads the words in screenshots and photos on this phone, with "
-            + "Google ML Kit through Google Play services. Pictures never leave the phone.";
-    static final String MEANING_LABEL = "Search by meaning";
-    static final String MEANING_HELP = "Finds items by what they mean. Downloads a "
-            + SmartVaultModel.sizeLabel() + " model once from Hugging Face; after that, search "
-            + "runs on this phone.";
-    static final String LINKS_LABEL = "Read saved links";
-    static final String LINKS_HELP = "Opens each saved link once to read its title and text. "
-            + "This contacts that website.";
-    static final String AI_LABEL = "Suggest details for new items";
-    static final String AI_HELP = "Sends new items to your AI provider for a suggested title, "
-            + "summary and topics. This uses your AI allowance.";
+    static final int OCR_LABEL = R.string.d_sv_ocr_label;
+    static final int OCR_HELP = R.string.d_sv_ocr_help;
+    static final int MEANING_LABEL = R.string.d_sv_meaning_label;
+    static final int MEANING_HELP = R.string.d_sv_meaning_help;
+    static final int LINKS_LABEL = R.string.d_sv_links_label;
+    static final int LINKS_HELP = R.string.d_sv_links_help;
+    static final int AI_LABEL = R.string.d_sv_ai_label;
+    static final int AI_HELP = R.string.d_sv_ai_help;
 
-    static final String DETAILS_LABEL = "Privacy details";
-    static final String DETAILS_BODY = "Search model: potion-base-8M by Minish Lab, MIT licence, "
-            + SmartVaultModel.sizeLabel() + ". Downloaded once from Hugging Face and checked "
-            + "against a fixed checksum. Works best in English.\n\n"
-            + "Text in pictures: read on this phone. Google may collect anonymous statistics about "
-            + "how ML Kit is used.\n\n"
-            + "AI suggestions: only items saved after you turn this on are sent. Items you saved "
-            + "before are only sent if you ask, under Saved items.\n\n"
-            + "Your saved items, notes and titles are never changed without you. Indexing runs in "
-            + "the background and pauses while the battery is low.";
+    static final int DETAILS_LABEL = R.string.d_sv_details_label;
+    static final int DETAILS_BODY = R.string.d_sv_details_body;
 
     /** Model states, as the row under Search by meaning words them. */
-    static final String MODEL_READY = "Search model ready on this phone";
-    static final String MODEL_PREPARING = "Preparing download…";
-    static final String MODEL_DOWNLOADING = "Downloading search model";
-    static final String MODEL_WAITING = "Waiting to continue";
-    static final String MODEL_FAILED = "Download didn't finish";
-    static final String MODEL_MISSING = "Search model not downloaded";
-    static final String ACTION_RETRY = "Retry";
-    static final String ACTION_DOWNLOAD = "Download";
-    static final String ACTION_REMOVE = "Remove";
+    static final int MODEL_READY = R.string.d_sv_model_ready;
+    static final int MODEL_PREPARING = R.string.d_sv_model_preparing;
+    static final int MODEL_DOWNLOADING = R.string.d_sv_model_downloading;
+    static final int MODEL_WAITING = R.string.d_sv_model_waiting;
+    static final int MODEL_FAILED = R.string.d_sv_model_failed;
+    static final int MODEL_MISSING = R.string.d_sv_model_missing;
+    static final int ACTION_RETRY = R.string.d_sv_action_retry;
+    static final int ACTION_DOWNLOAD = R.string.d_sv_action_download;
+    static final int ACTION_REMOVE = R.string.d_sv_action_remove;
 
     private LinearLayout page;
     private boolean choiceOcr = true;
@@ -195,25 +182,24 @@ public final class SmartVaultActivity extends Activity {
 
         if (!Prefs.vaultEnabled(this)) {
             LinearLayout off = card();
-            off.addView(UiKit.text(this, "Orbit Vault is turned off", 15, UiKit.TEXT, true));
-            off.addView(muted("Turn Orbit Vault on in Settings to use Smart Vault."));
+            off.addView(UiKit.text(this, getString(R.string.d_sv_vault_off), 15, UiKit.TEXT, true));
+            off.addView(muted(getString(R.string.d_sv_vault_off_hint)));
             page.addView(off, cardLp());
             return;
         }
 
         if (!on) {
             LinearLayout intro = card();
-            intro.addView(UiKit.text(this, "Find what you saved, faster", 15, UiKit.TEXT, true));
-            intro.addView(muted("Smart Vault indexes your Vault on this phone: words in "
-                    + "screenshots, similar meanings and topics. Choose what it may do below. "
-                    + "Nothing you saved is changed without you."));
+            intro.addView(UiKit.text(this, getString(R.string.d_sv_intro_title), 15, UiKit.TEXT, true));
+            intro.addView(muted(getString(R.string.d_sv_intro_body)));
             page.addView(intro, cardLp());
         }
 
-        page.addView(sectionLabel(SECTION_SEARCH, !on));
+        page.addView(sectionLabel(getString(SECTION_SEARCH), !on));
         LinearLayout search = card();
         meaningSwitch = new OrbitSwitch(this);
-        search.addView(option(meaningSwitch, MEANING_LABEL, MEANING_HELP,
+        search.addView(option(meaningSwitch, getString(MEANING_LABEL),
+                getString(MEANING_HELP, SmartVaultModel.sizeLabel()),
                 on ? Prefs.smartVaultMeaning(this) : choiceMeaning, Prefs.SMART_VAULT_MEANING,
                 v -> choiceMeaning = v));
         if (on) {
@@ -223,19 +209,19 @@ public final class SmartVaultActivity extends Activity {
         }
         page.addView(search, cardLp());
 
-        page.addView(sectionLabel(SECTION_CAPTURE, true));
+        page.addView(sectionLabel(getString(SECTION_CAPTURE), true));
         LinearLayout capture = card();
-        capture.addView(option(new OrbitSwitch(this), OCR_LABEL, OCR_HELP,
+        capture.addView(option(new OrbitSwitch(this), getString(OCR_LABEL), getString(OCR_HELP),
                 on ? Prefs.smartVaultOcr(this) : choiceOcr, Prefs.SMART_VAULT_OCR,
                 v -> choiceOcr = v));
-        capture.addView(option(new OrbitSwitch(this), LINKS_LABEL, LINKS_HELP,
+        capture.addView(option(new OrbitSwitch(this), getString(LINKS_LABEL), getString(LINKS_HELP),
                 on ? Prefs.smartVaultReadLinks(this) : choiceLinks, Prefs.SMART_VAULT_READ_LINKS,
                 v -> choiceLinks = v));
         page.addView(capture, cardLp());
 
-        page.addView(sectionLabel(SECTION_AI, true));
+        page.addView(sectionLabel(getString(SECTION_AI), true));
         LinearLayout ai = card();
-        ai.addView(option(new OrbitSwitch(this), AI_LABEL, AI_HELP,
+        ai.addView(option(new OrbitSwitch(this), getString(AI_LABEL), getString(AI_HELP),
                 on ? Prefs.smartVaultAiForNewItems(this) : choiceAi, Prefs.SMART_VAULT_AI_NEW,
                 v -> choiceAi = v));
         ai.addView(providerLine());
@@ -243,10 +229,10 @@ public final class SmartVaultActivity extends Activity {
 
         if (!on) {
             page.addView(details());
-            Button turnOn = UiKit.button(this, TURN_ON, true);
+            Button turnOn = UiKit.button(this, getString(TURN_ON), true);
             turnOn.setOnClickListener(v -> {
                 SmartVault.enable(this, choiceOcr, choiceMeaning, choiceLinks, choiceAi);
-                Toast.makeText(this, "Smart Vault is on. Indexing happens in the background.",
+                Toast.makeText(this, getString(R.string.d_sv_toast_on),
                         Toast.LENGTH_LONG).show();
                 rebuild();
                 scroll.post(() -> scroll.scrollTo(0, 0));
@@ -258,7 +244,7 @@ public final class SmartVaultActivity extends Activity {
             return;
         }
 
-        page.addView(sectionLabel(SECTION_ITEMS, true));
+        page.addView(sectionLabel(getString(SECTION_ITEMS), true));
         LinearLayout items = card();
         itemsBody = new LinearLayout(this);
         itemsBody.setOrientation(LinearLayout.VERTICAL);
@@ -266,24 +252,23 @@ public final class SmartVaultActivity extends Activity {
         fillItems();
         page.addView(items, cardLp());
 
-        page.addView(sectionLabel(SECTION_MANAGE, true));
+        page.addView(sectionLabel(getString(SECTION_MANAGE), true));
         LinearLayout manage = card();
-        Button off = UiKit.button(this, TURN_OFF, false);
+        Button off = UiKit.button(this, getString(TURN_OFF), false);
         off.setOnClickListener(v -> {
             SmartVault.disable(this);
-            Toast.makeText(this, "Smart Vault is off. Your Vault is unchanged.",
+            Toast.makeText(this, getString(R.string.d_sv_toast_off),
                     Toast.LENGTH_SHORT).show();
             rebuild();
         });
         manage.addView(off, buttonLp(0));
-        Button delete = UiKit.button(this, "Delete Smart Vault data", false);
+        Button delete = UiKit.button(this, getString(R.string.d_sv_delete_data), false);
         delete.setTextColor(UiKit.DANGER);
         delete.setBackground(UiKit.rippleOutlined(UiKit.SURFACE_2,
                 UiKit.withAlpha(UiKit.DANGER, 90), UiKit.DANGER, 15, this));
         delete.setOnClickListener(v -> confirmDeleteData());
         manage.addView(delete, buttonLp(9));
-        manage.addView(muted("Deleting removes recognised text, page text, the index and "
-                + "Orbit's suggestions. Your items, notes, own titles and kept topics stay."));
+        manage.addView(muted(getString(R.string.d_sv_delete_hint)));
         page.addView(manage, cardLp());
 
         page.addView(details());
@@ -292,7 +277,7 @@ public final class SmartVaultActivity extends Activity {
     private View providerLine() {
         String blocker = SmartVault.suggestionBlocker(this);
         String text = blocker.isEmpty()
-                ? "Provider: " + SmartVault.providerName(this)
+                ? getString(R.string.d_sv_provider, SmartVault.providerName(this))
                 : blocker + (blocker.endsWith(".") ? "" : ".");
         TextView line = UiKit.text(this, text, 12, UiKit.MUTED, false);
         line.setPadding(UiKit.dp(this, 2), UiKit.dp(this, 2), UiKit.dp(this, 2), UiKit.dp(this, 4));
@@ -343,7 +328,7 @@ public final class SmartVaultActivity extends Activity {
             root.setGravity(Gravity.CENTER_VERTICAL);
             root.setPadding(UiKit.dp(SmartVaultActivity.this, 2), UiKit.dp(SmartVaultActivity.this, 4),
                     UiKit.dp(SmartVaultActivity.this, 2), UiKit.dp(SmartVaultActivity.this, 8));
-            ring.setContentDescription("Search model download");
+            ring.setContentDescription(getString(R.string.d_sv_ring_desc));
             LinearLayout.LayoutParams ringLp = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             ringLp.setMargins(0, 0, UiKit.dp(SmartVaultActivity.this, 12), 0);
@@ -376,8 +361,8 @@ public final class SmartVaultActivity extends Activity {
             if (!meaning) return;
             SmartVaultModel.Phase phase = SmartVaultModel.phase(SmartVaultActivity.this);
             int percent = SmartVaultModel.percent(SmartVaultActivity.this);
-            String size = mb(SmartVaultModel.doneBytes(SmartVaultActivity.this)) + " of "
-                    + SmartVaultModel.sizeLabel();
+            String size = getString(R.string.d_sv_size_of,
+                    mb(SmartVaultModel.doneBytes(SmartVaultActivity.this)), SmartVaultModel.sizeLabel());
             int accent = UiKit.accent(SmartVaultActivity.this);
             String titleText;
             String detailText;
@@ -388,40 +373,40 @@ public final class SmartVaultActivity extends Activity {
             int trailingColor = accent;
             switch (phase) {
                 case PREPARING:
-                    titleText = MODEL_PREPARING;
-                    detailText = SmartVaultModel.sizeLabel() + ", once. Runs in the background.";
+                    titleText = getString(MODEL_PREPARING);
+                    detailText = getString(R.string.d_sv_preparing_detail, SmartVaultModel.sizeLabel());
                     ring.setIndeterminate();
                     break;
                 case DOWNLOADING:
-                    titleText = MODEL_DOWNLOADING;
-                    detailText = size + " · runs in the background";
+                    titleText = getString(MODEL_DOWNLOADING);
+                    detailText = getString(R.string.d_sv_downloading_detail, size);
                     ring.setProgress(percent);
                     action = percent + "%";
                     break;
                 case WAITING:
-                    titleText = MODEL_WAITING;
-                    detailText = "Continues by itself when the phone is online"
-                            + (percent > 0 ? " · " + size : "");
+                    titleText = getString(MODEL_WAITING);
+                    detailText = percent > 0 ? getString(R.string.d_sv_waiting_detail_size, size)
+                            : getString(R.string.d_sv_waiting_detail);
                     ring.setProgress(percent);
                     action = percent > 0 ? percent + "%" : "";
                     trailingColor = UiKit.MUTED;
                     break;
                 case FAILED:
-                    titleText = MODEL_FAILED;
+                    titleText = getString(MODEL_FAILED);
                     detailText = SmartVaultModel.error(SmartVaultActivity.this);
                     showRing = false;
-                    action = ACTION_RETRY;
+                    action = getString(ACTION_RETRY);
                     onAction = v -> {
                         SmartVaultModel.requestDownload(SmartVaultActivity.this);
                         bind();
                     };
                     break;
                 case READY:
-                    titleText = "✓  " + MODEL_READY;
+                    titleText = "✓  " + getString(MODEL_READY);
                     detailText = "";
                     titleColor = accent;
                     showRing = false;
-                    action = ACTION_REMOVE;
+                    action = getString(ACTION_REMOVE);
                     onAction = v -> {
                         SmartVaultModel.delete(SmartVaultActivity.this);
                         SmartVault.setOption(SmartVaultActivity.this, Prefs.SMART_VAULT_MEANING, false);
@@ -432,10 +417,10 @@ public final class SmartVaultActivity extends Activity {
                     break;
                 case MISSING:
                 default:
-                    titleText = MODEL_MISSING;
-                    detailText = SmartVaultModel.sizeLabel() + ", once, from Hugging Face";
+                    titleText = getString(MODEL_MISSING);
+                    detailText = getString(R.string.d_sv_missing_detail, SmartVaultModel.sizeLabel());
                     showRing = false;
-                    action = ACTION_DOWNLOAD;
+                    action = getString(ACTION_DOWNLOAD);
                     onAction = v -> {
                         SmartVaultModel.requestDownload(SmartVaultActivity.this);
                         bind();
@@ -455,8 +440,8 @@ public final class SmartVaultActivity extends Activity {
             trailing.setBackground(onAction == null ? null
                     : UiKit.ripple(android.graphics.Color.TRANSPARENT, accent, 12, SmartVaultActivity.this));
             trailing.setContentDescription(onAction == null ? null
-                    : action + (phase == SmartVaultModel.Phase.READY ? " search model"
-                            : " search model download"));
+                    : getString(phase == SmartVaultModel.Phase.READY
+                            ? R.string.d_sv_action_model : R.string.d_sv_action_model_download, action));
             shown = phase;
         }
     }
@@ -471,25 +456,25 @@ public final class SmartVaultActivity extends Activity {
         itemsSignature = itemsSignature();
         itemsBody.removeAllViews();
         int total = OrbitVaultStore.count(this);
-        itemsBody.addView(stat("Saved items", String.valueOf(total)));
+        itemsBody.addView(stat(getString(R.string.d_sv_stat_saved), String.valueOf(total)));
         int queued = 0;
         try {
             SmartVaultDb db = SmartVaultDb.get(this);
             if (Prefs.smartVaultMeaning(this) && SmartVaultModel.isReady(this)) {
-                itemsBody.addView(stat("Searchable by meaning",
-                        Math.min(total, db.vectorCount()) + " of " + total));
+                itemsBody.addView(stat(getString(R.string.d_sv_stat_searchable),
+                        getString(R.string.d_sv_x_of_y, Math.min(total, db.vectorCount()), total)));
             }
             if (Prefs.smartVaultOcr(this)) {
-                itemsBody.addView(stat("Pictures with text found",
+                itemsBody.addView(stat(getString(R.string.d_sv_stat_pictures),
                         String.valueOf(db.derivedCount(SmartVaultDb.KIND_OCR))));
             }
             if (Prefs.smartVaultReadLinks(this)) {
-                itemsBody.addView(stat("Links read",
+                itemsBody.addView(stat(getString(R.string.d_sv_stat_links),
                         String.valueOf(db.derivedCount(SmartVaultDb.KIND_PAGE))));
             }
             queued = db.queuedCount();
             if (queued > 0) {
-                itemsBody.addView(stat("Waiting for suggestions", queued + " · needs a connection"));
+                itemsBody.addView(stat(getString(R.string.d_sv_stat_waiting), getString(R.string.d_sv_needs_connection, queued)));
             }
         } catch (Exception ignored) {
         }
@@ -498,18 +483,17 @@ public final class SmartVaultActivity extends Activity {
         // items that would be sent and to which provider.
         List<String> without = SmartVault.itemsWithoutSuggestions(this);
         if (without.isEmpty()) {
-            itemsBody.addView(muted("Every item already has suggestions."));
+            itemsBody.addView(muted(getString(R.string.d_sv_all_have)));
         } else {
-            itemsBody.addView(muted(without.size() + (without.size() == 1 ? " item has"
-                    : " items have") + " no suggestions. Orbit only sends them to your AI "
-                    + "provider if you ask."));
-            Button suggest = UiKit.button(this, "Suggest details for these items", false);
+            itemsBody.addView(muted(getResources().getQuantityString(
+                    R.plurals.d_sv_without_suggestions, without.size(), without.size())));
+            Button suggest = UiKit.button(this, getString(R.string.d_sv_suggest_these), false);
             suggest.setOnClickListener(v -> confirmBatch(without));
             itemsBody.addView(suggest, buttonLp(10));
         }
         if (queued > 0) {
-            Button stop = UiKit.button(this, "Stop " + queued + " waiting "
-                    + (queued == 1 ? "suggestion" : "suggestions"), false);
+            Button stop = UiKit.button(this, getResources().getQuantityString(
+                    R.plurals.d_sv_stop_waiting, queued, queued), false);
             stop.setOnClickListener(v -> {
                 try { SmartVaultDb.get(this).cancelQueued(); } catch (Exception ignored) { }
                 fillItems();
@@ -541,12 +525,12 @@ public final class SmartVaultActivity extends Activity {
         int pad = UiKit.dp(this, 12);
         toggle.setPadding(UiKit.dp(this, 4), pad, UiKit.dp(this, 4), pad);
         toggle.setBackground(UiKit.ripple(android.graphics.Color.TRANSPARENT, UiKit.accent(this), 12, this));
-        TextView body = muted(DETAILS_BODY);
+        TextView body = muted(getString(DETAILS_BODY, SmartVaultModel.sizeLabel()));
         body.setPadding(UiKit.dp(this, 4), 0, UiKit.dp(this, 4), UiKit.dp(this, 6));
         Runnable apply = () -> {
-            toggle.setText((detailsOpen ? "▾  " : "▸  ") + DETAILS_LABEL);
+            toggle.setText((detailsOpen ? "▾  " : "▸  ") + getString(DETAILS_LABEL));
             if (android.os.Build.VERSION.SDK_INT >= 30) {
-                toggle.setStateDescription(detailsOpen ? "Expanded" : "Collapsed");
+                toggle.setStateDescription(getString(detailsOpen ? R.string.d_sv_expanded : R.string.d_sv_collapsed));
             }
             body.setVisibility(detailsOpen ? View.VISIBLE : View.GONE);
         };
@@ -573,21 +557,17 @@ public final class SmartVaultActivity extends Activity {
         String providerName = SmartVault.providerName(this);
         List<String> batch = ids.size() > SmartVault.MAX_BATCH
                 ? ids.subList(0, SmartVault.MAX_BATCH) : ids;
-        String message = "Orbit will send " + batch.size()
-                + (batch.size() == 1 ? " saved item" : " saved items")
-                + " to " + providerName + ", one at a time, for a suggested title, "
-                + "summary and topics. This uses your AI allowance: about one small request per "
-                + "item. You can stop at any time."
-                + (ids.size() > batch.size() ? "\n\nThe newest " + SmartVault.MAX_BATCH
-                        + " items are sent now; the rest can be sent afterwards." : "");
+        String message = getResources().getQuantityString(R.plurals.d_sv_confirm_message,
+                batch.size(), batch.size(), providerName)
+                + (ids.size() > batch.size() ? "\n\n" + getString(R.string.d_sv_confirm_newest, SmartVault.MAX_BATCH) : "");
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Suggest details for " + batch.size()
-                        + (batch.size() == 1 ? " item?" : " items?"))
+                .setTitle(getResources().getQuantityString(R.plurals.d_sv_confirm_title,
+                        batch.size(), batch.size()))
                 .setMessage(message)
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Send " + batch.size(), (d, w) -> {
+                .setNegativeButton(getString(R.string.ui_cancel_19766ed6), null)
+                .setPositiveButton(getString(R.string.d_sv_send, batch.size()), (d, w) -> {
                     int queued = SmartVault.queueSuggestions(this, batch);
-                    Toast.makeText(this, queued + " queued. Suggestions arrive in the background.",
+                    Toast.makeText(this, getString(R.string.d_sv_queued, queued),
                             Toast.LENGTH_LONG).show();
                     fillItems();
                 })
@@ -598,15 +578,13 @@ public final class SmartVaultActivity extends Activity {
 
     private void confirmDeleteData() {
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Delete Smart Vault data?")
-                .setMessage("Removes recognised text, page text, the search index and every "
-                        + "suggestion Orbit wrote. Your saved items, notes, your own titles and "
-                        + "kept topics are not touched. The search model stays until you remove it.")
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Delete", (d, w) -> {
+                .setTitle(getString(R.string.d_sv_delete_title))
+                .setMessage(getString(R.string.d_sv_delete_message))
+                .setNegativeButton(getString(R.string.ui_cancel_19766ed6), null)
+                .setPositiveButton(getString(R.string.ui_delete_e2d0a549), (d, w) -> {
                     int cleared = SmartVault.deleteData(this);
-                    Toast.makeText(this, "Smart Vault data deleted"
-                            + (cleared > 0 ? " (" + cleared + " items had suggestions)" : ""),
+                    Toast.makeText(this, cleared > 0 ? getResources().getQuantityString(R.plurals.d_sv_deleted_with, cleared, cleared)
+                                    : getString(R.string.d_sv_deleted),
                             Toast.LENGTH_SHORT).show();
                     fillItems();
                 })
@@ -624,16 +602,16 @@ public final class SmartVaultActivity extends Activity {
         back.setImageResource(R.drawable.ic_back);
         back.setImageTintList(ColorStateList.valueOf(UiKit.accent(this)));
         back.setBackground(UiKit.ripple(UiKit.SURFACE, UiKit.accent(this), 18, this));
-        back.setContentDescription("Back");
+        back.setContentDescription(getString(R.string.ui_back_76900f1b));
         back.setPadding(UiKit.dp(this, 11), UiKit.dp(this, 11), UiKit.dp(this, 11), UiKit.dp(this, 11));
         back.setOnClickListener(v -> navigation.performBack());
         UiKit.pressScale(back);
         top.addView(back, new LinearLayout.LayoutParams(UiKit.dp(this, 48), UiKit.dp(this, 48)));
         LinearLayout titles = new LinearLayout(this);
         titles.setOrientation(LinearLayout.VERTICAL);
-        titles.addView(UiKit.text(this, TITLE, 24, UiKit.TEXT, true));
-        titles.addView(UiKit.text(this, on ? "On · indexes your Vault on this phone"
-                : "Off · free, optional, private by default", 12, UiKit.MUTED, false));
+        titles.addView(UiKit.text(this, getString(TITLE), 24, UiKit.TEXT, true));
+        titles.addView(UiKit.text(this, getString(on ? R.string.d_sv_subtitle_on
+                : R.string.d_sv_subtitle_off), 12, UiKit.MUTED, false));
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                 0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
         lp.setMargins(UiKit.dp(this, 14), 0, 0, UiKit.dp(this, 6));

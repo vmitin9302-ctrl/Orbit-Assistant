@@ -111,85 +111,81 @@ public final class MemoryCommandRouter {
         if (raw.isEmpty()) return null;
 
         if (equalsAny(lower, LIST_ALL)) {
-            return listMemories(c, MemoryStore.list(c), "Here is what Orbit remembers locally:");
+            return listMemories(c, MemoryStore.list(c), c.getString(R.string.d_memrt_heading_all));
         }
 
         String subject = extractAfterAny(raw, lower, LIST_ABOUT);
         if (subject != null && !subject.isEmpty()) {
             if (subject.equalsIgnoreCase("me")) {
-                return listMemories(c, MemoryStore.list(c), "Here is what Orbit remembers locally:");
+                return listMemories(c, MemoryStore.list(c), c.getString(R.string.d_memrt_heading_all));
             }
             List<MemoryStore.Memory> matches = MemoryStore.search(c, subject);
             if (matches.isEmpty()) {
-                return new AssistantReply("I do not have any Orbit memories about " + subject + ".");
+                return new AssistantReply(c.getString(R.string.d_memrt_none_about, subject));
             }
-            return listMemories(c, matches, "Here is what Orbit remembers about " + subject + ":");
+            return listMemories(c, matches, c.getString(R.string.d_memrt_heading_about, subject));
         }
 
         if (equalsAny(lower, CLEAR_ALL)) {
             MemoryStore.clear(c);
-            return new AssistantReply("I cleared all local Orbit memories.");
+            return new AssistantReply(c.getString(R.string.d_memrt_cleared));
         }
 
         String deleteSubject = extractAfterAny(raw, lower, DELETE_ABOUT);
         if (deleteSubject != null && !deleteSubject.isEmpty()) {
             int deleted = MemoryStore.deleteMatching(c, deleteSubject);
             if (deleted == 0) {
-                return new AssistantReply("I could not find any Orbit memories about " + deleteSubject + ".");
+                return new AssistantReply(c.getString(R.string.d_memrt_none_to_forget, deleteSubject));
             }
-            return new AssistantReply("I forgot " + deleted + (deleted == 1 ? " Orbit memory" : " Orbit memories") +
-                    " about " + deleteSubject + ".");
+            return new AssistantReply(c.getResources().getQuantityString(R.plurals.d_memrt_forgot, deleted, deleted, deleteSubject));
         }
 
         Change change = parseChange(raw, lower);
         if (change != null) {
             MemoryStore.Memory match = MemoryStore.findBest(c, change.subject);
             if (match == null) {
-                return new AssistantReply("I could not find a matching Orbit memory about " +
-                        change.subject + " to update.");
+                return new AssistantReply(c.getString(R.string.d_memrt_no_match_update, change.subject));
             }
 
             MemoryStore.Memory duplicate = MemoryStore.findDuplicate(c, change.replacement, match.id);
             if (duplicate != null) {
-                return new AssistantReply("A very similar Orbit memory is already saved: " + duplicate.text);
+                return new AssistantReply(c.getString(R.string.d_memrt_similar_saved, duplicate.text));
             }
 
             String category = MemoryStore.inferCategory(change.replacement);
             if (MemoryStore.CATEGORY_OTHER.equals(category)) category = match.category;
             MemoryStore.update(c, match.id, category, change.replacement, match.pinned, match.enabled);
-            return new AssistantReply("I updated that Orbit memory to: " + change.replacement);
+            return new AssistantReply(c.getString(R.string.d_memrt_updated, change.replacement));
         }
 
         if (lower.equals("remember that") || lower.equals("remember this")) {
             MemoryStore.Suggestion contextual = recentSuggestion(c, history, raw);
             if (contextual == null || contextual.text == null || contextual.text.trim().isEmpty()) {
-                return new AssistantReply("I am not sure what you want me to remember. " +
-                        "Say “Remember that …” with the detail, or use Save on a Remember this? card.");
+                return new AssistantReply(c.getString(R.string.d_memrt_unsure));
             }
 
             MemoryStore.Memory duplicate =
                     MemoryStore.findDuplicate(c, contextual.text, null);
             if (duplicate != null) {
-                return new AssistantReply("I already have a similar Orbit memory saved: " +
-                        duplicate.text);
+                return new AssistantReply(c.getString(R.string.d_memrt_already_similar, duplicate.text));
             }
 
             MemoryStore.Memory saved = MemoryStore.add(c, contextual.category, contextual.text);
             return saved == null
-                    ? new AssistantReply("I could not save that memory.")
-                    : new AssistantReply("I will remember that locally in Orbit: " + saved.text);
+                    ? new AssistantReply(c.getString(R.string.d_memrt_save_failed))
+                    : new AssistantReply(c.getString(R.string.d_memrt_will_remember, saved.text));
         }
 
         String remember = isExplicitSave(lower) ? extractAfterAny(raw, lower, SAVE_PREFIXES) : null;
         if (remember != null && !remember.isEmpty()) {
             MemoryStore.Memory duplicate = MemoryStore.findDuplicate(c, remember, null);
             if (duplicate != null) {
-                return new AssistantReply("I already have a similar Orbit memory saved: " + duplicate.text);
+                return new AssistantReply(c.getString(R.string.d_memrt_already_similar, duplicate.text));
             }
 
             MemoryStore.Memory m = MemoryStore.add(c, MemoryStore.inferCategory(remember), remember);
-            return m == null ? new AssistantReply("I could not save that memory.")
-                    : new AssistantReply("I will remember that locally in Orbit: " + m.text);
+            return m == null ? new AssistantReply(c.getString(R.string.d_memrt_save_failed))
+                    : new AssistantReply(c.getString(R.string.d_memrt_will_remember, m.text));
         }
 
         String forget = null;
@@ -200,10 +196,10 @@ public final class MemoryCommandRouter {
         if (forget != null && !forget.isEmpty()) {
             MemoryStore.Memory match = MemoryStore.findBest(c, forget);
             if (match == null) {
-                return new AssistantReply("I could not find a matching Orbit memory to forget.");
+                return new AssistantReply(c.getString(R.string.d_memrt_no_match_forget));
             }
             MemoryStore.delete(c, match.id);
-            return new AssistantReply("I forgot this Orbit memory: " + match.text);
+            return new AssistantReply(c.getString(R.string.d_memrt_forgot_one, match.text));
         }
         return null;
     }
@@ -251,19 +247,19 @@ public final class MemoryCommandRouter {
 
     private static AssistantReply listMemories(Context c, List<MemoryStore.Memory> all, String heading) {
         if (all == null || all.isEmpty()) {
-            return new AssistantReply("I do not have any Orbit memories saved yet.");
+            return new AssistantReply(c.getString(R.string.d_memrt_empty));
         }
 
         StringBuilder b = new StringBuilder(heading);
         int shown = 0;
         for (MemoryStore.Memory m : all) {
             if (shown >= 20) {
-                b.append("\n\nThere are more in Orbit > Memory.");
+                b.append("\n\n" + c.getString(R.string.d_memrt_more));
                 break;
             }
             b.append("\n\n• ").append(m.text);
-            if (m.pinned) b.append(" [pinned]");
-            if (!m.enabled) b.append(" [disabled]");
+            if (m.pinned) b.append(" ").append(c.getString(R.string.d_memrt_pinned));
+            if (!m.enabled) b.append(" ").append(c.getString(R.string.d_memrt_disabled));
             shown++;
         }
         return new AssistantReply(b.toString());

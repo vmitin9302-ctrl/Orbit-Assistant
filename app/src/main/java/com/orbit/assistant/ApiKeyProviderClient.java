@@ -60,10 +60,10 @@ final class ApiKeyProviderClient {
                 }
                 String text = Prefs.PROVIDER_ANTHROPIC.equals(provider)
                         ? anthropicText(new JSONObject(raw)) : xaiText(new JSONObject(raw));
-                if (text.trim().isEmpty()) callback.onError(name(provider) + " returned no text.");
+                if (text.trim().isEmpty()) callback.onError(c.getString(R.string.d_api_no_text, name(provider)));
                 else callback.onText(text, name(provider) + " · " + selection.modelName());
             } catch (Exception e) {
-                callback.onError("Could not reach " + name(provider) + ". Check the connection and try again.");
+                callback.onError(c.getString(R.string.d_api_unreachable, name(provider)));
             } finally {
                 if (conn != null) conn.disconnect();
             }
@@ -109,11 +109,11 @@ final class ApiKeyProviderClient {
                 text = readXaiStream(conn.getInputStream(), callback);
             }
             if (openRouter && request.cancelled.getAsBoolean()) {
-                callback.onError("Stopped.");
+                callback.onError(c.getString(R.string.d_api_stopped));
                 return;
             }
             if (text.trim().isEmpty()) {
-                callback.onError(name(provider) + " connected but returned no assistant text. Try again.");
+                callback.onError(c.getString(R.string.d_api_no_assistant_text, name(provider)));
                 return;
             }
             ResponseDetails details = ResponseDetails.sentWith(request.selection);
@@ -125,7 +125,7 @@ final class ApiKeyProviderClient {
         } catch (StreamError e) {
             callback.onError(error(c, provider, e.code, e.getMessage(), request.selection.model));
         } catch (Exception e) {
-            callback.onError("Could not reach " + name(provider) + ". Check the connection and try again.");
+            callback.onError(c.getString(R.string.d_api_unreachable, name(provider)));
         } finally {
             if (conn != null) conn.disconnect();
         }
@@ -272,80 +272,69 @@ final class ApiKeyProviderClient {
         return code == 404 || OrbitModelCatalog.looksUnavailable(model, raw);
     }
 
-    /** {@link #error(String, int, String, String)}, saying how OpenRouter was connected. */
+    /** The message shown for a failed provider request, saying how OpenRouter was connected. */
     static String error(Context c, String provider, int code, String raw, String model) {
         if (Prefs.PROVIDER_OPENROUTER.equals(provider) && (code == 401)) {
             boolean oauth = c != null && SecureStore.OPENROUTER_SOURCE_OAUTH.equals(
                     SecureStore.openRouterKeySource(c));
             return oauth
-                    ? "OpenRouter no longer accepts Orbit's connection. It may have been revoked. "
-                    + "Reconnect OpenRouter in AI Providers."
-                    : "The saved OpenRouter API key is invalid or revoked. Update it in AI Providers.";
+                    ? c.getString(R.string.d_api_openrouter_revoked)
+                    : c.getString(R.string.d_api_openrouter_key_invalid);
         }
-        return error(provider, code, raw, model);
-    }
-
-    static String error(String provider, int code, String raw, String model) {
         String lower = raw == null ? "" : raw.toLowerCase(java.util.Locale.US);
         if (Prefs.PROVIDER_OPENROUTER.equals(provider)) {
-            String openRouter = openRouterError(code, lower, model);
+            String openRouter = openRouterError(c, code, lower, model);
             if (openRouter != null) return openRouter;
         }
-        if (code == 401 || code == 403) return "The saved " + name(provider)
-                + " API key is invalid, revoked, or lacks access. Update it in AI Providers.";
+        if (code == 401 || code == 403) return c.getString(R.string.d_api_key_invalid, name(provider));
         if (code == 404 || OrbitModelCatalog.looksUnavailable(model, raw))
             return OrbitModelCatalog.unavailableMessage(model);
         if (code == 413 || lower.contains("context") && (lower.contains("long") || lower.contains("limit")))
-            return "This request is too large for " + modelLabel(model) + ". Remove some context or continue in a new chat.";
-        if (code == 429) return name(provider) + " rate limit reached. Wait a moment and try again.";
-        if (code == 529 || lower.contains("overloaded")) return name(provider) + " is temporarily overloaded. Try again shortly.";
-        if (code >= 500) return name(provider) + " had a server problem. Try again shortly.";
+            return c.getString(R.string.d_api_too_large, modelLabel(c, model));
+        if (code == 429) return c.getString(R.string.d_api_rate_limit, name(provider));
+        if (code == 529 || lower.contains("overloaded")) return c.getString(R.string.d_api_overloaded, name(provider));
+        if (code >= 500) return c.getString(R.string.d_api_server_problem, name(provider));
         if (lower.contains("image") || lower.contains("unsupported"))
-            return "The selected model does not support something attached to this request.";
-        return name(provider) + " rejected this request. Check the selected model and try again.";
+            return c.getString(R.string.d_api_unsupported_attachment);
+        return c.getString(R.string.d_api_rejected, name(provider));
     }
 
     /**
      * OpenRouter's documented status codes, in plain words. Null hands over to the shared rules.
      * Never quotes the server's body back to the user.
      */
-    private static String openRouterError(int code, String lower, String model) {
+    private static String openRouterError(Context c, int code, String lower, String model) {
         if (code == 401) {
-            return "The saved OpenRouter connection was rejected. Reconnect OpenRouter in AI Providers.";
+            return c.getString(R.string.d_api_or_rejected);
         }
         if (code == 402 || lower.contains("insufficient credits") || lower.contains("more credits")) {
-            return "Your OpenRouter account does not have enough credits for this request. "
-                    + "Add credits on OpenRouter, or choose another model.";
+            return c.getString(R.string.d_api_or_credits);
         }
         if (lower.contains("no endpoints found that support")) {
-            return modelLabel(model) + " on OpenRouter cannot accept something attached to this "
-                    + "request. Remove the attachment or choose another model.";
+            return c.getString(R.string.d_api_or_attachment, modelLabel(c, model));
         }
         if (code == 403) {
-            return "OpenRouter declined this request (account permissions, a guardrail, or "
-                    + "moderation). Try different wording or another model.";
+            return c.getString(R.string.d_api_or_declined);
         }
-        if (code == 408) return "OpenRouter timed out on this request. Try again.";
+        if (code == 408) return c.getString(R.string.d_api_or_timeout);
         if (code == 413 || lower.contains("context length") || lower.contains("maximum context")
                 || lower.contains("too many tokens") || lower.contains("context window")) {
-            return "This request is too large for " + modelLabel(model) + " on OpenRouter. "
-                    + "Remove some context or continue in a new chat.";
+            return c.getString(R.string.d_api_or_too_large, modelLabel(c, model));
         }
-        if (code == 429) return "OpenRouter rate limit reached. Wait a moment and try again.";
+        if (code == 429) return c.getString(R.string.d_api_or_rate_limit);
         if (code == 502) {
-            return modelLabel(model) + " is down on OpenRouter right now. Try again shortly or "
-                    + "choose another model.";
+            return c.getString(R.string.d_api_or_down, modelLabel(c, model));
         }
         if (code == 503) {
-            return "OpenRouter has no provider available for " + modelLabel(model)
-                    + " right now. Try again shortly or choose another model.";
+            return c.getString(R.string.d_api_or_no_provider, modelLabel(c, model));
         }
         return null;
     }
 
-    private static String modelLabel(String model) {
+    private static String modelLabel(Context c, String model) {
         String name = OrbitModelCatalog.displayName(model);
-        return name.isEmpty() ? (model == null || model.isEmpty() ? "This model" : model) : name;
+        return name.isEmpty() ? (model == null || model.isEmpty()
+                ? c.getString(R.string.d_api_this_model) : model) : name;
     }
 
     private static String anthropicText(JSONObject root) {

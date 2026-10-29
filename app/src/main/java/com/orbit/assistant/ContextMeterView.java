@@ -48,7 +48,7 @@ final class ContextMeterView extends View {
         float stroke = UiKit.dp(context, 2);
         track.setStrokeWidth(stroke);
         arc.setStrokeWidth(stroke);
-        setContentDescription("Context window. Tap for details.");
+        setContentDescription(context.getString(R.string.d_ctxmeter_window));
         setAlpha(0.7f);
     }
 
@@ -56,7 +56,7 @@ final class ContextMeterView extends View {
     void setEstimate(ContextEstimate value) {
         estimate = value;
         float target = value == null ? 0f : value.fraction();
-        setContentDescription(describe(value));
+        setContentDescription(describe(getContext(), value));
         // Recede when there is nothing to say; come forward as the window fills.
         ContextEstimate.Level level = level();
         setAlpha(level == ContextEstimate.Level.NORMAL || level == ContextEstimate.Level.UNKNOWN
@@ -93,17 +93,17 @@ final class ContextMeterView extends View {
         }
     }
 
-    static String describe(ContextEstimate value) {
-        if (value == null) return "Context window. Tap for details.";
+    static String describe(Context c, ContextEstimate value) {
+        if (value == null) return c.getString(R.string.d_ctxmeter_window);
         if (value.auto) {
-            return "Context: about " + ContextEstimate.approx(value.tokens).substring(1)
-                    + " tokens. Auto chooses the model per request. Tap for details.";
+            return c.getString(R.string.d_ctxmeter_auto,
+                    ContextEstimate.approx(value.tokens).substring(1));
         }
         if (!value.knowsLimit()) {
-            return "Context window: about " + ContextEstimate.approx(value.tokens).substring(1)
-                    + " tokens, limit unknown. Tap for details.";
+            return c.getString(R.string.d_ctxmeter_unknown_limit,
+                    ContextEstimate.approx(value.tokens).substring(1));
         }
-        return "Context window: about " + value.percent() + " percent used. Tap for details.";
+        return c.getString(R.string.d_ctxmeter_percent, value.percent());
     }
 
     @Override protected void onDetachedFromWindow() {

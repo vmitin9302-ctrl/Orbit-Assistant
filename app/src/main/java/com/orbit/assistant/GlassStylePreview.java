@@ -103,10 +103,10 @@ public final class GlassStylePreview extends FrameLayout {
         control.setPadding(UiKit.dp(c, 12), UiKit.dp(c, 11), UiKit.dp(c, 12), UiKit.dp(c, 11));
         control.setElevation(UiKit.dp(c, OrbitGlass.RESTING_ELEVATION_DP));
 
-        label = UiKit.text(c, "Search", 12, UiKit.TEXT, false);
+        label = UiKit.text(c, c.getString(R.string.d_glassprev_search), 12, UiKit.TEXT, false);
         control.addView(label, new LinearLayout.LayoutParams(0,
                 ViewGroup.LayoutParams.WRAP_CONTENT, 1f));
-        hint = UiKit.text(c, "Chats", 11, UiKit.MUTED, false);
+        hint = UiKit.text(c, c.getString(R.string.ui_chats_ef5b4049), 11, UiKit.MUTED, false);
         control.addView(hint);
         cluster.addView(control, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -125,7 +125,7 @@ public final class GlassStylePreview extends FrameLayout {
         compact.setGravity(Gravity.CENTER);
         compact.setPadding(UiKit.dp(c, 12), UiKit.dp(c, 8), UiKit.dp(c, 12), UiKit.dp(c, 9));
         compact.setElevation(UiKit.dp(c, OrbitGlass.RESTING_ELEVATION_DP));
-        compactLabel = UiKit.text(c, "All", 11.5f, UiKit.TEXT, false);
+        compactLabel = UiKit.text(c, c.getString(R.string.d_glassprev_all), 11.5f, UiKit.TEXT, false);
         compact.addView(compactLabel);
         compactRow.addView(compact, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
@@ -156,17 +156,18 @@ public final class GlassStylePreview extends FrameLayout {
         hint.setTextColor(UiKit.withAlpha(ink, 170));
         compactLabel.setTextColor(ink);
 
-        setContentDescription(describe(tokens, resolved));
+        setContentDescription(describe(c, tokens, resolved));
     }
 
-    private String describe(OrbitThemeTokens tokens, OrbitProStyle resolved) {
+    private String describe(Context c, OrbitThemeTokens tokens, OrbitProStyle resolved) {
         String material = tokens.theme == null
                 ? OrbitTheme.MATERIAL_DEFAULT : tokens.theme.material;
-        String what = OrbitTheme.materialLabel(material) + " floating controls, a wide bar and a "
-                + "compact control. ";
+        String what = c.getString(R.string.d_glassprev_describe,
+                OrbitTheme.materialLabel(material)) + " ";
         if (!OrbitTheme.isGlass(material)) return what + OrbitFloatingSurface.noGlassNote();
-        return what + resolved.glassOpacityLabel() + ", tint "
-                + resolved.glassTintLabel().toLowerCase(java.util.Locale.US) + ", edge "
-                + resolved.glassEdgeLabel().toLowerCase(java.util.Locale.US) + ".";
+        return what + c.getString(R.string.d_glassprev_glass_detail,
+                resolved.glassOpacityLabel(),
+                resolved.glassTintLabel().toLowerCase(java.util.Locale.US),
+                resolved.glassEdgeLabel().toLowerCase(java.util.Locale.US));
     }
 }

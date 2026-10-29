@@ -53,7 +53,7 @@ public final class CalendarDiagnostics {
 
     /** The Calendar block of the diagnostics report, heading included. */
     public static String report(Context c) {
-        return "\n\nCalendar" + body(c);
+        return "\n\n" + c.getString(R.string.d_caldiag_heading) + body(c);
     }
 
     /**
@@ -70,20 +70,26 @@ public final class CalendarDiagnostics {
         OrbitCalendarStore.Target target = access ? OrbitCalendarStore.resolveTarget(c) : null;
         String lastError = d.getString("calendar_last_error", "");
 
-        return "\n  Direct calendar writes: available"
-                + "\n  Permission: " + (access ? "granted" : "not granted")
-                + "\n  Writable calendars: " + writable
-                + "\n  Selected calendar: " + (target == null
-                        ? (writable > 1 ? "not chosen yet" : "none") : target.label())
-                + "\n  Last requested events: " + d.getInt("calendar_requested", 0)
-                + "\n  Last added: " + d.getInt("calendar_added", 0)
-                + "\n  Last already present: " + d.getInt("calendar_duplicates", 0)
-                + "\n  Last failed: " + d.getInt("calendar_failed", 0)
-                + "\n  Last calendar issue: " + (lastError == null || lastError.trim().isEmpty()
-                        ? "none" : lastError)
-                + (updated == 0L ? "" : "\n  Last calendar write at: "
-                        + java.text.DateFormat.getDateTimeInstance()
-                                .format(new java.util.Date(updated)));
+        return "\n  " + c.getString(R.string.d_caldiag_direct_writes)
+                + "\n  " + c.getString(R.string.d_caldiag_permission, c.getString(access
+                        ? R.string.d_caldiag_granted : R.string.d_caldiag_not_granted))
+                + "\n  " + c.getString(R.string.d_caldiag_writable, writable)
+                + "\n  " + c.getString(R.string.d_caldiag_selected, target == null
+                        ? c.getString(writable > 1
+                                ? R.string.d_caldiag_not_chosen : R.string.d_caldiag_none)
+                        : target.label())
+                + "\n  " + c.getString(R.string.d_caldiag_requested,
+                        d.getInt("calendar_requested", 0))
+                + "\n  " + c.getString(R.string.d_caldiag_added, d.getInt("calendar_added", 0))
+                + "\n  " + c.getString(R.string.d_caldiag_duplicates,
+                        d.getInt("calendar_duplicates", 0))
+                + "\n  " + c.getString(R.string.d_caldiag_failed, d.getInt("calendar_failed", 0))
+                + "\n  " + c.getString(R.string.d_caldiag_issue,
+                        lastError == null || lastError.trim().isEmpty()
+                                ? c.getString(R.string.d_caldiag_none) : lastError)
+                + (updated == 0L ? "" : "\n  " + c.getString(R.string.d_caldiag_written_at,
+                        java.text.DateFormat.getDateTimeInstance()
+                                .format(new java.util.Date(updated))));
     }
 
     private static SharedPreferences.Editor edit(Context c) {

@@ -170,9 +170,9 @@ public final class SmartVaultScreensTest {
     @Test public void theSmartVaultScreenExplainsEachChoiceBeforeAnythingHappens() {
         SmartVaultActivity screen = Robolectric.buildActivity(SmartVaultActivity.class).setup().get();
         List<String> shown = texts(screen.getWindow().getDecorView());
-        for (String label : new String[]{SmartVaultActivity.OCR_LABEL,
-                SmartVaultActivity.MEANING_LABEL, SmartVaultActivity.LINKS_LABEL,
-                SmartVaultActivity.AI_LABEL, SmartVaultActivity.TURN_ON}) {
+        for (String label : new String[]{context.getString(SmartVaultActivity.OCR_LABEL),
+                context.getString(SmartVaultActivity.MEANING_LABEL), context.getString(SmartVaultActivity.LINKS_LABEL),
+                context.getString(SmartVaultActivity.AI_LABEL), context.getString(SmartVaultActivity.TURN_ON)}) {
             assertTrue(label, anyContains(shown, label));
         }
         assertTrue(anyContains(shown, "Google Play services"));
@@ -188,7 +188,7 @@ public final class SmartVaultScreensTest {
         SmartVault.enable(context, true, false, false, false);
         SmartVaultActivity screen = Robolectric.buildActivity(SmartVaultActivity.class).setup().get();
         List<String> shown = texts(screen.getWindow().getDecorView());
-        assertTrue(anyContains(shown, SmartVaultActivity.TURN_OFF));
+        assertTrue(anyContains(shown, context.getString(SmartVaultActivity.TURN_OFF)));
         assertTrue(anyContains(shown, "Delete Smart Vault data"));
         assertTrue(anyContains(shown, "1 item has no suggestions"));
     }
