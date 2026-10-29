@@ -32,7 +32,7 @@ public final class ReleaseWorkflowAuditTest {
             Path candidate = directory.resolve(".github/workflows/release.yml");
             if (Files.isRegularFile(candidate)) {
                 try {
-                    return new String(Files.readAllBytes(candidate), StandardCharsets.UTF_8);
+                    return LocalizedSource.expand(new String(Files.readAllBytes(candidate), StandardCharsets.UTF_8));
                 } catch (IOException e) {
                     throw new AssertionError("could not read release.yml", e);
                 }
@@ -212,7 +212,7 @@ public final class ReleaseWorkflowAuditTest {
             Path candidate = directory.resolve("CHANGELOG.md");
             if (!Files.isRegularFile(candidate)) continue;
             try {
-                String changelog = new String(Files.readAllBytes(candidate), StandardCharsets.UTF_8);
+                String changelog = LocalizedSource.expand(new String(Files.readAllBytes(candidate), StandardCharsets.UTF_8));
                 assertTrue("CHANGELOG.md needs an entry for v" + BuildConfig.VERSION_NAME,
                         changelog.contains("- **v" + BuildConfig.VERSION_NAME + "**:"));
                 return;

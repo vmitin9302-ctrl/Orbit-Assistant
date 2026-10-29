@@ -248,8 +248,7 @@ public final class DistributionBoundaryTest {
                 "setDataAndType\\([^;]*(package-archive|APK_MIME_TYPE)");
         try (Stream<Path> files = Files.list(repo().resolve("app/src/main/java/com/orbit/assistant"))) {
             for (Path file : files.collect(Collectors.toList())) {
-                String code = withoutComments(new String(Files.readAllBytes(file),
-                        StandardCharsets.UTF_8));
+                String code = withoutComments(LocalizedSource.expand(new String(Files.readAllBytes(file), StandardCharsets.UTF_8)));
                 String name = file.getFileName().toString();
                 assertFalse(name + " downloads release assets itself",
                         code.contains("/releases/download/"));
@@ -290,8 +289,7 @@ public final class DistributionBoundaryTest {
         int found = 0;
         try (Stream<Path> files = Files.list(repo().resolve("app/src/main/java/com/orbit/assistant"))) {
             for (Path file : files.collect(Collectors.toList())) {
-                String code = withoutComments(new String(Files.readAllBytes(file),
-                        StandardCharsets.UTF_8));
+                String code = withoutComments(LocalizedSource.expand(new String(Files.readAllBytes(file), StandardCharsets.UTF_8)));
                 Matcher m = instruction.matcher(code);
                 while (m.find()) {
                     found++;
@@ -361,7 +359,7 @@ public final class DistributionBoundaryTest {
 
     static String read(String relative) {
         try {
-            return new String(Files.readAllBytes(repo().resolve(relative)), StandardCharsets.UTF_8)
+            return LocalizedSource.expand(new String(Files.readAllBytes(repo().resolve(relative)), StandardCharsets.UTF_8))
                     .replace("\r\n", "\n");
         } catch (IOException e) {
             throw new AssertionError("could not read " + relative, e);

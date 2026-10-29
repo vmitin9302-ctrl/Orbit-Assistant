@@ -828,7 +828,7 @@ public final class ThemeStudioProTest {
 
     private static String read(Path file) {
         try {
-            return new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
+            return LocalizedSource.expand(new String(Files.readAllBytes(file), StandardCharsets.UTF_8));
         } catch (Exception e) {
             throw new AssertionError("could not read " + file, e);
         }

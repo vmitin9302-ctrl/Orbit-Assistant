@@ -57,6 +57,8 @@ def resources(path):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--base', default='main')
+    parser.add_argument('--check-resources-only', action='store_true',
+                        help='Only check XML well-formedness and en/ru resource pairs.')
     args = parser.parse_args()
     xml_count = 0
     for module in ('app', 'local'):
@@ -65,6 +67,7 @@ def main():
             xml_count += 1
     en = resources(ROOT / 'app/src/main/res/values')
     ru = resources(ROOT / 'app/src/main/res/values-ru')
+    assert en, 'no English resources found'
     required = {k for k, n in en.items() if n.get('translatable') != 'false'}
     assert required <= set(ru), f'Missing Russian resources: {sorted(required - set(ru))}'
     assert set(ru) <= set(en), f'Missing English fallback: {sorted(set(ru) - set(en))}'
@@ -77,6 +80,9 @@ def main():
             assert len(a) == len(b), key
         if a.get('formatted') != 'false':
             assert collections.Counter(FORMAT.findall(android_value(a))) == collections.Counter(FORMAT.findall(android_value(b))), key
+    if args.check_resources_only:
+        print(f'PASS: {xml_count} XML files; {len(required)} translatable resources paired with Russian')
+        return
     changed = subprocess.check_output(['git', 'diff', '--name-only', args.base, '--'], cwd=ROOT, text=True).splitlines()
     checked = []
     for path in changed:

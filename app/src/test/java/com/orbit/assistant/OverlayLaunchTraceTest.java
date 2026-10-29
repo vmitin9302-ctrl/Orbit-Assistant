@@ -534,8 +534,7 @@ public final class OverlayLaunchTraceTest {
 
     private static String readLog(File file) {
         try {
-            return new String(java.nio.file.Files.readAllBytes(file.toPath()),
-                    java.nio.charset.StandardCharsets.UTF_8);
+            return LocalizedSource.expand(new String(java.nio.file.Files.readAllBytes(file.toPath()), java.nio.charset.StandardCharsets.UTF_8));
         } catch (Exception e) {
             throw new AssertionError("could not read the launch log", e);
         }

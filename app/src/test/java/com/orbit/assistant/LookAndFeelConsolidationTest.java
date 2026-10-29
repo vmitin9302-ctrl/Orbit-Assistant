@@ -277,7 +277,7 @@ public final class LookAndFeelConsolidationTest {
         File file = new File("src/main/java/com/orbit/assistant/" + name);
         if (!file.exists()) file = new File("app/src/main/java/com/orbit/assistant/" + name);
         try {
-            return new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8);
+            return LocalizedSource.expand(new String(Files.readAllBytes(file.toPath()), StandardCharsets.UTF_8));
         } catch (IOException e) {
             throw new AssertionError("could not read " + name, e);
         }

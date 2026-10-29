@@ -185,11 +185,9 @@ public final class ComponentInstallHandoffTest {
                     "app/src/main/java/com/orbit/assistant/OrbitUpdater.java");
             if (!java.nio.file.Files.isRegularFile(candidate)) continue;
             try {
-                String source = new String(java.nio.file.Files.readAllBytes(candidate),
-                        java.nio.charset.StandardCharsets.UTF_8);
-                String edition = new String(java.nio.file.Files.readAllBytes(directory.resolve(
-                        "app/src/github/java/com/orbit/assistant/OrbitEdition.java")),
-                        java.nio.charset.StandardCharsets.UTF_8);
+                String source = LocalizedSource.expand(new String(java.nio.file.Files.readAllBytes(candidate), java.nio.charset.StandardCharsets.UTF_8));
+                String edition = LocalizedSource.expand(new String(java.nio.file.Files.readAllBytes(directory.resolve(
+                        "app/src/github/java/com/orbit/assistant/OrbitEdition.java")), java.nio.charset.StandardCharsets.UTF_8));
                 assertTrue(source.contains("OrbitEdition.apkInstallerIntent(uri)"));
                 assertTrue(edition.contains("Intent.ACTION_VIEW"));
                 assertTrue(edition.contains("application/vnd.android.package-archive"));

@@ -41,7 +41,7 @@ public final class ReleaseModularityTest {
         Path file = repositoryRoot().resolve(relativePath);
         if (!Files.isRegularFile(file)) fail("expected file is missing: " + relativePath);
         try {
-            return new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
+            return LocalizedSource.expand(new String(Files.readAllBytes(file), StandardCharsets.UTF_8));
         } catch (IOException e) {
             throw new AssertionError("could not read " + relativePath, e);
         }
@@ -72,7 +72,7 @@ public final class ReleaseModularityTest {
                     .filter(path -> path.toString().endsWith(".java"))
                     .filter(path -> {
                         try {
-                            return new String(Files.readAllBytes(path), StandardCharsets.UTF_8)
+                            return LocalizedSource.expand(new String(Files.readAllBytes(path), StandardCharsets.UTF_8))
                                     .contains(RUNTIME_PACKAGE);
                         } catch (IOException e) {
                             return false;

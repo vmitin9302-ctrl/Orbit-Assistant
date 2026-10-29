@@ -224,8 +224,8 @@ public final class ChatBackNavigationTest {
      * leaving. Asserted on the styles themselves because that is where the mistake would be made.
      */
     @Test public void thePredictiveStylesDeclareNoCloseAnimation() throws Exception {
-        String styles = new String(Files.readAllBytes(
-                new File("src/main/res/values/styles.xml").toPath()), StandardCharsets.UTF_8);
+        String styles = LocalizedSource.expand(new String(Files.readAllBytes(
+                new File("src/main/res/values/styles.xml").toPath()), StandardCharsets.UTF_8));
         for (String name : new String[]{"OrbitWindowAnimation.PredictiveSlide",
                 "OrbitWindowAnimation.PredictiveFade", "OrbitWindowAnimation.PredictiveNone"}) {
             int start = styles.indexOf("name=\"" + name + "\"");

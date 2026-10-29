@@ -141,8 +141,7 @@ public final class ThinkingUpdateProviderTest {
 
     private static String read(String relativePath) {
         try {
-            return new String(Files.readAllBytes(repositoryRoot().resolve(relativePath)),
-                    StandardCharsets.UTF_8);
+            return LocalizedSource.expand(new String(Files.readAllBytes(repositoryRoot().resolve(relativePath)), StandardCharsets.UTF_8));
         } catch (IOException e) {
             throw new AssertionError("could not read " + relativePath, e);
         }

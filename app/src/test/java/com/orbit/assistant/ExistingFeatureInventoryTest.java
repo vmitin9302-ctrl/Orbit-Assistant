@@ -207,8 +207,7 @@ public final class ExistingFeatureInventoryTest {
             for (File file : files) {
                 if (ignored.contains(file.getName())) continue;
                 try {
-                    String text = new String(java.nio.file.Files.readAllBytes(file.toPath()),
-                            java.nio.charset.StandardCharsets.UTF_8);
+                    String text = LocalizedSource.expand(new String(java.nio.file.Files.readAllBytes(file.toPath()), java.nio.charset.StandardCharsets.UTF_8));
                     if (text.contains(needle)) hits.add(file.getName());
                 } catch (Exception ignore) {
                     // A file that cannot be read cannot contain a second implementation.
