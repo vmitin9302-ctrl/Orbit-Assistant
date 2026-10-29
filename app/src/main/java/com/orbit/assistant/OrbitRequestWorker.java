@@ -421,7 +421,8 @@ public final class OrbitRequestWorker extends Worker {
     private boolean looksServerOverloaded(String s) {
         String lower = s == null ? "" : s.toLowerCase(Locale.US);
         return lower.contains("overloaded") || lower.contains("server busy") ||
-                lower.contains("temporarily unavailable") || lower.contains("capacity");
+                lower.contains("temporarily unavailable") || lower.contains("capacity")
+                || ErrorMarkers.matches(getApplicationContext(), R.string.markers_overloaded, s);
     }
 
     private boolean looksTransient(String s) {
@@ -430,6 +431,7 @@ public final class OrbitRequestWorker extends Worker {
                 lower.contains("timeout") || lower.contains("timed out") ||
                 lower.contains("network") || lower.contains("connection") ||
                 lower.contains("overloaded") || lower.contains("temporarily unavailable") ||
-                lower.contains("server busy");
+                lower.contains("server busy")
+                || ErrorMarkers.matches(getApplicationContext(), R.string.markers_transient, s);
     }
 }

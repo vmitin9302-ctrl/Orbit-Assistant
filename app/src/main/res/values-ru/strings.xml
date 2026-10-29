@@ -422,7 +422,7 @@
     <string name="ui_orbit_could_not_complete_this_backup_operatio_d02d6912" formatted="false">"Orbit не удалось завершить операцию с резервной копией."</string>
     <string name="ui_orbit_could_not_complete_this_operation_9507ae61" formatted="false">"Orbit не удалось выполнить эту операцию."</string>
     <string name="ui_orbit_could_not_create_a_camera_image_f05b6834" formatted="false">"Orbit не удалось создать снимок камеры"</string>
-    <string name="ui_orbit_could_not_finish_5bb52db0" formatted="false">"Orbit не удалось завершить запрос"</string>
+    <string name="ui_orbit_could_not_finish_5bb52db0" formatted="false">"Orbit не удалось завершить"</string>
     <string name="ui_orbit_could_not_finish_this_response_e795f0ce" formatted="false">"Orbit не удалось завершить этот ответ."</string>
     <string name="ui_orbit_could_not_load_this_screen_selection_a69f4a31" formatted="false">"Orbit не удалось загрузить выделенную область экрана"</string>
     <string name="ui_orbit_could_not_open_a_web_browser_on_this_ph_3ed952a5" formatted="false">"Orbit не удалось открыть браузер на этом телефоне."</string>

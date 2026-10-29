@@ -396,7 +396,8 @@ public class RoutineTriggersActivity extends Activity {
 
         if (!trigger.lastResult.isEmpty()) {
             TextView status = UiKit.text(this, getString(R.string.d_rtrg_last, trigger.lastResult), 11,
-                    trigger.lastResult.toLowerCase(Locale.US).contains("completed") ? UiKit.SUCCESS : UiKit.MUTED, false);
+                    (trigger.lastResult.toLowerCase(Locale.US).contains("completed")
+                            || trigger.lastResult.equals(getString(R.string.rtexec_completed))) ? UiKit.SUCCESS : UiKit.MUTED, false);
             status.setPadding(0, UiKit.dp(this, 8), 0, 0);
             card.addView(status);
         }

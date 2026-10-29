@@ -270,7 +270,7 @@ public final class SmartVaultWorker extends Worker {
             }
             int attempts = job.attempts + 1;
             if (error[0] != null) {
-                if (looksTemporary(error[0]) && attempts < 3) {
+                if ((looksTemporary(error[0]) || ErrorMarkers.matches(c, R.string.markers_transient, error[0])) && attempts < 3) {
                     db.putJob(item.id, SmartVaultDb.STATE_QUEUED, fingerprint, attempts, "");
                     return Outcome.RETRY;
                 }

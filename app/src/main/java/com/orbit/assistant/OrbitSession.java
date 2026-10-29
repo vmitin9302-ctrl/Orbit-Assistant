@@ -1522,7 +1522,7 @@ public class OrbitSession extends VoiceInteractionSession {
                 boolean newest = i == history.size() - 1;
                 boolean draftReply = newest && i > 0
                         && ReplyDraftContext.isDraftRequest(history.get(i - 1).content);
-                if (visible.startsWith(getContext().getString(R.string.ui_orbit_could_not_finish_5bb52db0))) addFailureRetryAction(PendingRequestStore.latestFailedForConversation(getContext(), conversationId), visible);
+                if (FailureMarker.isFailure(getContext(), visible)) addFailureRetryAction(PendingRequestStore.latestFailedForConversation(getContext(), conversationId), visible);
                 else if (draftReply) {
                     // Whether that turn was a clarification is remembered in the conversation's own
                     // reply-draft state, which survives the rebuild; the marker in the text does not.
@@ -2894,7 +2894,7 @@ public class OrbitSession extends VoiceInteractionSession {
         bubble.settle(displayText);
         applyBubbleWidth(bubble, bubble.prefersWide());
         if (displayText != null && !displayText.trim().isEmpty()
-                && !displayText.startsWith(getContext().getString(R.string.ui_orbit_could_not_finish_5bb52db0))) {
+                && !FailureMarker.isFailure(getContext(), displayText)) {
             MessageActions.bindAssistant(bubble, rawText, true, this::regenerateLastResponse,
                     () -> {
                         stateTextSafe(getContext().getString(R.string.ui_copied_8d525e5f));
@@ -4577,7 +4577,7 @@ public class OrbitSession extends VoiceInteractionSession {
         lp.gravity = Gravity.START;
         lp.setMargins(0, UiKit.dp(c, 4), UiKit.dp(c, 4), UiKit.dp(c, 6));
         if (displayText != null && !displayText.trim().isEmpty()
-                && !displayText.startsWith(getContext().getString(R.string.ui_orbit_could_not_finish_5bb52db0))) {
+                && !FailureMarker.isFailure(getContext(), displayText)) {
             MessageActions.bindAssistant(bubble, rawText, canRegenerate, this::regenerateLastResponse,
                     () -> {
                         stateTextSafe(getContext().getString(R.string.ui_copied_8d525e5f));

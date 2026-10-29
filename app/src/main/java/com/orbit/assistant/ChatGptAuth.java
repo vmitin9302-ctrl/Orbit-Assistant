@@ -460,7 +460,8 @@ public final class ChatGptAuth {
     static boolean needsSignIn(Context context, String failure) {
         return failure != null
                 && (failure.contains("Sign in with ChatGPT")
-                || failure.contains(context.getString(R.string.chatauth_sign_in_marker)))
+                || failure.toLowerCase(java.util.Locale.ROOT).contains(
+                        context.getString(R.string.chatauth_sign_in_marker).toLowerCase(java.util.Locale.ROOT)))
                 && !isSignedIn(context);
     }
 

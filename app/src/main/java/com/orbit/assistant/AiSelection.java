@@ -86,12 +86,12 @@ public final class AiSelection {
 
     /** What Auto is called everywhere it is shown, in the language of the given context. */
     public static String autoLabel(android.content.Context context) {
-        return context.getString(R.string.sel_auto);
+        return context == null ? AUTO_LABEL : context.getString(R.string.sel_auto);
     }
 
     /** Auto's one-line description, in the language of the given context. */
     public static String autoDescription(android.content.Context context) {
-        return context.getString(R.string.sel_auto_description);
+        return context == null ? AUTO_DESCRIPTION : context.getString(R.string.sel_auto_description);
     }
 
     /** As {@link #modelName()}, in the language of the given context. */

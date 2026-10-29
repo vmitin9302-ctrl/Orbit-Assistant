@@ -14,4 +14,6 @@
     <string name="lead_vault_type_images">Изображения</string>
     <string name="lead_vault_type_documents">Документы</string>
     <string name="lead_vault_type_orbit">Ответы Orbit</string>
+    <string name="markers_transient">не удалось связаться,не ответил вовремя,не дождался,перегружен,временно недоступ,тайм-аут,таймаут,сеть,сети,соединени,нет связи,слишком долго</string>
+    <string name="markers_overloaded">перегружен,временно недоступ,нагрузк</string>
 </resources>

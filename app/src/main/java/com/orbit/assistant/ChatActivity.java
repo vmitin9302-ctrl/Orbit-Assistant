@@ -913,7 +913,7 @@ public class ChatActivity extends Activity {
                     ViewGroup.LayoutParams.WRAP_CONTENT);
             richLp.gravity = Gravity.START;
             richLp.setMargins(0, UiKit.dp(this, 5), UiKit.dp(this, 8), UiKit.dp(this, 5));
-            boolean finished = !visible.trim().isEmpty() && !visible.startsWith(getString(R.string.ui_orbit_could_not_finish_5bb52db0));
+            boolean finished = !visible.trim().isEmpty() && !FailureMarker.isFailure(this, visible);
             MessageActions.AssistantActions actions = finished ? responseActions(h, index) : null;
             if (finished) MessageActions.bindAssistant(bubble, rawVisible, actions);
             messages.addView(bubble, richLp);
@@ -923,7 +923,7 @@ public class ChatActivity extends Activity {
             if (finished) addResponseStrip(rawVisible, actions, fork, index);
             else if (fork != null) addBranchNavigator(fork, index, false);
         }
-        if (!visible.trim().isEmpty() && !visible.startsWith(getString(R.string.ui_orbit_could_not_finish_5bb52db0))) {
+        if (!visible.trim().isEmpty() && !FailureMarker.isFailure(this, visible)) {
             addMemoryUsageIndicator(h);
             if (index == history.size() - 1) addMemorySuggestion(h, index);
             addPersistedActionCards(index, h);
@@ -3291,7 +3291,7 @@ public class ChatActivity extends Activity {
         if (failed == null) return;
         if (!history.isEmpty()) {
             AssistantClient.History last = history.get(history.size() - 1);
-            if (last == null || last.content == null || !last.content.startsWith(getString(R.string.ui_orbit_could_not_finish_5bb52db0))) return;
+            if (last == null || last.content == null || !FailureMarker.isFailure(this, last.content)) return;
         }
         LinearLayout row = new LinearLayout(this);
         row.setGravity(Gravity.CENTER_VERTICAL);

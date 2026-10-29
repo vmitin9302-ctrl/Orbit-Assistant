@@ -630,7 +630,7 @@ public class MainActivity extends Activity {
         PendingRequestStore.Item failed = PendingRequestStore.latestFailedForConversation(this, chat.id);
         boolean unresolvedFailure = failed != null && !chat.messages.isEmpty() &&
                 chat.messages.get(chat.messages.size() - 1).content != null &&
-                chat.messages.get(chat.messages.size() - 1).content.startsWith(getString(R.string.ui_orbit_could_not_finish_5bb52db0));
+                FailureMarker.isFailure(this, chat.messages.get(chat.messages.size() - 1).content);
         String suffix = active ? getString(R.string.ui_thinking_c42e2779) : unresolvedFailure ? getString(R.string.ui_needs_attention_06e1b32c) : "";
         int dateColor = active ? UiKit.accent(this) : unresolvedFailure ? Color.rgb(239,145,153) : UiKit.MUTED;
         TextView date = UiKit.text(this, when + suffix, 11, dateColor, false);
