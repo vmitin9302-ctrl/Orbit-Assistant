@@ -466,6 +466,104 @@
     <string name="relay_error_body">Ошибка ретранслятора %1$d: %2$s</string>
     <string name="relay_unreachable">Не удалось связаться с ретранслятором Orbit: %1$s</string>
     <string name="relay_label">Ретранслятор · %1$s</string>
+    <string name="aisel_provider" formatted="false">Провайдер</string>
+    <string name="aisel_model" formatted="false">Модель</string>
+    <string name="aisel_strength" formatted="false">Сила</string>
+    <string name="aisel_no_strength" formatted="false">У этой модели нет настройки силы.</string>
+    <string name="aisel_auto_providers_cd" formatted="false">Выбрать провайдеров, которых может использовать Авто</string>
+    <string name="aisel_favorites" formatted="false">Избранное</string>
+    <string name="aisel_recent" formatted="false">Недавние</string>
+    <string name="aisel_browse" formatted="false">Все модели ›</string>
+    <string name="aisel_browse_cd" formatted="false">Просмотреть все модели</string>
+    <string name="aisel_unavailable" formatted="false">Сейчас недоступно для этого аккаунта</string>
+    <string name="aisel_auto_can_use">Авто может использовать: %1$s ›</string>
+    <string name="aisel_provider_cd">Провайдер: %1$s</string>
+    <string name="aisel_strength_cd">Сила: %1$s</string>
+    <string name="aisel_selected_sentence" formatted="false">. Выбрано</string>
+    <string name="colorpick_hex_warning" formatted="false">Используйте цвет вида #8B7CFF.</string>
+    <string name="colorpick_suggested" formatted="false">Рекомендуемые</string>
+    <string name="colorpick_title" formatted="false">Выберите цвет</string>
+    <string name="colorpick_hex_cd" formatted="false">Значение цвета в шестнадцатеричном виде</string>
+    <string name="colorpick_use" formatted="false">Использовать</string>
+    <string name="colorpick_compare_cd">Сейчас: %1$s. Новый цвет: %2$s</string>
+    <string name="colorpick_current" formatted="false">Текущий</string>
+    <string name="colorpick_new_color" formatted="false">Новый</string>
+    <string name="colorpick_sv_cd" formatted="false">Насыщенность и яркость. Перетащите для настройки.</string>
+    <string name="colorpick_hue_cd" formatted="false">Оттенок. Перетащите, чтобы сменить цветовое семейство.</string>
+    <string name="colorpick_apply" formatted="false">Применить</string>
+    <string name="rtexec_skipped" formatted="false">Пропущено · оповещения триггеров недоступны</string>
+    <string name="rtexec_grant">Предоставьте доступ для «%1$s», чтобы эта автоматизация могла запускаться автоматически.</string>
+    <string name="rtexec_needs_access">Нужен доступ · %1$s</string>
+    <string name="rtexec_confirm">Требует внимания · «%1$s» требует подтверждения</string>
+    <string name="rtexec_visible">Требует внимания · «%1$s» требует открытого Orbit</string>
+    <string name="rtexec_tap_continue">Нажмите, чтобы продолжить с шага %1$d: %2$s.</string>
+    <string name="rtexec_stopped_at">Остановлено на шаге %1$d</string>
+    <string name="rtexec_stopped">Остановлено · %1$s</string>
+    <string name="rtexec_partial">Выполнено частично · ожидает «%1$s»</string>
+    <string name="rtexec_bg_done">Orbit выполнил шаги, безопасные для фона. Нажмите, чтобы продолжить с шага %1$d: %2$s.</string>
+    <string name="rtexec_completed" formatted="false">Выполнено автоматически</string>
+    <string name="rtexec_could_not_run" formatted="false">Остановлено · Orbit не удалось запустить эту автоматизацию</string>
+    <string name="vaultitem_type_link" formatted="false">Ссылка</string>
+    <string name="vaultitem_type_image" formatted="false">Изображение</string>
+    <string name="vaultitem_type_reply" formatted="false">Ответ Orbit</string>
+    <string name="vaultitem_type_page" formatted="false">Страница документа</string>
+    <string name="vaultitem_type_note" formatted="false">Заметка</string>
+    <string name="vaultitem_page_of">Страница %1$d из %2$d</string>
+    <string name="vaultitem_page">Страница %1$d</string>
+    <string name="vaultitem_saved">Сохранено %1$s</string>
+    <string name="vaultitem_edited">Изменено %1$s</string>
+    <string name="runhist_completed" formatted="false">Выполнено</string>
+    <string name="runhist_stopped" formatted="false">Остановлено до завершения</string>
+    <string name="runhist_failed_at">Сбой на действии %1$d</string>
+    <string name="runhist_failed_at_named">Сбой на действии %1$d: %2$s</string>
+    <string name="runhist_trigger" formatted="false">Автоматический триггер</string>
+    <string name="runhist_widget" formatted="false">Виджет или плитка</string>
+    <string name="runhist_manual" formatted="false">Запущено вручную</string>
+    <string name="rtnotify_finish" formatted="false">Нажмите, чтобы завершить автоматизацию.</string>
+    <string name="rtnotify_needs_you">«%1$s» требует вашего участия</string>
+    <string name="rtnotify_stopped_base" formatted="false">Автоматизация, запущенная автоматически, остановлена.</string>
+    <string name="rtnotify_retry">%1$s · Нажмите, чтобы повторить с этого шага.</string>
+    <string name="rtnotify_stopped_title">«%1$s» остановлена</string>
+    <string name="replysurface_use_in_chat" formatted="false">Вставить в чат</string>
+    <string name="replysurface_copied_email" formatted="false">Ответ скопирован · вставьте его в письмо</string>
+    <string name="replysurface_copied_conversation" formatted="false">Ответ скопирован · вставьте его в переписку</string>
+    <string name="replysurface_copied_app">Ответ скопирован · вставьте его в «%1$s»</string>
+    <string name="floatsurf_no_glass" formatted="false">Режим «Сплошной» не использует эффекты стекла. Ваши настройки стекла сохранены.</string>
+    <string name="floatsurf_solid" formatted="false">Чистые непрозрачные элементы без стекла</string>
+    <string name="floatsurf_frosted" formatted="false">Мягкое полупрозрачное стекло</string>
+    <string name="floatsurf_rich" formatted="false">Насыщенное стекло с глубиной и бликами</string>
+    <string name="attachbatch_read_failed" formatted="false">Orbit не удалось прочитать выбранные вложения.</string>
+    <string name="attachbatch_camera_photo" formatted="false">Фото с камеры</string>
+    <string name="attachbatch_clipboard">Буфер обмена · %1$s</string>
+    <string name="rlc_noun_brightness" formatted="false">яркость</string>
+    <string name="rlc_noun_volume" formatted="false">громкость мультимедиа</string>
+    <string name="rlc_conf_max">Устанавливаю %1$s на максимум.</string>
+    <string name="rlc_conf_mute" formatted="false">Отключаю звук мультимедиа.</string>
+    <string name="rlc_conf_min" formatted="false">Устанавливаю яркость на минимум.</string>
+    <string name="rlc_conf_pct">Устанавливаю %1$s на %2$d%%.</string>
+    <string name="rlc_conf_lower_by">Уменьшаю %1$s на %2$d%%.</string>
+    <string name="rlc_conf_raise_by">Увеличиваю %1$s на %2$d%%.</string>
+    <string name="rlc_conf_lower">Уменьшаю %1$s.</string>
+    <string name="rlc_conf_raise">Увеличиваю %1$s.</string>
+    <string name="rlc_sum_max">установить %1$s на максимум</string>
+    <string name="rlc_sum_mute" formatted="false">отключить звук мультимедиа</string>
+    <string name="rlc_sum_min" formatted="false">установить яркость на минимум</string>
+    <string name="rlc_sum_pct">установить %1$s на %2$d%%</string>
+    <string name="rlc_sum_lower_by">уменьшить %1$s на %2$d%%</string>
+    <string name="rlc_sum_raise_by">увеличить %1$s на %2$d%%</string>
+    <string name="rlc_sum_lower">уменьшить %1$s</string>
+    <string name="rlc_sum_raise">увеличить %1$s</string>
+    <string name="worker_chat_changed" formatted="false">Чат изменился до того, как удалось повторить попытку.</string>
+    <string name="worker_weather_failed" formatted="false">Сейчас не удалось загрузить погоду.</string>
+    <string name="worker_could_not_finish" formatted="false">Orbit не удалось завершить этот ответ.</string>
+    <string name="worker_could_not_finish_because">Orbit не удалось завершить этот ответ: %1$s</string>
+    <string name="worker_done" formatted="false">Готово.</string>
+    <string name="worker_retry_not_kept" formatted="false">Orbit не удалось сохранить эту повторную попытку, так как чат изменился.</string>
+    <string name="worker_timed_out">Orbit не дождался ответа от %1$s.</string>
+    <string name="worker_interrupted" formatted="false">Запрос Orbit был прерван.</string>
+    <string name="dialguard_title">Позвонить на %1$s?</string>
+    <string name="dialguard_message">Открыть набор номера для %1$s?</string>
+    <string name="dialguard_confirm" formatted="false">Открыть набор номера</string>
     <plurals name="convsheet_older_not_sent">
         <item quantity="one">Отправляются только ваши последние сообщения; самое старое (%1$d) не отправляется повторно.</item>
         <item quantity="few">Отправляются только ваши последние сообщения; %1$d самых старых не отправляются повторно.</item>
@@ -477,5 +575,11 @@
         <item quantity="few">%1$d шага</item>
         <item quantity="many">%1$d шагов</item>
         <item quantity="other">%1$d шага</item>
+    </plurals>
+    <plurals name="runhist_completed_steps">
+        <item quantity="one">Выполнено %1$d из %2$d шага</item>
+        <item quantity="few">Выполнено %1$d из %2$d шагов</item>
+        <item quantity="many">Выполнено %1$d из %2$d шагов</item>
+        <item quantity="other">Выполнено %1$d из %2$d шага</item>
     </plurals>
 </resources>

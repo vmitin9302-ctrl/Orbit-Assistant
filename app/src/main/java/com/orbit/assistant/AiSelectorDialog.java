@@ -89,7 +89,7 @@ final class AiSelectorDialog {
         AlertDialog.Builder builder = new AlertDialog.Builder(context)
                 .setTitle(title)
                 .setView(content)
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.string.ui_cancel_19766ed6, null)
                 .setPositiveButton(confirmLabel.labelFor(selection), (d, w) -> {
                     AiSelection confirmed = AiSelections.resolve(selection);
                     // The first time Auto is chosen anywhere, one short sheet says what it does.
@@ -122,7 +122,7 @@ final class AiSelectorDialog {
         // Provider chips only when there is a real choice to make. A single-provider phone gets no
         // control that can only ever show one option.
         if (providers.size() > 1) {
-            body.addView(heading("Provider"));
+            body.addView(heading(context.getString(R.string.aisel_provider)));
             providerRow = new LinearLayout(context);
             providerRow.setOrientation(LinearLayout.HORIZONTAL);
             HorizontalScrollView providerScroll = new HorizontalScrollView(context);
@@ -138,13 +138,13 @@ final class AiSelectorDialog {
             body.addView(providerScroll);
         }
 
-        body.addView(heading("Model"));
+        body.addView(heading(context.getString(R.string.aisel_model)));
         modelList = new LinearLayout(context);
         modelList.setOrientation(LinearLayout.VERTICAL);
         body.addView(modelList);
         buildModelRows();
 
-        strengthHeading = heading("Strength");
+        strengthHeading = heading(context.getString(R.string.aisel_strength));
         body.addView(strengthHeading);
         strengthRow = new LinearLayout(context);
         strengthRow.setOrientation(LinearLayout.HORIZONTAL);
@@ -159,7 +159,7 @@ final class AiSelectorDialog {
         }
         body.addView(strengthScroll);
         noStrengthNote = UiKit.text(context,
-                "This model has no strength setting.", 13, UiKit.MUTED, false);
+                context.getString(R.string.aisel_no_strength), 13, UiKit.MUTED, false);
         noStrengthNote.setPadding(0, UiKit.dp(context, 2), 0, 0);
         body.addView(noStrengthNote);
 
@@ -191,15 +191,15 @@ final class AiSelectorDialog {
                 UiKit.dp(context, 6));
         autoProviders.setMinHeight(UiKit.dp(context, 32));
         autoProviders.setGravity(Gravity.CENTER_VERTICAL);
-        autoProviders.setContentDescription("Choose which providers Auto can use");
+        autoProviders.setContentDescription(context.getString(R.string.aisel_auto_providers_cd));
         autoProviders.setOnClickListener(v -> AutoSheets.showSettings(context, () -> {
             if (autoProviders != null) autoProviders.setText(autoProvidersText());
         }));
         modelList.addView(autoProviders);
 
         Set<String> added = new LinkedHashSet<>();
-        addGroup("Favorites", ModelLibraryStore.favorites(context), added, Integer.MAX_VALUE);
-        addGroup("Recent", ModelLibraryStore.recents(context), added, 4);
+        addGroup(context.getString(R.string.aisel_favorites), ModelLibraryStore.favorites(context), added, Integer.MAX_VALUE);
+        addGroup(context.getString(R.string.aisel_recent), ModelLibraryStore.recents(context), added, 4);
 
         String provider = browseProvider();
         List<AiSelection> common = new ArrayList<>();
@@ -217,8 +217,8 @@ final class AiSelectorDialog {
                     Integer.MAX_VALUE);
         }
 
-        Button browse = chip("Browse models ›");
-        browse.setContentDescription("Browse all models");
+        Button browse = chip(context.getString(R.string.aisel_browse));
+        browse.setContentDescription(context.getString(R.string.aisel_browse_cd));
         browse.setOnClickListener(v -> ModelLibraryDialog.show(context, selection, chosen -> {
             selection = chosen;
             buildModelRows();
@@ -292,7 +292,7 @@ final class AiSelectorDialog {
         TextView name = UiKit.text(context, spec.displayName, 15, UiKit.TEXT, true);
         words.addView(name);
         boolean unavailable = ModelAvailability.knownUnavailable(context, spec.providerId, spec.id);
-        String note = unavailable ? "Not available on this account right now" : spec.descriptor;
+        String note = unavailable ? context.getString(R.string.aisel_unavailable) : spec.descriptor;
         if (!note.isEmpty()) {
             TextView descriptor = UiKit.text(context, note, 12,
                     unavailable ? UiKit.DANGER : UiKit.MUTED, false);
@@ -322,7 +322,7 @@ final class AiSelectorDialog {
 
     /** "Auto can use ChatGPT, Orbit Local ›": the one line that leads to Auto's settings. */
     private String autoProvidersText() {
-        return "Auto can use " + AutoPermissions.summary(context) + " ›";
+        return context.getString(R.string.aisel_auto_can_use, AutoPermissions.summary(context));
     }
 
     /** Auto's row: same shape as a model row, never a Favorite, with no strength of its own. */
@@ -441,7 +441,7 @@ final class AiSelectorDialog {
         boolean auto = selection.isAuto();
         for (Button chip : providerChips) {
             styleChip(chip, !auto && chip.getTag().equals(selection.provider), accent,
-                    "Provider " + chip.getText());
+                    context.getString(R.string.aisel_provider_cd, chip.getText()));
         }
         if (autoRow != null) {
             autoRow.setBackground(auto
@@ -452,7 +452,7 @@ final class AiSelectorDialog {
             View check = autoRow.findViewWithTag("check");
             if (check != null) check.setVisibility(auto ? View.VISIBLE : View.INVISIBLE);
             autoRow.setContentDescription(AiSelection.AUTO_LABEL + ". "
-                    + AiSelection.AUTO_DESCRIPTION + (auto ? ". Selected" : ""));
+                    + AiSelection.AUTO_DESCRIPTION + (auto ? context.getString(R.string.aisel_selected_sentence) : ""));
             autoRow.setSelected(auto);
         }
         if (autoProviders != null) autoProviders.setVisibility(auto ? View.VISIBLE : View.GONE);
@@ -470,7 +470,7 @@ final class AiSelectorDialog {
             if (check != null) check.setVisibility(selected ? View.VISIBLE : View.INVISIBLE);
             row.setContentDescription(spec.displayName
                     + (spec.descriptor.isEmpty() ? "" : ". " + spec.descriptor)
-                    + (selected ? ". Selected" : ""));
+                    + (selected ? context.getString(R.string.aisel_selected_sentence) : ""));
             row.setSelected(selected);
         }
         List<AiStrength> legal = AiSelections.strengthsFor(selection);
@@ -478,7 +478,7 @@ final class AiSelectorDialog {
             boolean offered = legal.contains(e.getKey());
             e.getValue().setVisibility(offered ? View.VISIBLE : View.GONE);
             styleChip(e.getValue(), e.getKey() == selection.strength, accent,
-                    "Strength " + e.getKey().label);
+                    context.getString(R.string.aisel_strength_cd, e.getKey().label));
         }
         boolean hasStrengths = !legal.isEmpty();
         strengthHeading.setVisibility(hasStrengths ? View.VISIBLE : View.GONE);
@@ -496,7 +496,7 @@ final class AiSelectorDialog {
                 ? UiKit.ripple(accent, UiKit.onAccent(accent), 16, context)
                 : UiKit.rippleOutlined(UiKit.SURFACE_2, UiKit.withAlpha(accent, 60), accent, 16,
                         context));
-        chip.setContentDescription(description + (selected ? ", selected" : ""));
+        chip.setContentDescription(description + (selected ? context.getString(R.string.ui_selected_bd44f3ef) : ""));
     }
 
     // ---- for tests -----------------------------------------------------------------------------

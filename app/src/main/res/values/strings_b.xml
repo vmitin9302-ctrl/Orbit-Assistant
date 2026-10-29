@@ -466,6 +466,104 @@
     <string name="relay_error_body">Relay error %1$d: %2$s</string>
     <string name="relay_unreachable">Could not reach the Orbit relay: %1$s</string>
     <string name="relay_label">Relay · %1$s</string>
+    <string name="aisel_provider" formatted="false">Provider</string>
+    <string name="aisel_model" formatted="false">Model</string>
+    <string name="aisel_strength" formatted="false">Strength</string>
+    <string name="aisel_no_strength" formatted="false">This model has no strength setting.</string>
+    <string name="aisel_auto_providers_cd" formatted="false">Choose which providers Auto can use</string>
+    <string name="aisel_favorites" formatted="false">Favorites</string>
+    <string name="aisel_recent" formatted="false">Recent</string>
+    <string name="aisel_browse" formatted="false">Browse models ›</string>
+    <string name="aisel_browse_cd" formatted="false">Browse all models</string>
+    <string name="aisel_unavailable" formatted="false">Not available on this account right now</string>
+    <string name="aisel_auto_can_use">Auto can use %1$s ›</string>
+    <string name="aisel_provider_cd">Provider %1$s</string>
+    <string name="aisel_strength_cd">Strength %1$s</string>
+    <string name="aisel_selected_sentence" formatted="false">. Selected</string>
+    <string name="colorpick_hex_warning" formatted="false">Use a color like #8B7CFF.</string>
+    <string name="colorpick_suggested" formatted="false">Suggested</string>
+    <string name="colorpick_title" formatted="false">Choose a color</string>
+    <string name="colorpick_hex_cd" formatted="false">Color value in hexadecimal</string>
+    <string name="colorpick_use" formatted="false">Use</string>
+    <string name="colorpick_compare_cd">Currently %1$s. New color %2$s</string>
+    <string name="colorpick_current" formatted="false">Current</string>
+    <string name="colorpick_new_color" formatted="false">New</string>
+    <string name="colorpick_sv_cd" formatted="false">Saturation and brightness. Drag to adjust.</string>
+    <string name="colorpick_hue_cd" formatted="false">Hue. Drag to change the color family.</string>
+    <string name="colorpick_apply" formatted="false">Apply</string>
+    <string name="rtexec_skipped" formatted="false">Skipped · trigger alerts unavailable</string>
+    <string name="rtexec_grant">Grant access for %1$s before this routine can run automatically.</string>
+    <string name="rtexec_needs_access">Needs access · %1$s</string>
+    <string name="rtexec_confirm">Needs attention · %1$s requires confirmation</string>
+    <string name="rtexec_visible">Needs attention · %1$s needs Orbit visible</string>
+    <string name="rtexec_tap_continue">Tap to continue at step %1$d: %2$s.</string>
+    <string name="rtexec_stopped_at">Stopped at step %1$d</string>
+    <string name="rtexec_stopped">Stopped · %1$s</string>
+    <string name="rtexec_partial">Partially ran · waiting for %1$s</string>
+    <string name="rtexec_bg_done">Orbit completed the background-safe steps. Tap to continue at step %1$d: %2$s.</string>
+    <string name="rtexec_completed" formatted="false">Completed automatically</string>
+    <string name="rtexec_could_not_run" formatted="false">Stopped · Orbit could not run this Routine</string>
+    <string name="vaultitem_type_link" formatted="false">Link</string>
+    <string name="vaultitem_type_image" formatted="false">Image</string>
+    <string name="vaultitem_type_reply" formatted="false">Orbit answer</string>
+    <string name="vaultitem_type_page" formatted="false">Document page</string>
+    <string name="vaultitem_type_note" formatted="false">Note</string>
+    <string name="vaultitem_page_of">Page %1$d of %2$d</string>
+    <string name="vaultitem_page">Page %1$d</string>
+    <string name="vaultitem_saved">Saved %1$s</string>
+    <string name="vaultitem_edited">Edited %1$s</string>
+    <string name="runhist_completed" formatted="false">Completed</string>
+    <string name="runhist_stopped" formatted="false">Stopped before finishing</string>
+    <string name="runhist_failed_at">Failed at action %1$d</string>
+    <string name="runhist_failed_at_named">Failed at action %1$d: %2$s</string>
+    <string name="runhist_trigger" formatted="false">Automatic trigger</string>
+    <string name="runhist_widget" formatted="false">Widget or tile</string>
+    <string name="runhist_manual" formatted="false">Run manually</string>
+    <string name="rtnotify_finish" formatted="false">Tap to finish the routine.</string>
+    <string name="rtnotify_needs_you">%1$s needs you</string>
+    <string name="rtnotify_stopped_base" formatted="false">The automatic routine stopped.</string>
+    <string name="rtnotify_retry">%1$s · Tap to retry from this step.</string>
+    <string name="rtnotify_stopped_title">%1$s stopped</string>
+    <string name="replysurface_use_in_chat" formatted="false">Use in chat</string>
+    <string name="replysurface_copied_email" formatted="false">Reply copied · paste it into your email</string>
+    <string name="replysurface_copied_conversation" formatted="false">Reply copied · paste it into the conversation</string>
+    <string name="replysurface_copied_app">Reply copied · paste it into %1$s</string>
+    <string name="floatsurf_no_glass" formatted="false">Solid uses no glass effects. Your glass settings are kept.</string>
+    <string name="floatsurf_solid" formatted="false">Clean opaque controls, no glass</string>
+    <string name="floatsurf_frosted" formatted="false">Soft translucent glass</string>
+    <string name="floatsurf_rich" formatted="false">Richer glass with depth and reflection</string>
+    <string name="attachbatch_read_failed" formatted="false">Orbit could not read the selected attachments.</string>
+    <string name="attachbatch_camera_photo" formatted="false">Camera photo</string>
+    <string name="attachbatch_clipboard">Clipboard · %1$s</string>
+    <string name="rlc_noun_brightness" formatted="false">brightness</string>
+    <string name="rlc_noun_volume" formatted="false">media volume</string>
+    <string name="rlc_conf_max">Setting %1$s to maximum.</string>
+    <string name="rlc_conf_mute" formatted="false">Muting media volume.</string>
+    <string name="rlc_conf_min" formatted="false">Setting brightness to minimum.</string>
+    <string name="rlc_conf_pct">Setting %1$s to %2$d%%.</string>
+    <string name="rlc_conf_lower_by">Lowering %1$s by %2$d%%.</string>
+    <string name="rlc_conf_raise_by">Raising %1$s by %2$d%%.</string>
+    <string name="rlc_conf_lower">Lowering %1$s.</string>
+    <string name="rlc_conf_raise">Raising %1$s.</string>
+    <string name="rlc_sum_max">set %1$s to maximum</string>
+    <string name="rlc_sum_mute" formatted="false">mute media volume</string>
+    <string name="rlc_sum_min" formatted="false">set brightness to minimum</string>
+    <string name="rlc_sum_pct">set %1$s to %2$d%%</string>
+    <string name="rlc_sum_lower_by">lower %1$s by %2$d%%</string>
+    <string name="rlc_sum_raise_by">raise %1$s by %2$d%%</string>
+    <string name="rlc_sum_lower">lower %1$s</string>
+    <string name="rlc_sum_raise">raise %1$s</string>
+    <string name="worker_chat_changed" formatted="false">This chat changed before the retry could run.</string>
+    <string name="worker_weather_failed" formatted="false">I couldn\'t load the weather right now.</string>
+    <string name="worker_could_not_finish" formatted="false">Orbit could not finish this response.</string>
+    <string name="worker_could_not_finish_because">Orbit could not finish this response: %1$s</string>
+    <string name="worker_done" formatted="false">Done.</string>
+    <string name="worker_retry_not_kept" formatted="false">Orbit could not keep this retry because the chat changed.</string>
+    <string name="worker_timed_out">Orbit timed out while waiting for %1$s.</string>
+    <string name="worker_interrupted" formatted="false">Orbit request was interrupted.</string>
+    <string name="dialguard_title">Call %1$s?</string>
+    <string name="dialguard_message">Open the phone dialer for %1$s?</string>
+    <string name="dialguard_confirm" formatted="false">Open dialer</string>
     <plurals name="convsheet_older_not_sent">
         <item quantity="one">Only your most recent messages are sent; the %1$d oldest is not resent.</item>
         <item quantity="other">Only your most recent messages are sent; the %1$d oldest are not resent.</item>
@@ -473,5 +571,9 @@
     <plurals name="rbuild_step_count">
         <item quantity="one">1 step</item>
         <item quantity="other">%1$d steps</item>
+    </plurals>
+    <plurals name="runhist_completed_steps">
+        <item quantity="one">Completed %1$d of %2$d step</item>
+        <item quantity="other">Completed %1$d of %2$d steps</item>
     </plurals>
 </resources>

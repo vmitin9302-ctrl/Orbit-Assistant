@@ -34,13 +34,13 @@ public final class RoutineTriggerNotifier {
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         String body = reason == null || reason.trim().isEmpty()
-                ? "Tap to finish the routine."
+                ? c.getString(R.string.rtnotify_finish)
                 : reason.trim();
         Notification.Builder b = Build.VERSION.SDK_INT >= 26
                 ? new Notification.Builder(c, CHANNEL)
                 : new Notification.Builder(c);
         b.setSmallIcon(R.drawable.ic_orbit)
-                .setContentTitle(routine.name + " needs you")
+                .setContentTitle(c.getString(R.string.rtnotify_needs_you, routine.name))
                 .setContentText(body)
                 .setStyle(new Notification.BigTextStyle().bigText(body))
                 .setContentIntent(pi)
@@ -63,13 +63,13 @@ public final class RoutineTriggerNotifier {
         PendingIntent pi = PendingIntent.getActivities(c, requestCode,
                 OrbitNavigation.stackFor(c, open),
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-        String base = reason == null || reason.trim().isEmpty() ? "The automatic routine stopped." : reason.trim();
-        String body = base + " · Tap to retry from this step.";
+        String base = reason == null || reason.trim().isEmpty() ? c.getString(R.string.rtnotify_stopped_base) : reason.trim();
+        String body = c.getString(R.string.rtnotify_retry, base);
         Notification.Builder b = Build.VERSION.SDK_INT >= 26
                 ? new Notification.Builder(c, CHANNEL)
                 : new Notification.Builder(c);
         b.setSmallIcon(R.drawable.ic_orbit)
-                .setContentTitle(routine.name + " stopped")
+                .setContentTitle(c.getString(R.string.rtnotify_stopped_title, routine.name))
                 .setContentText(body)
                 .setStyle(new Notification.BigTextStyle().bigText(body))
                 .setContentIntent(pi)
