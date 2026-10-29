@@ -19,6 +19,9 @@ import java.util.regex.Pattern;
 final class LocalizedSource {
     private static final Pattern ITEM = Pattern.compile(
             "<string\\s+name=\"([^\"]+)\"[^>]*>(.*?)</string>", Pattern.DOTALL);
+    /** {@code getString(R.string.x)} with no format arguments, optionally on a receiver. */
+    private static final Pattern PLAIN_CALL = Pattern.compile(
+            "(?:[A-Za-z_]\\w*(?:\\(\\))?\\.)*getString\\(\\s*(?:com\\.orbit\\.assistant\\.)?R\\.string\\.([A-Za-z0-9_]+)\\s*\\)");
     private static final Pattern REF = Pattern.compile(
             "(?:com\\.orbit\\.assistant\\.)?R\\.string\\.([A-Za-z0-9_]+)");
     private static Map<String, String> english;
@@ -28,6 +31,15 @@ final class LocalizedSource {
     static String expand(String source) {
         if (source == null || !source.contains("R.string.")) return source;
         Map<String, String> strings = english();
+        Matcher call = PLAIN_CALL.matcher(source);
+        StringBuffer plain = new StringBuffer();
+        while (call.find()) {
+            String text = strings.get(call.group(1));
+            call.appendReplacement(plain, Matcher.quoteReplacement(
+                    text == null ? call.group() : quote(text)));
+        }
+        call.appendTail(plain);
+        source = plain.toString();
         Matcher m = REF.matcher(source);
         StringBuffer out = new StringBuffer();
         while (m.find()) {
