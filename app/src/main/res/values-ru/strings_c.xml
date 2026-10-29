@@ -259,6 +259,7 @@
     <string name="ext_not_installed_title">Расширение не установлено</string>
     <string name="ext_err_open_file">Android не смог открыть выбранный файл.</string>
     <string name="ext_err_too_large">Манифест расширения слишком большой.</string>
+    <string name="ext_official_unavailable_one">Одно официальное расширение недоступно в этой сборке.</string>
     <plurals name="askvault_label">
         <item quantity="one">Вопрос к хранилищу: %d элемент</item>
         <item quantity="few">Вопрос к хранилищу: %d элемента</item>

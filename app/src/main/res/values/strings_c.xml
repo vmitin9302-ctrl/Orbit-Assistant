@@ -259,6 +259,7 @@
     <string name="ext_not_installed_title">Extension not installed</string>
     <string name="ext_err_open_file">Android could not open the selected file.</string>
     <string name="ext_err_too_large">The extension manifest is too large.</string>
+    <string name="ext_official_unavailable_one">One official extension is unavailable in this build.</string>
     <plurals name="askvault_label">
         <item quantity="one">Ask Vault: %d saved item</item>
         <item quantity="few">Ask Vault: %d saved items</item>
@@ -278,7 +279,6 @@
         <item quantity="other">%d ELSE steps</item>
     </plurals>
     <plurals name="ext_official_unavailable">
-        <item quantity="one">One official extension is unavailable in this build.</item>
         <item quantity="few">%d official extensions are unavailable in this build.</item>
         <item quantity="many">%d official extensions are unavailable in this build.</item>
         <item quantity="other">%d official extensions are unavailable in this build.</item>

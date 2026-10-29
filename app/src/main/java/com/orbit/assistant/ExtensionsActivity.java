@@ -187,8 +187,10 @@ public final class ExtensionsActivity extends Activity {
         if (bundledLoadFailures > 0) {
             LinearLayout unavailable = card();
             unavailable.addView(UiKit.text(this,
-                    getResources().getQuantityString(R.plurals.ext_official_unavailable,
-                            bundledLoadFailures, bundledLoadFailures),
+                    bundledLoadFailures == 1
+                            ? getString(R.string.ext_official_unavailable_one)
+                            : getResources().getQuantityString(R.plurals.ext_official_unavailable,
+                                    bundledLoadFailures, bundledLoadFailures),
                     13, UiKit.TEXT, true));
             page.addView(unavailable, cardSpacing(!firstParty.isEmpty()));
         }

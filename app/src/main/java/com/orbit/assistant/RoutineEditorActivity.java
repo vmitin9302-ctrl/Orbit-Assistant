@@ -1224,7 +1224,7 @@ public class RoutineEditorActivity extends Activity {
         }
         // Branch shape is checked before anything is written, and the message names the step, so a
         // half-defined ELSE is corrected here rather than becoming an unrunnable saved routine.
-        String branchProblem = RoutineBranch.structureProblem(workingActions);
+        String branchProblem = RoutineBranch.structureProblem(this, workingActions);
         if (!branchProblem.isEmpty()) {
             Toast.makeText(this, branchProblem, Toast.LENGTH_LONG).show();
             return;
