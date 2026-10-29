@@ -364,11 +364,12 @@ public final class OpenRouterAuthTest {
         OpenRouterAuth.Exchange expired = OpenRouterAuth.interpretExchange(403,
                 "{\"error\":{\"message\":\"Authorization code expired\"}}");
         assertFalse(expired.ok());
-        assertTrue(expired.message.contains("expired"));
-        assertFalse("the server body is never echoed", expired.message.contains("{"));
+        assertTrue(expired.text(org.robolectric.RuntimeEnvironment.getApplication()).contains("expired"));
+        assertFalse("the server body is never echoed", expired.text(org.robolectric.RuntimeEnvironment.getApplication()).contains("{"));
         assertTrue(OpenRouterAuth.interpretExchange(400, "Invalid code_challenge_method")
-                .message.contains("rejected"));
-        assertTrue(OpenRouterAuth.interpretExchange(429, "").message.contains("rate limit"));
+                .text(org.robolectric.RuntimeEnvironment.getApplication()).contains("rejected"));
+        assertTrue(OpenRouterAuth.interpretExchange(429, "")
+                .text(org.robolectric.RuntimeEnvironment.getApplication()).contains("rate limit"));
         assertFalse(OpenRouterAuth.interpretExchange(500, "boom").ok());
     }
 

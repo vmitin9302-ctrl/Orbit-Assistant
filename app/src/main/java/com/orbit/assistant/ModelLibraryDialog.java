@@ -55,7 +55,7 @@ final class ModelLibraryDialog {
         int pad = UiKit.dp(context, 18);
         page.setPadding(pad, UiKit.dp(context, 4), pad, UiKit.dp(context, 8));
 
-        search.setHint("Search models, makers or IDs");
+        search.setHint(context.getString(R.string.mld_search_hint));
         search.setSingleLine(true);
         search.setTextColor(UiKit.TEXT);
         search.setHintTextColor(UiKit.MUTED);
@@ -64,7 +64,7 @@ final class ModelLibraryDialog {
 
         LinearLayout filters = new LinearLayout(context);
         filters.setOrientation(LinearLayout.HORIZONTAL);
-        Button all = filter("All");
+        Button all = filter(context.getString(R.string.mld_filter_all));
         all.setOnClickListener(v -> {
             providerFilter = "";
             favoritesOnly = false;
@@ -73,14 +73,14 @@ final class ModelLibraryDialog {
             rebuild();
         });
         filters.addView(all);
-        Button favorites = filter("Favorites");
+        Button favorites = filter(context.getString(R.string.mld_filter_fav));
         favorites.setOnClickListener(v -> { favoritesOnly = true; rebuild(); });
         filters.addView(favorites);
         // Two capability filters, each a toggle; they combine with the provider filter.
-        Button vision = filter("Vision");
+        Button vision = filter(context.getString(R.string.mld_filter_vision));
         vision.setOnClickListener(v -> { visionOnly = !visionOnly; rebuild(); });
         filters.addView(vision);
-        Button reasoning = filter("Reasoning");
+        Button reasoning = filter(context.getString(R.string.mld_filter_reasoning));
         reasoning.setOnClickListener(v -> { reasoningOnly = !reasoningOnly; rebuild(); });
         filters.addView(reasoning);
         for (AiProvider provider : AiSelections.pickableProviders(context)) {
@@ -112,8 +112,8 @@ final class ModelLibraryDialog {
         // Opened from Auto, which belongs to no provider, the library shows every provider.
         if (initial != null && !initial.isAuto()) providerFilter = initial.provider;
         rebuild();
-        AlertDialog.Builder builder = new AlertDialog.Builder(context).setTitle("Browse Models")
-                .setView(page).setNegativeButton("Close", null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context).setTitle(context.getString(R.string.mld_title))
+                .setView(page).setNegativeButton(context.getString(R.string.mld_close), null);
         AlertDialog builtDialog = builder.create();
         dialog = builtDialog;
         UiKit.styleOrbitDialog(builtDialog, context, false);
@@ -144,13 +144,13 @@ final class ModelLibraryDialog {
             }
         }
         if (count == 0) {
-            TextView empty = UiKit.text(context, favoritesOnly
-                    ? "No favorite models match." : "No models match.", 14, UiKit.MUTED, false);
+            TextView empty = UiKit.text(context, context.getString(favoritesOnly
+                    ? R.string.mld_no_fav : R.string.mld_no_models), 14, UiKit.MUTED, false);
             empty.setPadding(0, UiKit.dp(context, 24), 0, UiKit.dp(context, 24));
             empty.setGravity(Gravity.CENTER);
             results.addView(empty);
         } else if (count > shown) {
-            TextView more = UiKit.text(context, moreLabel(shown, count), 12.5f, UiKit.MUTED, false);
+            TextView more = UiKit.text(context, moreLabel(context, shown, count), 12.5f, UiKit.MUTED, false);
             more.setPadding(0, UiKit.dp(context, 12), 0, UiKit.dp(context, 12));
             more.setGravity(Gravity.CENTER);
             results.addView(more);
@@ -159,8 +159,8 @@ final class ModelLibraryDialog {
     }
 
     /** "Showing 60 of 412 models. Search to find more." */
-    static String moreLabel(int shown, int total) {
-        return "Showing " + shown + " of " + total + " models. Search to find more.";
+    static String moreLabel(Context context, int shown, int total) {
+        return context.getString(R.string.mld_more, shown, total);
     }
 
     /** The Vision and Reasoning filters: only what the catalog states, never a guess. */
@@ -207,28 +207,31 @@ final class ModelLibraryDialog {
         words.setOrientation(LinearLayout.VERTICAL);
         words.addView(UiKit.text(context, spec.displayName, 15, UiKit.TEXT, true));
         boolean openRouterAuto = OrbitModelCatalog.OPENROUTER_AUTO.equals(spec.id);
-        String contextLabel = openRouterAuto ? "Context varies by model"
-                : spec.contextWindowTokens <= 0 ? "Context unknown"
-                : "Context " + compact(spec.contextWindowTokens);
+        String contextLabel = openRouterAuto ? context.getString(R.string.mld_ctx_varies)
+                : spec.contextWindowTokens <= 0 ? context.getString(R.string.mld_ctx_unknown)
+                : context.getString(R.string.mld_ctx, compact(spec.contextWindowTokens));
         // The route comes first, so the same model direct and through OpenRouter never look alike.
         String route = Prefs.PROVIDER_OPENROUTER.equals(provider.id()) && !openRouterAuto
                 && !spec.familyLabel.isEmpty()
                 ? provider.displayName() + " · " + spec.familyLabel : provider.displayName();
         String detail = route + " · " + contextLabel
-                + " · Vision " + (spec.vision ? "Yes" : "Not listed")
-                + (spec.nativeFiles ? " · Provider file input" : "")
-                + (spec.extractedDocuments ? " · Orbit text extraction" : "")
-                + (spec.tools ? " · Tools" : "")
-                + (spec.webSearch ? " · Web search" : "")
-                + (spec.hasStrengths() ? " · Reasoning " + strengthRange(spec) : " · No strength control")
-                + (spec.selectable() ? "" : " · Unavailable");
+                + " · " + context.getString(spec.vision ? R.string.mld_vision_yes
+                        : R.string.mld_vision_no)
+                + (spec.nativeFiles ? " · " + context.getString(R.string.mld_file_input) : "")
+                + (spec.extractedDocuments ? " · " + context.getString(R.string.mld_text_extraction) : "")
+                + (spec.tools ? " · " + context.getString(R.string.mld_tools) : "")
+                + (spec.webSearch ? " · " + context.getString(R.string.mld_web_search) : "")
+                + (spec.hasStrengths() ? " · " + context.getString(R.string.mld_reasoning,
+                        strengthRange(context, spec)) : " · " + context.getString(R.string.mld_no_strength))
+                + (spec.selectable() ? "" : " · " + context.getString(R.string.mld_unavailable));
         words.addView(UiKit.text(context, detail, 11.5f,
                 spec.selectable() ? UiKit.MUTED : UiKit.DANGER, false));
         row.addView(words, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
 
         Button star = filter(ModelLibraryStore.isFavorite(context, provider.id(), spec.id) ? "★" : "☆");
-        star.setContentDescription((ModelLibraryStore.isFavorite(context, provider.id(), spec.id)
-                ? "Remove from Favorites: " : "Add to Favorites: ") + spec.displayName);
+        star.setContentDescription(context.getString(
+                ModelLibraryStore.isFavorite(context, provider.id(), spec.id)
+                        ? R.string.mld_remove_fav : R.string.mld_add_fav, spec.displayName));
         star.setOnClickListener(v -> {
             boolean next = !ModelLibraryStore.isFavorite(context, provider.id(), spec.id);
             ModelLibraryStore.setFavorite(context, provider.id(), spec.id, next);
@@ -276,8 +279,8 @@ final class ModelLibraryDialog {
         return Math.round(tokens / 1000f) + "K";
     }
 
-    private static String strengthRange(AiModelSpec spec) {
-        if (spec.strengths.isEmpty()) return "None";
+    private static String strengthRange(Context context, AiModelSpec spec) {
+        if (spec.strengths.isEmpty()) return context.getString(R.string.mld_none);
         if (spec.strengths.size() == 1) return spec.strengths.get(0).label;
         return spec.strengths.get(0).label + "-" + spec.strengths.get(spec.strengths.size() - 1).label;
     }
