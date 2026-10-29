@@ -39,14 +39,14 @@ public final class MessageStylePreview extends LinearLayout {
         setPadding(UiKit.dp(c, 12), UiKit.dp(c, 11), UiKit.dp(c, 12), UiKit.dp(c, 12));
         setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_YES);
 
-        userBubble = UiKit.text(c, "Looks right?", 12.5f, UiKit.TEXT, false);
+        userBubble = UiKit.text(c, c.getString(R.string.stylepreview_user), 12.5f, UiKit.TEXT, false);
         userBubble.setPadding(UiKit.dp(c, 12), UiKit.dp(c, 8), UiKit.dp(c, 12), UiKit.dp(c, 8));
         LinearLayout.LayoutParams userLp = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         userLp.gravity = Gravity.END;
         addView(userBubble, userLp);
 
-        assistantBubble = UiKit.text(c, "That's your message shape.", 12.5f, UiKit.TEXT, false);
+        assistantBubble = UiKit.text(c, c.getString(R.string.stylepreview_assistant), 12.5f, UiKit.TEXT, false);
         assistantBubble.setPadding(UiKit.dp(c, 12), UiKit.dp(c, 8),
                 UiKit.dp(c, 12), UiKit.dp(c, 8));
         LinearLayout.LayoutParams replyLp = new LinearLayout.LayoutParams(
@@ -78,9 +78,10 @@ public final class MessageStylePreview extends LinearLayout {
                 UiKit.bubbleSurface(c, tokens.assistantBubble, tokens.accent, resolved));
 
         String outline = resolved.bubbleOutline == OrbitProStyle.OUTLINE_OFF
-                ? "no outline"
-                : resolved.bubbleOutlineLabel().toLowerCase(java.util.Locale.US) + " outline";
-        setContentDescription("Message style sample. "
-                + resolved.bubbleRadiusLabel() + " corners, " + outline + ".");
+                ? c.getString(R.string.stylepreview_no_outline)
+                : c.getString(R.string.stylepreview_outline,
+                        resolved.bubbleOutlineLabel(getContext()).toLowerCase(java.util.Locale.US));
+        setContentDescription(c.getString(R.string.stylepreview_cd,
+                resolved.bubbleRadiusLabel(getContext()), outline));
     }
 }

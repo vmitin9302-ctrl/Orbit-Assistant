@@ -217,8 +217,8 @@ public final class SmartVaultWorker extends Worker {
             // Reported once per item and then left alone, so nothing retries against a provider
             // that cannot answer and the user sees why on the item.
             String why = provider.status(c) == AiProvider.Status.NEEDS_SETUP
-                    ? "Sign in to " + provider.displayName() + " to get suggestions."
-                    : AiProvider.COMPLETION_UNSUPPORTED;
+                    ? c.getString(R.string.svw_sign_in, provider.displayName())
+                    : c.getString(R.string.aip_completion_unsupported);
             for (SmartVaultDb.Job job : db.queuedJobs(10_000)) {
                 db.putJob(job.itemId, SmartVaultDb.STATE_FAILED, job.basis, job.attempts, why);
             }
@@ -239,7 +239,7 @@ public final class SmartVaultWorker extends Worker {
             String page = SmartVaultIndex.currentDerived(derived, item, SmartVaultDb.KIND_PAGE);
             if (!SmartVaultEnrichment.hasMaterial(item, ocr, page)) {
                 db.putJob(item.id, SmartVaultDb.STATE_DONE, fingerprint, job.attempts,
-                        "There is no text here for Orbit to describe yet.");
+                        c.getString(R.string.svw_no_text));
                 continue;
             }
             String prompt = SmartVaultEnrichment.prompt(item, ocr, page, existingTopics);
@@ -270,12 +270,12 @@ public final class SmartVaultWorker extends Worker {
             }
             int attempts = job.attempts + 1;
             if (error[0] != null) {
-                if (looksTemporary(error[0]) && attempts < 3) {
+                if ((looksTemporary(error[0]) || ErrorMarkers.matches(c, R.string.markers_transient_vault, error[0])) && attempts < 3) {
                     db.putJob(item.id, SmartVaultDb.STATE_QUEUED, fingerprint, attempts, "");
                     return Outcome.RETRY;
                 }
                 db.putJob(item.id, SmartVaultDb.STATE_FAILED, fingerprint, attempts,
-                        "Suggestions failed: " + shorten(error[0]));
+                        c.getString(R.string.svw_failed, shorten(error[0])));
                 continue;
             }
             String providerName = label[0].contains("·")
@@ -286,7 +286,7 @@ public final class SmartVaultWorker extends Worker {
             if (parsed == null) {
                 db.putJob(item.id, attempts < 2 ? SmartVaultDb.STATE_QUEUED : SmartVaultDb.STATE_FAILED,
                         fingerprint, attempts, attempts < 2 ? ""
-                                : "The AI provider's answer could not be used. Try again later.");
+                                : c.getString(R.string.svw_unusable));
                 continue;
             }
             OrbitVaultStore.Apply applied = OrbitVaultStore.applySuggestions(c, item.id,
@@ -298,7 +298,7 @@ public final class SmartVaultWorker extends Worker {
                 // the new version, a bounded number of times.
                 db.putJob(item.id, attempts < 3 ? SmartVaultDb.STATE_QUEUED : SmartVaultDb.STATE_FAILED,
                         "", attempts, attempts < 3 ? ""
-                                : "The item kept changing, so Orbit stopped suggesting details.");
+                                : c.getString(R.string.svw_kept_changing));
             } else {
                 db.putJob(item.id, SmartVaultDb.STATE_DONE, fingerprint, attempts, "");
             }

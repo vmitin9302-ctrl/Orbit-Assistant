@@ -141,8 +141,7 @@ public final class ThinkingUpdateProviderTest {
 
     private static String read(String relativePath) {
         try {
-            return new String(Files.readAllBytes(repositoryRoot().resolve(relativePath)),
-                    StandardCharsets.UTF_8);
+            return LocalizedSource.expand(new String(Files.readAllBytes(repositoryRoot().resolve(relativePath)), StandardCharsets.UTF_8));
         } catch (IOException e) {
             throw new AssertionError("could not read " + relativePath, e);
         }
@@ -218,7 +217,7 @@ public final class ThinkingUpdateProviderTest {
             @Override public void onError(String message) { error.set(message); }
         });
         assertNotNull(error.get());
-        assertEquals(RelayProvider.NOT_CONFIGURED_ERROR, error.get());
+        assertEquals(context.getString(RelayProvider.NOT_CONFIGURED_ERROR), error.get());
     }
 
     @Test public void unconnectedOpenRouterRefusesChatWithTheFeatureOn() {

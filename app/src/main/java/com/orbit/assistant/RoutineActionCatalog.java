@@ -1,5 +1,7 @@
 package com.orbit.assistant;
 
+import android.content.Context;
+
 import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
@@ -72,64 +74,122 @@ public final class RoutineActionCatalog {
                 OPEN_BLUETOOTH_SETTINGS.equals(type));
     }
 
-    public static String labelForType(String type) {
-        if (type == null) return "Action";
-        for (int i = 0; i < TYPES.length; i++) {
-            if (TYPES[i].equalsIgnoreCase(type)) return LABELS[i];
-        }
-        return titleCase(type.replace('_', ' '));
+    /** Which string a label comes from; parallel to {@link #LABELS}. */
+    private static final int[] LABEL_RES = {
+            R.string.rcat_label_if_condition, R.string.rcat_label_open_app,
+            R.string.rcat_label_brightness, R.string.rcat_label_dnd,
+            R.string.rcat_label_media_volume, R.string.rcat_label_flashlight,
+            R.string.rcat_label_timer, R.string.rcat_label_alarm,
+            R.string.rcat_label_open_settings, R.string.rcat_label_internet_panel,
+            R.string.rcat_label_bluetooth_settings
+    };
+
+    /**
+     * One piece of wording: from resources when a Context is at hand, otherwise the English text
+     * (the {@code fallback} equals the English resource, so both routes read the same).
+     */
+    private static String t(Context c, int res, String fallback, Object... args) {
+        if (c != null) return args.length == 0 ? c.getString(res) : c.getString(res, args);
+        return args.length == 0 ? fallback : String.format(Locale.US, fallback, args);
     }
 
+    private static String plural(Context c, int res, int count, String one, String other) {
+        if (c != null) return c.getResources().getQuantityString(res, count, count);
+        return String.format(Locale.US, count == 1 ? one : other, count);
+    }
+
+
+    public static String labelForType(String type) {
+        return labelForType(null, type);
+    }
+
+    /** The label in the app language (English when there is no Context). */
+    public static String labelForType(Context c, String type) {
+        if (type == null) return t(c, R.string.rcat_action, "Action");
+        for (int i = 0; i < TYPES.length; i++) {
+            if (TYPES[i].equalsIgnoreCase(type)) return t(c, LABEL_RES[i], LABELS[i]);
+        }
+        return titleCase(c, type.replace('_', ' '));
+    }
+
+
     public static String title(AssistantReply.Action action) {
-        if (action == null) return "Action";
+        return title(null, action);
+    }
+
+    /** The step title in the app language (English when there is no Context). */
+    public static String title(Context c, AssistantReply.Action action) {
+        if (action == null) return t(c, R.string.rcat_action, "Action");
         JSONObject p = action.params == null ? new JSONObject() : action.params;
         String type = action.type == null ? "" : action.type.toUpperCase(Locale.US);
         switch (type) {
             case IF_CONDITION: {
                 String mode = RoutineConditionEvaluator.mode(action);
-                String branch = RoutineBranch.hasElse(action) ? " · with ELSE" : "";
+                String branch = RoutineBranch.hasElse(action)
+                        ? t(c, R.string.rcat_with_else, " · with ELSE") : "";
                 if (RoutineConditionEvaluator.MODE_LOCATION.equals(mode)) {
                     String name = clean(p.optString("locationName", ""));
-                    return "If location" + (name.isEmpty() ? "" : " · " + name) + branch;
+                    return t(c, R.string.rcat_if_location, "If location")
+                            + (name.isEmpty() ? "" : " · " + name) + branch;
                 }
-                String window = minuteLabel(p.optInt("startMinute", 0)) + "–" + minuteLabel(p.optInt("endMinute", 0));
+                String window = minuteLabel(c, p.optInt("startMinute", 0)) + "–"
+                        + minuteLabel(c, p.optInt("endMinute", 0));
                 if (RoutineConditionEvaluator.MODE_TIME_AND_LOCATION.equals(mode)) {
                     String name = clean(p.optString("locationName", ""));
-                    return "If time + location · " + window + (name.isEmpty() ? "" : " · " + name) + branch;
+                    return t(c, R.string.rcat_if_time_location, "If time + location") + " · "
+                            + window + (name.isEmpty() ? "" : " · " + name) + branch;
                 }
-                return "If time · " + window + branch;
+                return t(c, R.string.rcat_if_time, "If time") + " · " + window + branch;
             }
             case OPEN_APP:
                 String app = clean(p.optString("app", p.optString("package", "")));
-                return app.isEmpty() ? "Open app" : "Open " + app;
+                return app.isEmpty() ? t(c, R.string.rcat_label_open_app, "Open app")
+                        : t(c, R.string.rcat_open_named, "Open %1$s", app);
             case SET_BRIGHTNESS:
-                return "Brightness · " + clampPercent(p.optInt("percent", 50)) + "%";
+                return t(c, R.string.rcat_title_brightness, "Brightness · %1$d%%",
+                        clampPercent(p.optInt("percent", 50)));
             case SET_DND:
-                return "Do Not Disturb · " + (p.optBoolean("enabled", true) ? "On" : "Off");
+                return t(c, R.string.rcat_title_dnd, "Do Not Disturb · %1$s",
+                        onOff(c, p.optBoolean("enabled", true)));
             case SET_VOLUME:
-                return "Media volume · " + clampPercent(p.optInt("percent", 50)) + "%";
+                return t(c, R.string.rcat_title_volume, "Media volume · %1$d%%",
+                        clampPercent(p.optInt("percent", 50)));
             case FLASHLIGHT:
-                return "Flashlight · " + (p.optBoolean("on", true) ? "On" : "Off");
+                return t(c, R.string.rcat_title_flashlight, "Flashlight · %1$s",
+                        onOff(c, p.optBoolean("on", true)));
             case SET_TIMER:
-                return "Timer · " + durationLabel(Math.max(1, p.optInt("seconds", 60)));
+                return t(c, R.string.rcat_title_timer, "Timer · %1$s",
+                        durationLabel(c, Math.max(1, p.optInt("seconds", 60))));
             case SET_ALARM:
-                return "Alarm · " + timeLabel(p.optInt("hour", 8), p.optInt("minute", 0));
+                return t(c, R.string.rcat_title_alarm, "Alarm · %1$s",
+                        timeLabel(c, p.optInt("hour", 8), p.optInt("minute", 0)));
             case OPEN_SETTINGS:
-                return "Open Settings";
+                return t(c, R.string.rcat_label_open_settings, "Open Settings");
             case OPEN_INTERNET_PANEL:
-                return "Open Internet panel";
+                return t(c, R.string.rcat_title_open_internet, "Open Internet panel");
             case OPEN_BLUETOOTH_SETTINGS:
-                return "Open Bluetooth settings";
+                return t(c, R.string.rcat_title_open_bluetooth, "Open Bluetooth settings");
             case EXTENSION_ACTION: {
                 String actionName = clean(p.optString("actionName", ""));
-                return actionName.isEmpty() ? "Extension action" : actionName;
+                return actionName.isEmpty() ? t(c, R.string.rcat_extension_action, "Extension action")
+                        : actionName;
             }
             default:
-                return labelForType(type);
+                return labelForType(c, type);
         }
     }
 
+    private static String onOff(Context c, boolean on) {
+        return on ? t(c, R.string.rcat_on, "On") : t(c, R.string.rcat_off, "Off");
+    }
+
+
     public static String summary(AssistantReply.Action action) {
+        return summary(null, action);
+    }
+
+    /** The step summary in the app language (English when there is no Context). */
+    public static String summary(Context c, AssistantReply.Action action) {
         if (action == null) return "";
         JSONObject p = action.params == null ? new JSONObject() : action.params;
         String type = action.type == null ? "" : action.type.toUpperCase(Locale.US);
@@ -137,60 +197,76 @@ public final class RoutineActionCatalog {
             case IF_CONDITION: {
                 int next = RoutineConditionEvaluator.gatedSteps(action);
                 int otherwise = RoutineBranch.elseSteps(action);
-                String target = next == 1 ? "the next step" : "the next " + next + " steps";
+                String target = next == 1 ? t(c, R.string.rcat_next_one, "the next step")
+                        : plural(c, R.plurals.rcat_next_steps, next,
+                                "the next %d step", "the next %d steps");
                 if (otherwise > 0) {
                     // With an ELSE the interesting fact is that exactly one path runs, so the
                     // summary describes the split rather than repeating the condition mode.
                     String elseTarget = otherwise == 1
-                            ? "the step after" : "the " + otherwise + " steps after";
-                    return "Runs " + target + " when true, otherwise " + elseTarget
-                            + ", then continues the routine";
+                            ? t(c, R.string.rcat_after_one, "the step after")
+                            : plural(c, R.plurals.rcat_steps_after, otherwise,
+                                    "the %d step after", "the %d steps after");
+                    return t(c, R.string.rcat_sum_if_else,
+                            "Runs %1$s when true, otherwise %2$s, then continues the routine",
+                            target, elseTarget);
                 }
                 String mode = RoutineConditionEvaluator.mode(action);
                 if (RoutineConditionEvaluator.MODE_LOCATION.equals(mode)) {
                     int radius = Math.round((float) p.optDouble("radiusMeters", 200d));
-                    return "Runs " + target + " only while inside the saved " + radiusLabel(radius) + " area";
+                    return t(c, R.string.rcat_sum_if_location,
+                            "Runs %1$s only while inside the saved %2$s area",
+                            target, radiusLabel(c, radius));
                 }
                 if (RoutineConditionEvaluator.MODE_TIME_AND_LOCATION.equals(mode)) {
-                    return "Runs " + target + " only when both the time and location match";
+                    return t(c, R.string.rcat_sum_if_both,
+                            "Runs %1$s only when both the time and location match", target);
                 }
-                return "Runs " + target + " only during the saved time window";
+                return t(c, R.string.rcat_sum_if_time,
+                        "Runs %1$s only during the saved time window", target);
             }
             case OPEN_APP:
-                return "Launches the selected app";
+                return t(c, R.string.rcat_sum_open_app, "Launches the selected app");
             case SET_BRIGHTNESS:
-                return "Sets screen brightness to " + clampPercent(p.optInt("percent", 50)) + "%";
+                return t(c, R.string.rcat_sum_brightness, "Sets screen brightness to %1$d%%",
+                        clampPercent(p.optInt("percent", 50)));
             case SET_DND:
-                return p.optBoolean("enabled", true) ? "Enables Do Not Disturb" : "Disables Do Not Disturb";
+                return p.optBoolean("enabled", true)
+                        ? t(c, R.string.rcat_sum_dnd_on, "Enables Do Not Disturb")
+                        : t(c, R.string.rcat_sum_dnd_off, "Disables Do Not Disturb");
             case SET_VOLUME:
-                return "Sets media volume to " + clampPercent(p.optInt("percent", 50)) + "%";
+                return t(c, R.string.rcat_sum_volume, "Sets media volume to %1$d%%",
+                        clampPercent(p.optInt("percent", 50)));
             case FLASHLIGHT:
-                return p.optBoolean("on", true) ? "Turns the flashlight on" : "Turns the flashlight off";
+                return p.optBoolean("on", true)
+                        ? t(c, R.string.rcat_sum_flash_on, "Turns the flashlight on")
+                        : t(c, R.string.rcat_sum_flash_off, "Turns the flashlight off");
             case SET_TIMER: {
                 String label = clean(p.optString("label", ""));
-                String base = "Starts a "
-                        + durationModifierLabel(Math.max(1, p.optInt("seconds", 60))) + " timer";
+                String base = t(c, R.string.rcat_sum_timer, "Starts a %1$s timer",
+                        durationModifierLabel(c, Math.max(1, p.optInt("seconds", 60))));
                 return label.isEmpty() || "Orbit timer".equals(label) ? base : base + " · " + label;
             }
             case SET_ALARM: {
                 String label = clean(p.optString("label", ""));
-                String base = "Sets an alarm for " + timeLabel(p.optInt("hour", 8), p.optInt("minute", 0));
+                String base = t(c, R.string.rcat_sum_alarm, "Sets an alarm for %1$s",
+                        timeLabel(c, p.optInt("hour", 8), p.optInt("minute", 0)));
                 return label.isEmpty() || "Orbit alarm".equals(label) ? base : base + " · " + label;
             }
             case OPEN_SETTINGS:
-                return "Opens Android Settings";
+                return t(c, R.string.rcat_sum_open_settings, "Opens Android Settings");
             case OPEN_INTERNET_PANEL:
-                return "Opens Android's Internet controls";
+                return t(c, R.string.rcat_sum_open_internet, "Opens Android's Internet controls");
             case OPEN_BLUETOOTH_SETTINGS:
-                return "Opens Bluetooth settings";
+                return t(c, R.string.rcat_sum_open_bluetooth, "Opens Bluetooth settings");
             case EXTENSION_ACTION: {
                 String extensionName = clean(p.optString("extensionName", ""));
                 return extensionName.isEmpty()
-                        ? "Runs a saved declarative extension action"
-                        : "Extension · " + extensionName;
+                        ? t(c, R.string.rcat_sum_extension, "Runs a saved declarative extension action")
+                        : t(c, R.string.rcat_sum_extension_named, "Extension · %1$s", extensionName);
             }
             default:
-                return "Saved Orbit action";
+                return t(c, R.string.rcat_sum_default, "Saved Orbit action");
         }
     }
 
@@ -316,23 +392,39 @@ public final class RoutineActionCatalog {
         return Math.max(0, Math.min(100, percent));
     }
 
+
     public static String timeLabel(int hour24, int minute) {
+        return timeLabel(null, hour24, minute);
+    }
+
+    /** Clock time in the app language (12-hour with AM/PM unless the language resources ask for 24-hour). */
+    public static String timeLabel(Context c, int hour24, int minute) {
         int h = Math.max(0, Math.min(23, hour24));
         int m = Math.max(0, Math.min(59, minute));
-        String ap = h >= 12 ? "PM" : "AM";
+        if (c != null && c.getResources().getBoolean(R.bool.rcat_clock_24h)) {
+            return c.getString(R.string.rcat_time_24h, h, m);
+        }
+        String ap = h >= 12 ? t(c, R.string.rcat_pm, "PM") : t(c, R.string.rcat_am, "AM");
         int display = h % 12;
         if (display == 0) display = 12;
         return String.format(Locale.US, "%d:%02d %s", display, m, ap);
     }
 
+
     public static String minuteLabel(int minuteOfDay) {
-        int safe = Math.max(0, Math.min(1439, minuteOfDay));
-        return timeLabel(safe / 60, safe % 60);
+        return minuteLabel(null, minuteOfDay);
     }
 
-    private static String radiusLabel(int radiusMeters) {
-        if (radiusMeters >= 1000 && radiusMeters % 1000 == 0) return (radiusMeters / 1000) + " km";
-        return radiusMeters + " m";
+    public static String minuteLabel(Context c, int minuteOfDay) {
+        int safe = Math.max(0, Math.min(1439, minuteOfDay));
+        return timeLabel(c, safe / 60, safe % 60);
+    }
+
+    private static String radiusLabel(Context c, int radiusMeters) {
+        if (radiusMeters >= 1000 && radiusMeters % 1000 == 0) {
+            return t(c, R.string.rcat_radius_km, "%1$d km", radiusMeters / 1000);
+        }
+        return t(c, R.string.rcat_radius_m, "%1$d m", radiusMeters);
     }
 
     /**
@@ -345,24 +437,36 @@ public final class RoutineActionCatalog {
      * it can never disagree about whether 90 seconds is a minute and a half.
      */
     public static String durationLabel(int seconds) {
+        return durationLabel(null, seconds);
+    }
+
+    /** {@link #durationLabel(int)} in the app language (English when there is no Context). */
+    public static String durationLabel(Context c, int seconds) {
         int safe = Math.max(1, seconds);
         int single = DurationParser.naturalSingleUnit(safe);
         StringBuilder out = new StringBuilder();
         if (single > 0) {
-            appendPart(out, safe / single,
+            appendPart(c, out, safe / single,
                     single == 3600 ? "hour" : single == 60 ? "minute" : "second");
             return out.toString();
         }
-        appendPart(out, safe / 3600, "hour");
-        appendPart(out, (safe % 3600) / 60, "minute");
-        appendPart(out, safe % 60, "second");
+        appendPart(c, out, safe / 3600, "hour");
+        appendPart(c, out, (safe % 3600) / 60, "minute");
+        appendPart(c, out, safe % 60, "second");
         return out.toString();
     }
 
     /** One part of a spanning duration, pluralized, skipped entirely when it is zero. */
-    private static void appendPart(StringBuilder out, int count, String singularUnit) {
+    private static void appendPart(Context c, StringBuilder out, int count, String singularUnit) {
         if (count <= 0) return;
         if (out.length() > 0) out.append(' ');
+        if (c != null) {
+            int res = "hour".equals(singularUnit) ? R.plurals.rcat_dur_hours
+                    : "minute".equals(singularUnit) ? R.plurals.rcat_dur_minutes
+                    : R.plurals.rcat_dur_seconds;
+            out.append(c.getResources().getQuantityString(res, count, count));
+            return;
+        }
         out.append(count).append(' ').append(singularUnit);
         if (count != 1) out.append('s');
     }
@@ -378,6 +482,30 @@ public final class RoutineActionCatalog {
      */
     public static String durationModifierLabel(int seconds) {
         return DurationParser.spokenModifier(Math.max(1, seconds));
+    }
+
+    /** {@link #durationModifierLabel(int)} in the app language (English when no Context). */
+    public static String durationModifierLabel(Context c, int seconds) {
+        int safe = Math.max(1, seconds);
+        if (c == null) return durationModifierLabel(safe);
+        int single = DurationParser.naturalSingleUnit(safe);
+        if (single > 0) {
+            int count = safe / single;
+            int res = single == 3600 ? R.plurals.rcat_mod_hours
+                    : single == 60 ? R.plurals.rcat_mod_minutes : R.plurals.rcat_mod_seconds;
+            return c.getResources().getQuantityString(res, count, count);
+        }
+        StringBuilder out = new StringBuilder();
+        modPart(c, out, safe / 3600, R.plurals.rcat_modpart_hours);
+        modPart(c, out, (safe % 3600) / 60, R.plurals.rcat_modpart_minutes);
+        modPart(c, out, safe % 60, R.plurals.rcat_modpart_seconds);
+        return c.getString(R.string.rcat_mod_span, out.toString());
+    }
+
+    private static void modPart(Context c, StringBuilder out, int count, int res) {
+        if (count <= 0) return;
+        if (out.length() > 0) out.append(' ');
+        out.append(c.getResources().getQuantityString(res, count, count));
     }
 
     /**
@@ -402,8 +530,8 @@ public final class RoutineActionCatalog {
                 clean.matches("[a-z0-9][a-z0-9._-]+");
     }
 
-    private static String titleCase(String s) {
-        if (s == null || s.trim().isEmpty()) return "Action";
+    private static String titleCase(Context c, String s) {
+        if (s == null || s.trim().isEmpty()) return t(c, R.string.rcat_action, "Action");
         String[] parts = s.toLowerCase(Locale.US).trim().split("\\s+");
         StringBuilder out = new StringBuilder();
         for (String part : parts) {

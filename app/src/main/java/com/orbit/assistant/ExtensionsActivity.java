@@ -144,7 +144,7 @@ public final class ExtensionsActivity extends Activity {
         back.setImageResource(R.drawable.ic_back);
         back.setImageTintList(ColorStateList.valueOf(UiKit.accent(this)));
         back.setBackground(UiKit.ripple(UiKit.SURFACE_2, UiKit.accent(this), 18, this));
-        back.setContentDescription("Back to Settings");
+        back.setContentDescription(getString(R.string.ui_back_to_settings_ea37ec29));
         back.setPadding(UiKit.dp(this, 10), UiKit.dp(this, 10),
                 UiKit.dp(this, 10), UiKit.dp(this, 10));
         back.setOnClickListener(v -> navigation.performBack());
@@ -154,13 +154,13 @@ public final class ExtensionsActivity extends Activity {
         LinearLayout titles = new LinearLayout(this);
         titles.setOrientation(LinearLayout.VERTICAL);
         titles.setPadding(UiKit.dp(this, 13), 0, 0, 0);
-        titles.addView(UiKit.text(this, "Extensions", 25, UiKit.TEXT, true));
-        titles.addView(UiKit.text(this, "Add integrations and new actions to Orbit", 12, UiKit.MUTED, false));
+        titles.addView(UiKit.text(this, getString(R.string.ext_title), 25, UiKit.TEXT, true));
+        titles.addView(UiKit.text(this, getString(R.string.ext_subtitle), 12, UiKit.MUTED, false));
         header.addView(titles, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         page.addView(header);
 
         TextView intro = UiKit.text(this,
-                "Orbit Extensions are reviewed, declarative action packages. They cannot run code or access chats, Memory, screen context, files, credentials, or Android permissions.",
+                getString(R.string.ext_intro),
                 13, UiKit.MUTED, false);
         intro.setLineSpacing(0, 1.13f);
         LinearLayout.LayoutParams introLp = new LinearLayout.LayoutParams(
@@ -171,7 +171,7 @@ public final class ExtensionsActivity extends Activity {
         OrbitExtensionStore.ManagerSnapshot snapshot =
                 OrbitExtensionStore.managerSnapshot(this, includeV2);
 
-        page.addView(sectionHeading("FIRST-PARTY EXTENSIONS"));
+        page.addView(sectionHeading(getString(R.string.ext_first_party_header)));
         List<OrbitExtension> firstParty = loadFirstPartyExtensions(includeV2);
         for (int i = 0; i < firstParty.size(); i++) {
             LinearLayout.LayoutParams lp = cardSpacing(i > 0);
@@ -188,35 +188,36 @@ public final class ExtensionsActivity extends Activity {
             LinearLayout unavailable = card();
             unavailable.addView(UiKit.text(this,
                     bundledLoadFailures == 1
-                            ? "One official extension is unavailable in this build."
-                            : bundledLoadFailures + " official extensions are unavailable in this build.",
+                            ? getString(R.string.ext_official_unavailable_one)
+                            : getResources().getQuantityString(R.plurals.ext_official_unavailable,
+                                    bundledLoadFailures, bundledLoadFailures),
                     13, UiKit.TEXT, true));
             page.addView(unavailable, cardSpacing(!firstParty.isEmpty()));
         }
 
-        page.addView(sectionHeading("IMPORT"));
+        page.addView(sectionHeading(getString(R.string.ext_import_header)));
         LinearLayout importCard = card();
-        importCard.addView(UiKit.text(this, "Import extension from file", 16, UiKit.TEXT, true));
+        importCard.addView(UiKit.text(this, getString(R.string.ext_import_title), 16, UiKit.TEXT, true));
         TextView importNote = UiKit.text(this,
-                "Choose a user-created, community, or custom .orbitext file. Orbit validates it and shows the same complete review before installation.",
+                getString(R.string.ext_import_note),
                 12, UiKit.MUTED, false);
         importNote.setLineSpacing(0, 1.12f);
         importNote.setPadding(0, UiKit.dp(this, 5), 0, UiKit.dp(this, 11));
         importCard.addView(importNote);
-        Button install = secondaryButton("Import extension from file");
-        install.setContentDescription("Import extension from file using Android file picker");
+        Button install = secondaryButton(getString(R.string.ext_import_title));
+        install.setContentDescription(getString(R.string.ext_import_desc));
         install.setOnClickListener(v -> chooseExtension());
         importCard.addView(install, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 44)));
         page.addView(importCard);
 
-        page.addView(sectionHeading("INSTALLED EXTENSIONS"));
+        page.addView(sectionHeading(getString(R.string.ext_installed_header)));
 
         if (snapshot.entries.isEmpty() && snapshot.unreadableStoreToken == null) {
             LinearLayout empty = card();
-            empty.addView(UiKit.text(this, "No extensions installed", 16, UiKit.TEXT, true));
+            empty.addView(UiKit.text(this, getString(R.string.ext_none_installed), 16, UiKit.TEXT, true));
             TextView note = UiKit.text(this,
-                    "Choose a .orbitext file to review its actions and network destinations before installing it.",
+                    getString(R.string.ext_none_note),
                     12, UiKit.MUTED, false);
             note.setPadding(0, UiKit.dp(this, 5), 0, 0);
             empty.addView(note);
@@ -251,7 +252,7 @@ public final class ExtensionsActivity extends Activity {
         }
 
         TextView footer = UiKit.text(this,
-                "Extensions v1 remains compatible. Extensions v2 adds Orbit-rendered setup and Routine parameters while keeping actions declarative, reviewed and non-executable.",
+                getString(R.string.ext_footer),
                 11, UiKit.MUTED, false);
         footer.setGravity(Gravity.CENTER);
         footer.setPadding(UiKit.dp(this, 6), UiKit.dp(this, 17), UiKit.dp(this, 6), 0);
@@ -269,33 +270,33 @@ public final class ExtensionsActivity extends Activity {
         top.setGravity(Gravity.CENTER_VERTICAL);
         LinearLayout copy = new LinearLayout(this);
         copy.setOrientation(LinearLayout.VERTICAL);
-        copy.addView(UiKit.text(this, extension.name, 17, UiKit.TEXT, true));
+        copy.addView(UiKit.text(this, ExtensionText.name(this, extension), 17, UiKit.TEXT, true));
         copy.addView(UiKit.text(this,
                 "v" + extension.version + " · " + extension.author, 12, UiKit.MUTED, false));
         top.addView(copy, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
-        String stateText = !installed.enabled ? "DISABLED" :
-                requiresSetup ? "NEEDS SETUP" : "ENABLED";
+        String stateText = !installed.enabled ? getString(R.string.ext_state_disabled) :
+                requiresSetup ? getString(R.string.ext_state_needs_setup) : getString(R.string.ext_state_enabled);
         TextView state = UiKit.text(this, stateText, 11,
                 installed.enabled ? UiKit.accent(this) : UiKit.MUTED, true);
         state.setLetterSpacing(0.08f);
         top.addView(state);
         card.addView(top);
 
-        TextView description = UiKit.text(this, extension.description, 13, UiKit.MUTED, false);
+        TextView description = UiKit.text(this, ExtensionText.description(this, extension), 13, UiKit.MUTED, false);
         description.setLineSpacing(0, 1.12f);
         description.setPadding(0, UiKit.dp(this, 9), 0, UiKit.dp(this, 7));
         card.addView(description);
         for (OrbitExtension.Action action : extension.actions) {
             TextView actionView = UiKit.text(this,
-                    "• " + action.name + " · " + action.capabilityLabel(),
+                    "• " + ExtensionText.actionName(this, extension, action) + " · " + action.capabilityLabel(),
                     12, UiKit.TEXT, false);
             actionView.setPadding(0, UiKit.dp(this, 3), 0, 0);
             card.addView(actionView);
         }
 
         if (requiresSetup) {
-            Button configure = secondaryButton("Set up / Configure");
-            configure.setContentDescription("Set up or configure " + extension.name);
+            Button configure = secondaryButton(getString(R.string.ext_setup_configure));
+            configure.setContentDescription(getString(R.string.ext_setup_configure_desc, ExtensionText.name(this, extension)));
             configure.setOnClickListener(v -> showConfiguration(installed));
             LinearLayout.LayoutParams configureLp = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 44));
@@ -307,15 +308,16 @@ public final class ExtensionsActivity extends Activity {
         buttons.setOrientation(LinearLayout.HORIZONTAL);
         buttons.setPadding(0, extension.setupFields.isEmpty() ? UiKit.dp(this, 14) :
                 UiKit.dp(this, 9), 0, 0);
-        Button toggle = installed.enabled ? warningButton("Disable") : primaryButton("Enable");
-        toggle.setContentDescription((installed.enabled ? "Disable " : "Enable ") + extension.name);
+        Button toggle = installed.enabled ? warningButton(getString(R.string.ext_disable)) : primaryButton(getString(R.string.ext_enable));
+        toggle.setContentDescription(installed.enabled ? getString(R.string.ext_disable_desc, ExtensionText.name(this, extension))
+                : getString(R.string.ext_enable_desc, ExtensionText.name(this, extension)));
         toggle.setOnClickListener(v -> {
             if (OrbitExtensionStore.setEnabled(this, extension.id, !installed.enabled))
                 rebuildPreservingPosition();
         });
         buttons.addView(toggle, new LinearLayout.LayoutParams(0, UiKit.dp(this, 44), 1));
-        Button remove = destructiveButton("Remove");
-        remove.setContentDescription("Remove " + extension.name);
+        Button remove = destructiveButton(getString(R.string.ext_remove));
+        remove.setContentDescription(getString(R.string.ext_remove_desc, ExtensionText.name(this, extension)));
         LinearLayout.LayoutParams removeLp = new LinearLayout.LayoutParams(0, UiKit.dp(this, 44), 1);
         removeLp.leftMargin = UiKit.dp(this, 9);
         buttons.addView(remove, removeLp);
@@ -332,33 +334,38 @@ public final class ExtensionsActivity extends Activity {
         top.setGravity(Gravity.CENTER_VERTICAL);
         LinearLayout copy = new LinearLayout(this);
         copy.setOrientation(LinearLayout.VERTICAL);
-        copy.addView(UiKit.text(this, extension.name, 16, UiKit.TEXT, true));
+        copy.addView(UiKit.text(this, ExtensionText.name(this, extension), 16, UiKit.TEXT, true));
         copy.addView(UiKit.text(this,
                 "v" + extension.version + " · " + extension.author, 12, UiKit.MUTED, false));
         top.addView(copy, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
-        String stateText = installed == null ? "NOT INSTALLED" :
-                !installed.enabled ? "DISABLED" : requiresSetup ? "NEEDS SETUP" : "INSTALLED";
+        String stateText = installed == null ? getString(R.string.ext_state_not_installed) :
+                !installed.enabled ? getString(R.string.ext_state_disabled)
+                        : requiresSetup ? getString(R.string.ext_state_needs_setup)
+                        : getString(R.string.ext_state_installed);
         TextView state = UiKit.text(this, stateText, 10,
                 installed == null ? UiKit.MUTED : UiKit.accent(this), true);
         state.setLetterSpacing(0.07f);
         top.addView(state);
         card.addView(top);
 
-        TextView description = UiKit.text(this, extension.description, 12, UiKit.MUTED, false);
+        TextView description = UiKit.text(this, ExtensionText.description(this, extension), 12, UiKit.MUTED, false);
         description.setLineSpacing(0, 1.12f);
         description.setPadding(0, UiKit.dp(this, 7), 0, UiKit.dp(this, 12));
         card.addView(description);
 
         Button action;
         if (installed == null) {
-            action = primaryButton("Install");
-            action.setContentDescription("Review and install " + extension.name);
+            action = primaryButton(getString(R.string.ext_install));
+            action.setContentDescription(getString(R.string.ext_install_desc, ExtensionText.name(this, extension)));
             action.setOnClickListener(v -> showInstallReview(extension));
         } else {
-            action = installedButton(!installed.enabled ? "Installed · Disabled" :
-                    requiresSetup ? "Installed · Needs setup" : "Installed · Enabled");
-            action.setContentDescription(extension.name + " is installed and " +
-                    (!installed.enabled ? "disabled" : requiresSetup ? "needs setup" : "enabled"));
+            action = installedButton(!installed.enabled ? getString(R.string.ext_installed_disabled) :
+                    requiresSetup ? getString(R.string.ext_installed_needs_setup)
+                    : getString(R.string.ext_installed_enabled));
+            action.setContentDescription(!installed.enabled
+                    ? getString(R.string.ext_installed_desc_disabled, ExtensionText.name(this, extension))
+                    : requiresSetup ? getString(R.string.ext_installed_desc_needs_setup, ExtensionText.name(this, extension))
+                    : getString(R.string.ext_installed_desc_enabled, ExtensionText.name(this, extension)));
         }
         card.addView(action, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 44)));
@@ -382,13 +389,14 @@ public final class ExtensionsActivity extends Activity {
         try {
             String displayName = displayName(uri);
             if (!displayName.toLowerCase(java.util.Locale.US).endsWith(".orbitext"))
-                throw new IllegalArgumentException("Choose a file ending in .orbitext.");
+                throw new IllegalArgumentException(getString(R.string.ext_err_file_type));
             OrbitExtension extension = OrbitExtension.parse(readManifest(uri));
             if (OrbitExtensionStore.find(this, extension.id) != null)
-                throw new IllegalArgumentException("An extension with this ID is already installed.");
+                throw new IllegalArgumentException(getString(R.string.ext_err_duplicate));
             showInstallReview(extension);
         } catch (Exception e) {
-            showError(e.getMessage() == null ? "Orbit could not read this extension." : e.getMessage());
+            String reason = OrbitExtensionV2.describe(this, e);
+            showError(reason == null ? getString(R.string.ext_err_read) : reason);
         }
     }
 
@@ -397,51 +405,53 @@ public final class ExtensionsActivity extends Activity {
         review.setOrientation(LinearLayout.VERTICAL);
         review.setPadding(UiKit.dp(this, 22), UiKit.dp(this, 8),
                 UiKit.dp(this, 22), UiKit.dp(this, 4));
-        review.addView(UiKit.text(this, extension.name + " · v" + extension.version,
+        review.addView(UiKit.text(this, ExtensionText.name(this, extension) + " · v" + extension.version,
                 17, UiKit.TEXT, true));
-        review.addView(spacedText("By " + extension.author, UiKit.MUTED));
-        review.addView(spacedText(extension.description, UiKit.TEXT));
+        review.addView(spacedText(getString(R.string.ext_review_by, extension.author), UiKit.MUTED));
+        review.addView(spacedText(ExtensionText.description(this, extension), UiKit.TEXT));
 
         if (!extension.setupFields.isEmpty()) {
-            TextView setupTitle = spacedText("REQUIRES SETUP", UiKit.MUTED);
+            TextView setupTitle = spacedText(getString(R.string.ext_requires_setup), UiKit.MUTED);
             setupTitle.setLetterSpacing(0.1f);
             review.addView(setupTitle);
             for (OrbitExtension.SetupField field : extension.setupFields) {
-                String privacy = field.isSecret() ? "Secret " : "";
-                String kind = OrbitExtension.SETUP_SECRET_URL.equals(field.type) ||
-                        OrbitExtension.SETUP_URL.equals(field.type) ? "URL" : "Text";
-                review.addView(spacedText("• " + field.label + " — " + privacy + kind +
-                        (field.required ? " · Required" : " · Optional"), UiKit.TEXT));
+                boolean urlKind = OrbitExtension.SETUP_SECRET_URL.equals(field.type) ||
+                        OrbitExtension.SETUP_URL.equals(field.type);
+                String kind = field.isSecret()
+                        ? getString(urlKind ? R.string.ext_kind_secret_url : R.string.ext_kind_secret_text)
+                        : getString(urlKind ? R.string.ext_kind_url : R.string.ext_kind_text);
+                review.addView(spacedText(getString(field.required ? R.string.ext_field_required
+                        : R.string.ext_field_optional, field.label, kind), UiKit.TEXT));
             }
             review.addView(spacedText(
-                    "Install first, then configure explicitly. Orbit encrypts secret values and does not expose them to chats, Memory, backups, Routines or other extensions.",
+                    getString(R.string.ext_install_first),
                     UiKit.TEXT));
         }
 
-        TextView actionsTitle = spacedText("ACTIONS BEING ADDED", UiKit.MUTED);
+        TextView actionsTitle = spacedText(getString(R.string.ext_actions_being_added), UiKit.MUTED);
         actionsTitle.setLetterSpacing(0.1f);
         review.addView(actionsTitle);
         for (OrbitExtension.Action action : extension.actions) {
             String fixedBody = OrbitExtension.TYPE_HTTPS_REQUEST.equals(action.type) &&
                     "POST".equals(action.method)
-                    ? "\n  " + (action.parameters.isEmpty() ? "JSON body: " :
-                    "Templated JSON body: ") +
-                    (action.body == null ? "{}" : action.body.toString()) : "";
+                    ? "\n  " + getString(action.parameters.isEmpty() ? R.string.ext_json_body
+                    : R.string.ext_json_body_templated,
+                    action.body == null ? "{}" : action.body.toString()) : "";
             String parameters = action.parameters.isEmpty() ? "" :
-                    "\n  Routine parameters: " + parameterLabels(action);
+                    "\n  " + getString(R.string.ext_routine_parameters, parameterLabels(action));
             String headers = action.headers.isEmpty() ? "" :
-                    "\n  Declared headers: " + headerNames(action);
-            review.addView(spacedText("• " + action.name + " — " + action.capabilityLabel() +
+                    "\n  " + getString(R.string.ext_declared_headers, headerNames(action));
+            review.addView(spacedText("• " + ExtensionText.actionName(this, extension, action) + " — " + action.capabilityLabel() +
                     "\n  " + action.url + parameters + headers + fixedBody, UiKit.TEXT));
         }
         List<String> hosts = extension.contactedHosts();
-        String destinations = hosts.isEmpty() ? "None fixed in the manifest" :
+        String destinations = hosts.isEmpty() ? getString(R.string.ext_no_fixed_hosts) :
                 String.join("\n", hosts);
         if (extension.hasDynamicDestination())
-            destinations += "\nUser-supplied during setup (validated public HTTPS only)";
-        review.addView(spacedText("NETWORK DESTINATIONS\n" + destinations, UiKit.MUTED));
+            destinations += "\n" + getString(R.string.ext_user_destination);
+        review.addView(spacedText(getString(R.string.ext_network_destinations, destinations), UiKit.MUTED));
         TextView isolation = spacedText(
-                "This extension cannot receive Orbit chats, Memory, screen context, files, other credentials, or Android permission state. Only declared configuration and Routine parameters can enter its reviewed request templates.",
+                getString(R.string.ext_isolation),
                 UiKit.TEXT);
         isolation.setBackground(UiKit.rounded(UiKit.SURFACE_2, 14, this));
         isolation.setPadding(UiKit.dp(this, 13), UiKit.dp(this, 11),
@@ -452,15 +462,15 @@ public final class ExtensionsActivity extends Activity {
         ScrollView wrapper = new ScrollView(this);
         wrapper.addView(review);
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Review extension")
+                .setTitle(getString(R.string.ext_review_title))
                 .setView(wrapper)
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Install", (d, w) -> {
+                .setNegativeButton(getString(R.string.ui_cancel_19766ed6), null)
+                .setPositiveButton(getString(R.string.ext_install), (d, w) -> {
                     if (OrbitExtensionStore.install(this, extension)) {
-                        Toast.makeText(this, extension.name + " installed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.ext_installed_toast, ExtensionText.name(this, extension)), Toast.LENGTH_SHORT).show();
                         rebuildPreservingPosition();
                     } else {
-                        showError("Orbit could not install this extension. It may already exist or the extension limit was reached.");
+                        showError(getString(R.string.ext_install_failed));
                     }
                 }).create();
         UiKit.styleOrbitDialog(dialog, this, false);
@@ -477,7 +487,7 @@ public final class ExtensionsActivity extends Activity {
                 UiKit.dp(this, 22), UiKit.dp(this, 5));
 
         TextView note = UiKit.text(this,
-                "Secret values are encrypted by Android Keystore and are never shown again, backed up, or stored in Routines.",
+                getString(R.string.ext_secret_note),
                 12, UiKit.MUTED, false);
         note.setLineSpacing(0, 1.12f);
         note.setPadding(0, 0, 0, UiKit.dp(this, 8));
@@ -487,8 +497,8 @@ public final class ExtensionsActivity extends Activity {
         Map<String, Boolean> hadSecret = new HashMap<>();
         Set<String> clearRequested = new HashSet<>();
         for (OrbitExtension.SetupField field : extension.setupFields) {
-            TextView label = UiKit.text(this, field.label +
-                    (field.required ? " · Required" : " · Optional"),
+            TextView label = UiKit.text(this, getString(field.required ? R.string.ext_label_required
+                    : R.string.ext_label_optional, field.label),
                     12, UiKit.MUTED, true);
             label.setPadding(UiKit.dp(this, 2), UiKit.dp(this, 10), 0, UiKit.dp(this, 5));
             form.addView(label);
@@ -507,34 +517,34 @@ public final class ExtensionsActivity extends Activity {
             EditText input = configurationInput(field, secret ? "" :
                     saved.optString(field.id, field.defaultValue));
             if (secret) input.setHint(hasSecret ? safeSecretStatus(field, storedSecret) :
-                    "Enter securely");
+                    getString(R.string.ext_enter_securely));
             inputs.put(field.id, input);
             form.addView(input, new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 52)));
 
             if (secret && hasSecret) {
-                Button clear = secondaryButton("Clear saved value");
+                Button clear = secondaryButton(getString(R.string.ext_clear_saved));
                 LinearLayout.LayoutParams clearLp = new LinearLayout.LayoutParams(
                         ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 40));
                 clearLp.topMargin = UiKit.dp(this, 6);
                 form.addView(clear, clearLp);
                 clear.setOnClickListener(v -> {
                     if (clearRequested.remove(field.id)) {
-                        clear.setText("Clear saved value");
+                        clear.setText(getString(R.string.ext_clear_saved));
                         input.setHint(safeSecretStatus(field,
                                 OrbitExtensionSecretStore.load(this, extension.id, field.id)));
                     } else {
                         clearRequested.add(field.id);
                         input.setText("");
-                        input.setHint("Will be cleared");
-                        clear.setText("Keep saved value");
+                        input.setHint(getString(R.string.ext_will_be_cleared));
+                        clear.setText(getString(R.string.ext_keep_saved));
                     }
                 });
                 input.addTextChangedListener(new TextWatcher() {
                     @Override public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
                     @Override public void onTextChanged(CharSequence s, int start, int before, int count) {
                         if (s != null && s.length() > 0 && clearRequested.remove(field.id)) {
-                            clear.setText("Clear saved value");
+                            clear.setText(getString(R.string.ext_clear_saved));
                         }
                     }
                     @Override public void afterTextChanged(Editable s) {}
@@ -545,10 +555,11 @@ public final class ExtensionsActivity extends Activity {
         ScrollView wrapper = new ScrollView(this);
         wrapper.addView(form);
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle((initiallyConfigured ? "Configure " : "Set up ") + extension.name)
+                .setTitle(getString(initiallyConfigured ? R.string.ext_configure_title
+                        : R.string.ext_setup_title, ExtensionText.name(this, extension)))
                 .setView(wrapper)
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Save", null)
+                .setNegativeButton(getString(R.string.ui_cancel_19766ed6), null)
+                .setPositiveButton(getString(R.string.ui_save_1509f561), null)
                 .create();
         UiKit.styleOrbitDialog(dialog, this, false, () -> {
             Button saveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
@@ -568,20 +579,21 @@ public final class ExtensionsActivity extends Activity {
                                             !clearRequested.contains(field.id));
                             if (field.required && !willExist &&
                                     !(initiallyConfigured && clearRequested.contains(field.id)))
-                                throw new IllegalArgumentException("Enter " + field.label + ".");
+                                throw new IllegalArgumentException(getString(R.string.ext_enter_field, field.label));
                         } else {
                             String safe = OrbitExtensionV2.validateSetupValue(field, entered);
                             if (field.required && safe.isEmpty())
-                                throw new IllegalArgumentException("Enter " + field.label + ".");
+                                throw new IllegalArgumentException(getString(R.string.ext_enter_field, field.label));
                             if (!safe.isEmpty()) nonSecret.put(field.id, safe);
                         }
                     }
                 } catch (IllegalArgumentException e) {
-                    Toast.makeText(this, e.getMessage() == null ?
-                            "Check the setup values." : e.getMessage(), Toast.LENGTH_SHORT).show();
+                    String reason = OrbitExtensionV2.describe(this, e);
+                    Toast.makeText(this, reason == null ?
+                            getString(R.string.ext_check_values) : reason, Toast.LENGTH_SHORT).show();
                     return;
                 } catch (Exception e) {
-                    Toast.makeText(this, "Check the setup values.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.ext_check_values), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -599,7 +611,7 @@ public final class ExtensionsActivity extends Activity {
                     return;
                 }
                 dialog.dismiss();
-                Toast.makeText(this, extension.name + " configuration saved",
+                Toast.makeText(this, getString(R.string.ext_config_saved, ExtensionText.name(this, extension)),
                         Toast.LENGTH_SHORT).show();
                 rebuildPreservingPosition();
             });
@@ -631,20 +643,21 @@ public final class ExtensionsActivity extends Activity {
     }
 
     private String safeSecretStatus(OrbitExtension.SetupField field, String value) {
-        if (value == null || value.isEmpty()) return "Enter securely";
+        if (value == null || value.isEmpty()) return getString(R.string.ext_enter_securely);
         if (OrbitExtension.SETUP_SECRET_URL.equals(field.type)) {
             try {
                 String host = new java.net.URI(value).getHost();
-                if (host != null && !host.trim().isEmpty()) return "Configured · " + host;
+                if (host != null && !host.trim().isEmpty()) return getString(R.string.ext_configured_host, host);
             } catch (Exception ignored) {}
         }
-        return "Saved";
+        return getString(R.string.ext_saved);
     }
 
     private String parameterLabels(OrbitExtension.Action action) {
         List<String> labels = new ArrayList<>();
         for (OrbitExtension.ActionParameter parameter : action.parameters)
-            labels.add(parameter.label + (parameter.required ? " (required)" : " (optional)"));
+            labels.add(getString(parameter.required ? R.string.ext_param_required
+                    : R.string.ext_param_optional, parameter.label));
         return String.join(", ", labels);
     }
 
@@ -656,9 +669,9 @@ public final class ExtensionsActivity extends Activity {
 
     private void configurationSaveFailed() {
         AlertDialog error = new AlertDialog.Builder(this)
-                .setTitle("Configuration not saved")
-                .setMessage("Orbit could not securely save this extension configuration. No credential was stored in plaintext.")
-                .setPositiveButton("OK", null)
+                .setTitle(getString(R.string.ext_config_not_saved))
+                .setMessage(getString(R.string.ext_config_not_saved_msg))
+                .setPositiveButton(getString(R.string.ui_ok_565339bc), null)
                 .create();
         UiKit.styleOrbitDialog(error, this, false);
         error.show();
@@ -666,13 +679,13 @@ public final class ExtensionsActivity extends Activity {
 
     private void confirmRemove(OrbitExtension extension) {
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Remove " + extension.name + "?")
-                .setMessage("Routines that reference its actions will remain saved and report “Extension action unavailable” until a matching extension is installed again.")
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Remove", (d, w) -> {
+                .setTitle(getString(R.string.ext_remove_title, ExtensionText.name(this, extension)))
+                .setMessage(getString(R.string.ext_remove_msg))
+                .setNegativeButton(getString(R.string.ui_cancel_19766ed6), null)
+                .setPositiveButton(getString(R.string.ext_remove), (d, w) -> {
                     if (OrbitExtensionStore.remove(this, extension.id))
                         rebuildPreservingPosition();
-                    else Toast.makeText(this, "Orbit could not safely remove this extension.",
+                    else Toast.makeText(this, getString(R.string.ext_remove_failed),
                             Toast.LENGTH_SHORT).show();
                 }).create();
         UiKit.styleOrbitDialog(dialog, this, true);
@@ -684,28 +697,28 @@ public final class ExtensionsActivity extends Activity {
         LinearLayout card = card();
         LinearLayout top = new LinearLayout(this);
         top.setGravity(Gravity.CENTER_VERTICAL);
-        TextView title = UiKit.text(this, "Extension unavailable", 16, UiKit.TEXT, true);
+        TextView title = UiKit.text(this, getString(R.string.ext_unavailable_title), 16, UiKit.TEXT, true);
         top.addView(title, new LinearLayout.LayoutParams(
                 0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
-        TextView state = UiKit.text(this, "UNAVAILABLE", 10, UiKit.MUTED, true);
+        TextView state = UiKit.text(this, getString(R.string.ext_unavailable_state), 10, UiKit.MUTED, true);
         state.setLetterSpacing(0.07f);
         top.addView(state);
         card.addView(top);
 
         TextView guidance = UiKit.text(this,
-                "Orbit could not safely read this installed extension. It remains inactive and its saved data has not been changed.",
+                getString(R.string.ext_unavailable_msg),
                 12, UiKit.MUTED, false);
         guidance.setLineSpacing(0, 1.12f);
         guidance.setPadding(0, UiKit.dp(this, 8), 0, UiKit.dp(this, 12));
         card.addView(guidance);
         if (displayId != null && !displayId.isEmpty()) {
-            TextView id = UiKit.text(this, "Stored ID: " + displayId,
+            TextView id = UiKit.text(this, getString(R.string.ext_stored_id, displayId),
                     11, UiKit.MUTED, false);
             id.setPadding(0, 0, 0, UiKit.dp(this, 10));
             card.addView(id);
         }
-        Button remove = destructiveButton("Remove");
-        remove.setContentDescription("Remove unavailable extension");
+        Button remove = destructiveButton(getString(R.string.ext_remove));
+        remove.setContentDescription(getString(R.string.ext_remove_unavailable_desc));
         remove.setOnClickListener(v -> confirmRemoveUnavailable(removalKey, validExtension));
         card.addView(remove, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 44)));
@@ -714,15 +727,15 @@ public final class ExtensionsActivity extends Activity {
 
     private void confirmRemoveUnavailable(String removalKey, boolean validExtension) {
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Remove unavailable extension?")
-                .setMessage("Only this unavailable installed entry will be removed. Existing Routines remain saved.")
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Remove", (d, w) -> {
+                .setTitle(getString(R.string.ext_remove_unavailable_title))
+                .setMessage(getString(R.string.ext_remove_unavailable_msg))
+                .setNegativeButton(getString(R.string.ui_cancel_19766ed6), null)
+                .setPositiveButton(getString(R.string.ext_remove), (d, w) -> {
                     boolean removed = validExtension
                             ? OrbitExtensionStore.remove(this, removalKey)
                             : OrbitExtensionStore.removeUnavailable(this, removalKey);
                     if (removed) rebuildPreservingPosition();
-                    else Toast.makeText(this, "Orbit could not safely remove this extension.",
+                    else Toast.makeText(this, getString(R.string.ext_remove_failed),
                             Toast.LENGTH_SHORT).show();
                 }).create();
         UiKit.styleOrbitDialog(dialog, this, true);
@@ -761,15 +774,15 @@ public final class ExtensionsActivity extends Activity {
         page.setPadding(UiKit.dp(this, 28), UiKit.dp(this, 40),
                 UiKit.dp(this, 28), UiKit.dp(this, 40));
 
-        page.addView(UiKit.text(this, "Extensions couldn't load", 24, UiKit.TEXT, true));
+        page.addView(UiKit.text(this, getString(R.string.ext_recovery_title), 24, UiKit.TEXT, true));
         TextView message = UiKit.text(this,
-                "Orbit encountered a problem loading Extensions. Your extensions and Routines have not been deleted.",
+                getString(R.string.ext_recovery_msg),
                 14, UiKit.MUTED, false);
         message.setLineSpacing(0, 1.15f);
         message.setPadding(0, UiKit.dp(this, 12), 0, UiKit.dp(this, 22));
         page.addView(message);
 
-        Button retry = primaryButton("Retry");
+        Button retry = primaryButton(getString(R.string.ui_retry_942087cc));
         retry.setOnClickListener(v -> {
             try {
                 renderContent(false, -1);
@@ -782,20 +795,20 @@ public final class ExtensionsActivity extends Activity {
         page.addView(retry, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 46)));
 
-        Button back = secondaryButton("Back");
+        Button back = secondaryButton(getString(R.string.ui_back_76900f1b));
         back.setOnClickListener(v -> navigation.performBack());
         LinearLayout.LayoutParams backLp = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 46));
         backLp.topMargin = UiKit.dp(this, 9);
         page.addView(back, backLp);
 
-        Button copy = secondaryButton("Copy diagnostic details");
+        Button copy = secondaryButton(getString(R.string.ext_copy_diagnostic));
         copy.setOnClickListener(v -> {
             ClipboardManager clipboard = (ClipboardManager)
                     getSystemService(Context.CLIPBOARD_SERVICE);
             if (clipboard != null) clipboard.setPrimaryClip(
                     ClipData.newPlainText("Orbit Extensions diagnostic", diagnostic));
-            Toast.makeText(this, "Diagnostic details copied", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.ext_diagnostic_copied), Toast.LENGTH_SHORT).show();
         });
         LinearLayout.LayoutParams copyLp = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 46));
@@ -826,16 +839,16 @@ public final class ExtensionsActivity extends Activity {
 
     private void showError(String message) {
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Extension not installed")
+                .setTitle(getString(R.string.ext_not_installed_title))
                 .setMessage(message)
-                .setPositiveButton("OK", null).create();
+                .setPositiveButton(getString(R.string.ui_ok_565339bc), null).create();
         UiKit.styleOrbitDialog(dialog, this, false);
         dialog.show();
     }
 
     private String readManifest(Uri uri) throws Exception {
         try (InputStream input = getContentResolver().openInputStream(uri)) {
-            if (input == null) throw new IllegalArgumentException("Android could not open the selected file.");
+            if (input == null) throw new IllegalArgumentException(getString(R.string.ext_err_open_file));
             return readManifest(input);
         }
     }
@@ -868,7 +881,7 @@ public final class ExtensionsActivity extends Activity {
             while ((read = input.read(buffer)) != -1) {
                 total += read;
                 if (total > OrbitExtension.MAX_MANIFEST_BYTES)
-                    throw new IllegalArgumentException("The extension manifest is too large.");
+                    throw new IllegalArgumentException(getString(R.string.ext_err_too_large));
                 output.write(buffer, 0, read);
             }
             return output.toString(StandardCharsets.UTF_8.name());

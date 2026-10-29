@@ -226,7 +226,7 @@ public final class AiModelCatalogTest {
                 "app/src/main/java/com/orbit/assistant/ChatGptClient.java");
         assertFalse(client.contains("astraFallback"));
         assertFalse(client.contains("fallbackNotice"));
-        assertTrue(client.contains("cb.onError(OrbitModelCatalog.unavailableMessage(model))"));
+        assertTrue(client.contains("cb.onError(OrbitModelCatalog.unavailableMessage(context, model))"));
         String worker = ComponentUninstallTest.readRepositoryFile(
                 "app/src/main/java/com/orbit/assistant/OrbitRequestWorker.java");
         assertFalse("the overload retry may not move to a lighter model", worker.contains("MODE_FAST"));

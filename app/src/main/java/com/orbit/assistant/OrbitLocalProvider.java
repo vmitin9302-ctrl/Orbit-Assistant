@@ -65,19 +65,13 @@ final class OrbitLocalProvider implements AiProvider {
                     + "Never use an em dash in any response.";
 
     /** What Orbit says when a turn is only pictures, which the local model cannot see. */
-    static final String IMAGE_ONLY_REPLY =
-            "Orbit Local can't look at pictures yet, and Orbit didn't find any text in this one that "
-                    + "the local model could read instead. Nothing was sent anywhere. To ask about the "
-                    + "picture itself, switch to a cloud provider such as ChatGPT in Settings > AI & "
-                    + "account > AI Providers.";
+    static final int IMAGE_ONLY_REPLY = R.string.olp_image_only;
 
     /** Said under an answer that drew on text Orbit read from attached pictures. */
-    static final String PICTURE_TEXT_NOTE =
-            "Orbit Local can't see pictures, so this answer uses only the text Orbit read from them.";
+    static final int PICTURE_TEXT_NOTE = R.string.olp_picture_note;
 
     /** Said under an answer built from part of a long attachment. */
-    static final String EXCERPT_NOTE =
-            "Orbit Local read the parts of your attachment most relevant to this question, not all of it.";
+    static final int EXCERPT_NOTE = R.string.olp_excerpt_note;
 
     @Override public String id() { return Prefs.PROVIDER_LOCAL; }
 
@@ -86,6 +80,8 @@ final class OrbitLocalProvider implements AiProvider {
     @Override public String description() {
         return "Private AI on this phone, even offline. A compact model, so answers are simpler than cloud AI.";
     }
+
+    @Override public String description(Context context) { return context.getString(R.string.prov_local_description); }
 
     @Override public AiCapabilities capabilities() { return CAPABILITIES; }
 
@@ -111,13 +107,14 @@ final class OrbitLocalProvider implements AiProvider {
      * <p>A device already carrying a model from an older Orbit is told something more useful than
      * "not installed": the expensive part is already done, and only the small component is missing.
      */
-    static String componentStatusDetail(OrbitLocalComponent.State state, boolean hasLegacyModel) {
+    static String componentStatusDetail(Context context, OrbitLocalComponent.State state,
+            boolean hasLegacyModel) {
         switch (state) {
             case NOT_INSTALLED:
                 return hasLegacyModel
-                        ? "Component required · model ready to move" : "Component not installed";
-            case UNTRUSTED: return "Component not verified";
-            case UPDATE_REQUIRED: return "Component update required";
+                        ? context.getString(R.string.olp_comp_required_move) : context.getString(R.string.olp_comp_not_installed);
+            case UNTRUSTED: return context.getString(R.string.olp_comp_not_verified);
+            case UPDATE_REQUIRED: return context.getString(R.string.olp_comp_update);
             default: return "";
         }
     }
@@ -141,28 +138,28 @@ final class OrbitLocalProvider implements AiProvider {
 
     @Override public String statusDetail(Context context) {
         if (!OrbitDistribution.supportsOrbitLocal()) {
-            return "Not available in the Google Play edition";
+            return context.getString(R.string.olp_not_play);
         }
         if (!DeviceCapabilityCheck.allowsLocalAi(DeviceCapabilityCheck.assess(context))) {
-            return "Not supported on this device";
+            return context.getString(R.string.olp_unsupported);
         }
-        String componentDetail = componentStatusDetail(
+        String componentDetail = componentStatusDetail(context,
                 OrbitLocalComponent.state(context), LocalModelStore.hasLegacyModel(context));
         if (!componentDetail.isEmpty()) return componentDetail;
         OrbitLocalStatus status = cachedStatus(context);
-        if (status == null) return "Checking component…";
+        if (status == null) return context.getString(R.string.olp_checking);
         switch (status.modelState) {
-            case OrbitLocalStatus.READY: return "Ready · works offline";
-            case OrbitLocalStatus.DOWNLOADING: return "Downloading model…";
-            case OrbitLocalStatus.QUEUED: return "Starting model download…";
-            case OrbitLocalStatus.WAITING_FOR_NETWORK: return "Waiting for a connection";
-            case OrbitLocalStatus.VALIDATING: return "Verifying model…";
-            case OrbitLocalStatus.IMPORTING: return "Moving existing model…";
+            case OrbitLocalStatus.READY: return context.getString(R.string.olp_ready);
+            case OrbitLocalStatus.DOWNLOADING: return context.getString(R.string.olp_downloading);
+            case OrbitLocalStatus.QUEUED: return context.getString(R.string.olp_starting);
+            case OrbitLocalStatus.WAITING_FOR_NETWORK: return context.getString(R.string.olp_waiting);
+            case OrbitLocalStatus.VALIDATING: return context.getString(R.string.olp_verifying);
+            case OrbitLocalStatus.IMPORTING: return context.getString(R.string.olp_moving);
             // Two different things, and only one of them is something the user did.
-            case OrbitLocalStatus.PAUSED: return "Download paused";
-            case OrbitLocalStatus.INTERRUPTED: return "Download interrupted";
-            case OrbitLocalStatus.ERROR: return "Needs attention";
-            default: return "Model not installed";
+            case OrbitLocalStatus.PAUSED: return context.getString(R.string.olp_paused);
+            case OrbitLocalStatus.INTERRUPTED: return context.getString(R.string.olp_interrupted);
+            case OrbitLocalStatus.ERROR: return context.getString(R.string.ui_needs_attention_c1ebc781);
+            default: return context.getString(R.string.olp_model_missing);
         }
     }
 
@@ -188,7 +185,8 @@ final class OrbitLocalProvider implements AiProvider {
             // a picture it cannot see, and nothing leaves the phone to find out.
             DiagnosticStore.recordLocalRequest(context, fitted.path, fitted.sourcesSummary(), 0,
                     fitted.inputBudgetTokens, false, -1L, 0L, "explained");
-            callback.onSuccess(new AssistantReply(IMAGE_ONLY_REPLY, new java.util.ArrayList<>()));
+            callback.onSuccess(new AssistantReply(context.getString(IMAGE_ONLY_REPLY),
+                    new java.util.ArrayList<>()));
             return;
         }
         // Cancellation is watched here and forwarded to the component, so Stop behaves exactly as
@@ -224,14 +222,14 @@ final class OrbitLocalProvider implements AiProvider {
                             fitted.estimatedTokens, fitted.inputBudgetTokens, fitted.evidenceTrimmed,
                             first == 0L ? -1L : first - startedAt,
                             System.currentTimeMillis() - startedAt, stopped ? "stopped" : "empty");
-                    callback.onError("Orbit Local produced no answer. Try rephrasing, or switch provider for this question.");
+                    callback.onError(context.getString(R.string.olp_no_answer));
                     return;
                 }
                 DiagnosticStore.recordLocalRequest(app, fitted.path, fitted.sourcesSummary(),
                         fitted.estimatedTokens, fitted.inputBudgetTokens, fitted.evidenceTrimmed,
                         first == 0L ? -1L : first - startedAt,
                         System.currentTimeMillis() - startedAt, stopped ? "stopped" : "answered");
-                callback.onSuccess(new AssistantReply(withNotes(text.trim(), fitted),
+                callback.onSuccess(new AssistantReply(withNotes(context, text.trim(), fitted),
                         new java.util.ArrayList<>()).withDetails(
                         ResponseDetails.sentWith(request.selection)));
             }
@@ -257,10 +255,10 @@ final class OrbitLocalProvider implements AiProvider {
      * does not reliably cite, so the saved items it read are named here every time; and when the
      * model had only part of an attachment, or only the text from a picture, the answer says so.
      */
-    static String withNotes(String answer, LocalContextBudget.Result fitted) {
+    static String withNotes(Context context, String answer, LocalContextBudget.Result fitted) {
         StringBuilder out = new StringBuilder(answer);
         if (!fitted.vaultSources.isEmpty()) {
-            out.append("\n\nChecked in your Vault: ");
+            out.append("\n\n").append(context.getString(R.string.olp_checked_vault));
             for (int i = 0; i < fitted.vaultSources.size(); i++) {
                 LocalContextBudget.VaultSource source = fitted.vaultSources.get(i);
                 if (i > 0) out.append(" · ");
@@ -268,10 +266,10 @@ final class OrbitLocalProvider implements AiProvider {
             }
         }
         if (fitted.imageCount > 0 && LocalContextBudget.PATH_ATTACHMENTS.equals(fitted.path)) {
-            out.append("\n\n").append(PICTURE_TEXT_NOTE);
+            out.append("\n\n").append(context.getString(PICTURE_TEXT_NOTE));
         } else if (fitted.evidenceTrimmed && fitted.attachmentSegments > 0
                 && fitted.vaultSources.isEmpty()) {
-            out.append("\n\n").append(EXCERPT_NOTE);
+            out.append("\n\n").append(context.getString(EXCERPT_NOTE));
         }
         return out.toString();
     }
@@ -314,7 +312,7 @@ final class OrbitLocalProvider implements AiProvider {
 
     @Override public void plan(Context context, String planningPrompt, AiSelection selection,
                                AssistantClient.PlanCallback callback) {
-        callback.onError("Orbit Local can't build Routines yet. Switch the active provider to ChatGPT to plan this routine, then switch back.");
+        callback.onError(context.getString(R.string.olp_no_routines));
     }
 
     /**

@@ -33,6 +33,7 @@ import java.util.List;
  * explicit; Orbit never switches providers by itself.
  */
 public final class AiProvidersActivity extends Activity {
+    /** Stable ids compared in code and tests; {@link #actionText} gives the wording on screen. */
     static final String ACTION_USE = "Use this provider";
     static final String ACTION_MANAGE = "Manage";
     static final String ACTION_SET_UP = "Set up";
@@ -45,7 +46,7 @@ public final class AiProvidersActivity extends Activity {
     /** Hears the OpenRouter sign-in while this screen is visible. */
     private final OpenRouterAuth.Listener openRouterListener = new OpenRouterAuth.Listener() {
         @Override public void onConnected() {
-            Toast.makeText(AiProvidersActivity.this, "OpenRouter connected", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AiProvidersActivity.this, getString(R.string.aiprov_openrouter_connected), Toast.LENGTH_SHORT).show();
             refreshOpenRouterCatalog(false);
             refreshCards();
         }
@@ -121,7 +122,7 @@ public final class AiProvidersActivity extends Activity {
         back.setImageResource(R.drawable.ic_back);
         back.setImageTintList(ColorStateList.valueOf(UiKit.accent(this)));
         back.setBackground(UiKit.ripple(UiKit.SURFACE_2, UiKit.accent(this), 18, this));
-        back.setContentDescription("Back");
+        back.setContentDescription(getString(R.string.ui_back_76900f1b));
         back.setPadding(UiKit.dp(this, 10), UiKit.dp(this, 10),
                 UiKit.dp(this, 10), UiKit.dp(this, 10));
         back.setOnClickListener(v -> navigation.performBack());
@@ -131,14 +132,14 @@ public final class AiProvidersActivity extends Activity {
         LinearLayout titles = new LinearLayout(this);
         titles.setOrientation(LinearLayout.VERTICAL);
         titles.setPadding(UiKit.dp(this, 13), 0, 0, 0);
-        titles.addView(UiKit.text(this, "AI Providers", 24, UiKit.TEXT, true));
-        titles.addView(UiKit.text(this, "Choose what Orbit thinks with", 13, UiKit.MUTED, false));
+        titles.addView(UiKit.text(this, getString(R.string.aiprov_title), 24, UiKit.TEXT, true));
+        titles.addView(UiKit.text(this, getString(R.string.aiprov_subtitle), 13, UiKit.MUTED, false));
         header.addView(titles, new LinearLayout.LayoutParams(
                 0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         page.addView(header);
 
         TextView intro = UiKit.text(this,
-                "Choose how Orbit thinks. Features and capabilities vary by provider.",
+                getString(R.string.aiprov_intro),
                 13, UiKit.MUTED, false);
         intro.setLineSpacing(0, 1.14f);
         LinearLayout.LayoutParams introLp = new LinearLayout.LayoutParams(
@@ -188,13 +189,13 @@ public final class AiProvidersActivity extends Activity {
 
         LinearLayout titleRow = new LinearLayout(this);
         titleRow.setGravity(Gravity.CENTER_VERTICAL);
-        titleRow.addView(UiKit.text(this, provider.displayName(), 17, UiKit.TEXT, true),
+        titleRow.addView(UiKit.text(this, provider.displayName(this), 17, UiKit.TEXT, true),
                 new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         if (active) {
-            titleRow.addView(pill("Active", UiKit.onAccent(this),
+            titleRow.addView(pill(getString(R.string.aiprov_active), UiKit.onAccent(this),
                     UiKit.rounded(UiKit.accent(this), 99, this)));
         } else if (status == AiProvider.Status.COMING_SOON) {
-            titleRow.addView(pill("Experimental", UiKit.MUTED,
+            titleRow.addView(pill(getString(R.string.aiprov_experimental), UiKit.MUTED,
                     UiKit.outlined(UiKit.SURFACE_2, Color.rgb(53, 58, 72), 99, this)));
         }
         card.addView(titleRow);
@@ -212,13 +213,13 @@ public final class AiProvidersActivity extends Activity {
                 new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         card.addView(statusRow);
 
-        TextView description = UiKit.text(this, provider.description(), 12.5f, UiKit.MUTED, false);
+        TextView description = UiKit.text(this, provider.description(this), 12.5f, UiKit.MUTED, false);
         description.setLineSpacing(0, 1.15f);
         description.setPadding(0, UiKit.dp(this, 8), 0, 0);
         card.addView(description);
 
         ChipFlow chips = new ChipFlow(this, UiKit.dp(this, 6), UiKit.dp(this, 6));
-        for (String label : capabilityChips(provider.capabilities())) {
+        for (String label : capabilityChips(this, provider.capabilities())) {
             chips.addView(chip(label));
         }
         LinearLayout.LayoutParams chipsLp = new LinearLayout.LayoutParams(
@@ -226,7 +227,7 @@ public final class AiProvidersActivity extends Activity {
         chipsLp.topMargin = UiKit.dp(this, 10);
         card.addView(chips, chipsLp);
 
-        String limitation = capabilityLimitation(provider.capabilities());
+        String limitation = capabilityLimitation(this, provider.capabilities());
         if (!limitation.isEmpty()) {
             TextView limits = UiKit.text(this, limitation, 11.5f,
                     UiKit.withAlpha(UiKit.MUTED, 210), false);
@@ -287,7 +288,7 @@ public final class AiProvidersActivity extends Activity {
             if (primary) {
                 // The one state-progressing action is full width, in Orbit's stacked settings
                 // button language; nothing is ever squeezed beside it.
-                Button b = primaryButton(label);
+                Button b = primaryButton(actionText(label));
                 b.setOnClickListener(v -> runAction(provider, label));
                 action = b;
                 lp = new LinearLayout.LayoutParams(
@@ -295,7 +296,7 @@ public final class AiProvidersActivity extends Activity {
             } else {
                 // Secondary actions stay compact and right-aligned so cards without a primary
                 // action do not gain a wall of full-width buttons.
-                Button b = secondaryButton(label);
+                Button b = secondaryButton(actionText(label));
                 b.setOnClickListener(v -> runAction(provider, label));
                 LinearLayout row = new LinearLayout(this);
                 row.setGravity(Gravity.END);
@@ -314,7 +315,7 @@ public final class AiProvidersActivity extends Activity {
     private void runAction(AiProvider provider, String label) {
         if (ACTION_USE.equals(label)) {
             if (AiProviders.select(this, provider.id())) {
-                Toast.makeText(this, provider.displayName() + " is now Orbit's active provider",
+                Toast.makeText(this, getString(R.string.aiprov_now_active, provider.displayName(this)),
                         Toast.LENGTH_SHORT).show();
                 refreshCards();
             }
@@ -329,6 +330,19 @@ public final class AiProvidersActivity extends Activity {
             return;
         }
         manage(provider);
+    }
+
+    /** The wording for one of the {@code ACTION_*} ids. */
+    private String actionText(String action) {
+        switch (action) {
+            case ACTION_USE: return getString(R.string.aiprov_action_use);
+            case ACTION_MANAGE: return getString(R.string.aiprov_action_manage);
+            case ACTION_SET_UP: return getString(R.string.aiprov_action_set_up);
+            case ACTION_DETAILS: return getString(R.string.aiprov_action_details);
+            case ACTION_OPENROUTER_SIGN_IN: return getString(R.string.aiprov_action_openrouter_sign_in);
+            case ACTION_USE_API_KEY: return getString(R.string.aiprov_action_use_api_key);
+            default: return action;
+        }
     }
 
     private TextView pill(String text, int textColor, android.graphics.drawable.Drawable background) {
@@ -356,7 +370,7 @@ public final class AiProvidersActivity extends Activity {
         }
     }
 
-    /** Compact positive capabilities, in scanning order. */
+    /** Compact positive capabilities, in scanning order (English; screens use the Context overload). */
     static List<String> capabilityChips(AiCapabilities caps) {
         List<String> chips = new ArrayList<>();
         if (caps.streaming) chips.add("Live replies");
@@ -369,12 +383,25 @@ public final class AiProvidersActivity extends Activity {
         return chips;
     }
 
+    /** The same chips as {@link #capabilityChips(AiCapabilities)}, worded for the current language. */
+    static List<String> capabilityChips(Context context, AiCapabilities caps) {
+        List<String> chips = new ArrayList<>();
+        if (caps.streaming) chips.add(context.getString(R.string.aiprov_chip_live));
+        if (caps.deviceActions) chips.add(context.getString(R.string.aiprov_chip_device_actions));
+        if (caps.images) chips.add(context.getString(R.string.aiprov_chip_screens_images));
+        if (caps.hostedWebSearch) chips.add(context.getString(R.string.aiprov_chip_web_search));
+        if (caps.richWebMedia) chips.add(context.getString(R.string.aiprov_chip_sourced_images));
+        if (caps.offline) chips.add(context.getString(R.string.aiprov_chip_offline));
+        if (!caps.needsCredentials) chips.add(context.getString(R.string.aiprov_chip_no_account));
+        return chips;
+    }
+
     /** One honest sentence about what the provider cannot do yet, or empty. */
-    static String capabilityLimitation(AiCapabilities caps) {
+    static String capabilityLimitation(Context context, AiCapabilities caps) {
         if (caps.deviceActions) return "";
-        return caps.images
-                ? "Can't run device actions yet"
-                : "Can't run device actions or read screens and images yet";
+        return context.getString(caps.images
+                ? R.string.aiprov_limit_actions
+                : R.string.aiprov_limit_actions_screens);
     }
 
     private void manage(AiProvider provider) {
@@ -418,16 +445,16 @@ public final class AiProvidersActivity extends Activity {
                     .addCategory(Intent.CATEGORY_BROWSABLE));
         } catch (Exception e) {
             OpenRouterAuth.cancel();
-            showOpenRouterSignInFailure("Orbit could not open a web browser on this phone.");
+            showOpenRouterSignInFailure(getString(R.string.aiprov_no_browser));
         }
     }
 
     private void showOpenRouterSignInFailure(String message) {
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("OpenRouter was not connected")
+                .setTitle(getString(R.string.aiprov_openrouter_not_connected))
                 .setMessage(message)
-                .setPositiveButton(ACTION_USE_API_KEY, (d, w) -> showOpenRouterKeyEntry())
-                .setNegativeButton("Close", null)
+                .setPositiveButton(actionText(ACTION_USE_API_KEY), (d, w) -> showOpenRouterKeyEntry())
+                .setNegativeButton(getString(R.string.ui_close_7d9eb7ac), null)
                 .create();
         UiKit.styleOrbitDialog(dialog, this, false);
         dialog.show();
@@ -437,8 +464,8 @@ public final class AiProvidersActivity extends Activity {
     private void refreshOpenRouterCatalog(boolean announce) {
         ProviderCatalogRepository.refreshAsync(this, Prefs.PROVIDER_OPENROUTER, (changed, error) ->
                 runOnUiThread(() -> {
-                    if (announce || error.contains("rejected")) {
-                        Toast.makeText(this, error.isEmpty() ? "OpenRouter models are up to date"
+                    if (announce || error.contains("rejected") || error.equals(getString(R.string.provcat_key_rejected))) {
+                        Toast.makeText(this, error.isEmpty() ? getString(R.string.aiprov_openrouter_up_to_date)
                                 : error, error.isEmpty() ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG).show();
                     }
                     refreshCards();
@@ -455,31 +482,31 @@ public final class AiProvidersActivity extends Activity {
         int pad = UiKit.dp(this, 22);
         wrap.setPadding(pad, UiKit.dp(this, 8), pad, 0);
         String status = AiProviders.byId(Prefs.PROVIDER_OPENROUTER).statusDetail(this);
-        TextView note = UiKit.text(this, status + ". Usage is billed to your OpenRouter account. "
-                + "Auto uses OpenRouter only if you switch it on in Settings > Intelligence > Auto.",
+        TextView note = UiKit.text(this, getString(R.string.aiprov_openrouter_manage_note, status),
                 13, UiKit.MUTED, false);
         note.setLineSpacing(0, 1.14f);
         wrap.addView(note);
         AlertDialog[] holder = new AlertDialog[1];
-        addSheetButton(wrap, "Check connection", false, () -> {
-            Toast.makeText(this, "Checking OpenRouter connection…", Toast.LENGTH_SHORT).show();
+        addSheetButton(wrap, getString(R.string.aiprov_check_connection), false, () -> {
+            Toast.makeText(this, getString(R.string.aiprov_checking_openrouter), Toast.LENGTH_SHORT).show();
             ProviderCatalogRepository.checkOpenRouterAsync(this, (changed, error) ->
                     runOnUiThread(() -> {
-                        Toast.makeText(this, error.isEmpty() ? "OpenRouter is connected" : error,
+                        Toast.makeText(this, error.isEmpty() ? getString(R.string.aiprov_openrouter_is_connected) : error,
                                 error.isEmpty() ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG).show();
                         if (error.isEmpty()) refreshOpenRouterCatalog(false);
                     }));
         }, holder);
-        addSheetButton(wrap, "Refresh models", false, () -> refreshOpenRouterCatalog(true), holder);
-        addSheetButton(wrap, "Reconnect with OpenRouter", false, this::startOpenRouterSignIn, holder);
+        addSheetButton(wrap, getString(R.string.aiprov_refresh_models), false, () -> refreshOpenRouterCatalog(true), holder);
+        addSheetButton(wrap, getString(R.string.aiprov_reconnect_openrouter), false, this::startOpenRouterSignIn, holder);
         addSheetButton(wrap, SecureStore.OPENROUTER_SOURCE_MANUAL.equals(
-                SecureStore.openRouterKeySource(this)) ? "Replace API key" : ACTION_USE_API_KEY,
+                SecureStore.openRouterKeySource(this)) ? getString(R.string.aiprov_replace_api_key)
+                        : actionText(ACTION_USE_API_KEY),
                 false, this::showOpenRouterKeyEntry, holder);
-        addSheetButton(wrap, "Disconnect", true, this::confirmOpenRouterDisconnect, holder);
+        addSheetButton(wrap, getString(R.string.aiprov_disconnect), true, this::confirmOpenRouterDisconnect, holder);
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("OpenRouter")
                 .setView(wrap)
-                .setNegativeButton("Close", null)
+                .setNegativeButton(getString(R.string.ui_close_7d9eb7ac), null)
                 .create();
         holder[0] = dialog;
         UiKit.styleOrbitDialog(dialog, this, false);
@@ -503,15 +530,13 @@ public final class AiProvidersActivity extends Activity {
     /** Disconnect removes the key and Auto's permission; chats and their history stay. */
     private void confirmOpenRouterDisconnect() {
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Disconnect OpenRouter?")
-                .setMessage("Orbit removes its OpenRouter key from this phone and stops using "
-                        + "OpenRouter, including in Auto. Your chats and their history stay. To "
-                        + "revoke the key itself, delete it in your OpenRouter account settings.")
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Disconnect", (d, w) -> {
+                .setTitle(getString(R.string.aiprov_disconnect_title))
+                .setMessage(getString(R.string.aiprov_disconnect_message))
+                .setNegativeButton(getString(R.string.ui_cancel_19766ed6), null)
+                .setPositiveButton(getString(R.string.aiprov_disconnect), (d, w) -> {
                     OpenRouterAuth.cancel();
                     SecureStore.clearOpenRouterKey(this);
-                    Toast.makeText(this, "OpenRouter disconnected", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.aiprov_openrouter_disconnected), Toast.LENGTH_SHORT).show();
                     refreshCards();
                 })
                 .create();
@@ -530,13 +555,14 @@ public final class AiProvidersActivity extends Activity {
         int pad = UiKit.dp(this, 22);
         wrap.setPadding(pad, UiKit.dp(this, 8), pad, 0);
         TextView note = UiKit.text(this,
-                "Paste an API key created in your OpenRouter account. Orbit encrypts it with Android Keystore, never backs it up, and never shows it again. Signing in with OpenRouter does this for you.",
+                getString(R.string.aiprov_openrouter_key_note),
                 13, UiKit.MUTED, false);
         note.setLineSpacing(0, 1.14f);
         wrap.addView(note);
 
         EditText input = new EditText(this);
-        input.setHint(SecureStore.hasOpenRouterKey(this) ? "Key saved · enter a new key to replace it" : "sk-or-…");
+        input.setHint(SecureStore.hasOpenRouterKey(this)
+                ? getString(R.string.aiprov_key_saved_hint) : "sk-or-…");
         input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         input.setTextColor(UiKit.TEXT);
         input.setHintTextColor(UiKit.MUTED);
@@ -547,27 +573,27 @@ public final class AiProvidersActivity extends Activity {
         wrap.addView(input, inputLp);
 
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("OpenRouter API key")
+                .setTitle(getString(R.string.aiprov_openrouter_key_title))
                 .setView(wrap)
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Save and check", (d, w) -> {
+                .setNegativeButton(getString(R.string.ui_cancel_19766ed6), null)
+                .setPositiveButton(getString(R.string.aiprov_save_and_check), (d, w) -> {
                     String value = input.getText().toString().trim();
                     if (value.isEmpty()) return;
                     if (!SecureStore.saveOpenRouterKey(this, value,
                             SecureStore.OPENROUTER_SOURCE_MANUAL)) {
-                        Toast.makeText(this, "Could not store the key securely, so it was not saved",
+                        Toast.makeText(this, getString(R.string.aiprov_key_store_failed),
                                 Toast.LENGTH_LONG).show();
                         return;
                     }
-                    Toast.makeText(this, "Checking OpenRouter connection…", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.aiprov_checking_openrouter), Toast.LENGTH_SHORT).show();
                     ProviderCatalogRepository.checkOpenRouterAsync(this, (changed, error) ->
                             runOnUiThread(() -> {
                                 if (ProviderCatalogRepository.OPENROUTER_REJECTED.equals(error)) {
                                     SecureStore.clearOpenRouterKey(this);
-                                    Toast.makeText(this, "OpenRouter rejected that key, so it was not saved.",
+                                    Toast.makeText(this, getString(R.string.aiprov_openrouter_rejected),
                                             Toast.LENGTH_LONG).show();
                                 } else {
-                                    Toast.makeText(this, error.isEmpty() ? "OpenRouter connected" : error,
+                                    Toast.makeText(this, error.isEmpty() ? getString(R.string.aiprov_openrouter_connected) : error,
                                             error.isEmpty() ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG).show();
                                     refreshOpenRouterCatalog(false);
                                 }
@@ -588,13 +614,13 @@ public final class AiProvidersActivity extends Activity {
         int pad = UiKit.dp(this, 22);
         wrap.setPadding(pad, UiKit.dp(this, 8), pad, 0);
         TextView note = UiKit.text(this,
-                "Enter a developer API key from " + name + ". Orbit encrypts it with Android Keystore, never backs it up, and never shows the saved key again.",
+                getString(R.string.aiprov_api_key_note, name),
                 13, UiKit.MUTED, false);
         note.setLineSpacing(0, 1.14f);
         wrap.addView(note);
 
         EditText input = new EditText(this);
-        input.setHint(saved ? "Key saved · enter a new key to replace it" : "API key");
+        input.setHint(getString(saved ? R.string.aiprov_key_saved_hint : R.string.aiprov_api_key_hint));
         input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         input.setTextColor(UiKit.TEXT);
         input.setHintTextColor(UiKit.MUTED);
@@ -605,20 +631,20 @@ public final class AiProvidersActivity extends Activity {
         wrap.addView(input, inputLp);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this)
-                .setTitle(name + " connection")
+                .setTitle(getString(R.string.aiprov_connection_title, name))
                 .setView(wrap)
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Save and check", (d, w) -> {
+                .setNegativeButton(getString(R.string.ui_cancel_19766ed6), null)
+                .setPositiveButton(getString(R.string.aiprov_save_and_check), (d, w) -> {
                     String value = input.getText().toString().trim();
                     if (value.isEmpty()) return;
                     boolean stored = anthropic ? SecureStore.saveAnthropicKey(this, value)
                             : SecureStore.saveXaiKey(this, value);
                     if (!stored) {
-                        Toast.makeText(this, "Could not store the key securely, so it was not saved",
+                        Toast.makeText(this, getString(R.string.aiprov_key_store_failed),
                                 Toast.LENGTH_LONG).show();
                         return;
                     }
-                    Toast.makeText(this, "Checking " + name + " connection…", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.aiprov_checking_provider, name), Toast.LENGTH_SHORT).show();
                     ProviderCatalogRepository.refreshAsync(this, provider, (changed, error) ->
                             runOnUiThread(() -> {
                                 // A credential the provider explicitly rejected is not kept as a
@@ -630,14 +656,14 @@ public final class AiProvidersActivity extends Activity {
                                     else SecureStore.clearXaiKey(this);
                                 }
                                 Toast.makeText(this, error.isEmpty()
-                                                ? name + " connected" : error,
+                                                ? getString(R.string.aiprov_provider_connected, name) : error,
                                         error.isEmpty() ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG).show();
                                 refreshCards();
                             }));
                 });
-        if (saved) builder.setNeutralButton("Remove key", (d, w) -> {
+        if (saved) builder.setNeutralButton(getString(R.string.aiprov_remove_key), (d, w) -> {
             if (anthropic) SecureStore.clearAnthropicKey(this); else SecureStore.clearXaiKey(this);
-            Toast.makeText(this, name + " key removed", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.aiprov_key_removed, name), Toast.LENGTH_SHORT).show();
             refreshCards();
         });
         AlertDialog dialog = builder.create();

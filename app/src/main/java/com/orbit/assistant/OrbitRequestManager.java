@@ -362,7 +362,7 @@ public final class OrbitRequestManager {
                     images, explicitAttachment, kept);
             return SmartRouter.route(c, request);
         } catch (RuntimeException e) {
-            return SmartRouter.Route.failed("Auto could not choose a model for this request."
+            return SmartRouter.Route.failed(c.getString(R.string.requestmgr_auto_failed)
                     + SmartRouter.HINT);
         }
     }

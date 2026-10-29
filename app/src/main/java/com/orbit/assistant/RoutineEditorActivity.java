@@ -77,7 +77,7 @@ public class RoutineEditorActivity extends Activity {
         if (id != null && !id.trim().isEmpty()) {
             existing = RoutineStore.findById(this, id);
             if (existing == null) {
-                Toast.makeText(this, "That routine is no longer available.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.d_redit_unavailable), Toast.LENGTH_SHORT).show();
                 finish();
                 return;
             }
@@ -162,7 +162,7 @@ public class RoutineEditorActivity extends Activity {
 
         LinearLayout header = new LinearLayout(this);
         header.setGravity(Gravity.CENTER_VERTICAL);
-        ImageButton back = iconButton(R.drawable.ic_back, "Back");
+        ImageButton back = iconButton(R.drawable.ic_back, getString(R.string.ui_back_76900f1b));
         back.setOnClickListener(v -> handleBack());
         LinearLayout.LayoutParams backLp = new LinearLayout.LayoutParams(UiKit.dp(this, 48), UiKit.dp(this, 48));
         backLp.rightMargin = UiKit.dp(this, 12);
@@ -170,15 +170,13 @@ public class RoutineEditorActivity extends Activity {
 
         LinearLayout titles = new LinearLayout(this);
         titles.setOrientation(LinearLayout.VERTICAL);
-        titles.addView(UiKit.text(this, existing == null ? "New routine" : "Edit routine", 25, UiKit.TEXT, true));
-        titles.addView(UiKit.text(this, "Saved Action Engine chain", 12, UiKit.MUTED, false));
+        titles.addView(UiKit.text(this, getString(existing == null ? R.string.d_redit_new : R.string.d_redit_edit_title), 25, UiKit.TEXT, true));
+        titles.addView(UiKit.text(this, getString(R.string.d_redit_subtitle), 12, UiKit.MUTED, false));
         header.addView(titles, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         page.addView(header);
 
         TextView intro = UiKit.text(this,
-                "Steps run from top to bottom. An IF condition holds a THEN path and an OTHERWISE "
-                        + "path; exactly one of them runs, then the routine carries on with the "
-                        + "steps below it.",
+                getString(R.string.d_redit_intro),
                 13, UiKit.MUTED, false);
         intro.setLineSpacing(0, 1.12f);
         LinearLayout.LayoutParams introLp = new LinearLayout.LayoutParams(
@@ -186,8 +184,8 @@ public class RoutineEditorActivity extends Activity {
         introLp.setMargins(UiKit.dp(this, 2), UiKit.dp(this, 16), UiKit.dp(this, 2), UiKit.dp(this, 14));
         page.addView(intro, introLp);
 
-        page.addView(sectionTitle("NAME"));
-        nameField = inputField("Routine name",
+        page.addView(sectionTitle(getString(R.string.d_redit_name_section)));
+        nameField = inputField(getString(R.string.d_redit_name_hint),
                 existing != null ? existing.name : draftName, false);
         nameField.setFilters(new InputFilter[]{new InputFilter.LengthFilter(RoutineStore.MAX_NAME_LENGTH)});
         nameField.addTextChangedListener(new TextWatcher() {
@@ -200,12 +198,12 @@ public class RoutineEditorActivity extends Activity {
         page.addView(nameField, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 54)));
 
-        page.addView(sectionTitle("STEPS"));
+        page.addView(sectionTitle(getString(R.string.d_redit_steps_section)));
         stepsList = new LinearLayout(this);
         stepsList.setOrientation(LinearLayout.VERTICAL);
         page.addView(stepsList);
 
-        addStepButton = secondaryButton("+  Add step");
+        addStepButton = secondaryButton(getString(R.string.d_redit_add_step));
         addStepButton.setOnClickListener(v -> {
             // This one always appends after everything, so any path the user started from and
             // then abandoned is forgotten here rather than capturing the next action.
@@ -217,13 +215,13 @@ public class RoutineEditorActivity extends Activity {
         addLp.setMargins(0, UiKit.dp(this, 2), 0, UiKit.dp(this, 18));
         page.addView(addStepButton, addLp);
 
-        Button save = primaryButton(existing == null ? "Save routine" : "Save changes");
+        Button save = primaryButton(getString(existing == null ? R.string.d_redit_save_routine : R.string.d_redit_save_changes));
         save.setOnClickListener(v -> saveRoutine());
         page.addView(save, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 50)));
 
         TextView safety = UiKit.text(this,
-                "Routine actions are stored only on this device. Enabled Extensions can add reviewed declarative actions; secure setup values stay outside Routine storage.",
+                getString(R.string.d_redit_safety),
                 11, UiKit.MUTED, false);
         safety.setGravity(Gravity.CENTER);
         safety.setPadding(UiKit.dp(this, 8), UiKit.dp(this, 14), UiKit.dp(this, 8), 0);
@@ -237,9 +235,9 @@ public class RoutineEditorActivity extends Activity {
         stepsList.removeAllViews();
         if (workingActions.isEmpty()) {
             LinearLayout empty = card();
-            empty.addView(UiKit.text(this, "No steps yet", 15, UiKit.TEXT, true));
+            empty.addView(UiKit.text(this, getString(R.string.d_redit_no_steps), 15, UiKit.TEXT, true));
             TextView note = UiKit.text(this,
-                    "Add the actions Orbit should perform when this routine runs.",
+                    getString(R.string.d_redit_no_steps_note),
                     12, UiKit.MUTED, false);
             note.setPadding(0, UiKit.dp(this, 5), 0, 0);
             empty.addView(note);
@@ -259,7 +257,7 @@ public class RoutineEditorActivity extends Activity {
             boolean full = workingActions.size() >= RoutineActionCatalog.MAX_STEPS;
             addStepButton.setEnabled(!full);
             addStepButton.setAlpha(full ? 0.5f : 1f);
-            addStepButton.setText(full ? "Maximum " + RoutineActionCatalog.MAX_STEPS + " steps" : "+  Add step");
+            addStepButton.setText(full ? getString(R.string.d_redit_max_steps, RoutineActionCatalog.MAX_STEPS) : getString(R.string.d_redit_add_step));
         }
     }
 
@@ -279,7 +277,7 @@ public class RoutineEditorActivity extends Activity {
 
         LinearLayout text = new LinearLayout(this);
         text.setOrientation(LinearLayout.VERTICAL);
-        TextView tag = UiKit.text(this, "IF", 10, UiKit.accent(this), true);
+        TextView tag = UiKit.text(this, getString(R.string.d_redit_if), 10, UiKit.accent(this), true);
         tag.setLetterSpacing(0.16f);
         tag.setPadding(0, 0, 0, UiKit.dp(this, 2));
         text.addView(tag);
@@ -288,22 +286,22 @@ public class RoutineEditorActivity extends Activity {
         text.addView(title);
         header.addView(text, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
 
-        ImageButton more = iconButton(R.drawable.ic_more, "Branch options");
+        ImageButton more = iconButton(R.drawable.ic_more, getString(R.string.d_redit_branch_options));
         more.setOnClickListener(v -> showBranchMenu(more, conditionIndex));
         header.addView(more, new LinearLayout.LayoutParams(UiKit.dp(this, 42), UiKit.dp(this, 42)));
         card.addView(header);
 
         RoutineBranch.Span span = RoutineBranch.spanAt(workingActions, conditionIndex);
-        card.addView(pathSection(conditionIndex, RoutineBranch.BRANCH_TRUE, "THEN",
+        card.addView(pathSection(conditionIndex, RoutineBranch.BRANCH_TRUE, getString(R.string.d_redit_then),
                 span == null ? 0 : span.trueStart, span == null ? 0 : span.trueEnd));
-        card.addView(pathSection(conditionIndex, RoutineBranch.BRANCH_ELSE, "OTHERWISE",
+        card.addView(pathSection(conditionIndex, RoutineBranch.BRANCH_ELSE, getString(R.string.d_redit_otherwise),
                 span == null ? 0 : span.elseStart, span == null ? 0 : span.elseEnd));
 
         // Where the branch ends, said in words rather than stored as a step. Only worth showing
         // when something actually follows it.
         if (unit.end < workingActions.size()) {
             TextView continues = UiKit.text(this,
-                    "Either way, the routine continues below.", 11, UiKit.MUTED, false);
+                    getString(R.string.d_redit_continues), 11, UiKit.MUTED, false);
             LinearLayout.LayoutParams continuesLp = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             continuesLp.setMargins(0, UiKit.dp(this, 13), 0, 0);
@@ -348,7 +346,7 @@ public class RoutineEditorActivity extends Activity {
         if (to <= from) {
             // Not "Empty": the path is perfectly valid, it simply has no actions, which means a
             // false condition does nothing here and the routine carries straight on.
-            TextView none = UiKit.text(this, "None", 13, UiKit.MUTED, false);
+            TextView none = UiKit.text(this, getString(R.string.d_redit_none), 13, UiKit.MUTED, false);
             none.setPadding(0, UiKit.dp(this, 2), 0, UiKit.dp(this, 4));
             section.addView(none);
         } else {
@@ -358,7 +356,7 @@ public class RoutineEditorActivity extends Activity {
         }
 
         boolean canAdd = RoutineBranch.canAddTo(workingActions, conditionIndex, kind);
-        Button add = secondaryButton("+  Add action");
+        Button add = secondaryButton(getString(R.string.d_redit_add_action));
         add.setTextSize(13);
         add.setEnabled(canAdd);
         add.setAlpha(canAdd ? 1f : 0.5f);
@@ -383,13 +381,13 @@ public class RoutineEditorActivity extends Activity {
 
     private String addBlockedReason(int conditionIndex, int kind) {
         if (workingActions.size() >= RoutineActionCatalog.MAX_STEPS) {
-            return "Routine step limit reached.";
+            return getString(R.string.d_redit_step_limit);
         }
         if (RoutineBranch.pathSize(workingActions, conditionIndex, kind)
                 >= RoutineBranch.MAX_BRANCH_STEPS) {
-            return "A path can hold up to " + RoutineBranch.MAX_BRANCH_STEPS + " actions.";
+            return getString(R.string.d_redit_path_limit, RoutineBranch.MAX_BRANCH_STEPS);
         }
-        return "Add a THEN action first, so OTHERWISE has something to be an alternative to.";
+        return getString(R.string.d_redit_need_then_first);
     }
 
     /** One action inside a branch path. Compact, and never numbered: only one path ever runs. */
@@ -406,12 +404,12 @@ public class RoutineEditorActivity extends Activity {
 
         LinearLayout text = new LinearLayout(this);
         text.setOrientation(LinearLayout.VERTICAL);
-        TextView title = UiKit.text(this, RoutineActionCatalog.title(action), 13, UiKit.TEXT, false);
+        TextView title = UiKit.text(this, RoutineActionCatalog.title(this, action), 13, UiKit.TEXT, false);
         title.setMaxLines(2);
         text.addView(title);
         row.addView(text, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
 
-        ImageButton more = iconButton(R.drawable.ic_more, "Action options");
+        ImageButton more = iconButton(R.drawable.ic_more, getString(R.string.d_redit_action_options));
         more.setOnClickListener(v -> showStepMenu(more, index));
         row.addView(more, new LinearLayout.LayoutParams(UiKit.dp(this, 36), UiKit.dp(this, 36)));
         return row;
@@ -419,8 +417,8 @@ public class RoutineEditorActivity extends Activity {
 
     /** The condition's own description, without the branch bookkeeping the editor now owns. */
     private String conditionTitle(AssistantReply.Action condition) {
-        String title = RoutineActionCatalog.title(condition);
-        int marker = title.indexOf(" · with ELSE");
+        String title = RoutineActionCatalog.title(this, condition);
+        int marker = title.indexOf(getString(R.string.rcat_with_else));
         return marker < 0 ? title : title.substring(0, marker);
     }
 
@@ -446,16 +444,16 @@ public class RoutineEditorActivity extends Activity {
 
         LinearLayout text = new LinearLayout(this);
         text.setOrientation(LinearLayout.VERTICAL);
-        TextView title = UiKit.text(this, RoutineActionCatalog.title(action), 14, UiKit.TEXT, true);
+        TextView title = UiKit.text(this, RoutineActionCatalog.title(this, action), 14, UiKit.TEXT, true);
         title.setMaxLines(1);
         text.addView(title);
-        TextView summary = UiKit.text(this, RoutineActionCatalog.summary(action), 11, UiKit.MUTED, false);
+        TextView summary = UiKit.text(this, RoutineActionCatalog.summary(this, action), 11, UiKit.MUTED, false);
         summary.setMaxLines(2);
         summary.setPadding(0, UiKit.dp(this, 3), 0, 0);
         text.addView(summary);
         row.addView(text, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
 
-        ImageButton more = iconButton(R.drawable.ic_more, "Step options");
+        ImageButton more = iconButton(R.drawable.ic_more, getString(R.string.d_redit_step_options));
         more.setOnClickListener(v -> showStepMenu(more, index));
         row.addView(more, new LinearLayout.LayoutParams(UiKit.dp(this, 42), UiKit.dp(this, 42)));
         card.addView(row);
@@ -465,18 +463,18 @@ public class RoutineEditorActivity extends Activity {
     /** Options for a whole IF block. Moving it carries both paths with it. */
     private void showBranchMenu(View anchor, int conditionIndex) {
         List<String> labels = new ArrayList<>();
-        labels.add("Edit condition");
-        if (RoutineBranch.canMove(workingActions, conditionIndex, -1)) labels.add("Move up");
-        if (RoutineBranch.canMove(workingActions, conditionIndex, 1)) labels.add("Move down");
-        labels.add("Remove branch");
+        labels.add(getString(R.string.d_redit_edit_condition));
+        if (RoutineBranch.canMove(workingActions, conditionIndex, -1)) labels.add(getString(R.string.d_redit_move_up));
+        if (RoutineBranch.canMove(workingActions, conditionIndex, 1)) labels.add(getString(R.string.d_redit_move_down));
+        labels.add(getString(R.string.d_redit_remove_branch));
         UiKit.showOrbitMenu(this, anchor, labels.toArray(new String[0]), -1, (choice, label) -> {
-            if ("Edit condition".equals(label)) {
+            if (getString(R.string.d_redit_edit_condition).equals(label)) {
                 configureAction(RoutineActionCatalog.IF_CONDITION, conditionIndex);
-            } else if ("Move up".equals(label)) {
+            } else if (getString(R.string.d_redit_move_up).equals(label)) {
                 if (RoutineBranch.move(workingActions, conditionIndex, -1)) markDirtyAndRefresh();
-            } else if ("Move down".equals(label)) {
+            } else if (getString(R.string.d_redit_move_down).equals(label)) {
                 if (RoutineBranch.move(workingActions, conditionIndex, 1)) markDirtyAndRefresh();
-            } else if ("Remove branch".equals(label)) {
+            } else if (getString(R.string.d_redit_remove_branch).equals(label)) {
                 confirmRemoveBranch(conditionIndex);
             }
         });
@@ -501,11 +499,10 @@ public class RoutineEditorActivity extends Activity {
             return;
         }
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Remove branch?")
-                .setMessage("This will remove the IF condition and all actions inside its THEN "
-                        + "and OTHERWISE paths.")
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Remove", (d, which) -> {
+                .setTitle(getString(R.string.d_redit_remove_branch_title))
+                .setMessage(getString(R.string.d_redit_remove_branch_message))
+                .setNegativeButton(getString(R.string.ui_cancel_19766ed6), null)
+                .setPositiveButton(getString(R.string.d_redit_remove), (d, which) -> {
                     if (RoutineBranch.removeBranch(workingActions, conditionIndex)) {
                         markDirtyAndRefresh();
                     }
@@ -522,27 +519,27 @@ public class RoutineEditorActivity extends Activity {
 
     private void showStepMenu(View anchor, int index) {
         List<String> labels = new ArrayList<>();
-        if (RoutineActionCatalog.isConfigurable(workingActions.get(index).type)) labels.add("Edit");
-        if (RoutineBranch.canMove(workingActions, index, -1)) labels.add("Move up");
-        if (RoutineBranch.canMove(workingActions, index, 1)) labels.add("Move down");
-        if (workingActions.size() < RoutineActionCatalog.MAX_STEPS) labels.add("Duplicate");
-        labels.add("Remove");
+        if (RoutineActionCatalog.isConfigurable(workingActions.get(index).type)) labels.add(getString(R.string.d_redit_edit));
+        if (RoutineBranch.canMove(workingActions, index, -1)) labels.add(getString(R.string.d_redit_move_up));
+        if (RoutineBranch.canMove(workingActions, index, 1)) labels.add(getString(R.string.d_redit_move_down));
+        if (workingActions.size() < RoutineActionCatalog.MAX_STEPS) labels.add(getString(R.string.d_redit_duplicate));
+        labels.add(getString(R.string.d_redit_remove));
         String[] menu = labels.toArray(new String[0]);
         UiKit.showOrbitMenu(this, anchor, menu, -1, (choice, label) -> {
-            if ("Edit".equals(label)) {
+            if (getString(R.string.d_redit_edit).equals(label)) {
                 configureAction(workingActions.get(index).type, index);
-            } else if ("Move up".equals(label)) {
+            } else if (getString(R.string.d_redit_move_up).equals(label)) {
                 if (RoutineBranch.move(workingActions, index, -1)) markDirtyAndRefresh();
-            } else if ("Move down".equals(label)) {
+            } else if (getString(R.string.d_redit_move_down).equals(label)) {
                 if (RoutineBranch.move(workingActions, index, 1)) markDirtyAndRefresh();
-            } else if ("Duplicate".equals(label)) {
+            } else if (getString(R.string.d_redit_duplicate).equals(label)) {
                 if (RoutineBranch.duplicateStep(workingActions, index)) markDirtyAndRefresh();
-                else Toast.makeText(this, "There is no room to duplicate that action.",
+                else Toast.makeText(this, getString(R.string.d_redit_no_room),
                         Toast.LENGTH_SHORT).show();
-            } else if ("Remove".equals(label)) {
+            } else if (getString(R.string.d_redit_remove).equals(label)) {
                 if (RoutineBranch.removeStep(workingActions, index)) markDirtyAndRefresh();
                 else Toast.makeText(this,
-                        "A THEN path needs at least one action. Remove the branch to delete it.",
+                        getString(R.string.d_redit_then_needs_one),
                         Toast.LENGTH_LONG).show();
             }
         });
@@ -564,7 +561,7 @@ public class RoutineEditorActivity extends Activity {
         }
         List<OrbitExtensionStore.ActionChoice> extensions = OrbitExtensionStore.enabledActions(this);
         int builtInCount = labels.size();
-        if (!extensions.isEmpty()) labels.add("Extensions");
+        if (!extensions.isEmpty()) labels.add(getString(R.string.d_redit_extensions));
         UiKit.showOrbitMenu(this, anchor, labels.toArray(new String[0]), -1, (index, label) -> {
             if (index >= 0 && index < types.size()) {
                 configureAction(types.get(index), -1);
@@ -579,7 +576,7 @@ public class RoutineEditorActivity extends Activity {
     private void showExtensionActionPicker(View anchor, int editIndex) {
         List<OrbitExtensionStore.ActionChoice> choices = OrbitExtensionStore.enabledActions(this);
         if (choices.isEmpty()) {
-            Toast.makeText(this, "No enabled and configured extension actions are available.",
+            Toast.makeText(this, getString(R.string.d_redit_no_extension_actions),
                     Toast.LENGTH_SHORT).show();
             return;
         }
@@ -611,16 +608,16 @@ public class RoutineEditorActivity extends Activity {
                 showOpenAppDialog(editIndex);
                 break;
             case RoutineActionCatalog.SET_BRIGHTNESS:
-                showPercentDialog(type, editIndex, "Set brightness", "Brightness percentage");
+                showPercentDialog(type, editIndex, getString(R.string.d_redit_set_brightness), getString(R.string.d_redit_brightness_pct));
                 break;
             case RoutineActionCatalog.SET_VOLUME:
-                showPercentDialog(type, editIndex, "Set media volume", "Media volume percentage");
+                showPercentDialog(type, editIndex, getString(R.string.d_redit_set_volume), getString(R.string.d_redit_volume_pct));
                 break;
             case RoutineActionCatalog.SET_DND:
-                showToggleDialog(type, editIndex, "Do Not Disturb", "Enabled", "Disabled");
+                showToggleDialog(type, editIndex, getString(R.string.d_redit_dnd), getString(R.string.d_redit_enabled), getString(R.string.d_redit_disabled));
                 break;
             case RoutineActionCatalog.FLASHLIGHT:
-                showToggleDialog(type, editIndex, "Flashlight", "On", "Off");
+                showToggleDialog(type, editIndex, getString(R.string.d_redit_flashlight), getString(R.string.d_redit_on), getString(R.string.d_redit_off));
                 break;
             case RoutineActionCatalog.SET_TIMER:
                 showTimerDialog(editIndex);
@@ -637,7 +634,7 @@ public class RoutineEditorActivity extends Activity {
                 showExistingExtensionActionDialog(editIndex);
                 break;
             default:
-                Toast.makeText(this, "That action is not available for routines yet.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.d_redit_action_unavailable), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -652,7 +649,7 @@ public class RoutineEditorActivity extends Activity {
         OrbitExtension.Action action = installed == null ? null : installed.extension.findAction(
                 saved.params.optString("actionId", ""));
         if (action == null) {
-            Toast.makeText(this, "Extension action unavailable", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.d_redit_extension_unavailable), Toast.LENGTH_SHORT).show();
             return;
         }
         if (action.parameters.isEmpty()) {
@@ -671,8 +668,8 @@ public class RoutineEditorActivity extends Activity {
         Map<String, int[]> choiceIndexes = new LinkedHashMap<>();
 
         for (OrbitExtension.ActionParameter parameter : action.parameters) {
-            String required = parameter.required ? " · Required" : " · Optional";
-            form.addView(dialogLabel(parameter.label + required));
+            form.addView(dialogLabel(getString(parameter.required
+                    ? R.string.d_redit_param_required : R.string.d_redit_param_optional, parameter.label)));
             if (!parameter.description.isEmpty()) {
                 TextView description = UiKit.text(this, parameter.description,
                         11, UiKit.MUTED, false);
@@ -709,8 +706,8 @@ public class RoutineEditorActivity extends Activity {
             }
         }
 
-        showFormDialog((editIndex < 0 ? "Add " : "Edit ") + action.name, form,
-                editIndex < 0 ? "Add" : "Save", () -> {
+        showFormDialog(getString(editIndex < 0 ? R.string.d_redit_add_named : R.string.d_redit_edit_named, action.name), form,
+                getString(editIndex < 0 ? R.string.ui_add_9fd728c6 : R.string.ui_save_1509f561), () -> {
                     try {
                         JSONObject values = new JSONObject();
                         for (OrbitExtension.ActionParameter parameter : action.parameters) {
@@ -733,10 +730,11 @@ public class RoutineEditorActivity extends Activity {
                                 extension, action, safe));
                         return true;
                     } catch (IllegalArgumentException e) {
-                        return formError(e.getMessage() == null
-                                ? "Check the extension action values." : e.getMessage());
+                        String reason = OrbitExtensionV2.describe(this, e);
+                        return formError(reason == null
+                                ? getString(R.string.d_redit_check_extension_values) : reason);
                     } catch (Exception e) {
-                        return formError("Could not save that extension action.");
+                        return formError(getString(R.string.d_redit_extension_save_failed));
                     }
                 });
     }
@@ -761,29 +759,29 @@ public class RoutineEditorActivity extends Activity {
         final int keptElseSteps = old == null ? 0 : RoutineBranch.elseSteps(old);
         float oldRadius = (float) oldParams.optDouble("radiusMeters", 200d);
         final float[] radii = {100f, 200f, 300f, 500f, 1000f, 2000f, 5000f};
-        String[] radiusLabels = {"100 m", "200 m", "300 m", "500 m", "1 km", "2 km", "5 km"};
+        String[] radiusLabels = {getString(R.string.d_redit_radius_m, 100), getString(R.string.d_redit_radius_m, 200), getString(R.string.d_redit_radius_m, 300), getString(R.string.d_redit_radius_m, 500), getString(R.string.d_redit_radius_km, 1), getString(R.string.d_redit_radius_km, 2), getString(R.string.d_redit_radius_km, 5)};
         int radiusIndex = 1;
         for (int i = 0; i < radii.length; i++) if (Math.abs(radii[i] - oldRadius) < 0.5f) { radiusIndex = i; break; }
         final int[] radius = {radiusIndex};
 
         LinearLayout form = dialogForm();
-        form.addView(dialogLabel("Condition"));
+        form.addView(dialogLabel(getString(R.string.d_redit_condition)));
 
         LinearLayout timeGroup = new LinearLayout(this);
         timeGroup.setOrientation(LinearLayout.VERTICAL);
         LinearLayout locationGroup = new LinearLayout(this);
         locationGroup.setOrientation(LinearLayout.VERTICAL);
 
-        LinearLayout modeSelector = dialogSelector(new String[]{"Time", "Location", "Time + location"}, mode, () -> {
+        LinearLayout modeSelector = dialogSelector(new String[]{getString(R.string.d_redit_mode_time), getString(R.string.d_redit_mode_location), getString(R.string.d_redit_mode_both)}, mode, () -> {
             timeGroup.setVisibility(mode[0] == 1 ? View.GONE : View.VISIBLE);
             locationGroup.setVisibility(mode[0] == 0 ? View.GONE : View.VISIBLE);
         });
         form.addView(modeSelector, selectorLp());
 
-        timeGroup.addView(dialogLabel("Start time"));
+        timeGroup.addView(dialogLabel(getString(R.string.d_redit_start_time)));
         LinearLayout startRow = new LinearLayout(this);
-        EditText startHour = numericField("Hour", String.valueOf(startDisplay));
-        EditText startMin = numericField("Minute", String.format(Locale.US, "%02d", Math.max(0, Math.min(59, startMinute % 60))));
+        EditText startHour = numericField(getString(R.string.d_redit_hour_hint), String.valueOf(startDisplay));
+        EditText startMin = numericField(getString(R.string.d_redit_minute_hint), String.format(Locale.US, "%02d", Math.max(0, Math.min(59, startMinute % 60))));
         startRow.addView(startHour, new LinearLayout.LayoutParams(0, UiKit.dp(this, 52), 1));
         LinearLayout.LayoutParams minLp = new LinearLayout.LayoutParams(0, UiKit.dp(this, 52), 1); minLp.leftMargin = UiKit.dp(this, 7);
         startRow.addView(startMin, minLp);
@@ -792,10 +790,10 @@ public class RoutineEditorActivity extends Activity {
         LinearLayout.LayoutParams startApLp = selectorLp(); startApLp.topMargin = UiKit.dp(this, 7);
         timeGroup.addView(startApSelector, startApLp);
 
-        timeGroup.addView(dialogLabel("End time"));
+        timeGroup.addView(dialogLabel(getString(R.string.d_redit_end_time)));
         LinearLayout endRow = new LinearLayout(this);
-        EditText endHour = numericField("Hour", String.valueOf(endDisplay));
-        EditText endMin = numericField("Minute", String.format(Locale.US, "%02d", Math.max(0, Math.min(59, endMinute % 60))));
+        EditText endHour = numericField(getString(R.string.d_redit_hour_hint), String.valueOf(endDisplay));
+        EditText endMin = numericField(getString(R.string.d_redit_minute_hint), String.format(Locale.US, "%02d", Math.max(0, Math.min(59, endMinute % 60))));
         endRow.addView(endHour, new LinearLayout.LayoutParams(0, UiKit.dp(this, 52), 1));
         LinearLayout.LayoutParams endMinLp = new LinearLayout.LayoutParams(0, UiKit.dp(this, 52), 1); endMinLp.leftMargin = UiKit.dp(this, 7);
         endRow.addView(endMin, endMinLp);
@@ -803,32 +801,32 @@ public class RoutineEditorActivity extends Activity {
         LinearLayout endApSelector = dialogSelector(new String[]{"AM", "PM"}, endAp);
         LinearLayout.LayoutParams endApLp = selectorLp(); endApLp.topMargin = UiKit.dp(this, 7);
         timeGroup.addView(endApSelector, endApLp);
-        TextView overnight = UiKit.text(this, "Time windows can cross midnight. Using the same start and end time means all day.", 11, UiKit.MUTED, false);
+        TextView overnight = UiKit.text(this, getString(R.string.d_redit_overnight), 11, UiKit.MUTED, false);
         overnight.setPadding(0, UiKit.dp(this, 6), 0, 0);
         timeGroup.addView(overnight);
         form.addView(timeGroup);
 
-        locationGroup.addView(dialogLabel("Saved place (optional)"));
-        Button savedPlaceButton = secondaryButton("Choose saved place");
+        locationGroup.addView(dialogLabel(getString(R.string.d_redit_saved_place)));
+        Button savedPlaceButton = secondaryButton(getString(R.string.d_redit_choose_place));
         locationGroup.addView(savedPlaceButton, new LinearLayout.LayoutParams(-1, UiKit.dp(this, 44)));
 
-        locationGroup.addView(dialogLabel("Location name"));
-        EditText locationName = inputField("Home, Work, Gym…", oldParams.optString("locationName", ""), false);
+        locationGroup.addView(dialogLabel(getString(R.string.d_redit_location_name)));
+        EditText locationName = inputField(getString(R.string.d_redit_location_name_hint), oldParams.optString("locationName", ""), false);
         locationGroup.addView(locationName, new LinearLayout.LayoutParams(-1, UiKit.dp(this, 52)));
-        locationGroup.addView(dialogLabel("Coordinates"));
+        locationGroup.addView(dialogLabel(getString(R.string.d_redit_coordinates)));
         LinearLayout coords = new LinearLayout(this);
-        EditText latitude = decimalField("Latitude", old == null ? "" : coordinate(oldParams.optDouble("latitude", Double.NaN)));
-        EditText longitude = decimalField("Longitude", old == null ? "" : coordinate(oldParams.optDouble("longitude", Double.NaN)));
+        EditText latitude = decimalField(getString(R.string.d_redit_latitude), old == null ? "" : coordinate(oldParams.optDouble("latitude", Double.NaN)));
+        EditText longitude = decimalField(getString(R.string.d_redit_longitude), old == null ? "" : coordinate(oldParams.optDouble("longitude", Double.NaN)));
         savedPlaceButton.setOnClickListener(v -> {
             List<SavedPlaceStore.Place> places = SavedPlaceStore.list(this);
             if (places.isEmpty()) {
-                Toast.makeText(this, "No saved places yet. Add one first.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.d_redit_no_places), Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(this, SavedPlacesActivity.class));
                 return;
             }
             String[] labels = new String[places.size() + 1];
             for (int i = 0; i < places.size(); i++) labels[i] = places.get(i).name;
-            labels[places.size()] = "Manage saved places…";
+            labels[places.size()] = getString(R.string.d_redit_manage_places);
             UiKit.showOrbitMenu(this, savedPlaceButton, labels, -1, (index, label) -> {
                 if (index >= places.size()) {
                     startActivity(new Intent(this, SavedPlacesActivity.class));
@@ -845,9 +843,9 @@ public class RoutineEditorActivity extends Activity {
         LinearLayout.LayoutParams lonLp = new LinearLayout.LayoutParams(0, UiKit.dp(this, 52), 1); lonLp.leftMargin = UiKit.dp(this, 7);
         coords.addView(longitude, lonLp);
         locationGroup.addView(coords);
-        Button current = secondaryButton("Use my current location");
+        Button current = secondaryButton(getString(R.string.d_redit_use_current));
         current.setOnClickListener(v -> {
-            savedPlaceButton.setText("Choose saved place");
+            savedPlaceButton.setText(R.string.d_redit_choose_place);
             pendingConditionLatitude = latitude;
             pendingConditionLongitude = longitude;
             pendingConditionLocationButton = current;
@@ -855,9 +853,9 @@ public class RoutineEditorActivity extends Activity {
         });
         LinearLayout.LayoutParams currentLp = new LinearLayout.LayoutParams(-1, UiKit.dp(this, 44)); currentLp.topMargin = UiKit.dp(this, 8);
         locationGroup.addView(current, currentLp);
-        locationGroup.addView(dialogLabel("Radius"));
+        locationGroup.addView(dialogLabel(getString(R.string.d_redit_radius)));
         locationGroup.addView(dialogSelector(radiusLabels, radius), selectorLp());
-        TextView locationHelp = UiKit.text(this, "Location conditions check the phone's current system location when this Routine reaches the IF step.", 11, UiKit.MUTED, false);
+        TextView locationHelp = UiKit.text(this, getString(R.string.d_redit_location_help), 11, UiKit.MUTED, false);
         locationHelp.setPadding(0, UiKit.dp(this, 6), 0, 0);
         locationGroup.addView(locationHelp);
         form.addView(locationGroup);
@@ -866,8 +864,7 @@ public class RoutineEditorActivity extends Activity {
         // to THEN and which to OTHERWISE is shown and edited on the branch itself, and Orbit keeps
         // the stored counts in step with it.
         TextView behavior = UiKit.text(this,
-                "Add the actions for THEN and OTHERWISE on the branch itself. Exactly one path "
-                        + "runs, then Orbit continues with the rest of the Routine.",
+                getString(R.string.d_redit_behavior),
                 11, UiKit.MUTED, false);
         behavior.setLineSpacing(0, 1.1f);
         behavior.setPadding(0, UiKit.dp(this, 12), 0, 0);
@@ -878,8 +875,8 @@ public class RoutineEditorActivity extends Activity {
 
         ScrollView scroll = new ScrollView(this);
         scroll.addView(form, new ScrollView.LayoutParams(-1, -2));
-        showFormDialog(editIndex < 0 ? "Add IF condition" : "Edit IF condition", scroll,
-                editIndex < 0 ? "Add" : "Save", () -> {
+        showFormDialog(getString(editIndex < 0 ? R.string.d_redit_add_if : R.string.d_redit_edit_if), scroll,
+                getString(editIndex < 0 ? R.string.ui_add_9fd728c6 : R.string.ui_save_1509f561), () -> {
                     try {
                         JSONObject params = new JSONObject();
                         String selectedMode = mode[0] == 1 ? RoutineConditionEvaluator.MODE_LOCATION :
@@ -898,7 +895,7 @@ public class RoutineEditorActivity extends Activity {
                             Integer em = parseInt(endMin.getText().toString());
                             if (sh == null || sh < 1 || sh > 12 || eh == null || eh < 1 || eh > 12 ||
                                     sm == null || sm < 0 || sm > 59 || em == null || em < 0 || em > 59) {
-                                return formError("Use valid start and end times.");
+                                return formError(getString(R.string.d_redit_invalid_times));
                             }
                             int sh24 = sh % 12; if (startAp[0] == 1) sh24 += 12;
                             int eh24 = eh % 12; if (endAp[0] == 1) eh24 += 12;
@@ -909,7 +906,7 @@ public class RoutineEditorActivity extends Activity {
                             Double lat = parseDouble(latitude.getText().toString());
                             Double lon = parseDouble(longitude.getText().toString());
                             if (lat == null || lat < -90d || lat > 90d || lon == null || lon < -180d || lon > 180d) {
-                                return formError("Enter valid latitude and longitude coordinates.");
+                                return formError(getString(R.string.d_redit_invalid_coordinates));
                             }
                             params.put("locationName", locationName.getText().toString().trim())
                                     .put("latitude", lat).put("longitude", lon)
@@ -921,7 +918,7 @@ public class RoutineEditorActivity extends Activity {
                         pendingConditionLocationButton = null;
                         return true;
                     } catch (Exception e) {
-                        return formError("Could not save that condition.");
+                        return formError(getString(R.string.d_redit_condition_save_failed));
                     }
                 });
     }
@@ -934,7 +931,7 @@ public class RoutineEditorActivity extends Activity {
             return;
         }
         if (!RoutineLocationTriggerScheduler.isLocationEnabled(this)) {
-            Toast.makeText(this, "Turn on Android location first.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.d_redit_turn_on_location), Toast.LENGTH_SHORT).show();
             RoutineLocationTriggerScheduler.openLocationServices(this);
             return;
         }
@@ -950,12 +947,12 @@ public class RoutineEditorActivity extends Activity {
         try { if (provider == null && lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) provider = LocationManager.GPS_PROVIDER; } catch (Exception ignored) {}
         if (provider == null) {
             if (cached != null) applyConditionLocation(cached);
-            else Toast.makeText(this, "Could not find an enabled location provider.", Toast.LENGTH_SHORT).show();
+            else Toast.makeText(this, getString(R.string.d_redit_no_provider), Toast.LENGTH_SHORT).show();
             return;
         }
         if (pendingConditionLocationButton != null) {
             pendingConditionLocationButton.setEnabled(false);
-            pendingConditionLocationButton.setText("Finding location…");
+            pendingConditionLocationButton.setText(R.string.d_redit_finding_location);
         }
         final String chosenProvider = provider;
         final Location fallback = cached;
@@ -987,7 +984,7 @@ public class RoutineEditorActivity extends Activity {
             if (pendingConditionLongitude != null) pendingConditionLongitude.setText(coordinate(location.getLongitude()));
             if (pendingConditionLocationButton != null) {
                 pendingConditionLocationButton.setEnabled(true);
-                pendingConditionLocationButton.setText("Use my current location");
+                pendingConditionLocationButton.setText(R.string.d_redit_use_current);
             }
         });
     }
@@ -996,9 +993,9 @@ public class RoutineEditorActivity extends Activity {
         runOnUiThread(() -> {
             if (pendingConditionLocationButton != null) {
                 pendingConditionLocationButton.setEnabled(true);
-                pendingConditionLocationButton.setText("Use my current location");
+                pendingConditionLocationButton.setText(R.string.d_redit_use_current);
             }
-            Toast.makeText(this, "Orbit could not get the current location.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.d_redit_location_failed), Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -1022,21 +1019,21 @@ public class RoutineEditorActivity extends Activity {
         AssistantReply.Action existingAction = actionAt(editIndex, RoutineActionCatalog.OPEN_APP);
         String current = existingAction == null ? "" : existingAction.params.optString("app", "");
         LinearLayout form = dialogForm();
-        form.addView(dialogLabel("App name"));
-        EditText app = inputField("Spotify, YouTube, Overwatch…", current, false);
+        form.addView(dialogLabel(getString(R.string.d_redit_app_name)));
+        EditText app = inputField(getString(R.string.d_redit_app_hint), current, false);
         form.addView(app, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 52)));
-        TextView help = UiKit.text(this, "Orbit resolves the installed app when the routine runs.", 11, UiKit.MUTED, false);
+        TextView help = UiKit.text(this, getString(R.string.d_redit_app_help), 11, UiKit.MUTED, false);
         help.setPadding(0, UiKit.dp(this, 7), 0, 0);
         form.addView(help);
-        showFormDialog(editIndex < 0 ? "Add Open app" : "Edit Open app", form,
-                editIndex < 0 ? "Add" : "Save", () -> {
+        showFormDialog(getString(editIndex < 0 ? R.string.d_redit_add_open_app : R.string.d_redit_edit_open_app), form,
+                getString(editIndex < 0 ? R.string.ui_add_9fd728c6 : R.string.ui_save_1509f561), () -> {
                     String value = app.getText().toString().trim();
-                    if (value.isEmpty()) return formError("Enter an app name.");
+                    if (value.isEmpty()) return formError(getString(R.string.d_redit_enter_app));
                     try {
                         putAction(editIndex, new AssistantReply.Action(RoutineActionCatalog.OPEN_APP,
                                 new JSONObject().put("app", value), false));
                         return true;
-                    } catch (Exception e) { return formError("Could not save that app action."); }
+                    } catch (Exception e) { return formError(getString(R.string.d_redit_app_save_failed)); }
                 });
     }
 
@@ -1045,18 +1042,18 @@ public class RoutineEditorActivity extends Activity {
         int current = old == null ? (RoutineActionCatalog.SET_BRIGHTNESS.equals(type) ? 50 : 30)
                 : old.params.optInt("percent", 50);
         LinearLayout form = dialogForm();
-        form.addView(dialogLabel(label + " (0–100)"));
+        form.addView(dialogLabel(getString(R.string.d_redit_percent_label, label)));
         EditText percent = numericField("0–100", String.valueOf(current));
         form.addView(percent, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 52)));
-        showFormDialog((editIndex < 0 ? "Add " : "Edit ") + title, form,
-                editIndex < 0 ? "Add" : "Save", () -> {
+        showFormDialog(getString(editIndex < 0 ? R.string.d_redit_add_named : R.string.d_redit_edit_named, title), form,
+                getString(editIndex < 0 ? R.string.ui_add_9fd728c6 : R.string.ui_save_1509f561), () -> {
                     Integer value = parseInt(percent.getText().toString());
-                    if (value == null || value < 0 || value > 100) return formError("Use a percentage from 0 to 100.");
+                    if (value == null || value < 0 || value > 100) return formError(getString(R.string.d_redit_invalid_percent));
                     try {
                         putAction(editIndex, new AssistantReply.Action(type,
                                 new JSONObject().put("percent", value), false));
                         return true;
-                    } catch (Exception e) { return formError("Could not save that value."); }
+                    } catch (Exception e) { return formError(getString(R.string.d_redit_value_save_failed)); }
                 });
     }
 
@@ -1067,18 +1064,18 @@ public class RoutineEditorActivity extends Activity {
                 (RoutineActionCatalog.SET_DND.equals(type) ? old.params.optBoolean("enabled", true) : old.params.optBoolean("on", true));
         final int[] selected = {current ? 0 : 1};
         LinearLayout form = dialogForm();
-        form.addView(dialogLabel("State"));
+        form.addView(dialogLabel(getString(R.string.d_redit_state)));
         LinearLayout selector = dialogSelector(new String[]{onLabel, offLabel}, selected);
         form.addView(selector, selectorLp());
-        showFormDialog((editIndex < 0 ? "Add " : "Edit ") + title, form,
-                editIndex < 0 ? "Add" : "Save", () -> {
+        showFormDialog(getString(editIndex < 0 ? R.string.d_redit_add_named : R.string.d_redit_edit_named, title), form,
+                getString(editIndex < 0 ? R.string.ui_add_9fd728c6 : R.string.ui_save_1509f561), () -> {
                     try {
                         JSONObject params = new JSONObject();
                         if (RoutineActionCatalog.SET_DND.equals(type)) params.put("enabled", selected[0] == 0);
                         else params.put("on", selected[0] == 0);
                         putAction(editIndex, new AssistantReply.Action(type, params, false));
                         return true;
-                    } catch (Exception e) { return formError("Could not save that state."); }
+                    } catch (Exception e) { return formError(getString(R.string.d_redit_state_save_failed)); }
                 });
     }
 
@@ -1093,31 +1090,31 @@ public class RoutineEditorActivity extends Activity {
         final int[] unit = {unitIndex};
 
         LinearLayout form = dialogForm();
-        form.addView(dialogLabel("Duration"));
-        EditText amountField = numericField("Amount", String.valueOf(amount));
+        form.addView(dialogLabel(getString(R.string.d_redit_duration)));
+        EditText amountField = numericField(getString(R.string.d_redit_amount), String.valueOf(amount));
         form.addView(amountField, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 52)));
-        LinearLayout unitSelector = dialogSelector(new String[]{"Seconds", "Minutes", "Hours"}, unit);
+        LinearLayout unitSelector = dialogSelector(new String[]{getString(R.string.d_redit_seconds), getString(R.string.d_redit_minutes), getString(R.string.d_redit_hours)}, unit);
         LinearLayout.LayoutParams unitLp = selectorLp();
         unitLp.topMargin = UiKit.dp(this, 8);
         form.addView(unitSelector, unitLp);
-        form.addView(dialogLabel("Optional label"));
+        form.addView(dialogLabel(getString(R.string.d_redit_optional_label)));
         EditText label = inputField("Orbit timer", old == null ? "" : old.params.optString("label", ""), false);
         form.addView(label, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 52)));
 
-        showFormDialog(editIndex < 0 ? "Add Timer" : "Edit Timer", form,
-                editIndex < 0 ? "Add" : "Save", () -> {
+        showFormDialog(getString(editIndex < 0 ? R.string.d_redit_add_timer : R.string.d_redit_edit_timer), form,
+                getString(editIndex < 0 ? R.string.ui_add_9fd728c6 : R.string.ui_save_1509f561), () -> {
                     Integer value = parseInt(amountField.getText().toString());
-                    if (value == null || value <= 0) return formError("Enter a duration greater than zero.");
+                    if (value == null || value <= 0) return formError(getString(R.string.d_redit_invalid_duration));
                     long multiplier = unit[0] == 2 ? 3600L : unit[0] == 1 ? 60L : 1L;
                     long total = value * multiplier;
-                    if (total > Integer.MAX_VALUE) return formError("That timer is too long.");
+                    if (total > Integer.MAX_VALUE) return formError(getString(R.string.d_redit_timer_too_long));
                     try {
                         String timerLabel = label.getText().toString().trim();
                         JSONObject p = new JSONObject().put("seconds", (int) total)
                                 .put("label", timerLabel.isEmpty() ? "Orbit timer" : timerLabel);
                         putAction(editIndex, new AssistantReply.Action(RoutineActionCatalog.SET_TIMER, p, false));
                         return true;
-                    } catch (Exception e) { return formError("Could not save that timer."); }
+                    } catch (Exception e) { return formError(getString(R.string.d_redit_timer_save_failed)); }
                 });
     }
 
@@ -1130,26 +1127,26 @@ public class RoutineEditorActivity extends Activity {
         final int[] amPm = {hour24 >= 12 ? 1 : 0};
 
         LinearLayout form = dialogForm();
-        form.addView(dialogLabel("Hour (1–12)"));
-        EditText hour = numericField("Hour", String.valueOf(displayHour));
+        form.addView(dialogLabel(getString(R.string.d_tte_hour)));
+        EditText hour = numericField(getString(R.string.d_redit_hour_hint), String.valueOf(displayHour));
         form.addView(hour, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 52)));
-        form.addView(dialogLabel("Minute (0–59)"));
-        EditText minuteField = numericField("Minute", String.valueOf(minute));
+        form.addView(dialogLabel(getString(R.string.d_tte_minute)));
+        EditText minuteField = numericField(getString(R.string.d_redit_minute_hint), String.valueOf(minute));
         form.addView(minuteField, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 52)));
         LinearLayout apSelector = dialogSelector(new String[]{"AM", "PM"}, amPm);
         LinearLayout.LayoutParams apLp = selectorLp();
         apLp.topMargin = UiKit.dp(this, 8);
         form.addView(apSelector, apLp);
-        form.addView(dialogLabel("Optional label"));
+        form.addView(dialogLabel(getString(R.string.d_redit_optional_label)));
         EditText label = inputField("Orbit alarm", old == null ? "" : old.params.optString("label", ""), false);
         form.addView(label, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 52)));
 
-        showFormDialog(editIndex < 0 ? "Add Alarm" : "Edit Alarm", form,
-                editIndex < 0 ? "Add" : "Save", () -> {
+        showFormDialog(getString(editIndex < 0 ? R.string.d_redit_add_alarm : R.string.d_redit_edit_alarm), form,
+                getString(editIndex < 0 ? R.string.ui_add_9fd728c6 : R.string.ui_save_1509f561), () -> {
                     Integer h = parseInt(hour.getText().toString());
                     Integer m = parseInt(minuteField.getText().toString());
-                    if (h == null || h < 1 || h > 12) return formError("Use an hour from 1 to 12.");
-                    if (m == null || m < 0 || m > 59) return formError("Use a minute from 0 to 59.");
+                    if (h == null || h < 1 || h > 12) return formError(getString(R.string.d_redit_invalid_hour));
+                    if (m == null || m < 0 || m > 59) return formError(getString(R.string.d_redit_invalid_minute));
                     int h24 = h % 12;
                     if (amPm[0] == 1) h24 += 12;
                     try {
@@ -1158,7 +1155,7 @@ public class RoutineEditorActivity extends Activity {
                                 .put("label", alarmLabel.isEmpty() ? "Orbit alarm" : alarmLabel);
                         putAction(editIndex, new AssistantReply.Action(RoutineActionCatalog.SET_ALARM, p, false));
                         return true;
-                    } catch (Exception e) { return formError("Could not save that alarm."); }
+                    } catch (Exception e) { return formError(getString(R.string.d_redit_alarm_save_failed)); }
                 });
     }
 
@@ -1173,7 +1170,7 @@ public class RoutineEditorActivity extends Activity {
         int branchKind = pendingBranchKind;
         clearPendingBranch();
         if (!RoutineActionCatalog.isValid(action)) {
-            Toast.makeText(this, "That action is incomplete.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.d_redit_action_incomplete), Toast.LENGTH_SHORT).show();
             return;
         }
         AssistantReply.Action copy = RoutineActionCatalog.copy(action);
@@ -1189,7 +1186,7 @@ public class RoutineEditorActivity extends Activity {
                 return;
             }
         } else if (!RoutineBranch.addStep(workingActions, copy)) {
-            Toast.makeText(this, "Routine step limit reached.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.d_redit_step_limit), Toast.LENGTH_SHORT).show();
             return;
         }
         markDirtyAndRefresh();
@@ -1208,23 +1205,23 @@ public class RoutineEditorActivity extends Activity {
     private void saveRoutine() {
         String name = RoutineStore.sanitizeName(nameField == null ? "" : nameField.getText().toString());
         if (name.isEmpty()) {
-            Toast.makeText(this, "Give the routine a name.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.d_redit_need_name), Toast.LENGTH_SHORT).show();
             if (nameField != null) nameField.requestFocus();
             return;
         }
         if (workingActions.isEmpty()) {
-            Toast.makeText(this, "Add at least one step before saving.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.d_redit_need_step), Toast.LENGTH_SHORT).show();
             return;
         }
         for (AssistantReply.Action action : workingActions) {
             if (!RoutineActionCatalog.isValid(action)) {
-                Toast.makeText(this, "One of the routine steps is incomplete.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.d_redit_step_incomplete), Toast.LENGTH_SHORT).show();
                 return;
             }
         }
         // Branch shape is checked before anything is written, and the message names the step, so a
         // half-defined ELSE is corrected here rather than becoming an unrunnable saved routine.
-        String branchProblem = RoutineBranch.structureProblem(workingActions);
+        String branchProblem = RoutineBranch.structureProblem(this, workingActions);
         if (!branchProblem.isEmpty()) {
             Toast.makeText(this, branchProblem, Toast.LENGTH_LONG).show();
             return;
@@ -1238,13 +1235,12 @@ public class RoutineEditorActivity extends Activity {
             if (RoutineBranch.pathSize(workingActions, unit.start, RoutineBranch.BRANCH_TRUE) > 0) {
                 continue;
             }
-            Toast.makeText(this, "Add at least one THEN action to the IF condition in step "
-                    + (position + 1) + ".", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.d_redit_need_then, position + 1), Toast.LENGTH_LONG).show();
             return;
         }
         String exceptId = existing == null ? null : existing.id;
         if (RoutineStore.nameExists(this, name, exceptId)) {
-            Toast.makeText(this, "A routine named “" + name + "” already exists.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.d_redit_name_exists, name), Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -1256,11 +1252,11 @@ public class RoutineEditorActivity extends Activity {
             routine = existing.withNameAndActions(name, workingActions);
         }
         if (!RoutineStore.upsert(this, routine)) {
-            Toast.makeText(this, "Orbit could not save this routine.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.d_redit_save_failed), Toast.LENGTH_SHORT).show();
             return;
         }
         dirty = false;
-        Toast.makeText(this, "Saved " + name, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(R.string.d_redit_saved, name), Toast.LENGTH_SHORT).show();
         // Only now, with a real saved routine, is a proposed trigger offered. It is still not
         // created here: the existing Automatic triggers screen stays the authority.
         // A drafted location trigger has nowhere to go in the Play edition, whose builder preview
@@ -1286,12 +1282,10 @@ public class RoutineEditorActivity extends Activity {
      */
     private void offerProposedTrigger(String routineId, RoutineTriggerDraft proposed) {
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Set up automation?")
-                .setMessage("Orbit suggested running this routine automatically:\n\n"
-                        + proposed.summary(this)
-                        + "\n\nIt is not scheduled yet. Open Automatic triggers to set it up.")
-                .setNegativeButton("Not now", (d, w) -> finish())
-                .setPositiveButton("Automatic triggers", (d, w) -> {
+                .setTitle(getString(R.string.d_redit_setup_title))
+                .setMessage(getString(R.string.d_redit_setup_message, proposed.summary(this)))
+                .setNegativeButton(getString(R.string.d_rtrg_not_now), (d, w) -> finish())
+                .setPositiveButton(getString(R.string.d_rtrg_title), (d, w) -> {
                     startActivity(new Intent(this, RoutineTriggersActivity.class)
                             .putExtra(RoutineTriggersActivity.EXTRA_ROUTINE_ID, routineId));
                     finish();
@@ -1309,10 +1303,10 @@ public class RoutineEditorActivity extends Activity {
             return;
         }
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Discard routine changes?")
-                .setMessage("Your unsaved changes will be lost.")
-                .setNegativeButton("Keep editing", null)
-                .setPositiveButton("Discard", (d, w) -> {
+                .setTitle(getString(R.string.d_redit_discard_title))
+                .setMessage(getString(R.string.d_redit_discard_message))
+                .setNegativeButton(getString(R.string.d_tte_keep_editing), null)
+                .setPositiveButton(getString(R.string.d_tte_discard), (d, w) -> {
                     dirty = false;
                     finish();
                 }).create();
@@ -1346,7 +1340,7 @@ public class RoutineEditorActivity extends Activity {
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle(title)
                 .setView(form)
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(getString(R.string.ui_cancel_19766ed6), null)
                 .setPositiveButton(positiveLabel, null)
                 .create();
         styleOrbitDialog(dialog, false, () -> {

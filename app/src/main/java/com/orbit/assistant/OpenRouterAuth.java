@@ -79,14 +79,23 @@ public final class OpenRouterAuth {
     static final class Exchange {
         final String key;
         final String message;
+        /** A string resource for the failure text, or 0 when {@link #message} carries it. */
+        final int messageRes;
 
-        private Exchange(String key, String message) {
+        private Exchange(String key, String message, int messageRes) {
             this.key = key == null ? "" : key;
             this.message = message == null ? "" : message;
+            this.messageRes = messageRes;
         }
 
-        static Exchange success(String key) { return new Exchange(key, ""); }
-        static Exchange failure(String message) { return new Exchange("", message); }
+        static Exchange success(String key) { return new Exchange(key, "", 0); }
+        static Exchange failure(String message) { return new Exchange("", message, 0); }
+        static Exchange failure(int messageRes) { return new Exchange("", "", messageRes); }
+
+        /** The failure text in the language of the given context. */
+        String text(Context context) {
+            return messageRes != 0 ? context.getString(messageRes) : message;
+        }
 
         boolean ok() { return !key.isEmpty(); }
     }
@@ -230,8 +239,7 @@ public final class OpenRouterAuth {
         cancel();
         ServerSocket server = bindLoopback();
         if (server == null) {
-            return new Started(null, "Orbit could not open its local sign-in receiver on this "
-                    + "phone, so the browser sign-in cannot finish. Use an API key instead.");
+            return new Started(null, app.getString(R.string.orauth_no_receiver));
         }
         ServerSocket server6 = bindIpv6Loopback(server.getLocalPort());
         Attempt attempt = new Attempt(app, ChatGptBrowserAuth.newPkce(RANDOM),
@@ -316,8 +324,7 @@ public final class OpenRouterAuth {
             while (!isEnded(attempt)) {
                 long remaining = attempt.deadline - System.currentTimeMillis();
                 if (remaining <= 0) {
-                    finish(attempt, l -> l.onFailed("The OpenRouter sign-in timed out before the "
-                            + "browser came back to Orbit. Try again, or use an API key instead."),
+                    finish(attempt, l -> l.onFailed(attempt.app.getString(R.string.orauth_timed_out)),
                             false);
                     return;
                 }
@@ -337,8 +344,7 @@ public final class OpenRouterAuth {
         } catch (IOException e) {
             // Closed by cancel/finish, or failed. Only the main receiver failing ends the attempt.
             if (!isEnded(attempt) && server == attempt.server) {
-                finish(attempt, l -> l.onFailed("Orbit's local sign-in receiver stopped before "
-                        + "the browser came back. Try again, or use an API key instead."), false);
+                finish(attempt, l -> l.onFailed(attempt.app.getString(R.string.orauth_receiver_stopped)), false);
             }
         }
     }
@@ -372,31 +378,29 @@ public final class OpenRouterAuth {
         Callback callback = parseCallback(target, attempt.state);
         switch (callback.outcome) {
             case NOT_CALLBACK:
-                return new Response(404, page("Not found",
-                        "This address is only used to finish connecting OpenRouter to Orbit.", false));
+                return new Response(404, page(attempt.app, R.string.orauth_not_found,
+                        R.string.orauth_not_found_msg, false));
             case STATE_MISMATCH:
                 // Refused without ending the attempt: an old tab or a stray request must not be
                 // able to cancel the sign-in the user is actually completing.
-                return new Response(400, page("This sign-in page is out of date",
-                        "Return to Orbit and tap Sign in with OpenRouter again.", true));
+                return new Response(400, page(attempt.app, R.string.orauth_stale,
+                        R.string.orauth_stale_msg, true));
             case DENIED:
-                finish(attempt, l -> l.onFailed("OpenRouter did not authorize Orbit. You can try "
-                        + "again, or use an API key instead."), false);
-                return new Response(200, page("OpenRouter was not connected",
-                        "Return to Orbit to try again.", true));
+                finish(attempt, l -> l.onFailed(attempt.app.getString(R.string.orauth_denied)), false);
+                return new Response(200, page(attempt.app, R.string.orauth_not_connected,
+                        R.string.orauth_try_again_msg, true));
             case MISSING_CODE:
-                finish(attempt, l -> l.onFailed("OpenRouter returned to Orbit without an "
-                        + "authorization code. Try again, or use an API key instead."), false);
-                return new Response(400, page("OpenRouter was not connected",
-                        "Return to Orbit to try again.", true));
+                finish(attempt, l -> l.onFailed(attempt.app.getString(R.string.orauth_missing_code)), false);
+                return new Response(400, page(attempt.app, R.string.orauth_not_connected,
+                        R.string.orauth_try_again_msg, true));
             case CODE:
             default:
                 // The receivers' job is done; nothing else may arrive. The code is used once: the
                 // attempt is claimed atomically, so a replay, or the same callback reaching both
                 // loopback receivers, can never exchange a second time.
                 if (!claim(attempt)) {
-                    return new Response(400, page("This sign-in already finished",
-                            "Return to Orbit.", true));
+                    return new Response(400, page(attempt.app, R.string.orauth_already,
+                            R.string.orauth_already_msg, true));
                 }
                 closeQuietly(attempt.server);
                 closeQuietly(attempt.server6);
@@ -404,16 +408,15 @@ public final class OpenRouterAuth {
                 if (result.ok() && SecureStore.saveOpenRouterKey(attempt.app, result.key,
                         SecureStore.OPENROUTER_SOURCE_OAUTH)) {
                     deliver(attempt, Listener::onConnected, false);
-                    return new Response(200, page("OpenRouter is connected",
-                            "Your OpenRouter account is connected to Orbit. You can return to Orbit.",
-                            true));
+                    return new Response(200, page(attempt.app, R.string.orauth_connected,
+                            R.string.orauth_connected_msg, true));
                 }
                 String message = result.ok()
-                        ? "Orbit could not store the OpenRouter key securely on this phone, so it was not saved."
-                        : result.message;
+                        ? attempt.app.getString(R.string.orauth_store_failed)
+                        : result.text(attempt.app);
                 deliver(attempt, l -> l.onFailed(message), false);
-                return new Response(200, page("Orbit could not finish connecting",
-                        "Return to Orbit for details.", true));
+                return new Response(200, page(attempt.app, R.string.orauth_not_finished,
+                        R.string.orauth_not_finished_msg, true));
         }
     }
 
@@ -445,8 +448,7 @@ public final class OpenRouterAuth {
                     ? conn.getInputStream() : conn.getErrorStream());
             return interpretExchange(status, raw);
         } catch (Exception e) {
-            return Exchange.failure("Orbit could not reach OpenRouter to finish connecting. "
-                    + "Check the connection and try again.");
+            return Exchange.failure(R.string.orauth_unreachable);
         } finally {
             if (conn != null) conn.disconnect();
         }
@@ -459,20 +461,19 @@ public final class OpenRouterAuth {
             try { key = new JSONObject(raw == null ? "" : raw).optString("key", "").trim(); }
             catch (Exception ignored) {}
             return key.isEmpty()
-                    ? Exchange.failure("OpenRouter finished signing in but returned no key. Try again.")
+                    ? Exchange.failure(R.string.orauth_no_key)
                     : Exchange.success(key);
         }
         if (status == 403) {
-            return Exchange.failure("OpenRouter refused the sign-in code. It may have expired or "
-                    + "already been used. Try signing in again.");
+            return Exchange.failure(R.string.orauth_code_refused);
         }
         if (status == 400) {
-            return Exchange.failure("OpenRouter rejected the sign-in request. Try signing in again.");
+            return Exchange.failure(R.string.orauth_request_rejected);
         }
         if (status == 429) {
-            return Exchange.failure("OpenRouter is rate limiting sign-ins. Wait a moment and try again.");
+            return Exchange.failure(R.string.orauth_rate_limited);
         }
-        return Exchange.failure("OpenRouter could not finish connecting right now. Try again shortly.");
+        return Exchange.failure(R.string.orauth_unavailable);
     }
 
     private static String read(InputStream input) throws IOException {
@@ -488,9 +489,13 @@ public final class OpenRouterAuth {
 
     // ---- the browser page ------------------------------------------------------------------------
 
-    private static String page(String title, String message, boolean returnButton) {
+    private static String page(Context context, int titleRes, int messageRes,
+                               boolean returnButton) {
+        String title = context.getString(titleRes);
+        String message = context.getString(messageRes);
         String button = returnButton ? "<p><a class=\"b\" href=\""
-                + ChatGptBrowserAuth.RETURN_URI + "\">Return to Orbit</a></p>" : "";
+                + ChatGptBrowserAuth.RETURN_URI + "\">"
+                + context.getString(R.string.orauth_return_link) + "</a></p>" : "";
         return "<!doctype html><html><head><meta charset=\"utf-8\">"
                 + "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">"
                 + "<title>Orbit</title><style>body{font-family:sans-serif;background:#111;color:#eee;"

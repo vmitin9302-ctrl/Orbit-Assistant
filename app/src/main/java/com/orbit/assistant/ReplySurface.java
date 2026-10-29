@@ -145,6 +145,21 @@ public final class ReplySurface {
         return kind == Kind.SMS ? "Use in chat" : "";
     }
 
+    /** {@link #insertLabel(Kind)} in the user's language, for screens. */
+    public static String insertLabel(android.content.Context context, Kind kind) {
+        return kind == Kind.SMS ? context.getString(R.string.replysurface_use_in_chat) : "";
+    }
+
+    /** {@link #copiedMessage(Kind, String)} in the user's language, for screens. */
+    public static String copiedMessage(android.content.Context context, Kind kind, String appLabel) {
+        String app = appLabel == null ? "" : appLabel.trim();
+        if (app.isEmpty()) {
+            return context.getString(kind == Kind.EMAIL ? R.string.replysurface_copied_email
+                    : R.string.replysurface_copied_conversation);
+        }
+        return context.getString(R.string.replysurface_copied_app, app);
+    }
+
     /**
      * What Orbit says after copying, naming where the draft is going.
      *

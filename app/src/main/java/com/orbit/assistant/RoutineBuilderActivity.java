@@ -104,7 +104,7 @@ public class RoutineBuilderActivity extends Activity {
 
         LinearLayout header = new LinearLayout(this);
         header.setGravity(Gravity.CENTER_VERTICAL);
-        ImageButton back = iconButton(R.drawable.ic_back, "Back");
+        ImageButton back = iconButton(R.drawable.ic_back, getString(R.string.ui_back_76900f1b));
         back.setOnClickListener(v -> navigation.performBack());
         LinearLayout.LayoutParams backLp = new LinearLayout.LayoutParams(
                 UiKit.dp(this, 48), UiKit.dp(this, 48));
@@ -112,15 +112,13 @@ public class RoutineBuilderActivity extends Activity {
         header.addView(back, backLp);
         LinearLayout titles = new LinearLayout(this);
         titles.setOrientation(LinearLayout.VERTICAL);
-        titles.addView(UiKit.text(this, "Create with Orbit", 25, UiKit.TEXT, true));
-        titles.addView(UiKit.text(this, "Describe a routine", 12, UiKit.MUTED, false));
+        titles.addView(UiKit.text(this, getString(R.string.rbuild_title), 25, UiKit.TEXT, true));
+        titles.addView(UiKit.text(this, getString(R.string.rbuild_subtitle), 12, UiKit.MUTED, false));
         header.addView(titles, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         page.addView(header);
 
         TextView intro = UiKit.text(this,
-                "Describe what you want the routine to do and Orbit will turn it into steps using "
-                        + "the actions it already supports. Nothing runs and nothing is saved until "
-                        + "you review it and press Save routine.",
+                getString(R.string.rbuild_intro),
                 14, UiKit.MUTED, false);
         intro.setLineSpacing(0, 1.13f);
         LinearLayout.LayoutParams introLp = new LinearLayout.LayoutParams(
@@ -129,7 +127,7 @@ public class RoutineBuilderActivity extends Activity {
         page.addView(intro, introLp);
 
         description = new EditText(this);
-        description.setHint("Turn on Do Not Disturb, set brightness to 20%, and lower media volume");
+        description.setHint(getString(R.string.rbuild_hint));
         description.setHintTextColor(UiKit.MUTED);
         description.setTextColor(UiKit.TEXT);
         description.setTextSize(15);
@@ -142,22 +140,22 @@ public class RoutineBuilderActivity extends Activity {
                 UiKit.dp(this, 14), UiKit.dp(this, 12));
         description.setBackground(UiKit.outlined(UiKit.SURFACE,
                 UiKit.withAlpha(UiKit.accent(this), 46), 18, this));
-        description.setContentDescription("Routine description");
+        description.setContentDescription(getString(R.string.rbuild_desc_cd));
         page.addView(description, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        buildButton = primaryButton("Build draft");
+        buildButton = primaryButton(getString(R.string.rbuild_build));
         buildButton.setOnClickListener(v -> startBuild());
         LinearLayout.LayoutParams buildLp = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 50));
         buildLp.setMargins(0, UiKit.dp(this, 14), 0, 0);
         page.addView(buildButton, buildLp);
 
-        page.addView(sectionTitle("EXAMPLES"));
+        page.addView(sectionTitle(getString(R.string.rbuild_examples)));
         for (String example : new String[]{
-                "Bedtime: turn on Do Not Disturb, set brightness to 15%, and lower media volume",
-                "Focus mode: Do Not Disturb on and brightness at 35%",
-                "Gaming: flashlight off, media volume 80%, brightness 90%"}) {
+                getString(R.string.rbuild_ex1),
+                getString(R.string.rbuild_ex2),
+                getString(R.string.rbuild_ex3)}) {
             page.addView(exampleRow(example));
         }
 
@@ -188,7 +186,7 @@ public class RoutineBuilderActivity extends Activity {
         if (building) return;
         String text = description.getText().toString().trim();
         if (text.isEmpty()) {
-            showMessage("Describe the routine you want Orbit to build.");
+            showMessage(getString(R.string.rbuild_need_text));
             return;
         }
         building = true;
@@ -224,7 +222,7 @@ public class RoutineBuilderActivity extends Activity {
         if (buildButton != null) {
             buildButton.setEnabled(true);
             buildButton.setAlpha(1f);
-            buildButton.setText("Build draft");
+            buildButton.setText(getString(R.string.rbuild_build));
         }
         stopThinking();
     }
@@ -239,7 +237,7 @@ public class RoutineBuilderActivity extends Activity {
         // Decorative: the adjacent label is what carries the state for screen readers.
         thinking.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
         row.addView(thinking, new LinearLayout.LayoutParams(UiKit.dp(this, 30), UiKit.dp(this, 30)));
-        TextView label = UiKit.text(this, "Building your routine…", 15, UiKit.TEXT, false);
+        TextView label = UiKit.text(this, getString(R.string.rbuild_building), 15, UiKit.TEXT, false);
         label.setPadding(UiKit.dp(this, 12), 0, 0, 0);
         row.addView(label);
         thinkingRow.addView(row);
@@ -259,7 +257,7 @@ public class RoutineBuilderActivity extends Activity {
     private void showMessage(String message) {
         resultArea.removeAllViews();
         LinearLayout card = card();
-        card.addView(UiKit.text(this, "Couldn't build that routine", 16, UiKit.TEXT, true));
+        card.addView(UiKit.text(this, getString(R.string.rbuild_failed), 16, UiKit.TEXT, true));
         TextView note = UiKit.text(this, message, 13, UiKit.MUTED, false);
         note.setLineSpacing(0, 1.1f);
         note.setPadding(0, UiKit.dp(this, 6), 0, 0);
@@ -276,38 +274,39 @@ public class RoutineBuilderActivity extends Activity {
         card.addView(UiKit.text(this, draft.name, 17, UiKit.TEXT, true));
 
         if (draft.hasTrigger()) {
-            TextView automaticLabel = UiKit.text(this, "AUTOMATIC", 11, UiKit.MUTED, true);
+            TextView automaticLabel = UiKit.text(this, getString(R.string.rbuild_automatic), 11, UiKit.MUTED, true);
             automaticLabel.setLetterSpacing(0.14f);
             automaticLabel.setPadding(0, UiKit.dp(this, 10), 0, UiKit.dp(this, 3));
             card.addView(automaticLabel);
             card.addView(UiKit.text(this, draft.trigger.summary(this), 13, UiKit.TEXT, false));
             String readiness = draft.trigger.readiness(this);
-            if (!readiness.isEmpty() && !"Ready".equals(readiness)) {
+            if (!readiness.isEmpty() && !getString(R.string.ui_ready_5fa7aac5).equals(readiness)) {
                 TextView state = UiKit.text(this, readiness, 12, UiKit.DANGER, false);
                 state.setPadding(0, UiKit.dp(this, 3), 0, 0);
                 card.addView(state);
             }
             TextView inactive = UiKit.text(this,
-                    "Nothing is scheduled until you review and save the routine.",
+                    getString(R.string.rbuild_inactive),
                     12, UiKit.MUTED, false);
             inactive.setPadding(0, UiKit.dp(this, 4), 0, 0);
             card.addView(inactive);
-            TextView stepsLabel = UiKit.text(this, "STEPS", 11, UiKit.MUTED, true);
+            TextView stepsLabel = UiKit.text(this, getString(R.string.rbuild_steps), 11, UiKit.MUTED, true);
             stepsLabel.setLetterSpacing(0.14f);
             stepsLabel.setPadding(0, UiKit.dp(this, 12), 0, UiKit.dp(this, 3));
             card.addView(stepsLabel);
         }
 
         TextView steps = UiKit.text(this,
-                draft.actions.size() == 1 ? "1 step" : draft.actions.size() + " steps",
+                getResources().getQuantityString(R.plurals.rbuild_step_count,
+                        draft.actions.size(), draft.actions.size()),
                 12, UiKit.MUTED, false);
         steps.setPadding(0, UiKit.dp(this, 3), 0, UiKit.dp(this, 10));
         card.addView(steps);
 
-        List<String> summaries = draft.stepSummaries();
+        List<String> summaries = draft.stepSummaries(this);
         for (int i = 0; i < summaries.size(); i++) {
             TextView step = UiKit.text(this, "✓  " + summaries.get(i), 13, UiKit.TEXT, false);
-            step.setContentDescription("Step " + (i + 1) + ": " + summaries.get(i));
+            step.setContentDescription(getString(R.string.rbuild_step_cd, i + 1, summaries.get(i)));
             step.setPadding(0, UiKit.dp(this, 4), 0, UiKit.dp(this, 4));
             card.addView(step);
         }
@@ -315,7 +314,7 @@ public class RoutineBuilderActivity extends Activity {
 
         if (!draft.warnings.isEmpty()) {
             LinearLayout warn = card();
-            warn.addView(UiKit.text(this, "Needs attention", 15, UiKit.DANGER, true));
+            warn.addView(UiKit.text(this, getString(R.string.ui_needs_attention_c1ebc781), 15, UiKit.DANGER, true));
             for (String warning : draft.warnings) {
                 TextView line = UiKit.text(this, "•  " + warning, 13, UiKit.MUTED, false);
                 line.setPadding(0, UiKit.dp(this, 5), 0, 0);
@@ -326,7 +325,7 @@ public class RoutineBuilderActivity extends Activity {
 
         if (!automationNotice.isEmpty()) {
             LinearLayout notice = card();
-            notice.addView(UiKit.text(this, "Scheduling", 15, UiKit.TEXT, true));
+            notice.addView(UiKit.text(this, getString(R.string.rbuild_scheduling), 15, UiKit.TEXT, true));
             TextView line = UiKit.text(this, automationNotice, 13, UiKit.MUTED, false);
             line.setLineSpacing(0, 1.1f);
             line.setPadding(0, UiKit.dp(this, 5), 0, 0);
@@ -334,7 +333,7 @@ public class RoutineBuilderActivity extends Activity {
             resultArea.addView(notice, cardLp());
         }
 
-        Button review = primaryButton("Review routine");
+        Button review = primaryButton(getString(R.string.rbuild_review));
         review.setOnClickListener(v -> {
             // Opens the ordinary editor with an unsaved draft. Nothing is stored until Save.
             startActivity(new Intent(this, RoutineEditorActivity.class)
@@ -345,7 +344,7 @@ public class RoutineBuilderActivity extends Activity {
         reviewLp.setMargins(0, UiKit.dp(this, 4), 0, UiKit.dp(this, 8));
         resultArea.addView(review, reviewLp);
 
-        Button change = secondaryButton("Change description");
+        Button change = secondaryButton(getString(R.string.rbuild_change));
         change.setOnClickListener(v -> {
             draft = null;
             automationNotice = "";

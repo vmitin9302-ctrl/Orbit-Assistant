@@ -170,12 +170,12 @@ public final class OrbitLocalComponent {
     }
 
     /** A short line for the component card, matching the state Orbit actually observed. */
-    public static String stateLabel(State state) {
+    public static String stateLabel(Context context, State state) {
         switch (state) {
-            case INSTALLED: return "Installed";
-            case UPDATE_REQUIRED: return "Update required";
-            case UNTRUSTED: return "Not verified";
-            default: return "Not installed";
+            case INSTALLED: return context.getString(R.string.localcomp_installed);
+            case UPDATE_REQUIRED: return context.getString(R.string.localcomp_update_required);
+            case UNTRUSTED: return context.getString(R.string.localcomp_untrusted);
+            default: return context.getString(R.string.localcomp_not_installed);
         }
     }
 }

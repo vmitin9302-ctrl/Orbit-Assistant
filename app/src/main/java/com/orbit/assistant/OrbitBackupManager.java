@@ -60,6 +60,18 @@ public final class OrbitBackupManager {
             this.createdAt = createdAt;
         }
 
+        public String confirmationMessage(Context context) {
+            return context.getString(R.string.backup_confirm, sourceVersion,
+                    data.optJSONArray("conversations").length(),
+                    data.optJSONArray("memories").length(),
+                    data.optJSONArray("routines").length(),
+                    optionalArray(data, "customCommands").length(),
+                    data.optJSONArray("reminders").length(),
+                    optionalArray(data, "extensions").length(),
+                    optionalArray(data, "vault").length());
+        }
+
+
         public String confirmationMessage() {
             return "This valid Orbit " + sourceVersion + " backup contains " +
                     data.optJSONArray("conversations").length() + " chats, " +

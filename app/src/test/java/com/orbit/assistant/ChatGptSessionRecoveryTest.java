@@ -153,7 +153,7 @@ public final class ChatGptSessionRecoveryTest {
         behaviour = form -> new ChatGptAuth.TokenResponse(400,
                 "{\"error\":\"invalid_grant\",\"error_description\":\"refresh_token_reused\"}");
         Outcome out = get(null);
-        assertEquals(ChatGptAuth.SESSION_ENDED, out.error);
+        assertEquals(ChatGptAuth.sessionEnded(context), out.error);
         assertNull(SecureStore.loadChatGptTokens(context));
         assertTrue("the failure offers Sign in again", ChatGptAuth.needsSignIn(context, out.error));
         Outcome again = get(null);

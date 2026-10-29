@@ -32,15 +32,26 @@ final class OrbitLocalCapabilities {
 
     /** One line of the capability list. */
     static final class Capability {
+        /** Stable identifier of the capability (also what tests and diagnostics compare). */
         final String name;
         final Availability availability;
-        /** What stands in the way, or a short qualifier. Empty when there is nothing to say. */
-        final String detail;
+        /** String resource of what stands in the way, or a short qualifier. 0 when there is nothing to say. */
+        final int detailRes;
 
-        Capability(String name, Availability availability, String detail) {
+        Capability(String name, Availability availability, int detailRes) {
             this.name = name;
             this.availability = availability;
-            this.detail = detail == null ? "" : detail;
+            this.detailRes = detailRes;
+        }
+
+        /** The capability's name as shown to the user. */
+        String label(Context context) {
+            return context.getString(nameRes(name));
+        }
+
+        /** What stands in the way, or a short qualifier. Empty when there is nothing to say. */
+        String detail(Context context) {
+            return detailRes == 0 ? "" : context.getString(detailRes);
         }
     }
 
@@ -70,9 +81,25 @@ final class OrbitLocalCapabilities {
 
     private OrbitLocalCapabilities() {}
 
+    private static int nameRes(String id) {
+        switch (id) {
+            case CHAT: return R.string.olc_chat;
+            case MEMORY: return R.string.olc_memory;
+            case SCREEN: return R.string.olc_screen;
+            case ASK_VAULT: return R.string.olc_ask_vault;
+            case ATTACHMENTS: return R.string.olc_attachments;
+            case NOTIFICATIONS: return R.string.olc_notifications;
+            case DEVICE_ACTIONS: return R.string.olc_device_actions;
+            case WEB: return R.string.olc_web;
+            case PICTURES: return R.string.olc_pictures;
+            case ROUTINES: return R.string.olc_routines;
+            default: return R.string.olc_suggestions;
+        }
+    }
+
     static List<Capability> evaluate(State s) {
         List<Capability> out = new ArrayList<>();
-        String needsModel = "After the local model is installed";
+        int needsModel = R.string.olc_after_model;
         if (!s.chatModelReady) {
             out.add(new Capability(CHAT, Availability.NEEDS_SETUP, needsModel));
             out.add(new Capability(MEMORY, Availability.NEEDS_SETUP, needsModel));
@@ -81,40 +108,40 @@ final class OrbitLocalCapabilities {
             out.add(new Capability(ATTACHMENTS, Availability.NEEDS_SETUP, needsModel));
             out.add(new Capability(NOTIFICATIONS, Availability.NEEDS_SETUP, needsModel));
         } else {
-            out.add(new Capability(CHAT, Availability.READY, ""));
+            out.add(new Capability(CHAT, Availability.READY, 0));
             out.add(s.memoryEnabled
-                    ? new Capability(MEMORY, Availability.READY, "")
-                    : new Capability(MEMORY, Availability.NEEDS_SETUP, "Orbit Memory is off"));
+                    ? new Capability(MEMORY, Availability.READY, 0)
+                    : new Capability(MEMORY, Availability.NEEDS_SETUP, R.string.olc_memory_off));
             out.add(new Capability(SCREEN, Availability.READY, s.screenContextEnabled
-                    ? "" : "When you attach the screen"));
+                    ? 0 : R.string.olc_screen_attach));
             out.add(s.smartVaultEnabled
-                    ? new Capability(ASK_VAULT, Availability.READY, "")
-                    : new Capability(ASK_VAULT, Availability.NEEDS_SETUP, "Turn on Smart Vault"));
-            out.add(new Capability(ATTACHMENTS, Availability.READY, "The text Orbit reads from them"));
+                    ? new Capability(ASK_VAULT, Availability.READY, 0)
+                    : new Capability(ASK_VAULT, Availability.NEEDS_SETUP, R.string.olc_turn_on_vault));
+            out.add(new Capability(ATTACHMENTS, Availability.READY, R.string.olc_attachment_text));
             if (!s.notificationAccess) {
                 out.add(new Capability(NOTIFICATIONS, Availability.NEEDS_SETUP,
-                        "Needs notification access"));
+                        R.string.olc_needs_access));
             } else if (!s.notificationIntelligenceEnabled) {
                 out.add(new Capability(NOTIFICATIONS, Availability.NEEDS_SETUP,
-                        "Notification Intelligence is off"));
+                        R.string.olc_ni_off));
             } else {
-                out.add(new Capability(NOTIFICATIONS, Availability.READY, ""));
+                out.add(new Capability(NOTIFICATIONS, Availability.READY, 0));
             }
         }
         // Independent of the chat model: the action model is its own download.
         if (!s.actionModelReady) {
             out.add(new Capability(DEVICE_ACTIONS, Availability.NEEDS_SETUP,
-                    "Needs the action model"));
+                    R.string.olc_needs_action_model));
         } else if (!s.deviceActionsEnabled) {
-            out.add(new Capability(DEVICE_ACTIONS, Availability.NEEDS_SETUP, "Turned off"));
+            out.add(new Capability(DEVICE_ACTIONS, Availability.NEEDS_SETUP, R.string.olc_turned_off));
         } else {
-            out.add(new Capability(DEVICE_ACTIONS, Availability.READY, ""));
+            out.add(new Capability(DEVICE_ACTIONS, Availability.READY, 0));
         }
-        out.add(new Capability(WEB, Availability.CLOUD_ONLY, ""));
+        out.add(new Capability(WEB, Availability.CLOUD_ONLY, 0));
         out.add(new Capability(PICTURES, Availability.CLOUD_ONLY,
-                "Text Orbit reads from a picture still works"));
-        out.add(new Capability(ROUTINES, Availability.CLOUD_ONLY, ""));
-        out.add(new Capability(SUGGESTIONS, Availability.CLOUD_ONLY, ""));
+                R.string.olc_pictures_text));
+        out.add(new Capability(ROUTINES, Availability.CLOUD_ONLY, 0));
+        out.add(new Capability(SUGGESTIONS, Availability.CLOUD_ONLY, 0));
         return Collections.unmodifiableList(out);
     }
 

@@ -254,8 +254,7 @@ public final class ChatGptBrowserAuth {
         ServerSocket server = bind();
         if (server == null) {
             ChatGptAuth.logFailure("browser_receiver_failed", "ports_busy");
-            return new Started(null, "Orbit could not open its local sign-in receiver on this "
-                    + "phone, so the browser sign-in cannot finish. Use code sign-in instead.");
+            return new Started(null, app.getString(R.string.cgba_no_receiver));
         }
         Attempt attempt = new Attempt(app, newPkce(RANDOM), newState(RANDOM), server,
                 System.currentTimeMillis() + timeoutMs);
@@ -328,8 +327,7 @@ public final class ChatGptBrowserAuth {
             while (!isEnded(attempt)) {
                 long remaining = attempt.deadline - System.currentTimeMillis();
                 if (remaining <= 0) {
-                    finish(attempt, l -> l.onFailed("The ChatGPT sign-in timed out before the "
-                            + "browser came back to Orbit. Try again, or use code sign-in.", true),
+                    finish(attempt, l -> l.onFailed(attempt.app.getString(R.string.cgba_timeout), true),
                             "timeout");
                     return;
                 }
@@ -349,8 +347,7 @@ public final class ChatGptBrowserAuth {
         } catch (IOException e) {
             // The receiver was closed by cancel/finish, or failed. Either way the attempt ends.
             if (!isEnded(attempt)) {
-                finish(attempt, l -> l.onFailed("Orbit's local sign-in receiver stopped before "
-                        + "the browser came back. Try again, or use code sign-in.", true),
+                finish(attempt, l -> l.onFailed(attempt.app.getString(R.string.cgba_receiver_stopped), true),
                         "receiver_failed");
             }
         }
@@ -388,25 +385,22 @@ public final class ChatGptBrowserAuth {
         Callback callback = parseCallback(target, attempt.state);
         switch (callback.outcome) {
             case NOT_CALLBACK:
-                return new Response(404, page("Not found", "This address is only used to finish "
-                        + "signing in to Orbit.", false));
+                return new Response(404, page(attempt.app, R.string.cgba_page_not_found_title, R.string.cgba_page_not_found_msg, false));
             case STATE_MISMATCH:
                 // Refused without ending the attempt: an old tab or a stray request must not be
                 // able to cancel the sign-in the user is actually completing.
                 ChatGptAuth.logFailure("browser_callback_rejected", "state_mismatch");
-                return new Response(400, page("This sign-in page is out of date",
-                        "Return to Orbit and tap Sign in with ChatGPT again.", true));
+                return new Response(400, page(attempt.app, R.string.cgba_page_outdated_title,
+                        R.string.cgba_page_outdated_msg, true));
             case OAUTH_ERROR:
                 String reason = callback.error;
-                finish(attempt, l -> l.onFailed("ChatGPT sign-in did not complete: "
-                        + reason + ". You can try again, or use code sign-in.", true), "oauth_error");
-                return new Response(200, page("Sign-in was not completed",
-                        "Return to Orbit to try again.", true));
+                finish(attempt, l -> l.onFailed(attempt.app.getString(R.string.cgba_oauth_error, reason), true), "oauth_error");
+                return new Response(200, page(attempt.app, R.string.cgba_page_incomplete_title,
+                        R.string.cgba_page_incomplete_msg, true));
             case MISSING_CODE:
-                finish(attempt, l -> l.onFailed("OpenAI returned to Orbit without a sign-in "
-                        + "code. Try again, or use code sign-in.", true), "missing_code");
-                return new Response(400, page("Sign-in was not completed",
-                        "Return to Orbit to try again.", true));
+                finish(attempt, l -> l.onFailed(attempt.app.getString(R.string.cgba_missing_code), true), "missing_code");
+                return new Response(400, page(attempt.app, R.string.cgba_page_incomplete_title,
+                        R.string.cgba_page_incomplete_msg, true));
             case CODE:
             default:
                 // The receiver's job is done; nothing else may arrive on it.
@@ -416,19 +410,21 @@ public final class ChatGptBrowserAuth {
                         callback.code, attempt.pkce.verifier, attempt.redirectUri);
                 if (result.ok()) {
                     deliver(attempt, l -> l.onSignedIn(result.account), "signed_in");
-                    return new Response(200, page("You're signed in to Orbit",
-                            "Your ChatGPT account is connected. You can return to Orbit.", true));
+                    return new Response(200, page(attempt.app, R.string.cgba_page_done_title,
+                            R.string.cgba_page_done_msg, true));
                 }
-                deliver(attempt, l -> l.onFailed(result.message
-                        + " You can try again, or use code sign-in.", true), "exchange_failed");
-                return new Response(200, page("Orbit could not finish signing in",
-                        "Return to Orbit for details.", true));
+                deliver(attempt, l -> l.onFailed(attempt.app.getString(R.string.cgba_exchange_failed, result.message), true), "exchange_failed");
+                return new Response(200, page(attempt.app, R.string.cgba_page_failed_title,
+                        R.string.cgba_page_failed_msg, true));
         }
     }
 
-    private static String page(String title, String message, boolean returnButton) {
+    private static String page(Context app, int titleRes, int messageRes, boolean returnButton) {
+        String title = app.getString(titleRes);
+        String message = app.getString(messageRes);
         String button = returnButton
-                ? "<p><a class=\"b\" href=\"" + RETURN_URI + "\">Return to Orbit</a></p>" : "";
+                ? "<p><a class=\"b\" href=\"" + RETURN_URI + "\">"
+                + app.getString(R.string.cgba_page_return) + "</a></p>" : "";
         return "<!doctype html><html><head><meta charset=\"utf-8\">"
                 + "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">"
                 + "<title>Orbit</title><style>body{font-family:sans-serif;background:#111;color:#eee;"

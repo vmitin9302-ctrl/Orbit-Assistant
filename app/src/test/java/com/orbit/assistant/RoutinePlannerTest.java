@@ -105,7 +105,7 @@ public final class RoutinePlannerTest {
     }
 
     @Test public void schedulingIsReportedRatherThanBuilt() {
-        String notice = RoutinePlanner.automationNotice();
+        String notice = RoutinePlanner.automationNotice(context);
         assertTrue(notice.toLowerCase(java.util.Locale.US).contains("automatic triggers"));
         assertTrue("the user must be told the steps were still created",
                 notice.toLowerCase(java.util.Locale.US).contains("steps were created"));

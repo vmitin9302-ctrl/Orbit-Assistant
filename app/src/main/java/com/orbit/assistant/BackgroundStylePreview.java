@@ -70,15 +70,15 @@ public final class BackgroundStylePreview extends FrameLayout {
         // Text directly on the page, which is the pairing a background effect could damage and the
         // reason Orbit keeps deriving page ink from the theme's Background colour rather than from
         // whatever the effect happens to be doing at that point on the screen.
-        pageText = UiKit.text(c, "Text on the page", 12.5f, UiKit.TEXT, false);
+        pageText = UiKit.text(c, c.getString(R.string.bgprev_page_text), 12.5f, UiKit.TEXT, false);
         content.addView(pageText);
 
         card = new LinearLayout(c);
         card.setOrientation(LinearLayout.VERTICAL);
         card.setPadding(UiKit.dp(c, 11), UiKit.dp(c, 9), UiKit.dp(c, 11), UiKit.dp(c, 10));
-        cardTitle = UiKit.text(c, "A card", 13, UiKit.TEXT, true);
+        cardTitle = UiKit.text(c, c.getString(R.string.bgprev_card_title), 13, UiKit.TEXT, true);
         card.addView(cardTitle);
-        cardBody = UiKit.text(c, "Cards keep their own color, so the effect stays behind them.",
+        cardBody = UiKit.text(c, c.getString(R.string.bgprev_card_body),
                 11.5f, UiKit.MUTED, false);
         cardBody.setLineSpacing(0, 1.1f);
         card.addView(cardBody);
@@ -117,7 +117,7 @@ public final class BackgroundStylePreview extends FrameLayout {
         // Asked of the renderer rather than recomputed here, so the sample cannot decide it is hidden
         // on different grounds from the page it is a sample of.
         boolean hidden = OrbitBackground.hiddenByAmoled(page);
-        note.setText(hidden ? OrbitBackground.amoledHiddenLabel() : "");
+        note.setText(hidden ? OrbitBackground.amoledHiddenLabel(c) : "");
         note.setTextColor(tokens.muted);
         // A chip rather than bare text. A muted sentence on a true-black sample reads as an empty
         // preview with a caption; a small enclosed label reads as the sample telling you its state.
@@ -130,19 +130,18 @@ public final class BackgroundStylePreview extends FrameLayout {
 
     private String describe(OrbitProStyle style, boolean hidden) {
         if (hidden) {
-            return "Background sample. " + style.backgroundModeLabel()
-                    + " is configured but hidden while AMOLED is on.";
+            return getContext().getString(R.string.bgprev_desc_hidden, style.backgroundModeLabel(getContext()));
         }
         if (style.backgroundMode == OrbitProStyle.BACKGROUND_LINEAR) {
-            return "Background sample. Linear gradient, from the "
-                    + style.directionLabel().toLowerCase(java.util.Locale.US) + ".";
+            return getContext().getString(R.string.bgprev_desc_linear,
+                    style.directionLabel(getContext()).toLowerCase(java.util.Locale.US));
         }
         if (style.backgroundMode == OrbitProStyle.BACKGROUND_GLOW) {
-            return "Background sample. Radial glow, "
-                    + style.glowStrengthLabel().toLowerCase(java.util.Locale.US) + ", "
-                    + style.glowSizeLabel().toLowerCase(java.util.Locale.US) + ", at the "
-                    + style.glowPositionLabel().toLowerCase(java.util.Locale.US) + ".";
+            return getContext().getString(R.string.bgprev_desc_glow,
+                    style.glowStrengthLabel(getContext()).toLowerCase(java.util.Locale.US),
+                    style.glowSizeLabel(getContext()).toLowerCase(java.util.Locale.US),
+                    style.glowPositionLabel(getContext()).toLowerCase(java.util.Locale.US));
         }
-        return "Background sample. Solid, the theme's own background color.";
+        return getContext().getString(R.string.bgprev_desc_solid);
     }
 }

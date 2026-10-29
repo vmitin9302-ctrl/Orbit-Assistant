@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Orbit Local</string>
+    <string name="orbit_local_bind_permission_label">Запуск локального ИИ Orbit Local</string>
+    <string name="orbit_local_bind_permission_description">Позволяет Orbit запускать ИИ приватно на этом устройстве.</string>
+    <string name="local_err_no_storage">Недостаточно свободного места для модели. Освободите место и повторите попытку.</string>
+    <string name="local_err_start_failed">Orbit Local не удалось начать загрузку на этом устройстве. Повторите попытку.</string>
+    <string name="local_err_http_refused">Сервер отклонил загрузку модели (HTTP %1$d). Повторите попытку позже.</string>
+    <string name="local_err_low_storage">Во время загрузки на устройстве закончилось место. Освободите место и возобновите загрузку.</string>
+    <string name="local_err_mismatch">Загруженные данные не соответствуют ожидаемой модели. Повторите попытку.</string>
+    <string name="local_err_incomplete">Файл загружен не полностью. Повторите попытку.</string>
+    <string name="local_err_verification">Файл не прошёл проверку и был удалён. Повторите попытку.</string>
+    <string name="local_err_install">Orbit не удалось завершить установку модели. Повторите попытку.</string>
+    <string name="local_err_move_no_storage">Недостаточно свободного места, чтобы перенести существующую модель.</string>
+    <string name="local_err_move_too_large">Существующая модель оказалась больше ожидаемого и не была перенесена.</string>
+    <string name="local_err_move_incomplete">Существующую модель не удалось перенести полностью. Ничего не удалено.</string>
+    <string name="local_err_move_failed">Существующую модель не удалось перенести. Ничего не удалено; можно повторить попытку.</string>
+    <string name="local_err_chat_not_installed">локальная модель не установлена</string>
+    <string name="local_err_action_not_installed">локальная модель действий не установлена</string>
+    <string name="local_err_empty_request">запрос был пустым</string>
+</resources>

@@ -174,6 +174,19 @@ public final class OrbitFloatingSurface {
         return "Solid uses no glass effects. Your glass settings are kept.";
     }
 
+    /** {@link #noGlassNote()} in the user's language, for screens. */
+    public static String noGlassNote(android.content.Context context) {
+        return context.getString(R.string.floatsurf_no_glass);
+    }
+
+    /** {@link #materialDescription(String)} in the user's language, for screens. */
+    public static String materialDescription(android.content.Context context, String material) {
+        String value = OrbitTheme.normalizeMaterial(material);
+        if (OrbitTheme.MATERIAL_SOLID.equals(value)) return context.getString(R.string.floatsurf_solid);
+        if (OrbitTheme.MATERIAL_FROSTED.equals(value)) return context.getString(R.string.floatsurf_frosted);
+        return context.getString(R.string.floatsurf_rich);
+    }
+
     /** A short description of what a material is, for the selector's accessibility announcement. */
     public static String materialDescription(String material) {
         String value = OrbitTheme.normalizeMaterial(material);

@@ -477,14 +477,14 @@ public final class ComponentModelStore {
     static boolean validateAndPromote(Context c, ComponentModelSpec spec, File candidate) {
         if (!candidate.exists() || candidate.length() != spec.sizeBytes) {
             recordFailure(c, spec, FAILURE_SIZE_MISMATCH);
-            setState(c, spec, State.ERROR, "The file was incomplete. Try again.");
+            setState(c, spec, State.ERROR, c.getString(R.string.local_err_incomplete));
             //noinspection ResultOfMethodCallIgnored
             candidate.delete();
             return false;
         }
         if (!spec.sha256.equalsIgnoreCase(sha256(candidate))) {
             recordFailure(c, spec, FAILURE_CHECKSUM);
-            setState(c, spec, State.ERROR, "The file failed verification and was removed. Try again.");
+            setState(c, spec, State.ERROR, c.getString(R.string.local_err_verification));
             //noinspection ResultOfMethodCallIgnored
             candidate.delete();
             return false;
@@ -494,7 +494,7 @@ public final class ComponentModelStore {
         model.delete();
         if (!candidate.renameTo(model)) {
             recordFailure(c, spec, FAILURE_INSTALL);
-            setState(c, spec, State.ERROR, "Orbit could not finish installing the model. Try again.");
+            setState(c, spec, State.ERROR, c.getString(R.string.local_err_install));
             return false;
         }
         clearPauseRequest(c, spec);

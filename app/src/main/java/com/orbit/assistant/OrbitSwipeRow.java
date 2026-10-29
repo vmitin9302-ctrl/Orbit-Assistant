@@ -103,7 +103,7 @@ public class OrbitSwipeRow extends FrameLayout {
      * <p>It defaults to "chat" so that every existing caller keeps the exact strings TalkBack has
      * always read out for Chats.
      */
-    private String subject = "chat";
+    private String subject = null;
 
     private int leftAction = ACTION_NONE;
     private int rightAction = ACTION_NONE;
@@ -532,13 +532,15 @@ public class OrbitSwipeRow extends FrameLayout {
         card.setAccessibilityDelegate(new View.AccessibilityDelegate() {
             @Override public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfo info) {
                 super.onInitializeAccessibilityNodeInfo(host, info);
+                Context ctx = getContext();
+                String named = subject != null ? subject : ctx.getString(R.string.h_subject_chat);
                 if (rightAction == ACTION_PIN) {
                     info.addAction(new AccessibilityNodeInfo.AccessibilityAction(
-                            R.id.orbit_action_pin, (pinned ? "Unpin " : "Pin ") + subject));
+                            R.id.orbit_action_pin, ctx.getString(pinned ? R.string.h_swipe_unpin : R.string.h_swipe_pin, named)));
                 }
                 if (leftAction == ACTION_DELETE) {
                     info.addAction(new AccessibilityNodeInfo.AccessibilityAction(
-                            R.id.orbit_action_delete, "Delete " + subject));
+                            R.id.orbit_action_delete, ctx.getString(R.string.h_swipe_delete, named)));
                 }
             }
 

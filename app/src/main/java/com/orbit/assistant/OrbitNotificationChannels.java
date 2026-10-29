@@ -51,11 +51,11 @@ public final class OrbitNotificationChannels {
     /** One channel's fixed identity, so the four definitions read as a list rather than as code. */
     private static final class Definition {
         final String id;
-        final String name;
-        final String description;
+        final int name;
+        final int description;
         final int importance;
 
-        Definition(String id, String name, String description, int importance) {
+        Definition(String id, int name, int description, int importance) {
             this.id = id;
             this.name = name;
             this.description = description;
@@ -65,17 +65,17 @@ public final class OrbitNotificationChannels {
 
     private static List<Definition> definitions() {
         List<Definition> out = new ArrayList<>(4);
-        out.add(new Definition(BACKGROUND_RESPONSES, "Background responses",
-                "Notifies you when an Orbit response finishes after you leave the chat.",
+        out.add(new Definition(BACKGROUND_RESPONSES, R.string.notifch_bg_name,
+                R.string.notifch_bg_desc,
                 NotificationManager.IMPORTANCE_DEFAULT));
-        out.add(new Definition(REMINDERS, "Reminders",
-                "Reminders you create through Orbit.",
+        out.add(new Definition(REMINDERS, R.string.notifch_rem_name,
+                R.string.notifch_rem_desc,
                 NotificationManager.IMPORTANCE_HIGH));
-        out.add(new Definition(ROUTINE_TRIGGERS, "Routine triggers",
-                "Only alerts you when an automatic Orbit routine needs attention or a foreground step.",
+        out.add(new Definition(ROUTINE_TRIGGERS, R.string.notifch_rt_name,
+                R.string.notifch_rt_desc,
                 NotificationManager.IMPORTANCE_DEFAULT));
-        out.add(new Definition(UPDATES, "Orbit updates",
-                "Notifies you when a verified Orbit release is available.",
+        out.add(new Definition(UPDATES, R.string.notifch_upd_name,
+                R.string.notifch_upd_desc,
                 NotificationManager.IMPORTANCE_DEFAULT));
         return out;
     }
@@ -90,7 +90,7 @@ public final class OrbitNotificationChannels {
         if (context == null || Build.VERSION.SDK_INT < 26) return;
         NotificationManager manager = manager(context);
         if (manager == null) return;
-        for (Definition definition : definitions()) create(manager, definition);
+        for (Definition definition : definitions()) create(context, manager, definition);
     }
 
     /** Declares one channel by ID, for the notifier that is about to use it. */
@@ -100,7 +100,7 @@ public final class OrbitNotificationChannels {
         if (manager == null) return;
         for (Definition definition : definitions()) {
             if (definition.id.equals(channelId)) {
-                create(manager, definition);
+                create(context, manager, definition);
                 return;
             }
         }
@@ -119,10 +119,10 @@ public final class OrbitNotificationChannels {
         return service instanceof NotificationManager ? (NotificationManager) service : null;
     }
 
-    private static void create(NotificationManager manager, Definition definition) {
+    private static void create(Context context, NotificationManager manager, Definition definition) {
         NotificationChannel channel = new NotificationChannel(
-                definition.id, definition.name, definition.importance);
-        channel.setDescription(definition.description);
+                definition.id, context.getString(definition.name), definition.importance);
+        channel.setDescription(context.getString(definition.description));
         manager.createNotificationChannel(channel);
     }
 }

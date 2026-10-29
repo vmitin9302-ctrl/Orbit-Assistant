@@ -74,23 +74,30 @@ public final class OrbitThemeFileCodec {
     public static final class ThemeFileException extends Exception {
         /** True when the file is a real Orbit theme from a schema this build predates. */
         public final boolean newerVersion;
+        private final int messageRes;
 
-        ThemeFileException(String message, boolean newerVersion) {
+        ThemeFileException(String message, boolean newerVersion, int messageRes) {
             super(message);
             this.newerVersion = newerVersion;
+            this.messageRes = messageRes;
+        }
+
+        /** The same sentence in the app language. */
+        public String message(android.content.Context context) {
+            return context.getString(messageRes);
         }
     }
 
     private static ThemeFileException unsupported() {
-        return new ThemeFileException(NOT_A_THEME, false);
+        return new ThemeFileException(NOT_A_THEME, false, R.string.themefile_not_a_theme);
     }
 
     private static ThemeFileException newerVersion() {
-        return new ThemeFileException(FROM_THE_FUTURE, true);
+        return new ThemeFileException(FROM_THE_FUTURE, true, R.string.themefile_newer);
     }
 
     private static ThemeFileException tooLarge() {
-        return new ThemeFileException(TOO_LARGE, false);
+        return new ThemeFileException(TOO_LARGE, false, R.string.themefile_too_large);
     }
 
     // ---- export ----------------------------------------------------------------------------------
@@ -283,6 +290,22 @@ public final class OrbitThemeFileCodec {
                 OrbitPalette.labelFor(theme.accent),
                 theme.amoled ? "AMOLED true black" : surfaceLabel(theme.background));
     }
+
+    /** {@link #describe(OrbitTheme)} in the app language. */
+    public static String describe(android.content.Context context, OrbitTheme theme) {
+        if (theme == null) return "";
+        return context.getString(R.string.themefile_describe,
+                OrbitPalette.labelFor(theme.accent),
+                theme.amoled ? context.getString(R.string.themefile_amoled)
+                        : surfaceLabel(context, theme.background));
+    }
+
+    private static String surfaceLabel(android.content.Context context, String token) {
+        return OrbitTheme.isHexToken(token)
+                ? context.getString(R.string.themefile_custom, token)
+                : context.getString(R.string.themefile_default);
+    }
+
 
     private static String surfaceLabel(String token) {
         return OrbitTheme.isHexToken(token) ? "custom " + token : "Orbit default";

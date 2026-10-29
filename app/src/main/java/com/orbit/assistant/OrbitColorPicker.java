@@ -108,7 +108,7 @@ public final class OrbitColorPicker {
                 warning.setVisibility(parsed == null && s != null && s.length() > 0
                         ? View.VISIBLE : View.GONE);
                 if (parsed == null) {
-                    warning.setText("Use a color like #8B7CFF.");
+                    warning.setText(c.getString(R.string.colorpick_hex_warning));
                     return;
                 }
                 if (parsed == current[0]) return;
@@ -140,7 +140,7 @@ public final class OrbitColorPicker {
         form.addView(warning);
 
         if (suggestions != null && !suggestions.isEmpty()) {
-            TextView label = UiKit.text(c, "Suggested", 12, UiKit.MUTED, false);
+            TextView label = UiKit.text(c, c.getString(R.string.colorpick_suggested), 12, UiKit.MUTED, false);
             label.setPadding(UiKit.dp(c, 2), UiKit.dp(c, 14), 0, UiKit.dp(c, 8));
             form.addView(label);
             form.addView(swatchRow(c, suggestions, chosen -> {
@@ -153,10 +153,10 @@ public final class OrbitColorPicker {
         publish.run();
 
         AlertDialog dialog = new AlertDialog.Builder(activity)
-                .setTitle(role == null || role.trim().isEmpty() ? "Choose a color" : role)
+                .setTitle(role == null || role.trim().isEmpty() ? c.getString(R.string.colorpick_title) : role)
                 .setView(form)
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Apply", null)
+                .setNegativeButton(R.string.ui_cancel_19766ed6, null)
+                .setPositiveButton(R.string.colorpick_apply, null)
                 .create();
         UiKit.styleOrbitDialog(dialog, c, false,
                 UiKit.outlined(UiKit.SURFACE, UiKit.withAlpha(UiKit.accent(c), 55), 22, c),
@@ -207,7 +207,7 @@ public final class OrbitColorPicker {
         field.setHintTextColor(UiKit.MUTED);
         field.setHint("#8B7CFF");
         field.setTextSize(15);
-        field.setContentDescription("Color value in hexadecimal");
+        field.setContentDescription(c.getString(R.string.colorpick_hex_cd));
         field.setPadding(UiKit.dp(c, 14), 0, UiKit.dp(c, 14), 0);
         field.setBackground(UiKit.outlined(UiKit.SURFACE_2,
                 UiKit.withAlpha(UiKit.accent(c), 72), 14, c));
@@ -231,7 +231,7 @@ public final class OrbitColorPicker {
             View swatch = new View(c);
             swatch.setBackground(UiKit.outlined(color,
                     UiKit.withAlpha(OrbitContrast.inkOn(color), 60), 11, c));
-            swatch.setContentDescription(OrbitColorName.describe("Use", color));
+            swatch.setContentDescription(OrbitColorName.describe(c, c.getString(R.string.colorpick_use), color));
             UiKit.pressScale(swatch);
             swatch.setOnClickListener(v -> {
                 UiKit.haptic(v, android.view.HapticFeedbackConstants.KEYBOARD_TAP);
@@ -273,8 +273,8 @@ public final class OrbitColorPicker {
         }
 
         private void updateDescription() {
-            setContentDescription("Currently " + OrbitColorName.of(original)
-                    + ". New color " + OrbitColorName.describe("", proposed));
+            setContentDescription(getContext().getString(R.string.colorpick_compare_cd,
+                    OrbitColorName.of(getContext(), original), OrbitColorName.describe(getContext(), "", proposed)));
         }
 
         @Override protected void onDraw(Canvas canvas) {
@@ -292,8 +292,8 @@ public final class OrbitColorPicker {
             canvas.restore();
             canvas.drawRoundRect(rect, radius, radius, stroke);
 
-            drawCaption(canvas, "Current", original, 0, half);
-            drawCaption(canvas, "New", proposed, half, getWidth());
+            drawCaption(canvas, getContext().getString(R.string.colorpick_current), original, 0, half);
+            drawCaption(canvas, getContext().getString(R.string.colorpick_new_color), proposed, half, getWidth());
         }
 
         private final Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -324,7 +324,7 @@ public final class OrbitColorPicker {
             super(c);
             knob.setStyle(Paint.Style.STROKE);
             knob.setStrokeWidth(UiKit.dp(c, 2));
-            setContentDescription("Saturation and brightness. Drag to adjust.");
+            setContentDescription(c.getString(R.string.colorpick_sv_cd));
         }
 
         void setListener(PointListener value) { this.listener = value; }
@@ -411,7 +411,7 @@ public final class OrbitColorPicker {
             knob.setStyle(Paint.Style.STROKE);
             knob.setStrokeWidth(UiKit.dp(c, 3));
             knob.setColor(Color.WHITE);
-            setContentDescription("Hue. Drag to change the color family.");
+            setContentDescription(getContext().getString(R.string.colorpick_hue_cd));
         }
 
         void setListener(HueListener value) { this.listener = value; }

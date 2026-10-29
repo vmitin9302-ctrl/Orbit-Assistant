@@ -26,13 +26,13 @@ public final class CustomCommandRouter {
         }
         if (matches.isEmpty()) return null;
         if (matches.size() > 1) {
-            return new AssistantReply("More than one Custom Command matches that phrase, so Orbit did not run anything. Resolve the conflict in Settings → Routines → Custom Commands.");
+            return new AssistantReply(context.getString(R.string.cmdrouter_conflict));
         }
 
         CustomCommandStore.Command command = matches.get(0);
         RoutineStore.Routine routine = RoutineStore.findById(context, command.routineId);
         if (routine == null) {
-            return new AssistantReply("That Custom Command needs attention because its Routine is unavailable. Reassign it in Settings → Routines → Custom Commands.");
+            return new AssistantReply(context.getString(R.string.cmdrouter_routine_missing));
         }
         return RoutineCommandRouter.replyForRoutine(context, routine);
     }

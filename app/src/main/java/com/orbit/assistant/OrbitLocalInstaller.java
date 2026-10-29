@@ -121,11 +121,11 @@ public final class OrbitLocalInstaller {
                 int status = connection.getResponseCode();
                 requireHttpsFinalUrl(connection);
                 if (status < 200 || status >= 300) {
-                    throw new InstallException("The Orbit Local download failed (HTTP " + status + ").");
+                    throw new InstallException(R.string.localinst_http_failed, status);
                 }
                 long contentLength = connection.getContentLengthLong();
                 if (contentLength > MAX_APK_BYTES) {
-                    throw new InstallException("The Orbit Local component is unexpectedly large.");
+                    throw new InstallException(R.string.localinst_unexpectedly_large);
                 }
 
                 long total = 0L;
@@ -137,7 +137,7 @@ public final class OrbitLocalInstaller {
                     while ((read = in.read(buffer)) != -1) {
                         total += read;
                         if (total > MAX_APK_BYTES) {
-                            throw new InstallException("The Orbit Local download exceeded its safe size limit.");
+                            throw new InstallException(R.string.localinst_size_limit);
                         }
                         out.write(buffer, 0, read);
                         long denominator = expected.sizeBytes > 0L ? expected.sizeBytes : contentLength;
@@ -151,7 +151,7 @@ public final class OrbitLocalInstaller {
                     out.getFD().sync();
                 }
                 if (!part.renameTo(output)) {
-                    throw new InstallException("Orbit could not finish preparing the component.");
+                    throw new InstallException(R.string.localinst_prepare_failed);
                 }
                 callback.onVerifying();
                 verify(app, output, expected);
@@ -161,9 +161,11 @@ public final class OrbitLocalInstaller {
                 safeDelete(part);
                 safeDelete(output);
                 Log.w(TAG, "component install failed: " + e.getClass().getSimpleName());
-                callback.onError(e instanceof InstallException && e.getMessage() != null
-                        ? e.getMessage()
-                        : "Orbit could not download the Orbit Local component.");
+                String reported = e instanceof InstallException
+                        ? ((InstallException) e).userMessage(app) : null;
+                callback.onError(reported != null
+                        ? reported
+                        : app.getString(R.string.localinst_download_failed));
             } finally {
                 if (connection != null) connection.disconnect();
             }
@@ -203,7 +205,7 @@ public final class OrbitLocalInstaller {
         static Expected from(JSONObject manifest) throws Exception {
             JSONObject component = manifest == null ? null : manifest.optJSONObject("component");
             if (component == null) {
-                throw new InstallException("This Orbit release does not publish an Orbit Local component.");
+                throw new InstallException(R.string.localinst_not_published);
             }
             Expected expected = new Expected(
                     component.optString("packageName", "").trim(),
@@ -216,25 +218,25 @@ public final class OrbitLocalInstaller {
                     component.optLong("apkSize", -1L));
 
             if (!OrbitLocalComponent.PACKAGE.equals(expected.packageName)) {
-                throw new InstallException("The Orbit Local component metadata names the wrong package.");
+                throw new InstallException(R.string.localinst_wrong_package);
             }
             if (!assetName().equals(expected.assetName)) {
-                throw new InstallException("The Orbit Local component does not match this Orbit version.");
+                throw new InstallException(R.string.localinst_version_mismatch);
             }
             // Both halves of the version, not just the name: the component and the main app are
             // released in lockstep, and a mismatched versionCode is a mismatched build.
             if (!BuildConfig.VERSION_NAME.equals(expected.versionName)
                     || expected.versionCode != BuildConfig.VERSION_CODE) {
-                throw new InstallException("The Orbit Local component does not match this Orbit version.");
+                throw new InstallException(R.string.localinst_version_mismatch);
             }
             if (expected.protocol != OrbitLocalComponent.PROTOCOL_VERSION) {
-                throw new InstallException("The Orbit Local component uses an incompatible interface.");
+                throw new InstallException(R.string.localinst_incompatible);
             }
             if (!expected.sha256.matches("^[0-9a-fA-F]{64}$")) {
-                throw new InstallException("The Orbit Local component checksum is malformed.");
+                throw new InstallException(R.string.localinst_checksum_malformed);
             }
             if (!normalize(expected.certificateSha256).equals(normalize(CERTIFICATE_SHA256))) {
-                throw new InstallException("The Orbit Local component certificate metadata is invalid.");
+                throw new InstallException(R.string.localinst_cert_metadata);
             }
             return expected;
         }
@@ -250,33 +252,33 @@ public final class OrbitLocalInstaller {
         File root = componentDirectory(context).getCanonicalFile();
         File candidate = apk.getCanonicalFile();
         if (!candidate.getPath().startsWith(root.getPath() + File.separator) || !candidate.isFile()) {
-            throw new InstallException("The downloaded component file is unavailable.");
+            throw new InstallException(R.string.localinst_file_unavailable);
         }
         if (!normalize(sha256(candidate)).equals(normalize(expected.sha256))) {
-            throw new InstallException("The downloaded component checksum did not match the official release.");
+            throw new InstallException(R.string.localinst_checksum_mismatch);
         }
         PackageInfo info = context.getPackageManager().getPackageArchiveInfo(
                 candidate.getAbsolutePath(), PackageManager.GET_SIGNING_CERTIFICATES);
         if (info == null || info.signingInfo == null) {
-            throw new InstallException("Android could not inspect the downloaded component.");
+            throw new InstallException(R.string.localinst_cannot_inspect);
         }
         if (!OrbitLocalComponent.PACKAGE.equals(info.packageName)) {
-            throw new InstallException("The downloaded component has the wrong package name.");
+            throw new InstallException(R.string.localinst_wrong_package_name);
         }
         if (!expected.versionName.equals(info.versionName)
                 || info.getLongVersionCode() != expected.versionCode) {
-            throw new InstallException("The downloaded component version does not match the release manifest.");
+            throw new InstallException(R.string.localinst_manifest_version);
         }
         if (info.signingInfo.hasMultipleSigners()) {
-            throw new InstallException("The downloaded component has an unexpected signer set.");
+            throw new InstallException(R.string.localinst_signer_set);
         }
         Signature[] signers = info.signingInfo.getApkContentsSigners();
         if (signers == null || signers.length != 1) {
-            throw new InstallException("The downloaded component signer could not be verified.");
+            throw new InstallException(R.string.localinst_signer_unverified);
         }
         String certificate = hex(MessageDigest.getInstance("SHA-256").digest(signers[0].toByteArray()));
         if (!normalize(certificate).equals(normalize(CERTIFICATE_SHA256))) {
-            throw new InstallException("The downloaded component is not signed by Orbit's permanent certificate.");
+            throw new InstallException(R.string.localinst_not_orbit_cert);
         }
     }
 
@@ -297,16 +299,21 @@ public final class OrbitLocalInstaller {
      * Beta report into a diagnosis.
      */
     enum InstallStage {
-        APK_MISSING("The verified component file is no longer available. Download it again."),
-        OUTSIDE_COMPONENT_DIRECTORY("The verified component file is unavailable."),
-        FILEPROVIDER_URI("Orbit could not share the component with Android's installer."),
-        NO_INSTALLER("This device has no package installer available."),
-        START_ACTIVITY("Android could not open the package installer.");
+        APK_MISSING(R.string.localinst_stage_apk_missing),
+        OUTSIDE_COMPONENT_DIRECTORY(R.string.localinst_stage_outside),
+        FILEPROVIDER_URI(R.string.localinst_stage_fileprovider),
+        NO_INSTALLER(R.string.localinst_stage_no_installer),
+        START_ACTIVITY(R.string.localinst_stage_start);
 
-        final String message;
+        final int messageRes;
 
-        InstallStage(String message) {
-            this.message = message;
+        InstallStage(int messageRes) {
+            this.messageRes = messageRes;
+        }
+
+        /** The short sentence for this stage, in the language the person uses. */
+        String message(Context context) {
+            return context.getString(messageRes);
         }
     }
 
@@ -324,7 +331,7 @@ public final class OrbitLocalInstaller {
         }
         InstallStage stage = InstallStage.APK_MISSING;
         try {
-            if (apk == null || !apk.isFile()) throw new InstallException(stage.message);
+            if (apk == null || !apk.isFile()) throw new InstallException(stage.message(activity));
 
             stage = InstallStage.OUTSIDE_COMPONENT_DIRECTORY;
             File root = componentDirectory(activity).getCanonicalFile();
@@ -333,7 +340,7 @@ public final class OrbitLocalInstaller {
             // offered for installation, whatever path the caller passed in.
             if (!candidate.getPath().startsWith(root.getPath() + File.separator)
                     || !candidate.isFile()) {
-                throw new InstallException(stage.message);
+                throw new InstallException(stage.message(activity));
             }
 
             stage = InstallStage.FILEPROVIDER_URI;
@@ -344,7 +351,7 @@ public final class OrbitLocalInstaller {
 
             stage = InstallStage.NO_INSTALLER;
             if (install.resolveActivity(activity.getPackageManager()) == null) {
-                throw new InstallException(stage.message);
+                throw new InstallException(stage.message(activity));
             }
 
             stage = InstallStage.START_ACTIVITY;
@@ -353,7 +360,7 @@ public final class OrbitLocalInstaller {
         } catch (Throwable t) {
             log(activity, stage, t);
             throw t instanceof InstallException ? (InstallException) t
-                    : new InstallException(stage.message);
+                    : new InstallException(stage.message(activity));
         }
     }
 
@@ -470,7 +477,7 @@ public final class OrbitLocalInstaller {
 
     private static String downloadUrl(String tag, String assetName) throws Exception {
         if (!OrbitVersion.isValidTag(tag) || !assetName.matches("^[A-Za-z0-9._-]+$")) {
-            throw new InstallException("The Orbit Local asset reference is malformed.");
+            throw new InstallException(R.string.localinst_asset_malformed);
         }
         return OrbitEdition.releaseDownloadBase() + tag + "/" + assetName;
     }
@@ -481,8 +488,7 @@ public final class OrbitLocalInstaller {
             int status = connection.getResponseCode();
             requireHttpsFinalUrl(connection);
             if (status < 200 || status >= 300) {
-                throw new InstallException("The Orbit Local release information could not be read (HTTP "
-                        + status + ").");
+                throw new InstallException(R.string.localinst_release_info_http, status);
             }
             try (InputStream in = connection.getInputStream();
                  ByteArrayOutputStream out = new ByteArrayOutputStream()) {
@@ -491,7 +497,7 @@ public final class OrbitLocalInstaller {
                 int read;
                 while ((read = in.read(buffer)) != -1) {
                     total += read;
-                    if (total > limit) throw new InstallException("The release information is too large.");
+                    if (total > limit) throw new InstallException(R.string.localinst_release_info_large);
                     out.write(buffer, 0, read);
                 }
                 return new JSONObject(new String(out.toByteArray(), StandardCharsets.UTF_8));
@@ -504,7 +510,7 @@ public final class OrbitLocalInstaller {
     private static HttpURLConnection open(String value) throws Exception {
         URL url = new URL(value);
         if (!"https".equalsIgnoreCase(url.getProtocol())) {
-            throw new InstallException("Orbit Local downloads require HTTPS.");
+            throw new InstallException(R.string.localinst_https_required);
         }
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setConnectTimeout(15000);
@@ -518,7 +524,7 @@ public final class OrbitLocalInstaller {
     private static void requireHttpsFinalUrl(HttpURLConnection connection) throws Exception {
         if (connection == null || connection.getURL() == null
                 || !"https".equalsIgnoreCase(connection.getURL().getProtocol())) {
-            throw new InstallException("The download redirected to an insecure URL.");
+            throw new InstallException(R.string.localinst_insecure_redirect);
         }
     }
 
@@ -549,6 +555,25 @@ public final class OrbitLocalInstaller {
     }
 
     static class InstallException extends Exception {
-        InstallException(String message) { super(message); }
+        private final int messageRes;
+        private final Object[] messageArgs;
+
+        InstallException(String message) {
+            super(message);
+            this.messageRes = 0;
+            this.messageArgs = new Object[0];
+        }
+
+        /** A failure worded by a string resource, resolved where a Context exists. */
+        InstallException(int messageRes, Object... messageArgs) {
+            super("string resource " + messageRes);
+            this.messageRes = messageRes;
+            this.messageArgs = messageArgs;
+        }
+
+        /** The sentence shown to the person, or null when this carries no wording. */
+        String userMessage(Context context) {
+            return messageRes != 0 ? context.getString(messageRes, messageArgs) : getMessage();
+        }
     }
 }

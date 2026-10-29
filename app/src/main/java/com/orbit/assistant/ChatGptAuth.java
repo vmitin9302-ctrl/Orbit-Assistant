@@ -104,7 +104,7 @@ public final class ChatGptAuth {
                 String body = readAll(code >= 200 && code < 300 ? conn.getInputStream() : conn.getErrorStream());
                 if (code < 200 || code >= 300) {
                     logFailure("device_code_request_failed", "http_" + code);
-                    cb.onError(deviceAuthError("Could not start ChatGPT sign-in", code, body));
+                    cb.onError(deviceAuthError(app, R.string.chatauth_start_failed, code, body));
                     return;
                 }
                 JSONObject o = new JSONObject(body);
@@ -113,14 +113,14 @@ public final class ChatGptAuth {
                 long interval = parseLong(o.opt("interval"), 5L);
                 if (deviceAuthId.isEmpty() || userCode.isEmpty()) {
                     logFailure("device_code_request_failed", "incomplete_response");
-                    cb.onError("OpenAI returned an incomplete device sign-in response.");
+                    cb.onError(app.getString(R.string.chatauth_incomplete_device));
                     return;
                 }
                 long expiresAtMs = System.currentTimeMillis() + LOGIN_TIMEOUT_MS;
                 if (!persistPendingAttempt(
                         app, deviceAuthId, userCode, interval, expiresAtMs)) {
                     logFailure("device_code_request_failed", "pending_state_persistence");
-                    cb.onError("Orbit could not securely save the pending ChatGPT sign-in. Try again.");
+                    cb.onError(app.getString(R.string.chatauth_pending_save_failed));
                     return;
                 }
                 logStage("device_code_received_and_persisted");
@@ -128,7 +128,7 @@ public final class ChatGptAuth {
                         VERIFICATION_URL, userCode, deviceAuthId, interval, expiresAtMs));
             } catch (Exception e) {
                 logFailure("device_code_request_failed", exceptionKind(e));
-                cb.onError("Could not start ChatGPT sign-in: " + cleanMessage(e));
+                cb.onError(app.getString(R.string.chatauth_start_failed_with, cleanMessage(e)));
             } finally {
                 if (conn != null) conn.disconnect();
             }
@@ -159,7 +159,7 @@ public final class ChatGptAuth {
                         String verifier = result.optString("code_verifier", "");
                         if (authCode.isEmpty() || verifier.isEmpty()) {
                             finishError(app, dc.deviceAuthId, "poll_response_incomplete",
-                                    "OpenAI approved the sign-in but did not return the token exchange fields Orbit needs.");
+                                    app.getString(R.string.chatauth_poll_incomplete));
                             return;
                         }
                         logStage("browser_authorization_confirmed");
@@ -183,7 +183,7 @@ public final class ChatGptAuth {
                     // This matches Codex's public device-code implementation: 403/404 mean keep polling.
                     if (code != 403 && code != 404 && code != 429 && (code < 500 || code >= 600)) {
                         finishError(app, dc.deviceAuthId, "poll_rejected_http_" + code,
-                                deviceAuthError("ChatGPT sign-in failed", code, body));
+                                deviceAuthError(app, R.string.chatauth_signin_failed, code, body));
                         return;
                     }
                     if (code == 429 || code >= 500) {
@@ -199,7 +199,7 @@ public final class ChatGptAuth {
                 if (!sleepFor(dc.intervalSeconds, deadline)) break;
             }
             finishError(app, dc.deviceAuthId, "device_code_expired",
-                    "The ChatGPT sign-in code expired. Start sign-in again to get a new code.");
+                    app.getString(R.string.chatauth_code_expired));
         });
     }
 
@@ -231,7 +231,7 @@ public final class ChatGptAuth {
             int code = conn.getResponseCode();
             String body = readAll(code >= 200 && code < 300 ? conn.getInputStream() : conn.getErrorStream());
             if (code < 200 || code >= 300) {
-                return ExchangeResult.error(oauthError("OpenAI token exchange failed", code, body),
+                return ExchangeResult.error(oauthError(context, R.string.chatauth_exchange_failed, code, body),
                         code == 429 || code >= 500, "http_" + code);
             }
             JSONObject o = new JSONObject(body);
@@ -240,7 +240,7 @@ public final class ChatGptAuth {
             String refresh = o.optString("refresh_token", "");
             if (access.isEmpty() || refresh.isEmpty()) {
                 return ExchangeResult.error(
-                        "OpenAI completed sign-in but did not return reusable OAuth credentials.",
+                        context.getString(R.string.chatauth_no_oauth),
                         false, "incomplete_credentials");
             }
             String accountId = firstNonEmpty(extractAccountId(id), extractAccountId(access));
@@ -250,12 +250,12 @@ public final class ChatGptAuth {
                 }
                 if (!SecureStore.saveChatGptTokens(context, id, access, refresh, accountId)) {
                     return ExchangeResult.error(
-                            "ChatGPT sign-in worked, but Orbit could not save the credentials in Android Keystore.",
+                            context.getString(R.string.chatauth_keystore_save),
                             false, "credential_persistence");
                 }
                 if (SecureStore.loadChatGptTokens(context) == null) {
                     return ExchangeResult.error(
-                            "ChatGPT sign-in worked, but Orbit could not verify the saved credentials.",
+                            context.getString(R.string.chatauth_keystore_verify),
                             false, "credential_reload");
                 }
                 Prefs.get(context).edit().putString(Prefs.PROVIDER, Prefs.PROVIDER_CHATGPT).apply();
@@ -263,7 +263,7 @@ public final class ChatGptAuth {
             logStage("credentials_persisted_and_verified");
             return ExchangeResult.success(accountInfo(id, access, accountId));
         } catch (Exception e) {
-            return ExchangeResult.error("OpenAI token exchange failed: " + cleanMessage(e),
+            return ExchangeResult.error(context.getString(R.string.chatauth_exchange_failed_with, cleanMessage(e)),
                     true, exceptionKind(e));
         } finally {
             if (conn != null) conn.disconnect();
@@ -341,14 +341,14 @@ public final class ChatGptAuth {
             String body = readAll(status >= 200 && status < 300 ? conn.getInputStream() : conn.getErrorStream());
             if (status < 200 || status >= 300) {
                 logFailure("browser_token_exchange_failed", "http_" + status);
-                return BrowserExchange.error(oauthError("OpenAI could not finish the sign-in", status, body));
+                return BrowserExchange.error(oauthError(context, R.string.chatauth_finish_failed, status, body));
             }
             JSONObject o = new JSONObject(body);
             return storeSignIn(context, o.optString("id_token", ""), o.optString("access_token", ""),
                     o.optString("refresh_token", ""));
         } catch (Exception e) {
             logFailure("browser_token_exchange_failed", exceptionKind(e));
-            return BrowserExchange.error("OpenAI could not finish the sign-in: " + cleanMessage(e));
+            return BrowserExchange.error(context.getString(R.string.chatauth_finish_failed_with, cleanMessage(e)));
         } finally {
             if (conn != null) conn.disconnect();
         }
@@ -357,18 +357,15 @@ public final class ChatGptAuth {
     /** Stores fresh credentials from a browser sign-in. Shared with tests that fake the exchange. */
     static BrowserExchange storeSignIn(Context context, String id, String access, String refresh) {
         if (access == null || access.isEmpty() || refresh == null || refresh.isEmpty()) {
-            return BrowserExchange.error(
-                    "OpenAI completed sign-in but did not return reusable credentials.");
+            return BrowserExchange.error(context.getString(R.string.chatauth_no_credentials));
         }
         String accountId = firstNonEmpty(extractAccountId(id), extractAccountId(access));
         synchronized (LOGIN_LOCK) {
             if (!SecureStore.saveChatGptTokens(context, id, access, refresh, accountId)) {
-                return BrowserExchange.error(
-                        "ChatGPT sign-in worked, but Orbit could not save the credentials in Android Keystore.");
+                return BrowserExchange.error(context.getString(R.string.chatauth_keystore_save));
             }
             if (SecureStore.loadChatGptTokens(context) == null) {
-                return BrowserExchange.error(
-                        "ChatGPT sign-in worked, but Orbit could not verify the saved credentials.");
+                return BrowserExchange.error(context.getString(R.string.chatauth_keystore_verify));
             }
             SecureStore.clearPendingChatGptLogin(context);
             Prefs.get(context).edit().putString(Prefs.PROVIDER, Prefs.PROVIDER_CHATGPT).apply();
@@ -386,8 +383,9 @@ public final class ChatGptAuth {
     static final long MAX_SESSION_AGE_MS = 8L * 24L * 60L * 60L * 1000L;
 
     /** Shown when the credentials themselves were refused, so only signing in again can help. */
-    static final String SESSION_ENDED = "Your ChatGPT session has ended. Sign in with ChatGPT again"
-            + " in Orbit settings. Your chats are kept.";
+    static String sessionEnded(Context context) {
+        return context.getString(R.string.chatauth_session_ended);
+    }
 
     /** One renewal at a time: refresh tokens rotate, so a second concurrent use would be refused. */
     private static final Object REFRESH_LOCK = new Object();
@@ -439,7 +437,7 @@ public final class ChatGptAuth {
     public static void getValidTokens(Context context, String rejectedAccessToken, TokenCallback cb) {
         SecureStore.ChatGptTokens t = SecureStore.loadChatGptTokens(context);
         if (t == null) {
-            cb.onError("Sign in with ChatGPT in Orbit settings first.");
+            cb.onError(context.getString(R.string.chatauth_sign_in_first));
             return;
         }
         boolean rejected = rejectedAccessToken != null && rejectedAccessToken.equals(t.accessToken);
@@ -460,7 +458,11 @@ public final class ChatGptAuth {
 
     /** Whether a failed answer is one only signing in to ChatGPT again can fix. */
     static boolean needsSignIn(Context context, String failure) {
-        return failure != null && failure.contains("Sign in with ChatGPT") && !isSignedIn(context);
+        return failure != null
+                && (failure.contains("Sign in with ChatGPT")
+                || failure.toLowerCase(java.util.Locale.ROOT).contains(
+                        context.getString(R.string.chatauth_sign_in_marker).toLowerCase(java.util.Locale.ROOT)))
+                && !isSignedIn(context);
     }
 
     static boolean sessionAged(SecureStore.ChatGptTokens t, long nowMs) {
@@ -478,7 +480,7 @@ public final class ChatGptAuth {
      */
     static String sessionRejected(Context context, SecureStore.ChatGptTokens rejected) {
         endSession(context, rejected.refreshToken);
-        return SESSION_ENDED;
+        return sessionEnded(context);
     }
 
     private static void refreshShared(Context context, SecureStore.ChatGptTokens old,
@@ -500,16 +502,16 @@ public final class ChatGptAuth {
                     + "&" + formPair("refresh_token", old.refreshToken)
                     + "&" + formPair("client_id", CLIENT_ID));
         } catch (Exception e) {
-            finishRefresh(null, "ChatGPT couldn't renew your session right now: " + cleanMessage(e), true);
+            finishRefresh(null, context.getString(R.string.chatauth_renew_failed_with, cleanMessage(e)), true);
             return;
         }
         if (response.code < 200 || response.code >= 300) {
             if (refreshRefused(response.code, response.body)) {
                 endSession(context, old.refreshToken);
-                finishRefresh(null, SESSION_ENDED, false);
+                finishRefresh(null, sessionEnded(context), false);
             } else {
-                finishRefresh(null, oauthError("ChatGPT couldn't renew your session right now."
-                        + " Try again in a moment", response.code, response.body), true);
+                finishRefresh(null, oauthError(context, R.string.chatauth_renew_try_again,
+                        response.code, response.body), true);
             }
             return;
         }
@@ -520,7 +522,7 @@ public final class ChatGptAuth {
             next = null;
         }
         if (next == null) {
-            finishRefresh(null, "OpenAI returned an incomplete session renewal. Try again.", true);
+            finishRefresh(null, context.getString(R.string.chatauth_renew_incomplete), true);
             return;
         }
         SecureStore.ChatGptTokens updated;
@@ -530,13 +532,13 @@ public final class ChatGptAuth {
             if (current == null || !current.refreshToken.equals(old.refreshToken)) {
                 // Signed out, or signed in again, while this ran: never bring the old session back.
                 updated = current;
-                if (current == null) error = "Sign in with ChatGPT in Orbit settings first.";
+                if (current == null) error = context.getString(R.string.chatauth_sign_in_first);
             } else if (!SecureStore.saveChatGptTokens(context, next[0], next[1], next[2], next[3])) {
                 updated = null;
-                error = "Orbit could not securely save the renewed ChatGPT session.";
+                error = context.getString(R.string.chatauth_renew_save_failed);
             } else {
                 updated = SecureStore.loadChatGptTokens(context);
-                if (updated == null) error = "Orbit could not reload the renewed ChatGPT session.";
+                if (updated == null) error = context.getString(R.string.chatauth_renew_reload_failed);
             }
         }
         finishRefresh(updated, error, false);
@@ -705,13 +707,14 @@ public final class ChatGptAuth {
         catch (Exception ignored) { return def; }
     }
 
-    private static String deviceAuthError(String prefix, int code, String body) {
-        if (code == 404) return prefix + ": device-code login may be disabled for this ChatGPT account or workspace.";
+    private static String deviceAuthError(Context context, int prefixRes, int code, String body) {
+        String prefix = context.getString(prefixRes);
+        if (code == 404) return context.getString(R.string.chatauth_device_disabled, prefix);
         return prefix + " (HTTP " + code + ")" + conciseBody(body);
     }
 
-    private static String oauthError(String prefix, int code, String body) {
-        return prefix + " (HTTP " + code + ")" + conciseBody(body);
+    private static String oauthError(Context context, int prefixRes, int code, String body) {
+        return context.getString(prefixRes) + " (HTTP " + code + ")" + conciseBody(body);
     }
 
     private static String conciseBody(String body) {

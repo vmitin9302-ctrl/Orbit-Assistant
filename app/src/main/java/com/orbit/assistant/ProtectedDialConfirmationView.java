@@ -52,11 +52,11 @@ public final class ProtectedDialConfirmationView {
         card.setBackground(UiKit.outlined(UiKit.SURFACE_2,
                 UiKit.withAlpha(UiKit.accent(c), 110), 17, c));
 
-        TextView title = UiKit.text(c, EmergencyDialGuard.titleFor(number),
+        TextView title = UiKit.text(c, EmergencyDialGuard.titleFor(c, number),
                 compact ? 14.5f : 15.5f, UiKit.TEXT, true);
         card.addView(title);
 
-        TextView body = UiKit.text(c, EmergencyDialGuard.messageFor(number),
+        TextView body = UiKit.text(c, EmergencyDialGuard.messageFor(c, number),
                 compact ? 12f : 12.5f, UiKit.MUTED, false);
         body.setLineSpacing(0, 1.1f);
         // The cap is what keeps the card content-sized: the body is the widest line in it, so
@@ -73,13 +73,13 @@ public final class ProtectedDialConfirmationView {
 
         // Cancel first in reading order, in focus order, and in the order a thumb sweeps. The safe
         // answer is the one reached without effort.
-        Button cancel = ghostButton(c, EmergencyDialGuard.cancelLabel(), compact);
-        cancel.setContentDescription(EmergencyDialGuard.cancelLabel()
-                + ", close this without opening the dialer");
+        Button cancel = ghostButton(c, EmergencyDialGuard.cancelLabel(c), compact);
+        cancel.setContentDescription(c.getString(R.string.h_dial_cancel_desc,
+                EmergencyDialGuard.cancelLabel(c)));
         actions.addView(cancel);
 
-        Button confirm = accentPillButton(c, EmergencyDialGuard.confirmLabel(), compact);
-        confirm.setContentDescription(EmergencyDialGuard.confirmLabel() + " for " + number);
+        Button confirm = accentPillButton(c, EmergencyDialGuard.confirmLabel(c), compact);
+        confirm.setContentDescription(c.getString(R.string.h_dial_confirm_desc, EmergencyDialGuard.confirmLabel(c), number));
         LinearLayout.LayoutParams confirmLp = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         confirmLp.setMarginStart(UiKit.dp(c, 6));
@@ -98,6 +98,10 @@ public final class ProtectedDialConfirmationView {
     /** What a screen reader is told the moment the card appears. */
     public static String announcement(String number) {
         return EmergencyDialGuard.titleFor(number) + " " + EmergencyDialGuard.messageFor(number);
+    }
+
+    public static String announcement(android.content.Context c, String number) {
+        return EmergencyDialGuard.titleFor(c, number) + " " + EmergencyDialGuard.messageFor(c, number);
     }
 
     /**

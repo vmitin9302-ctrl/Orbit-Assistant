@@ -358,10 +358,10 @@ public final class OnboardingAppearanceTest {
     /** The page says where deeper customization lives, and does not send anybody there. */
     @Test public void themeStudioIsExplainedRatherThanOpened() {
         String text = textOf(personalize().get());
-        assertTrue(text.contains(OnboardingActivity.THEME_STUDIO_NOTE));
-        assertTrue("it names the place", OnboardingActivity.THEME_STUDIO_NOTE.contains("Theme Studio"));
+        assertTrue(text.contains(context.getString(OnboardingActivity.THEME_STUDIO_NOTE)));
+        assertTrue("it names the place", context.getString(OnboardingActivity.THEME_STUDIO_NOTE).contains("Theme Studio"));
         assertTrue("and says it is for later",
-                OnboardingActivity.THEME_STUDIO_NOTE.contains("later"));
+                context.getString(OnboardingActivity.THEME_STUDIO_NOTE).contains("later"));
 
         String source = source();
         assertFalse("setup never opens the editor itself",

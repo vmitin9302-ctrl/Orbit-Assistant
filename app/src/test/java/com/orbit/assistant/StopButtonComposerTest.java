@@ -65,7 +65,7 @@ public final class StopButtonComposerTest {
         composer.addView(input, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         control = new ImageButton(activity);
         control.setImageResource(R.drawable.ic_send);
-        control.setContentDescription(ComposerActionState.SEND_DESCRIPTION);
+        control.setContentDescription(org.robolectric.RuntimeEnvironment.getApplication().getString(ComposerActionState.SEND_DESCRIPTION));
         composer.addView(control, new LinearLayout.LayoutParams(UiKit.dp(activity, 44), UiKit.dp(activity, 44)));
         root.addView(composer);
         activity.setContentView(root);
@@ -104,7 +104,7 @@ public final class StopButtonComposerTest {
 
         assertTrue(stopForFullChat(FULL_CHAT));
         ComposerActionState.apply(control, true);
-        assertEquals(ComposerActionState.STOP_DESCRIPTION, control.getContentDescription());
+        assertEquals(org.robolectric.RuntimeEnvironment.getApplication().getString(ComposerActionState.STOP_DESCRIPTION), control.getContentDescription());
         assertEquals("Stop response", control.getContentDescription());
 
         PendingRequestStore.markRunning(context, request.id);
@@ -128,7 +128,7 @@ public final class StopButtonComposerTest {
         assertFalse(stopForOverlay(OVERLAY_CHAT, true));
 
         ComposerActionState.apply(control, stopForFullChat(FULL_CHAT));
-        assertEquals(ComposerActionState.SEND_DESCRIPTION, control.getContentDescription());
+        assertEquals(org.robolectric.RuntimeEnvironment.getApplication().getString(ComposerActionState.SEND_DESCRIPTION), control.getContentDescription());
     }
 
     // ---- 16-17. Getting back to Send -----------------------------------------------------------
@@ -142,7 +142,7 @@ public final class StopButtonComposerTest {
 
         assertFalse(stopForFullChat(FULL_CHAT));
         ComposerActionState.apply(control, stopForFullChat(FULL_CHAT));
-        assertEquals(ComposerActionState.SEND_DESCRIPTION, control.getContentDescription());
+        assertEquals(org.robolectric.RuntimeEnvironment.getApplication().getString(ComposerActionState.SEND_DESCRIPTION), control.getContentDescription());
     }
 
     @Test public void aFailureAlsoRestoresSend() {
@@ -165,7 +165,7 @@ public final class StopButtonComposerTest {
         // is already terminal the instant cancel returns.
         assertFalse(stopForFullChat(FULL_CHAT));
         ComposerActionState.apply(control, stopForFullChat(FULL_CHAT));
-        assertEquals(ComposerActionState.SEND_DESCRIPTION, control.getContentDescription());
+        assertEquals(org.robolectric.RuntimeEnvironment.getApplication().getString(ComposerActionState.SEND_DESCRIPTION), control.getContentDescription());
     }
 
     // ---- One control, one footprint -------------------------------------------------------------
@@ -190,8 +190,8 @@ public final class StopButtonComposerTest {
     @Test public void sendAndStopUseDifferentIconsAndDescriptions() {
         assertEquals(R.drawable.ic_send, ComposerActionState.iconFor(false));
         assertEquals(R.drawable.ic_stop, ComposerActionState.iconFor(true));
-        assertEquals("Send message", ComposerActionState.descriptionFor(false));
-        assertEquals("Stop response", ComposerActionState.descriptionFor(true));
+        assertEquals("Send message", ComposerActionState.descriptionFor(org.robolectric.RuntimeEnvironment.getApplication(), false));
+        assertEquals("Stop response", ComposerActionState.descriptionFor(org.robolectric.RuntimeEnvironment.getApplication(), true));
     }
 
     // ---- 18-20. Typing is not disturbed ----------------------------------------------------------

@@ -101,21 +101,21 @@ public class AppsActivity extends Activity {
 
         LinearLayout top = new LinearLayout(this);
         top.setGravity(Gravity.CENTER_VERTICAL);
-        ImageButton back = iconButton(R.drawable.ic_back, "Back");
+        ImageButton back = iconButton(R.drawable.ic_back, getString(R.string.ui_back_76900f1b));
         back.setOnClickListener(v -> navigation.performBack());
         top.addView(back, new LinearLayout.LayoutParams(UiKit.dp(this,48), UiKit.dp(this,48)));
 
         LinearLayout titles = new LinearLayout(this);
         titles.setOrientation(LinearLayout.VERTICAL);
-        titles.addView(UiKit.text(this, "Apps", 24, UiKit.TEXT, true));
-        titles.addView(UiKit.text(this, "Per-app behavior", 12, UiKit.MUTED, false));
+        titles.addView(UiKit.text(this, getString(R.string.apps_title), 24, UiKit.TEXT, true));
+        titles.addView(UiKit.text(this, getString(R.string.apps_subtitle), 12, UiKit.MUTED, false));
         LinearLayout.LayoutParams titleLp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
         titleLp.setMargins(UiKit.dp(this,14), 0, 0, 0);
         top.addView(titles, titleLp);
         root.addView(top);
 
         TextView note = UiKit.text(this,
-                "Orbit adapts automatically to each app. Open any app below to customize privacy, screen behavior, or all three quick actions.",
+                getString(R.string.apps_intro),
                 13, UiKit.MUTED, false);
         note.setPadding(UiKit.dp(this,4), UiKit.dp(this,12), UiKit.dp(this,4), UiKit.dp(this,12));
         root.addView(note);
@@ -132,7 +132,7 @@ public class AppsActivity extends Activity {
         searchBox.addView(icon, new LinearLayout.LayoutParams(UiKit.dp(this,34),UiKit.dp(this,34)));
 
         search = new EditText(this);
-        search.setHint("Search installed apps");
+        search.setHint(getString(R.string.apps_search_hint));
         search.setHintTextColor(Color.rgb(113,119,135));
         search.setTextColor(UiKit.TEXT);
         search.setTextSize(14);
@@ -188,14 +188,15 @@ public class AppsActivity extends Activity {
             if (p.isDefault()) {
                 categorySummary = inferred.confidence >= 65 &&
                         !AppProfileStore.CATEGORY_GENERIC.equals(inferred.category)
-                        ? "Automatic · " + inferred.label : "Automatic";
+                        ? getString(R.string.apps_automatic_with, inferred.label) : getString(R.string.apps_automatic);
             } else {
                 categorySummary = AppProfileStore.CATEGORY_AUTO.equals(p.category)
-                        ? "Automatic context" : AppProfileStore.categoryLabel(p.category);
+                        ? getString(R.string.apps_automatic_context) : AppProfileStore.categoryLabel(p.category);
             }
-            String summary = categorySummary + "  •  " +
-                    AppProfileStore.effectivePrivacyLabel(this, app.pkg) + " privacy" +
-                    (AppProfileStore.hasCustomActions(p) ? "  •  Custom actions" : "");
+            String summary = getString(R.string.apps_summary, categorySummary,
+                    AppProfileStore.effectivePrivacyLabel(this, app.pkg)) +
+                    (AppProfileStore.hasCustomActions(p)
+                            ? "  •  " + getString(R.string.apps_custom_actions) : "");
 
             TextView state = UiKit.text(this, summary, 12,
                     p.isDefault() ? UiKit.MUTED : UiKit.accent(this), false);
@@ -213,7 +214,7 @@ public class AppsActivity extends Activity {
 
         if (shown == 0) {
             LinearLayout empty = card();
-            empty.addView(UiKit.text(this, "No matching apps", 15, UiKit.TEXT, true));
+            empty.addView(UiKit.text(this, getString(R.string.apps_no_match), 15, UiKit.TEXT, true));
             list.addView(empty, cardLp());
         }
     }

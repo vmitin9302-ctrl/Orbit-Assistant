@@ -218,6 +218,15 @@ public final class OrbitBackground {
                 + "Turn AMOLED off to see this effect.";
     }
 
+    /** As {@link #amoledSuppressionNote()}, in the language of the given context. */
+    public static String amoledSuppressionNote(Context c) { return c.getString(R.string.obg_amoled_note); }
+
+    /** As {@link #amoledHiddenLabel()}, in the language of the given context. */
+    public static String amoledHiddenLabel(Context c) { return c.getString(R.string.obg_amoled_hidden); }
+
+    /** As {@link #amoledToast()}, in the language of the given context. */
+    public static String amoledToast(Context c) { return c.getString(R.string.obg_amoled_toast); }
+
     /** The short label the background sample carries when it is black for that reason. */
     public static String amoledHiddenLabel() {
         return "Hidden by AMOLED";

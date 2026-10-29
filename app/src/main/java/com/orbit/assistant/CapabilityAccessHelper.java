@@ -126,10 +126,10 @@ public final class CapabilityAccessHelper {
             } else {
                 String option = RoutineLocationTriggerScheduler.backgroundPermissionLabel(activity);
                 AlertDialog dialog = new AlertDialog.Builder(activity)
-                        .setTitle("Allow background location")
-                        .setMessage("For arrive/leave Routines to work while Orbit is closed, open Orbit's app permissions, choose Location, then select \"" + option + "\".")
-                        .setNegativeButton("Not now", null)
-                        .setPositiveButton("Open settings", (d, w) ->
+                        .setTitle(activity.getString(R.string.capaccess_bgloc_title))
+                        .setMessage(activity.getString(R.string.capaccess_bgloc_message, option))
+                        .setNegativeButton(activity.getString(R.string.ui_not_now_a0e63d7c), null)
+                        .setPositiveButton(activity.getString(R.string.capaccess_open_settings), (d, w) ->
                                 RoutineLocationTriggerScheduler.openAppLocationSettings(activity))
                         .create();
                 UiKit.styleOrbitDialog(dialog, activity, false);
@@ -145,11 +145,11 @@ public final class CapabilityAccessHelper {
     }
 
     public static String locationAutomationStatus(Activity activity) {
-        if (!OrbitDistribution.supportsLocationTriggers()) return "Not available";
-        if (RoutineLocationTriggerScheduler.ready(activity)) return "Ready";
-        if (!RoutineLocationTriggerScheduler.hasFineLocation(activity)) return "Needs precise";
-        if (!RoutineLocationTriggerScheduler.hasBackgroundLocation(activity)) return "Needs background";
-        return "Location off";
+        if (!OrbitDistribution.supportsLocationTriggers()) return activity.getString(R.string.capaccess_na);
+        if (RoutineLocationTriggerScheduler.ready(activity)) return activity.getString(R.string.ui_ready_5fa7aac5);
+        if (!RoutineLocationTriggerScheduler.hasFineLocation(activity)) return activity.getString(R.string.capaccess_needs_precise);
+        if (!RoutineLocationTriggerScheduler.hasBackgroundLocation(activity)) return activity.getString(R.string.capaccess_needs_background);
+        return activity.getString(R.string.capaccess_location_off);
     }
 
     private static void openWithFallback(Activity activity, Intent preferred, Intent fallback) {

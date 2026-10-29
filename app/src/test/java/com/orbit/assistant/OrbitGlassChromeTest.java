@@ -135,7 +135,7 @@ public final class OrbitGlassChromeTest {
             Path candidate = directory.resolve(relative);
             if (!Files.isRegularFile(candidate)) continue;
             try {
-                return new String(Files.readAllBytes(candidate), StandardCharsets.UTF_8);
+                return LocalizedSource.expand(new String(Files.readAllBytes(candidate), StandardCharsets.UTF_8));
             } catch (IOException e) {
                 throw new AssertionError("could not read " + relative, e);
             }

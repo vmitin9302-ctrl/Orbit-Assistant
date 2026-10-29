@@ -94,14 +94,14 @@ public final class RichAnswerCardView extends LinearLayout {
         view.setAdjustViewBounds(true);
         view.setScaleType(ImageView.ScaleType.CENTER_CROP);
         view.setMaxHeight(UiKit.dp(context, MAX_HEIGHT_DP));
-        view.setContentDescription(image.contentDescription());
+        view.setContentDescription(image.contentDescription(context));
         frame.addView(view, new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         // A modest reserved height rather than a spinner. The answer above is what the user is
         // reading; a large indeterminate indicator in the middle of it would compete with the
         // words for attention while adding nothing they can act on.
-        TextView resolving = UiKit.text(context, "Loading image",
+        TextView resolving = UiKit.text(context, context.getString(R.string.rac_loading),
                 Prefs.chatTextSp(context, 12), UiKit.MUTED, false);
         resolving.setGravity(Gravity.CENTER);
         resolving.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
@@ -112,14 +112,13 @@ public final class RichAnswerCardView extends LinearLayout {
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(context, PLACEHOLDER_HEIGHT_DP));
         card.addView(frame, frameLp);
 
-        String attribution = image.attributionLine();
+        String attribution = image.attributionLine(context);
         if (!attribution.isEmpty()) {
             TextView caption = UiKit.text(context, attribution,
                     Prefs.chatTextSp(context, 11.5f), UiKit.withAlpha(foreground, 190), false);
             caption.setLineSpacing(0, 1.1f);
-            caption.setContentDescription(image.isGenerated()
-                    ? "Generated image"
-                    : "Open image source: " + attribution);
+            caption.setContentDescription(context.getString(image.isGenerated()
+                    ? R.string.rac_generated : R.string.rac_open_source_desc, attribution));
             if (image.isWebSource() && RichAnswerUrlPolicy.isOpenableWebUrl(image.sourceUrl)) {
                 caption.setClickable(true);
                 caption.setFocusable(true);
@@ -167,11 +166,11 @@ public final class RichAnswerCardView extends LinearLayout {
                                         RichAnswerImage image) {
         Context context = frame.getContext();
         boolean openable = RichAnswerUrlPolicy.isOpenableWebUrl(image.sourceUrl);
-        resolving.setText("Image unavailable");
+        resolving.setText(context.getString(R.string.rac_unavailable));
         if (!openable) return;
         frame.setClickable(true);
         frame.setFocusable(true);
-        frame.setContentDescription("Open the page this image came from");
+        frame.setContentDescription(context.getString(R.string.rac_open_page_desc));
         frame.setOnClickListener(v -> {
             UiKit.haptic(v, HapticFeedbackConstants.CLOCK_TICK);
             // Revalidated at the tap, exactly as the viewer does: a stored address is data, and a
@@ -185,7 +184,7 @@ public final class RichAnswerCardView extends LinearLayout {
             } catch (Exception ignored) {}
         });
         UiKit.pressScale(frame);
-        TextView open = UiKit.text(context, "Open source",
+        TextView open = UiKit.text(context, context.getString(R.string.rac_open_source),
                 Prefs.chatTextSp(context, 12), UiKit.accent(context), false);
         open.setGravity(Gravity.CENTER);
         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(
@@ -218,7 +217,7 @@ public final class RichAnswerCardView extends LinearLayout {
         frame.setBackground(UiKit.rounded(UiKit.SURFACE_2, 16, frame.getContext()));
         frame.setClickable(true);
         frame.setFocusable(true);
-        frame.setContentDescription(image.contentDescription());
+        frame.setContentDescription(image.contentDescription(frame.getContext()));
         frame.setOnClickListener(v -> {
             UiKit.haptic(v, HapticFeedbackConstants.CLOCK_TICK);
             openViewer(v, all, image);

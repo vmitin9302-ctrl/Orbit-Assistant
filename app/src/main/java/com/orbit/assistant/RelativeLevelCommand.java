@@ -52,6 +52,7 @@ public final class RelativeLevelCommand {
         return target == Target.BRIGHTNESS ? "SET_BRIGHTNESS" : "SET_VOLUME";
     }
 
+
     private String noun() {
         return target == Target.BRIGHTNESS ? "brightness" : "media volume";
     }
@@ -70,6 +71,47 @@ public final class RelativeLevelCommand {
                     + Math.abs(delta) + "%.";
         }
         return (delta < 0 ? "Lowering " : "Raising ") + noun() + ".";
+    }
+
+    private String noun(android.content.Context context) {
+        return context.getString(target == Target.BRIGHTNESS ? R.string.rlc_noun_brightness
+                : R.string.rlc_noun_volume);
+    }
+
+    /** {@link #confirmation()} in the user's language, for screens and speech. */
+    public String confirmation(android.content.Context context) {
+        String noun = noun(context);
+        if (absolute) {
+            if (percent >= 100) return context.getString(R.string.rlc_conf_max, noun);
+            if (percent <= 0) {
+                return context.getString(target == Target.VOLUME ? R.string.rlc_conf_mute
+                        : R.string.rlc_conf_min);
+            }
+            return context.getString(R.string.rlc_conf_pct, noun, percent);
+        }
+        if (exact) {
+            return context.getString(delta < 0 ? R.string.rlc_conf_lower_by : R.string.rlc_conf_raise_by,
+                    noun, Math.abs(delta));
+        }
+        return context.getString(delta < 0 ? R.string.rlc_conf_lower : R.string.rlc_conf_raise, noun);
+    }
+
+    /** {@link #summary()} in the user's language. */
+    public String summary(android.content.Context context) {
+        String noun = noun(context);
+        if (absolute) {
+            if (percent >= 100) return context.getString(R.string.rlc_sum_max, noun);
+            if (percent <= 0) {
+                return context.getString(target == Target.VOLUME ? R.string.rlc_sum_mute
+                        : R.string.rlc_sum_min);
+            }
+            return context.getString(R.string.rlc_sum_pct, noun, percent);
+        }
+        if (exact) {
+            return context.getString(delta < 0 ? R.string.rlc_sum_lower_by : R.string.rlc_sum_raise_by,
+                    noun, Math.abs(delta));
+        }
+        return context.getString(delta < 0 ? R.string.rlc_sum_lower : R.string.rlc_sum_raise, noun);
     }
 
     /** Short description used where Orbit names the action it performed. */

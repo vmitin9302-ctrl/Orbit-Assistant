@@ -382,7 +382,7 @@ public final class AssistantClient {
         // Orbit Local, and whichever cloud provider is active - so this is where the reply's prose
         // is checked against what has actually been done. A protected dial that is about to be put
         // to the user for confirmation cannot leave here described as though it already happened.
-        final Callback cb = ActionNarration.guard(callback);
+        final Callback cb = ActionNarration.guard(context, callback);
         final Bitmap screenshot = images == null || images.isEmpty() ? null : images.get(0);
         final List<Bitmap> requestImages = images == null
                 ? java.util.Collections.emptyList() : images;
@@ -523,7 +523,7 @@ public final class AssistantClient {
         ProviderCatalogRepository.loadCached(context);
         AiModelSpec selectedModel = OrbitModelCatalog.spec(resolved.provider, resolved.model);
         if (selectedModel == null || !selectedModel.selectable()) {
-            cb.onError(OrbitModelCatalog.unavailableMessage(resolved.model));
+            cb.onError(OrbitModelCatalog.unavailableMessage(context, resolved.model));
             return;
         }
         // Extracted document text is still valid context even when a model has no native file or
@@ -531,8 +531,7 @@ public final class AssistantClient {
         if (!Prefs.PROVIDER_LOCAL.equals(resolved.provider) && !selectedModel.vision
                 && images != null && !images.isEmpty()
                 && (screenText == null || screenText.trim().isEmpty())) {
-            cb.onError(selectedModel.displayName
-                    + " cannot read images. Choose a vision-capable model or remove the image.");
+            cb.onError(context.getString(R.string.d_ai_no_vision, selectedModel.displayName));
             return;
         }
         // Only a validated ordinary conversation dispatch the user chose explicitly records Recents.
@@ -606,7 +605,7 @@ public final class AssistantClient {
     public static void plan(Context context, String planningPrompt, PlanCallback cb) {
         if (context == null || cb == null) return;
         if (planningPrompt == null || planningPrompt.trim().isEmpty()) {
-            cb.onError("Describe the routine you want Orbit to build.");
+            cb.onError(context.getString(R.string.d_ai_describe_routine));
             return;
         }
         AiSelection selection = planSelection(context);

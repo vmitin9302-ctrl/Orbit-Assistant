@@ -61,9 +61,8 @@ public final class OrbitVaultPickerActivity extends Activity {
      */
     public static final String EXTRA_REMAINING = "orbit_vault_remaining";
 
-    static final String EMPTY_TITLE = "Nothing saved yet";
-    static final String EMPTY_BODY =
-            "Items you save to Orbit Vault can be attached to a message from here.";
+    static final int EMPTY_TITLE = R.string.vaultpick_empty_title;
+    static final int EMPTY_BODY = R.string.vaultpick_empty_body;
 
     private LinearLayout list;
     private EditText searchInput;
@@ -135,7 +134,7 @@ public final class OrbitVaultPickerActivity extends Activity {
         back.setImageResource(R.drawable.ic_back);
         back.setImageTintList(ColorStateList.valueOf(UiKit.accent(this)));
         back.setBackground(UiKit.ripple(UiKit.SURFACE, UiKit.accent(this), 18, this));
-        back.setContentDescription("Back to the message");
+        back.setContentDescription(getString(R.string.vaultpick_back_cd));
         back.setPadding(UiKit.dp(this, 11), UiKit.dp(this, 11), UiKit.dp(this, 11),
                 UiKit.dp(this, 11));
         UiKit.pressScale(back);
@@ -144,7 +143,7 @@ public final class OrbitVaultPickerActivity extends Activity {
 
         LinearLayout titles = new LinearLayout(this);
         titles.setOrientation(LinearLayout.VERTICAL);
-        titles.addView(UiKit.text(this, "Attach from Vault", 22, UiKit.TEXT, true));
+        titles.addView(UiKit.text(this, getString(R.string.vaultpick_title), 22, UiKit.TEXT, true));
         countLine = UiKit.text(this, "", 12, UiKit.MUTED, false);
         titles.addView(countLine);
         LinearLayout.LayoutParams titleLp = new LinearLayout.LayoutParams(
@@ -155,8 +154,8 @@ public final class OrbitVaultPickerActivity extends Activity {
 
         searchInput = new EditText(this);
         searchInput.setSingleLine(true);
-        searchInput.setHint("Search your Vault");
-        searchInput.setContentDescription("Search your Vault");
+        searchInput.setHint(getString(R.string.vaultpick_search));
+        searchInput.setContentDescription(getString(R.string.vaultpick_search));
         searchInput.setTextColor(UiKit.TEXT);
         searchInput.setHintTextColor(UiKit.MUTED);
         searchInput.setTextSize(14);
@@ -214,11 +213,11 @@ public final class OrbitVaultPickerActivity extends Activity {
         if (shown.isEmpty()) {
             LinearLayout empty = card();
             boolean searching = !query.isEmpty();
-            empty.addView(UiKit.text(this, searching ? "No matching items" : EMPTY_TITLE,
+            empty.addView(UiKit.text(this, getString(searching ? R.string.vaultpick_no_match : EMPTY_TITLE),
                     15, UiKit.TEXT, true));
-            TextView body = UiKit.text(this, searching
-                            ? "Search looks at titles, text, links and your own notes."
-                            : EMPTY_BODY,
+            TextView body = UiKit.text(this, getString(searching
+                            ? R.string.vaultpick_search_hint
+                            : EMPTY_BODY),
                     12, UiKit.MUTED, false);
             body.setPadding(0, UiKit.dp(this, 6), 0, 0);
             empty.addView(body);
@@ -233,17 +232,19 @@ public final class OrbitVaultPickerActivity extends Activity {
         int count = picked.size();
         if (countLine != null) {
             countLine.setText(count == 0
-                    ? (remaining == 1 ? "Choose one saved item"
-                            : "Choose up to " + remaining + " saved items")
-                    : count + (count == 1 ? " item selected" : " items selected"));
+                    ? (remaining == 1 ? getString(R.string.vaultpick_choose_one)
+                            : getResources().getQuantityString(R.plurals.vaultpick_choose_up_to,
+                                    remaining, remaining))
+                    : getResources().getQuantityString(R.plurals.vaultpick_selected_n, count, count));
         }
         if (attachButton == null) return;
-        attachButton.setText(count <= 1 ? "Attach" : "Attach " + count);
+        attachButton.setText(count <= 1 ? getString(R.string.vaultpick_attach)
+                : getString(R.string.vaultpick_attach_n, count));
         attachButton.setEnabled(count > 0);
         attachButton.setAlpha(count > 0 ? 1f : 0.5f);
         attachButton.setContentDescription(count == 0
-                ? "Attach, nothing selected yet"
-                : "Attach " + count + (count == 1 ? " saved item" : " saved items"));
+                ? getString(R.string.vaultpick_attach_none_cd)
+                : getResources().getQuantityString(R.plurals.vaultpick_attach_n_cd, count, count));
     }
 
     /**
@@ -261,8 +262,9 @@ public final class OrbitVaultPickerActivity extends Activity {
         }
         if (picked.size() >= remaining) {
             Toast.makeText(this, remaining == 1
-                            ? "This message has room for one more attachment"
-                            : "This message has room for " + remaining + " more attachments",
+                            ? getString(R.string.vaultpick_room_one)
+                            : getResources().getQuantityString(R.plurals.vaultpick_room_n,
+                                    remaining, remaining),
                     Toast.LENGTH_SHORT).show();
             return;
         }
@@ -315,9 +317,9 @@ public final class OrbitVaultPickerActivity extends Activity {
         title.setEllipsize(TextUtils.TruncateAt.END);
         words.addView(title);
 
-        StringBuilder meta = new StringBuilder(item.typeLabel());
+        StringBuilder meta = new StringBuilder(item.typeLabel(this));
         if (item.isLink() && !item.hostLabel().isEmpty()) meta.append(" · ").append(item.hostLabel());
-        if (item.hasNote()) meta.append(" · Has a note");
+        if (item.hasNote()) meta.append(" · ").append(getString(R.string.vaultpick_has_note));
         TextView metaText = UiKit.text(this, meta.toString(), 11, UiKit.MUTED, false);
         metaText.setMaxLines(1);
         metaText.setEllipsize(TextUtils.TruncateAt.END);
@@ -341,8 +343,8 @@ public final class OrbitVaultPickerActivity extends Activity {
                 selected ? UiKit.blend(UiKit.accent(this), UiKit.SURFACE, 0.16f) : UiKit.SURFACE,
                 UiKit.withAlpha(UiKit.accent(this), selected ? 190 : 34),
                 UiKit.accent(this), 18, this));
-        row.setContentDescription(item.typeLabel() + ": " + item.displayTitle()
-                + (selected ? ", selected" : ", not selected"));
+        row.setContentDescription(getString(selected ? R.string.vaultpick_row_selected
+                : R.string.vaultpick_row_not_selected, item.typeLabel(this), item.displayTitle()));
         row.setOnClickListener(v -> toggle(item));
         UiKit.pressScale(row);
         return row;

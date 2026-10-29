@@ -1,6 +1,7 @@
 package com.orbit.assistant;
 
 import android.content.Context;
+import androidx.annotation.StringRes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,18 +18,32 @@ public final class DeckLayoutTemplates {
         public final String id;
         public final String name;
         public final String description;
+        @StringRes public final int nameRes;
+        @StringRes public final int descriptionRes;
 
-        private Template(String id, String name, String description) {
+        private Template(String id, String name, String description,
+                         @StringRes int nameRes, @StringRes int descriptionRes) {
             this.id = id;
             this.name = name;
             this.description = description;
+            this.nameRes = nameRes;
+            this.descriptionRes = descriptionRes;
         }
+
+        /** The name in the app language. */
+        public String name(Context context) { return context.getString(nameRes); }
+
+        /** The description in the app language. */
+        public String description(Context context) { return context.getString(descriptionRes); }
     }
 
     private static final List<Template> TEMPLATES = Collections.unmodifiableList(Arrays.asList(
-            new Template(ESSENTIALS, "Orbit Essentials", "Orbit's everyday destinations and device controls"),
-            new Template(FOCUS, "Focus", "A quieter Deck for conversations, reminders, and routines"),
-            new Template(COMMAND_CENTER, "Command Center", "A structured dashboard for Orbit tools and actions")
+            new Template(ESSENTIALS, "Orbit Essentials", "Orbit's everyday destinations and device controls",
+                    R.string.decktpl_essentials_name, R.string.decktpl_essentials_desc),
+            new Template(FOCUS, "Focus", "A quieter Deck for conversations, reminders, and routines",
+                    R.string.decktpl_focus_name, R.string.decktpl_focus_desc),
+            new Template(COMMAND_CENTER, "Command Center", "A structured dashboard for Orbit tools and actions",
+                    R.string.decktpl_cc_name, R.string.decktpl_cc_desc)
     ));
 
     private DeckLayoutTemplates() {}
@@ -45,7 +60,7 @@ public final class DeckLayoutTemplates {
         else if (FOCUS.equals(templateId)) focus(context, items);
         else if (COMMAND_CENTER.equals(templateId)) commandCenter(context, items);
         String name = DeckLayout.sanitizeName(requestedName);
-        if (name.isEmpty()) name = template.name;
+        if (name.isEmpty()) name = context.getString(template.nameRes);
         return new DeckLayout(DeckTile.newInstanceId(), name, items);
     }
 
@@ -55,7 +70,7 @@ public final class DeckLayoutTemplates {
     }
 
     private static void essentials(Context context, List<DeckItem> items) {
-        items.add(new DeckSection(DeckTile.newInstanceId(), "Everyday"));
+        items.add(new DeckSection(DeckTile.newInstanceId(), context.getString(R.string.decktpl_section_everyday)));
         addItem(context, items, DeckTileRegistry.TYPE_NEW_CHAT, DeckTile.Size.WIDE);
         addItem(context, items, DeckTileRegistry.TYPE_REMINDERS, DeckTile.Size.STANDARD);
         addItem(context, items, DeckTileRegistry.TYPE_MEMORIES, DeckTile.Size.STANDARD);
@@ -64,12 +79,12 @@ public final class DeckLayoutTemplates {
         addTile(context, actions, DeckTileRegistry.TYPE_FLASHLIGHT, DeckTile.Size.STANDARD);
         addTile(context, actions, DeckTileRegistry.TYPE_MEDIA, DeckTile.Size.STANDARD);
         if (!actions.isEmpty()) {
-            items.add(new DeckFolder(DeckTile.newInstanceId(), "Device", actions));
+            items.add(new DeckFolder(DeckTile.newInstanceId(), context.getString(R.string.decktpl_folder_device), actions));
         }
     }
 
     private static void focus(Context context, List<DeckItem> items) {
-        items.add(new DeckSection(DeckTile.newInstanceId(), "Focus"));
+        items.add(new DeckSection(DeckTile.newInstanceId(), context.getString(R.string.decktpl_section_focus)));
         addItem(context, items, DeckTileRegistry.TYPE_NEW_CHAT, DeckTile.Size.LARGE);
         addItem(context, items, DeckTileRegistry.TYPE_REMINDERS, DeckTile.Size.WIDE);
         addItem(context, items, DeckTileRegistry.TYPE_ROUTINES, DeckTile.Size.WIDE);
@@ -77,7 +92,7 @@ public final class DeckLayoutTemplates {
     }
 
     private static void commandCenter(Context context, List<DeckItem> items) {
-        items.add(new DeckSection(DeckTile.newInstanceId(), "Orbit"));
+        items.add(new DeckSection(DeckTile.newInstanceId(), context.getString(R.string.decktpl_section_orbit)));
         addItem(context, items, DeckTileRegistry.TYPE_NEW_CHAT, DeckTile.Size.WIDE);
         addItem(context, items, DeckTileRegistry.TYPE_CAPABILITIES, DeckTile.Size.STANDARD);
         addItem(context, items, DeckTileRegistry.TYPE_SETTINGS, DeckTile.Size.STANDARD);
@@ -86,7 +101,7 @@ public final class DeckLayoutTemplates {
         addTile(context, actions, DeckTileRegistry.TYPE_FLASHLIGHT, DeckTile.Size.STANDARD);
         addTile(context, actions, DeckTileRegistry.TYPE_MEDIA, DeckTile.Size.STANDARD);
         if (!actions.isEmpty()) {
-            items.add(new DeckFolder(DeckTile.newInstanceId(), "Controls", actions));
+            items.add(new DeckFolder(DeckTile.newInstanceId(), context.getString(R.string.decktpl_folder_controls), actions));
         }
         addItem(context, items, DeckTileRegistry.TYPE_EXTENSIONS, DeckTile.Size.WIDE);
     }

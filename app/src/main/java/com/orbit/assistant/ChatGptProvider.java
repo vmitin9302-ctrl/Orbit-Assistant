@@ -11,9 +11,6 @@ import android.content.Context;
  * sign-in status, and forwards requests.
  */
 final class ChatGptProvider implements AiProvider {
-    static final String SIGN_IN_ERROR =
-            "Sign in with ChatGPT in Orbit settings first. No API key is required for ChatGPT-account mode.";
-
     private static final AiCapabilities CAPABILITIES = AiCapabilities.builder()
             .streaming(true)
             .deviceActions(true)
@@ -43,6 +40,10 @@ final class ChatGptProvider implements AiProvider {
         return "Your ChatGPT account. Currently Orbit's fullest feature set.";
     }
 
+    @Override public String description(Context context) {
+        return context.getString(R.string.cgp_description);
+    }
+
     @Override public AiCapabilities capabilities() { return CAPABILITIES; }
 
     @Override public Status status(Context context) {
@@ -50,7 +51,8 @@ final class ChatGptProvider implements AiProvider {
     }
 
     @Override public String statusDetail(Context context) {
-        return ChatGptAuth.isSignedIn(context) ? "Connected" : "Sign-in required";
+        return context.getString(ChatGptAuth.isSignedIn(context) ? R.string.cgp_connected
+                : R.string.cgp_sign_in_required);
     }
 
     @Override public boolean selectable(Context context) { return true; }
@@ -58,7 +60,7 @@ final class ChatGptProvider implements AiProvider {
     @Override public void send(Context context, AiRequest request,
                                AssistantClient.Callback callback) {
         if (!ChatGptAuth.isSignedIn(context)) {
-            callback.onError(SIGN_IN_ERROR);
+            callback.onError(context.getString(R.string.cgp_sign_in_error));
             return;
         }
         ChatGptClient.send(context, request.prompt, request.screenText, request.images,
@@ -71,7 +73,7 @@ final class ChatGptProvider implements AiProvider {
     @Override public void plan(Context context, String planningPrompt, AiSelection selection,
                                AssistantClient.PlanCallback callback) {
         if (!ChatGptAuth.isSignedIn(context)) {
-            callback.onError(SIGN_IN_ERROR);
+            callback.onError(context.getString(R.string.cgp_sign_in_error));
             return;
         }
         ChatGptClient.plan(context, planningPrompt, selection, callback);
@@ -89,7 +91,7 @@ final class ChatGptProvider implements AiProvider {
     @Override public void complete(Context context, String instructions, String prompt,
                                    AssistantClient.PlanCallback callback) {
         if (!ChatGptAuth.isSignedIn(context)) {
-            callback.onError(SIGN_IN_ERROR);
+            callback.onError(context.getString(R.string.cgp_sign_in_error));
             return;
         }
         ChatGptClient.complete(context, instructions, prompt,

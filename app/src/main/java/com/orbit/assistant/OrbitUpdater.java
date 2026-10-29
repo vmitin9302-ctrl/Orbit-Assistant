@@ -168,7 +168,7 @@ public final class OrbitUpdater {
             try { callback.onResult(checkNow(app)); }
             catch (Exception e) {
                 log("check_failed", diagnostic(e));
-                callback.onError(userMessage(e, "Orbit could not check for updates."));
+                callback.onError(userMessage(app, e, R.string.upd_check_failed));
             }
         });
     }
@@ -214,14 +214,14 @@ public final class OrbitUpdater {
         log("check_started", "latest_stable_release");
         JSONObject releaseJson = readJson(OrbitEdition.latestReleaseApi(), MAX_JSON_BYTES);
         if (releaseJson.optBoolean("draft", true) || releaseJson.optBoolean("prerelease", true)) {
-            throw new UpdateException("The latest GitHub release is not a stable published release.");
+            throw new UpdateException("The latest GitHub release is not a stable published release.", R.string.upd_stable_release);
         }
         String tag = releaseJson.optString("tag_name", "").trim();
         if (!OrbitVersion.isStableTag(tag)) {
-            throw new UpdateException("The latest Orbit release tag is malformed.");
+            throw new UpdateException("The latest Orbit release tag is malformed.", R.string.upd_tag_malformed);
         }
         if (releaseJson.optJSONArray("assets") == null) {
-            throw new UpdateException("The latest Orbit release has no assets.");
+            throw new UpdateException("The latest Orbit release has no assets.", R.string.upd_latest_no_assets);
         }
         JSONObject manifest = fetchManifest(releaseJson, tag);
         return evaluateCandidate(releaseJson, manifest, Prefs.CHANNEL_STABLE);
@@ -320,7 +320,7 @@ public final class OrbitUpdater {
     static Release evaluateCandidate(JSONObject release, JSONObject manifest, String channel)
             throws Exception {
         if (!structurallyEligible(release, channel)) {
-            throw new UpdateException("The Orbit release is not an eligible published release.");
+            throw new UpdateException("The Orbit release is not an eligible published release.", R.string.upd_not_eligible);
         }
         String tag = release.optString("tag_name", "").trim();
         JSONArray assets = release.optJSONArray("assets");
@@ -331,7 +331,7 @@ public final class OrbitUpdater {
 
     private static JSONObject fetchManifest(JSONObject release, String tag) throws Exception {
         JSONArray assets = release.optJSONArray("assets");
-        if (assets == null) throw new UpdateException("The Orbit release has no assets.");
+        if (assets == null) throw new UpdateException("The Orbit release has no assets.", R.string.upd_no_assets);
         JSONObject manifestAsset = uniqueAsset(assets, UPDATE_MANIFEST_NAME);
         requireOfficialAssetUrl(manifestAsset, tag, UPDATE_MANIFEST_NAME);
         return readJson(downloadUrl(tag, UPDATE_MANIFEST_NAME), MAX_JSON_BYTES);
@@ -437,7 +437,7 @@ public final class OrbitUpdater {
             } catch (Exception e) {
                 safeDelete(apk);
                 log("verification_failed", diagnostic(e));
-                callback.onError(userMessage(e, "The downloaded update could not be verified."));
+                callback.onError(userMessage(app, e, R.string.upd_verify_failed));
             }
         });
     }
@@ -447,39 +447,39 @@ public final class OrbitUpdater {
         File root = updateDirectory(context).getCanonicalFile();
         File candidate = apk.getCanonicalFile();
         if (!candidate.getPath().startsWith(root.getPath() + File.separator) || !candidate.isFile()) {
-            throw new VerificationException("The downloaded update file is unavailable.");
+            throw new VerificationException("The downloaded update file is unavailable.", R.string.upd_file_unavailable);
         }
         if (!normalizeSha256(sha256(candidate)).equals(normalizeSha256(release.apkSha256))) {
-            throw new VerificationException("The downloaded APK checksum did not match the official release.");
+            throw new VerificationException("The downloaded APK checksum did not match the official release.", R.string.upd_checksum_mismatch);
         }
 
         PackageManager pm = context.getPackageManager();
         PackageInfo info = pm.getPackageArchiveInfo(
                 candidate.getAbsolutePath(), PackageManager.GET_SIGNING_CERTIFICATES);
         if (info == null || info.signingInfo == null) {
-            throw new VerificationException("Android could not inspect the downloaded APK.");
+            throw new VerificationException("Android could not inspect the downloaded APK.", R.string.upd_cannot_inspect);
         }
         if (!PACKAGE_NAME.equals(info.packageName)) {
-            throw new VerificationException("The downloaded APK has the wrong package name.");
+            throw new VerificationException("The downloaded APK has the wrong package name.", R.string.upd_wrong_package);
         }
         if (info.getLongVersionCode() != release.versionCode ||
                 !release.versionName.equals(info.versionName)) {
-            throw new VerificationException("The downloaded APK version does not match the release manifest.");
+            throw new VerificationException("The downloaded APK version does not match the release manifest.", R.string.upd_version_mismatch);
         }
         if (info.getLongVersionCode() <= BuildConfig.VERSION_CODE) {
-            throw new VerificationException("The downloaded APK is not newer than this Orbit installation.");
+            throw new VerificationException("The downloaded APK is not newer than this Orbit installation.", R.string.upd_not_newer);
         }
         if (info.signingInfo.hasMultipleSigners()) {
-            throw new VerificationException("The downloaded APK has an unexpected signer set.");
+            throw new VerificationException("The downloaded APK has an unexpected signer set.", R.string.upd_unexpected_signers);
         }
         Signature[] signers = info.signingInfo.getApkContentsSigners();
         if (signers == null || signers.length != 1) {
-            throw new VerificationException("The downloaded APK signer could not be verified.");
+            throw new VerificationException("The downloaded APK signer could not be verified.", R.string.upd_signer_unverified);
         }
         String certificate = hex(MessageDigest.getInstance("SHA-256").digest(signers[0].toByteArray()));
         if (!normalizeSha256(certificate).equals(normalizeSha256(CERTIFICATE_SHA256)) ||
                 !normalizeSha256(release.certificateSha256).equals(normalizeSha256(CERTIFICATE_SHA256))) {
-            throw new VerificationException("The downloaded APK is not signed by Orbit's permanent certificate.");
+            throw new VerificationException("The downloaded APK is not signed by Orbit's permanent certificate.", R.string.upd_not_orbit_signed);
         }
         log("verification_complete", "package_version_certificate_valid");
     }
@@ -499,7 +499,7 @@ public final class OrbitUpdater {
         File candidate = apk.getCanonicalFile();
         if (!candidate.getPath().startsWith(root.getPath() + File.separator) || !candidate.isFile() ||
                 !candidate.getName().equals(release.apkAssetName)) {
-            throw new VerificationException("The verified update file is unavailable.");
+            throw new VerificationException("The verified update file is unavailable.", R.string.upd_verified_unavailable);
         }
         Uri uri = FileProvider.getUriForFile(
                 activity, activity.getPackageName() + ".fileprovider", candidate);
@@ -508,7 +508,7 @@ public final class OrbitUpdater {
                 .putLong(PREF_PENDING_INSTALL_CODE, release.versionCode)
                 .putString(PREF_PENDING_INSTALL_FILE, candidate.getName())
                 .commit();
-        if (!saved) throw new UpdateException("Orbit could not prepare the update installer.");
+        if (!saved) throw new UpdateException("Orbit could not prepare the update installer.", R.string.upd_installer_prepare);
         try {
             activity.startActivity(install);
         } catch (Exception e) {
@@ -599,14 +599,15 @@ public final class OrbitUpdater {
             int status = connection.getResponseCode();
             requireHttpsFinalUrl(connection);
             if (status < 200 || status >= 300) {
-                throw new UpdateException("The official APK download failed (HTTP " + status + ").");
+                throw new UpdateException("The official APK download failed (HTTP " + status + ").",
+                        R.string.upd_download_http, status);
             }
             long contentLength = connection.getContentLengthLong();
             if (contentLength > MAX_APK_BYTES || release.apkSize > MAX_APK_BYTES) {
-                throw new UpdateException("The official APK is unexpectedly large.");
+                throw new UpdateException("The official APK is unexpectedly large.", R.string.upd_apk_large);
             }
             if (release.apkSize > 0L && contentLength > 0L && release.apkSize != contentLength) {
-                throw new VerificationException("The APK download size did not match the release metadata.");
+                throw new VerificationException("The APK download size did not match the release metadata.", R.string.upd_size_mismatch);
             }
 
             long total = 0L;
@@ -618,7 +619,7 @@ public final class OrbitUpdater {
                 while ((read = in.read(buffer)) != -1) {
                     if (handle.isCancelled()) throw new CancelledException();
                     total += read;
-                    if (total > MAX_APK_BYTES) throw new UpdateException("The APK download exceeded the safe size limit.");
+                    if (total > MAX_APK_BYTES) throw new UpdateException("The APK download exceeded the safe size limit.", R.string.upd_download_limit);
                     out.write(buffer, 0, read);
                     long expected = release.apkSize > 0L ? release.apkSize : contentLength;
                     int progress = expected > 0L ? (int) Math.min(100L, total * 100L / expected) : -1;
@@ -630,9 +631,9 @@ public final class OrbitUpdater {
                 out.getFD().sync();
             }
             if (release.apkSize > 0L && total != release.apkSize) {
-                throw new VerificationException("The APK download was incomplete.");
+                throw new VerificationException("The APK download was incomplete.", R.string.upd_download_incomplete);
             }
-            if (!part.renameTo(output)) throw new UpdateException("Orbit could not finalize the APK download.");
+            if (!part.renameTo(output)) throw new UpdateException("Orbit could not finalize the APK download.", R.string.upd_download_finalize);
             callback.onVerifying();
             verifyDownloadedApk(context, output, release);
             callback.onReady(output);
@@ -646,9 +647,9 @@ public final class OrbitUpdater {
             safeDelete(output);
             boolean verification = e instanceof VerificationException;
             log(verification ? "verification_failed" : "download_failed", diagnostic(e));
-            callback.onError(userMessage(e, verification
-                    ? "The downloaded update failed verification."
-                    : "Orbit could not download the update."), verification);
+            callback.onError(userMessage(context, e, verification
+                    ? R.string.upd_verification_failed
+                    : R.string.upd_download_failed), verification);
         } finally {
             if (connection != null) connection.disconnect();
         }
@@ -657,7 +658,7 @@ public final class OrbitUpdater {
     private static Release validateManifestAndAssets(String tag, String notes, JSONObject manifest,
                                                      JSONArray assets) throws Exception {
         if (manifest.optInt("schema", -1) != SCHEMA) {
-            throw new UpdateException("The Orbit update manifest schema is unsupported.");
+            throw new UpdateException("The Orbit update manifest schema is unsupported.", R.string.upd_schema);
         }
         String packageName = manifest.optString("packageName", "");
         String versionName = manifest.optString("versionName", "").trim();
@@ -668,14 +669,14 @@ public final class OrbitUpdater {
         Release release = new Release(tag, versionName, versionCode, apkAssetName,
                 apkSha256, certificate, -1L, compactNotes(notes));
         if (!PACKAGE_NAME.equals(packageName)) {
-            throw new UpdateException("The Orbit update manifest has the wrong package name.");
+            throw new UpdateException("The Orbit update manifest has the wrong package name.", R.string.upd_manifest_package);
         }
         validateReleaseFields(release);
         JSONObject apkAsset = uniqueAsset(assets, apkAssetName);
         requireOfficialAssetUrl(apkAsset, tag, apkAssetName);
         long size = apkAsset.optLong("size", -1L);
         if (size <= 0L || size > MAX_APK_BYTES) {
-            throw new UpdateException("The Orbit release APK size is invalid.");
+            throw new UpdateException("The Orbit release APK size is invalid.", R.string.upd_apk_size);
         }
         return new Release(tag, versionName, versionCode, apkAssetName,
                 apkSha256, certificate, size, compactNotes(notes));
@@ -688,18 +689,18 @@ public final class OrbitUpdater {
         if (release == null || !OrbitVersion.isValid(release.versionName) ||
                 !release.tag.equals(OrbitVersion.tagFor(release.versionName)) ||
                 release.versionCode <= 0L) {
-            throw new UpdateException("The Orbit release version metadata is malformed.");
+            throw new UpdateException("The Orbit release version metadata is malformed.", R.string.upd_version_metadata);
         }
         String expectedAsset = "Orbit-Assistant-v" + release.versionName + ".apk";
         if (!expectedAsset.equals(release.apkAssetName)) {
-            throw new UpdateException("The Orbit release APK name is inconsistent.");
+            throw new UpdateException("The Orbit release APK name is inconsistent.", R.string.upd_apk_name);
         }
         if (!SHA256_PATTERN.matcher(release.apkSha256).matches()) {
-            throw new UpdateException("The Orbit release APK checksum is malformed.");
+            throw new UpdateException("The Orbit release APK checksum is malformed.", R.string.upd_apk_checksum);
         }
         if (!normalizeSha256(release.certificateSha256)
                 .equals(normalizeSha256(CERTIFICATE_SHA256))) {
-            throw new UpdateException("The Orbit release certificate metadata is invalid.");
+            throw new UpdateException("The Orbit release certificate metadata is invalid.", R.string.upd_cert_metadata);
         }
     }
 
@@ -708,17 +709,18 @@ public final class OrbitUpdater {
         for (int i = 0; i < assets.length(); i++) {
             JSONObject asset = assets.optJSONObject(i);
             if (asset != null && name.equals(asset.optString("name", ""))) {
-                if (found != null) throw new UpdateException("The Orbit release contains duplicate assets.");
+                if (found != null) throw new UpdateException("The Orbit release contains duplicate assets.", R.string.upd_duplicate_assets);
                 found = asset;
             }
         }
-        if (found == null) throw new UpdateException("The Orbit release is missing " + name + ".");
+        if (found == null) throw new UpdateException("The Orbit release is missing " + name + ".",
+                R.string.upd_missing_asset, name);
         return found;
     }
 
     private static void requireOfficialAssetUrl(JSONObject asset, String tag, String name) throws Exception {
         if (!downloadUrl(tag, name).equals(asset.optString("browser_download_url", ""))) {
-            throw new UpdateException("The Orbit release contains an unexpected asset URL.");
+            throw new UpdateException("The Orbit release contains an unexpected asset URL.", R.string.upd_asset_url);
         }
     }
 
@@ -737,7 +739,8 @@ public final class OrbitUpdater {
             int status = connection.getResponseCode();
             requireHttpsFinalUrl(connection);
             if (status < 200 || status >= 300) {
-                throw new UpdateException("The update service returned HTTP " + status + ".");
+                throw new UpdateException("The update service returned HTTP " + status + ".",
+                        R.string.upd_service_http, status);
             }
             byte[] bytes = readLimited(connection.getInputStream(), limit);
             return new String(bytes, StandardCharsets.UTF_8);
@@ -749,7 +752,7 @@ public final class OrbitUpdater {
     private static HttpURLConnection open(String value, String accept) throws Exception {
         URL url = new URL(value);
         if (!"https".equalsIgnoreCase(url.getProtocol())) {
-            throw new UpdateException("Orbit updates require HTTPS.");
+            throw new UpdateException("Orbit updates require HTTPS.", R.string.upd_https_required);
         }
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setConnectTimeout(15000);
@@ -762,13 +765,13 @@ public final class OrbitUpdater {
     private static void requireHttpsFinalUrl(HttpURLConnection connection) throws Exception {
         if (connection == null || connection.getURL() == null ||
                 !"https".equalsIgnoreCase(connection.getURL().getProtocol())) {
-            throw new UpdateException("The update service redirected to an insecure URL.");
+            throw new UpdateException("The update service redirected to an insecure URL.", R.string.upd_insecure_redirect);
         }
     }
 
     private static String downloadUrl(String tag, String assetName) throws Exception {
         if (!OrbitVersion.isValidTag(tag) || !assetName.matches("^[A-Za-z0-9._-]+$")) {
-            throw new UpdateException("The Orbit release asset reference is malformed.");
+            throw new UpdateException("The Orbit release asset reference is malformed.", R.string.upd_asset_reference);
         }
         return OrbitEdition.releaseDownloadBase() + tag + "/" + assetName;
     }
@@ -788,7 +791,7 @@ public final class OrbitUpdater {
             int read;
             while ((read = in.read(buffer)) != -1) {
                 total += read;
-                if (total > limit) throw new UpdateException("The update service response is too large.");
+                if (total > limit) throw new UpdateException("The update service response is too large.", R.string.upd_response_large);
                 out.write(buffer, 0, read);
             }
             return out.toByteArray();
@@ -832,11 +835,11 @@ public final class OrbitUpdater {
         }
     }
 
-    private static String userMessage(Exception e, String fallback) {
+    private static String userMessage(Context context, Exception e, int fallback) {
         if (e instanceof UpdateException && e.getMessage() != null && !e.getMessage().isEmpty()) {
-            return e.getMessage();
+            return ((UpdateException) e).userText(context);
         }
-        return fallback;
+        return context.getString(fallback);
     }
 
     private static String diagnostic(Exception e) {
@@ -857,11 +860,27 @@ public final class OrbitUpdater {
     }
 
     private static class UpdateException extends Exception {
-        UpdateException(String message) { super(message); }
+        // The English message feeds the diagnostic log; the resource is what the user is shown.
+        private final int messageRes;
+        private final Object[] messageArgs;
+
+        UpdateException(String message) { this(message, 0); }
+
+        UpdateException(String message, int messageRes, Object... messageArgs) {
+            super(message);
+            this.messageRes = messageRes;
+            this.messageArgs = messageArgs;
+        }
+
+        String userText(Context context) {
+            return messageRes == 0 ? getMessage() : context.getString(messageRes, messageArgs);
+        }
     }
 
     private static final class VerificationException extends UpdateException {
-        VerificationException(String message) { super(message); }
+        VerificationException(String message, int messageRes, Object... messageArgs) {
+            super(message, messageRes, messageArgs);
+        }
     }
 
     private static final class CancelledException extends Exception {}

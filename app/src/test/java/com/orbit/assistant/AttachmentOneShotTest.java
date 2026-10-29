@@ -165,7 +165,7 @@ public final class AttachmentOneShotTest {
         for (android.view.View v : descendants(activity.getWindow().getDecorView())) {
             CharSequence description = v.getContentDescription();
             if (description != null
-                    && ComposerActionState.SEND_DESCRIPTION.contentEquals(description)) {
+                    && org.robolectric.RuntimeEnvironment.getApplication().getString(ComposerActionState.SEND_DESCRIPTION).contentEquals(description)) {
                 return v;
             }
         }

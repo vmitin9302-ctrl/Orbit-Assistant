@@ -194,8 +194,8 @@ public final class OrbitNavigationPolicyTest {
      * with it. The flag may therefore appear on exactly the screens this table says are migrated.
      */
     @Test public void themanifestOptsInExactlyTheMigratedScreens() throws Exception {
-        String manifest = new String(Files.readAllBytes(
-                new File("src/main/AndroidManifest.xml").toPath()), StandardCharsets.UTF_8);
+        String manifest = LocalizedSource.expand(new String(Files.readAllBytes(
+                new File("src/main/AndroidManifest.xml").toPath()), StandardCharsets.UTF_8));
 
         for (String name : sourceActivities()) {
             boolean optedIn = optsIn(manifest, name);

@@ -83,8 +83,8 @@ final class SmartVaultAsk {
         }
         String context = contextText(question, items, recognized, pages,
                 Prefs.smartVaultMeaning(c) ? SmartVaultModel.embedder(c) : null);
-        String label = "Ask Vault: " + items.size() + (items.size() == 1 ? " saved item"
-                : " saved items");
+        String label = c.getResources().getQuantityString(R.plurals.askvault_label,
+                items.size(), items.size());
         StringBuilder detail = new StringBuilder();
         for (int i = 0; i < items.size(); i++) {
             if (i > 0) detail.append(" · ");

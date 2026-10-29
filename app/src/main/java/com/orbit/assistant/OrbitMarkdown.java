@@ -86,6 +86,15 @@ public final class OrbitMarkdown {
      * length limit so the visible characters are spent on words rather than on syntax.
      */
     public static String toPreviewText(String source, int maxChars) {
+        return toPreviewText(source, maxChars, "Code snippet");
+    }
+
+    /** The same preview, with the code-only fallback label in the app language. */
+    public static String toPreviewText(Context context, String source, int maxChars) {
+        return toPreviewText(source, maxChars, context.getString(R.string.markdown_code_snippet));
+    }
+
+    private static String toPreviewText(String source, int maxChars, String codeLabel) {
         if (source == null || source.trim().isEmpty()) return "";
         String[] lines = source.replace("\r", "").split("\n", -1);
         StringBuilder out = new StringBuilder();
@@ -132,7 +141,7 @@ public final class OrbitMarkdown {
         }
 
         String text = out.toString().replaceAll("\\s+", " ").trim();
-        if (text.isEmpty()) return sawCode ? "Code snippet" : "";
+        if (text.isEmpty()) return sawCode ? codeLabel : "";
         if (maxChars > 0 && text.length() > maxChars) {
             text = text.substring(0, Math.max(0, maxChars - 1)).trim() + "…";
         }

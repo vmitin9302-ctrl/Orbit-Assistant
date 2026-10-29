@@ -74,6 +74,27 @@ public final class RoutineRunHistoryStore {
             return "Failed at action " + failedStep + label;
         }
 
+        /** {@link #headline()} in the user's language, for screens. */
+        public String headline(Context context) {
+            if (success) {
+                return totalSteps <= 0 ? context.getString(R.string.runhist_completed)
+                        : context.getResources().getQuantityString(R.plurals.runhist_completed_steps,
+                                totalSteps, completedSteps, totalSteps);
+            }
+            if (failedStep <= 0) return context.getString(R.string.runhist_stopped);
+            return failedAction.isEmpty()
+                    ? context.getString(R.string.runhist_failed_at, failedStep)
+                    : context.getString(R.string.runhist_failed_at_named, failedStep, failedAction);
+        }
+
+        /** {@link #sourceLabel()} in the user's language, for screens. */
+        public String sourceLabel(Context context) {
+            if (SOURCE_TRIGGER.equals(source)) return context.getString(R.string.runhist_trigger);
+            if (SOURCE_WIDGET.equals(source)) return context.getString(R.string.runhist_widget);
+            return context.getString(R.string.runhist_manual);
+        }
+
+
         public String sourceLabel() {
             if (SOURCE_TRIGGER.equals(source)) return "Automatic trigger";
             if (SOURCE_WIDGET.equals(source)) return "Widget or tile";
@@ -98,7 +119,7 @@ public final class RoutineRunHistoryStore {
                                            AssistantReply.Action failedAction, String reason) {
         if (c == null) return;
         try {
-            String label = failedAction == null ? "" : RoutineActionCatalog.title(failedAction);
+            String label = failedAction == null ? "" : RoutineActionCatalog.title(c, failedAction);
             int failedStep = failedIndex < 0 ? 0 : failedIndex + 1;
             List<Entry> entries = new ArrayList<>(stored(c));
             entries.add(new Entry(null, routineId, routineName, source, System.currentTimeMillis(),

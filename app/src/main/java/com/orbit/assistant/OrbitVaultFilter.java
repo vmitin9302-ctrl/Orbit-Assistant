@@ -53,6 +53,18 @@ public final class OrbitVaultFilter {
             this.label = label;
         }
 
+        /** The label in the language of the given context. */
+        public String label(android.content.Context context) {
+            switch (this) {
+                case TEXT: return context.getString(R.string.lead_vault_type_text);
+                case LINKS: return context.getString(R.string.lead_vault_type_links);
+                case IMAGES: return context.getString(R.string.lead_vault_type_images);
+                case DOCUMENTS: return context.getString(R.string.lead_vault_type_documents);
+                case ORBIT: return context.getString(R.string.lead_vault_type_orbit);
+                default: return context.getString(R.string.lead_vault_type_all);
+            }
+        }
+
         /** Decided on the item's canonical type id, never on the word a card draws. */
         public boolean matches(OrbitVaultItem item) {
             if (item == null) return false;

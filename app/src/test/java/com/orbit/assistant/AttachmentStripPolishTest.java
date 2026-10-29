@@ -85,15 +85,15 @@ public final class AttachmentStripPolishTest {
                 "Screenshot_20260830_211502_Orbit Assistant.jpg",
                 "IMG_20260830_2115.jpg");
 
-        assertEquals("Photo 1", AttachmentLabels.displayLabel(photos.get(0), 1));
-        assertEquals("Photo 2", AttachmentLabels.displayLabel(photos.get(1), 2));
-        assertEquals("Photo 3", AttachmentLabels.displayLabel(photos.get(2), 3));
+        assertEquals("Photo 1", AttachmentLabels.displayLabel(context, photos.get(0), 1));
+        assertEquals("Photo 2", AttachmentLabels.displayLabel(context, photos.get(1), 2));
+        assertEquals("Photo 3", AttachmentLabels.displayLabel(context, photos.get(2), 3));
     }
 
     /** The caption is a caption. Nothing underneath it was rewritten. */
     @Test public void theUnderlyingLabelIsNeverMutated() {
         ComposerAttachment photo = image("Screenshot_20260830_211455_Orbit Assistant.jpg");
-        AttachmentLabels.displayLabel(photo, 1);
+        AttachmentLabels.displayLabel(context, photo, 1);
         assertEquals("history, the model, and diagnostics still need the real name",
                 "Screenshot_20260830_211455_Orbit Assistant.jpg", photo.label);
     }
@@ -106,15 +106,15 @@ public final class AttachmentStripPolishTest {
      */
     @Test public void documentsKeepTheirRealFilenames() {
         assertEquals("syllabus.pdf",
-                AttachmentLabels.displayLabel(document("pdf", "syllabus.pdf"), 1));
+                AttachmentLabels.displayLabel(context, document("pdf", "syllabus.pdf"), 1));
         assertEquals("notes.txt",
-                AttachmentLabels.displayLabel(document("file_text", "notes.txt"), 2));
+                AttachmentLabels.displayLabel(context, document("file_text", "notes.txt"), 2));
     }
 
     /** A screen capture already has Orbit's own short caption, so it is left alone. */
     @Test public void screenCapturesKeepOrbitsOwnCaption() {
         ComposerAttachment capture = new ComposerAttachment("screen", "Screen · Gmail", "", bitmap());
-        assertEquals("Screen · Gmail", AttachmentLabels.displayLabel(capture, 1));
+        assertEquals("Screen · Gmail", AttachmentLabels.displayLabel(context, capture, 1));
     }
 
     // ---- what a screen reader hears ---------------------------------------------------------------
@@ -123,25 +123,25 @@ public final class AttachmentStripPolishTest {
     @Test public void aphotoIsAnnouncedByKindAndPosition() {
         List<ComposerAttachment> four = images("a.jpg", "b.jpg", "c.jpg", "d.jpg");
         assertEquals("Photo attachment 2 of 4",
-                AttachmentLabels.cardDescription(four.get(1), 2, 4));
+                AttachmentLabels.cardDescription(context, four.get(1), 2, 4));
         assertEquals("Remove photo attachment 2",
-                AttachmentLabels.removeDescription(four.get(1), 2, 4));
+                AttachmentLabels.removeDescription(context, four.get(1), 2, 4));
     }
 
     /** A lone photo is not read out as "1 of 1". */
     @Test public void asinglePhotoIsAnnouncedWithoutAPosition() {
         ComposerAttachment only = image("holiday.jpg");
-        assertEquals("Photo attachment", AttachmentLabels.cardDescription(only, 1, 1));
-        assertEquals("Remove photo attachment", AttachmentLabels.removeDescription(only, 1, 1));
+        assertEquals("Photo attachment", AttachmentLabels.cardDescription(context, only, 1, 1));
+        assertEquals("Remove photo attachment", AttachmentLabels.removeDescription(context, only, 1, 1));
     }
 
     /** A document is announced with the name, because for a document the name is the point. */
     @Test public void adocumentIsAnnouncedWithItsFilename() {
         ComposerAttachment pdf = document("pdf", "syllabus.pdf");
         assertEquals("PDF attachment 1 of 2, syllabus.pdf",
-                AttachmentLabels.cardDescription(pdf, 1, 2));
+                AttachmentLabels.cardDescription(context, pdf, 1, 2));
         assertEquals("Remove PDF attachment 1, syllabus.pdf",
-                AttachmentLabels.removeDescription(pdf, 1, 2));
+                AttachmentLabels.removeDescription(context, pdf, 1, 2));
     }
 
     /** The card and its remove control agree about which attachment they are talking about. */

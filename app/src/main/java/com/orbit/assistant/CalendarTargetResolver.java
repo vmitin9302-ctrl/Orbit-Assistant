@@ -65,6 +65,21 @@ public final class CalendarTargetResolver {
             return "Choose a calendar";
         }
 
+        /** {@link #selectorLabel()} in the app language. */
+        public String selectorLabel(Context c) {
+            if (!permitted) return c.getString(R.string.calresolver_access_needed);
+            if (writable.isEmpty()) return c.getString(R.string.calresolver_no_writable);
+            if (target != null) return target.label();
+            return c.getString(R.string.calresolver_choose);
+        }
+
+        /** {@link #destinationName()} in the app language. */
+        public String destinationName(Context c) {
+            if (target != null) return target.label();
+            if (permitted && writable.size() > 1) return c.getString(R.string.calresolver_dest_choose);
+            return c.getString(R.string.calresolver_dest_yours);
+        }
+
         /** How the confirmation title names the destination. */
         public String destinationName() {
             if (target != null) return target.label();

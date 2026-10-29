@@ -18,9 +18,9 @@ public final class AskOrbitTileService extends TileService {
                 new ComponentName(this, OrbitVoiceInteractionService.class));
         tile.setLabel("Orbit");
         tile.setState(active ? Tile.STATE_ACTIVE : Tile.STATE_INACTIVE);
-        if (Build.VERSION.SDK_INT >= 29) tile.setSubtitle(active ? "Ask Orbit" : "Set up assistant");
+        if (Build.VERSION.SDK_INT >= 29) tile.setSubtitle(active ? getString(R.string.process_text_label) : getString(R.string.asktile_setup));
         if (Build.VERSION.SDK_INT >= 30) {
-            tile.setStateDescription(active ? "Ready" : "Orbit is not the active assistant");
+            tile.setStateDescription(active ? getString(R.string.ui_ready_5fa7aac5) : getString(R.string.asktile_inactive));
         }
         tile.updateTile();
     }

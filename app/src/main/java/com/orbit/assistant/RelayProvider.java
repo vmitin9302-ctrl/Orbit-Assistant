@@ -31,9 +31,8 @@ import java.util.concurrent.Executors;
 final class RelayProvider implements AiProvider {
     private static final ExecutorService EXEC = Executors.newCachedThreadPool();
 
-    static final String NOT_CONFIGURED_ERROR =
-            "API-relay mode is selected, but no relay is configured. Add your HTTPS relay URL or switch Provider to ChatGPT account.";
-    static final String HTTPS_ERROR = "For security, Orbit only connects to HTTPS relay URLs.";
+    static final int NOT_CONFIGURED_ERROR = R.string.relay_not_configured;
+    static final int HTTPS_ERROR = R.string.relay_https_only;
 
     private static final AiCapabilities CAPABILITIES = AiCapabilities.builder()
             .streaming(false)
@@ -60,6 +59,10 @@ final class RelayProvider implements AiProvider {
         return "Advanced fallback: a private HTTPS relay you control. Your API key never enters Orbit.";
     }
 
+    @Override public String description(Context context) { return context.getString(R.string.prov_relay_description); }
+
+    @Override public String displayName(Context context) { return context.getString(R.string.prov_relay_name); }
+
     @Override public AiCapabilities capabilities() { return CAPABILITIES; }
 
     @Override public Status status(Context context) {
@@ -67,7 +70,8 @@ final class RelayProvider implements AiProvider {
     }
 
     @Override public String statusDetail(Context context) {
-        return Prefs.relayConfigured(context) ? "Relay configured" : "Relay URL required";
+        return context.getString(Prefs.relayConfigured(context)
+                ? R.string.relay_configured : R.string.relay_url_required);
     }
 
     @Override public boolean selectable(Context context) { return true; }
@@ -75,8 +79,8 @@ final class RelayProvider implements AiProvider {
     @Override public void send(Context context, AiRequest request,
                                AssistantClient.Callback cb) {
         String backend = Prefs.backendUrl(context);
-        if (backend.isEmpty()) { cb.onError(NOT_CONFIGURED_ERROR); return; }
-        if (!backend.startsWith("https://")) { cb.onError(HTTPS_ERROR); return; }
+        if (backend.isEmpty()) { cb.onError(context.getString(NOT_CONFIGURED_ERROR)); return; }
+        if (!backend.startsWith("https://")) { cb.onError(context.getString(HTTPS_ERROR)); return; }
 
         EXEC.execute(() -> {
             HttpURLConnection conn = null;
@@ -162,13 +166,15 @@ final class RelayProvider implements AiProvider {
                 InputStream input = code >= 200 && code < 300 ? conn.getInputStream() : conn.getErrorStream();
                 String body = readAll(input);
                 if (code < 200 || code >= 300) {
-                    cb.onError("Relay error " + code + (body.isEmpty() ? "" : ": " + safe(body, 700)));
+                    cb.onError(body.isEmpty()
+                            ? context.getString(R.string.relay_error_code, code)
+                            : context.getString(R.string.relay_error_body, code, safe(body, 700)));
                     return;
                 }
                 cb.onSuccess(AssistantReply.fromJson(new JSONObject(body))
                         .withDetails(ResponseDetails.sentWith(request.selection)));
             } catch (Exception e) {
-                cb.onError("Could not reach the Orbit relay: " + e.getMessage());
+                cb.onError(context.getString(R.string.relay_unreachable, e.getMessage()));
             } finally {
                 if (conn != null) conn.disconnect();
             }
@@ -178,8 +184,8 @@ final class RelayProvider implements AiProvider {
     @Override public void plan(Context context, String planningPrompt, AiSelection selection,
                                AssistantClient.PlanCallback cb) {
         String backend = Prefs.backendUrl(context);
-        if (backend.isEmpty()) { cb.onError(NOT_CONFIGURED_ERROR); return; }
-        if (!backend.startsWith("https://")) { cb.onError(HTTPS_ERROR); return; }
+        if (backend.isEmpty()) { cb.onError(context.getString(NOT_CONFIGURED_ERROR)); return; }
+        if (!backend.startsWith("https://")) { cb.onError(context.getString(HTTPS_ERROR)); return; }
         EXEC.execute(() -> {
             HttpURLConnection conn = null;
             try {
@@ -218,12 +224,14 @@ final class RelayProvider implements AiProvider {
                 InputStream input = code >= 200 && code < 300 ? conn.getInputStream() : conn.getErrorStream();
                 String body = readAll(input);
                 if (code < 200 || code >= 300) {
-                    cb.onError("Relay error " + code + (body.isEmpty() ? "" : ": " + safe(body, 700)));
+                    cb.onError(body.isEmpty()
+                            ? context.getString(R.string.relay_error_code, code)
+                            : context.getString(R.string.relay_error_body, code, safe(body, 700)));
                     return;
                 }
-                cb.onText(body, "Relay · " + AiSelections.resolve(selection).label());
+                cb.onText(body, context.getString(R.string.relay_label, AiSelections.resolve(selection).label()));
             } catch (Exception e) {
-                cb.onError("Could not reach the Orbit relay: " + e.getMessage());
+                cb.onError(context.getString(R.string.relay_unreachable, e.getMessage()));
             } finally {
                 if (conn != null) conn.disconnect();
             }

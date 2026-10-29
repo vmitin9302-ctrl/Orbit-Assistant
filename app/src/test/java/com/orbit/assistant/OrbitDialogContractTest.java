@@ -412,7 +412,7 @@ public final class OrbitDialogContractTest {
             throws IOException {
         int creations = 0;
         for (Path file : mainJavaFiles()) {
-            String source = new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
+            String source = LocalizedSource.expand(new String(Files.readAllBytes(file), StandardCharsets.UTF_8));
             String code = stripNonCode(source);
             Matcher matcher = ALERT_BUILDER.matcher(code);
             List<Integer> starts = new ArrayList<>();
@@ -447,7 +447,7 @@ public final class OrbitDialogContractTest {
                 "(?m)^\\s*(?:(?:public|protected|private|static|final)\\s+)*void\\s+"
                         + "(styleOrbitDialog|styleDialog)\\s*\\([^)]*\\)\\s*\\{");
         for (Path file : mainJavaFiles()) {
-            String source = new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
+            String source = LocalizedSource.expand(new String(Files.readAllBytes(file), StandardCharsets.UTF_8));
             String code = stripNonCode(source);
             if (!file.getFileName().toString().equals("UiKit.java")) {
                 assertFalse(relative(file) + " bypasses the full styling contract with prepareOrbitDialog",

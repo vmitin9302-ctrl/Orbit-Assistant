@@ -634,7 +634,147 @@ public final class OrbitProStyle {
         return 0.18f;
     }
 
+    // ---- the same labels as string resources -----------------------------------------------------------
+    // The String methods above and below stay as they were for callers with no Context. These return
+    // the resource of the same label, so a screen with a Context can show it in the user's language.
+
+    @androidx.annotation.StringRes
+    public int bubbleRadiusLabelRes() {
+        if (bubbleRadiusDp <= 11) return R.string.d_pro_squared;
+        if (bubbleRadiusDp <= 15) return R.string.d_pro_restrained;
+        if (bubbleRadiusDp == BUBBLE_RADIUS_DEFAULT) return R.string.d_pro_orbit_default;
+        if (bubbleRadiusDp <= 22) return R.string.d_pro_soft;
+        return R.string.d_pro_rounded;
+    }
+
+    @androidx.annotation.StringRes
+    public static int outlineLabelRes(int value) {
+        if (value == OUTLINE_DEFINED) return R.string.d_pro_defined;
+        if (value == OUTLINE_SUBTLE) return R.string.d_pro_subtle;
+        return R.string.d_pro_off;
+    }
+
+    @androidx.annotation.StringRes
+    public int bubbleOutlineLabelRes() {
+        return outlineLabelRes(bubbleOutline);
+    }
+
+    @androidx.annotation.StringRes
+    public int glassOpacityLabelRes() {
+        if (glassOpacity == GLASS_OPACITY_DEFAULT) return R.string.d_pro_orbit_default;
+        return glassOpacity < GLASS_OPACITY_DEFAULT
+                ? R.string.d_pro_more_see_through : R.string.d_pro_more_solid;
+    }
+
+    @androidx.annotation.StringRes
+    public static int strengthLabelRes(int value) {
+        if (value == 100) return R.string.d_pro_orbit_default;
+        if (value == 0) return R.string.d_pro_neutral;
+        return value < 100 ? R.string.d_pro_subtle : R.string.d_pro_stronger;
+    }
+
+    @androidx.annotation.StringRes
+    public int glassTintLabelRes() { return strengthLabelRes(glassTint); }
+
+    @androidx.annotation.StringRes
+    public int glassEdgeLabelRes() { return strengthLabelRes(glassEdge); }
+
+    @androidx.annotation.StringRes
+    public static int backgroundModeLabelRes(int mode) {
+        if (mode == BACKGROUND_LINEAR) return R.string.d_pro_linear;
+        if (mode == BACKGROUND_GLOW) return R.string.d_pro_glow;
+        return R.string.d_pro_solid;
+    }
+
+    @androidx.annotation.StringRes
+    public int backgroundModeLabelRes() {
+        return backgroundModeLabelRes(backgroundMode);
+    }
+
+    @androidx.annotation.StringRes
+    public static int directionLabelRes(int direction) {
+        switch (direction) {
+            case DIRECTION_TR_BL: return R.string.d_pro_top_right;
+            case DIRECTION_RIGHT_LEFT: return R.string.d_pro_right;
+            case DIRECTION_BR_TL: return R.string.d_pro_bottom_right;
+            case DIRECTION_BOTTOM_TOP: return R.string.d_pro_bottom;
+            case DIRECTION_BL_TR: return R.string.d_pro_bottom_left;
+            case DIRECTION_LEFT_RIGHT: return R.string.d_pro_left;
+            case DIRECTION_TL_BR: return R.string.d_pro_top_left;
+            default: return R.string.d_pro_top;
+        }
+    }
+
+    @androidx.annotation.StringRes
+    public int directionLabelRes() {
+        return directionLabelRes(gradientDirection);
+    }
+
+    @androidx.annotation.StringRes
+    public static int glowPositionLabelRes(int position) {
+        if (position == GLOW_CENTER) return R.string.d_pro_center;
+        if (position == GLOW_BOTTOM) return R.string.d_pro_bottom;
+        return R.string.d_pro_top;
+    }
+
+    @androidx.annotation.StringRes
+    public int glowPositionLabelRes() {
+        return glowPositionLabelRes(glowPosition);
+    }
+
+    @androidx.annotation.StringRes
+    public static int glowStrengthLabelRes(int value) {
+        if (value <= 20) return R.string.d_pro_faint;
+        if (value <= 40) return R.string.d_pro_subtle;
+        if (value == GLOW_STRENGTH_DEFAULT) return R.string.d_pro_orbit_default;
+        if (value <= 70) return R.string.d_pro_clear;
+        return R.string.d_pro_dramatic;
+    }
+
+    @androidx.annotation.StringRes
+    public int glowStrengthLabelRes() {
+        return glowStrengthLabelRes(glowStrength);
+    }
+
+    @androidx.annotation.StringRes
+    public static int gradientStrengthLabelRes(int value) {
+        if (value == GRADIENT_STRENGTH_MAX) return R.string.d_pro_full;
+        if (value <= 30) return R.string.d_pro_whisper;
+        if (value <= 55) return R.string.d_pro_subtle;
+        return R.string.d_pro_balanced;
+    }
+
+    @androidx.annotation.StringRes
+    public int gradientStrengthLabelRes() {
+        return gradientStrengthLabelRes(gradientStrength);
+    }
+
+    @androidx.annotation.StringRes
+    public static int glowSizeLabelRes(int value) {
+        if (value <= 35) return R.string.d_pro_focused;
+        if (value == GLOW_SIZE_DEFAULT) return R.string.d_pro_orbit_default;
+        if (value <= 75) return R.string.d_pro_wide;
+        return R.string.d_pro_atmospheric;
+    }
+
+    @androidx.annotation.StringRes
+    public int glowSizeLabelRes() {
+        return glowSizeLabelRes(glowSize);
+    }
+
     // ---- how each value reads to a person ------------------------------------------------------------
+
+    public String bubbleRadiusLabel(android.content.Context context) { return context.getString(bubbleRadiusLabelRes()); }
+    public String bubbleOutlineLabel(android.content.Context context) { return context.getString(bubbleOutlineLabelRes()); }
+    public String glassOpacityLabel(android.content.Context context) { return context.getString(glassOpacityLabelRes()); }
+    public String glassTintLabel(android.content.Context context) { return context.getString(glassTintLabelRes()); }
+    public String glassEdgeLabel(android.content.Context context) { return context.getString(glassEdgeLabelRes()); }
+    public String backgroundModeLabel(android.content.Context context) { return context.getString(backgroundModeLabelRes()); }
+    public String directionLabel(android.content.Context context) { return context.getString(directionLabelRes()); }
+    public String glowPositionLabel(android.content.Context context) { return context.getString(glowPositionLabelRes()); }
+    public String glowStrengthLabel(android.content.Context context) { return context.getString(glowStrengthLabelRes()); }
+    public String gradientStrengthLabel(android.content.Context context) { return context.getString(gradientStrengthLabelRes()); }
+    public String glowSizeLabel(android.content.Context context) { return context.getString(glowSizeLabelRes()); }
 
     public String bubbleRadiusLabel() {
         if (bubbleRadiusDp <= 11) return "Squared";
@@ -687,6 +827,10 @@ public final class OrbitProStyle {
      * <p>Named by where the light starts rather than by an angle, because "Top left" is something
      * you can look at the preview and verify and "135 degrees" is not.
      */
+    public static String directionLabel(android.content.Context context, int direction) {
+        return context.getString(directionLabelRes(direction));
+    }
+
     public static String directionLabel(int direction) {
         switch (direction) {
             case DIRECTION_TR_BL: return "Top right";

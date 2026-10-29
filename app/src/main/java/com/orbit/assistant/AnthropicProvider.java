@@ -12,19 +12,20 @@ final class AnthropicProvider implements AiProvider {
     @Override public String id() { return Prefs.PROVIDER_ANTHROPIC; }
     @Override public String displayName() { return "Anthropic Claude"; }
     @Override public String description() { return "Claude models through Anthropic's official developer API."; }
+    @Override public String description(Context context) { return context.getString(R.string.prov_anthropic_description); }
     @Override public AiCapabilities capabilities() { return CAPABILITIES; }
     @Override public Status status(Context context) {
         return SecureStore.hasAnthropicKey(context) ? Status.READY : Status.NEEDS_SETUP;
     }
     @Override public String statusDetail(Context context) {
-        return SecureStore.hasAnthropicKey(context) ? "API key saved" : "API key required";
+        return SecureStore.hasAnthropicKey(context) ? context.getString(R.string.anthropic_key_saved) : context.getString(R.string.anthropic_key_required);
     }
     @Override public boolean selectable(Context context) { return true; }
 
     @Override public void send(Context context, AiRequest request, AssistantClient.Callback callback) {
         String key = SecureStore.loadAnthropicKey(context);
         if (key.isEmpty()) {
-            callback.onError("Add an Anthropic API key in Settings > AI Providers first.");
+            callback.onError(context.getString(R.string.anthropic_add_key_settings));
             return;
         }
         ApiKeyProviderClient.send(context, id(), key, request, callback);
@@ -33,7 +34,7 @@ final class AnthropicProvider implements AiProvider {
     @Override public void plan(Context context, String prompt, AiSelection selection,
                                AssistantClient.PlanCallback callback) {
         String key = SecureStore.loadAnthropicKey(context);
-        if (key.isEmpty()) { callback.onError("Add an Anthropic API key first."); return; }
+        if (key.isEmpty()) { callback.onError(context.getString(R.string.anthropic_add_key)); return; }
         ApiKeyProviderClient.complete(context, id(), key, AiSelections.resolve(selection),
                 "Return only the requested valid JSON. Do not add Markdown fences.", prompt,
                 callback);
@@ -46,7 +47,7 @@ final class AnthropicProvider implements AiProvider {
     @Override public void complete(Context context, String instructions, String prompt,
                                    AssistantClient.PlanCallback callback) {
         String key = SecureStore.loadAnthropicKey(context);
-        if (key.isEmpty()) { callback.onError("Add an Anthropic API key first."); return; }
+        if (key.isEmpty()) { callback.onError(context.getString(R.string.anthropic_add_key)); return; }
         AiSelection selection = ModelLibraryStore.providerDefault(context, id());
         ApiKeyProviderClient.complete(context, id(), key, AiSelections.resolve(selection),
                 instructions, prompt, callback);

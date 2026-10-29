@@ -77,24 +77,24 @@ public final class WhatsNewActivity extends Activity {
         LinearLayout titles = new LinearLayout(this);
         titles.setOrientation(LinearLayout.VERTICAL);
         titles.setPadding(UiKit.dp(this, 13), 0, 0, 0);
-        titles.addView(UiKit.text(this, "What's New", 24, UiKit.TEXT, true));
-        titles.addView(UiKit.text(this, "Recent stable Orbit releases", 13, UiKit.MUTED, false));
+        titles.addView(UiKit.text(this, getString(R.string.whatsnew_title), 24, UiKit.TEXT, true));
+        titles.addView(UiKit.text(this, getString(R.string.whatsnew_subtitle), 13, UiKit.MUTED, false));
         header.addView(titles, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         page.addView(header);
 
         TextView current = UiKit.text(this,
-                "Current version: " + BuildConfig.VERSION_NAME + " (" + BuildConfig.VERSION_CODE + ")",
+                getString(R.string.whatsnew_current_version, BuildConfig.VERSION_NAME, BuildConfig.VERSION_CODE),
                 13, UiKit.MUTED, false);
         LinearLayout.LayoutParams currentLp = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         currentLp.setMargins(UiKit.dp(this, 3), UiKit.dp(this, 20), UiKit.dp(this, 3), UiKit.dp(this, 12));
         page.addView(current, currentLp);
 
-        status = UiKit.text(this, "Loading stable release notes…", 13, UiKit.MUTED, false);
+        status = UiKit.text(this, getString(R.string.whatsnew_loading), 13, UiKit.MUTED, false);
         status.setLineSpacing(0, 1.1f);
         page.addView(status);
 
-        retry = secondaryButton("Retry");
+        retry = secondaryButton(getString(R.string.ui_retry_942087cc));
         retry.setVisibility(View.GONE);
         retry.setOnClickListener(v -> loadNotes());
         LinearLayout.LayoutParams retryLp = new LinearLayout.LayoutParams(
@@ -110,7 +110,7 @@ public final class WhatsNewActivity extends Activity {
         page.addView(notesContainer, notesLp);
 
         TextView source = UiKit.text(this,
-                "Release notes come from the public lpnovi/Orbit-Assistant GitHub Releases page. Orbit caches the last successful result for offline viewing.",
+                getString(R.string.whatsnew_source),
                 11, UiKit.MUTED, false);
         source.setLineSpacing(0, 1.1f);
         LinearLayout.LayoutParams sourceLp = new LinearLayout.LayoutParams(
@@ -122,7 +122,7 @@ public final class WhatsNewActivity extends Activity {
     }
 
     private void loadNotes() {
-        status.setText("Loading stable release notes…");
+        status.setText(R.string.whatsnew_loading);
         status.setTextColor(UiKit.MUTED);
         retry.setVisibility(View.GONE);
         notesContainer.removeAllViews();
@@ -132,8 +132,8 @@ public final class WhatsNewActivity extends Activity {
                 runOnUiThread(() -> {
                     if (isFinishing() || isDestroyed()) return;
                     status.setText(fromCache
-                            ? "Offline · showing the last successfully cached release notes."
-                            : "Latest stable release notes from GitHub.");
+                            ? getString(R.string.whatsnew_offline)
+                            : getString(R.string.whatsnew_latest));
                     status.setTextColor(fromCache ? Color.rgb(236, 187, 95) : UiKit.SUCCESS);
                     renderReleases(releases);
                 });
@@ -153,7 +153,7 @@ public final class WhatsNewActivity extends Activity {
     private void renderReleases(List<ReleaseNotesRepository.ReleaseNote> releases) {
         notesContainer.removeAllViews();
         if (releases == null || releases.isEmpty()) {
-            status.setText("No stable Orbit release notes are available yet.");
+            status.setText(R.string.whatsnew_none);
             retry.setVisibility(View.VISIBLE);
             return;
         }
@@ -163,12 +163,12 @@ public final class WhatsNewActivity extends Activity {
                 && ReleaseNotesRepository.isNewerThanCurrent(releases.get(0).versionName)) {
             LinearLayout update = card();
             update.addView(UiKit.text(this,
-                    "Update available · v" + releases.get(0).versionName, 15, UiKit.TEXT, true));
+                    getString(R.string.whatsnew_update_available, releases.get(0).versionName), 15, UiKit.TEXT, true));
             TextView detail = UiKit.text(this,
-                    "Return to About & updates to use Orbit's verified updater.", 12, UiKit.MUTED, false);
+                    getString(R.string.whatsnew_update_hint), 12, UiKit.MUTED, false);
             detail.setPadding(0, UiKit.dp(this, 4), 0, UiKit.dp(this, 10));
             update.addView(detail);
-            Button open = primaryButton("Open About & updates");
+            Button open = primaryButton(getString(R.string.whatsnew_open_updates));
             open.setOnClickListener(v -> {
                 startActivity(new Intent(this, UpdateActivity.class));
                 finish();
@@ -187,7 +187,7 @@ public final class WhatsNewActivity extends Activity {
         LinearLayout card = card();
         card.addView(UiKit.text(this, release.title, 17, UiKit.TEXT, true));
         String metadata = "v" + release.versionName;
-        if (release.versionName.equals(BuildConfig.VERSION_NAME)) metadata += " · Installed";
+        if (release.versionName.equals(BuildConfig.VERSION_NAME)) metadata += getString(R.string.whatsnew_installed);
         if (release.publishedAt.length() >= 10) metadata += " · " + release.publishedAt.substring(0, 10);
         TextView version = UiKit.text(this, metadata, 11, UiKit.MUTED, false);
         version.setPadding(0, UiKit.dp(this, 4), 0, UiKit.dp(this, 11));
@@ -196,7 +196,7 @@ public final class WhatsNewActivity extends Activity {
         CharSequence notes = markdown(OrbitDistribution.isPlay()
                 ? withoutApkFooter(release.body) : release.body);
         TextView body = UiKit.text(this, "", 13, UiKit.TEXT, false);
-        body.setText(notes.length() == 0 ? "No release notes were provided." : notes);
+        body.setText(notes.length() == 0 ? getString(R.string.whatsnew_no_notes) : notes);
         body.setLineSpacing(UiKit.dp(this, 2), 1.08f);
         card.addView(body);
         return card;
@@ -298,7 +298,7 @@ public final class WhatsNewActivity extends Activity {
         button.setImageResource(R.drawable.ic_back);
         button.setImageTintList(ColorStateList.valueOf(UiKit.accent(this)));
         button.setBackground(UiKit.ripple(UiKit.SURFACE_2, UiKit.accent(this), 18, this));
-        button.setContentDescription("Back");
+        button.setContentDescription(getString(R.string.ui_back_76900f1b));
         button.setPadding(UiKit.dp(this, 10), UiKit.dp(this, 10), UiKit.dp(this, 10), UiKit.dp(this, 10));
         UiKit.pressScale(button);
         return button;

@@ -59,13 +59,12 @@ final class ContinueChat {
         Context c = context.getApplicationContext();
         Handler main = new Handler(Looper.getMainLooper());
         if (!available(c)) {
-            main.post(() -> callback.onFailed("Continue in new chat needs ChatGPT sign-in to write "
-                    + "the summary. This chat is unchanged."));
+            main.post(() -> callback.onFailed(c.getString(R.string.cch_needs_signin)));
             return;
         }
         ConversationStore.Conversation chat = ConversationStore.load(c, conversationId);
         if (chat == null || chat.messages.isEmpty()) {
-            main.post(() -> callback.onFailed("There is nothing in this chat to continue yet."));
+            main.post(() -> callback.onFailed(c.getString(R.string.cch_nothing)));
             return;
         }
         String prompt = summaryPrompt(chat.title, chat.messages, chat.keptItems());
@@ -74,14 +73,13 @@ final class ContinueChat {
                     @Override public void onText(String raw, String providerLabel) {
                         String summary = cleanSummary(raw);
                         if (summary == null) {
-                            main.post(() -> callback.onFailed("Orbit could not write a summary. "
-                                    + "This chat is unchanged."));
+                            main.post(() -> callback.onFailed(c.getString(R.string.cch_summary_failed)));
                             return;
                         }
                         String fresh = ConversationStore.newId();
                         List<KeptContext> items = new ArrayList<>();
                         items.add(KeptContext.create(KeptContext.KIND_SUMMARY,
-                                "Summary of " + chat.title, summary, "", "", false));
+                                c.getString(R.string.cch_summary_of, chat.title), summary, "", "", false));
                         for (KeptContext kept : chat.keptItems()) {
                             if (items.size() >= KeptContext.MAX_ITEMS) break;
                             // The text travels; the original chat's document path does not, so
@@ -94,15 +92,13 @@ final class ContinueChat {
                                         : AiSelections.resolve(chat.aiSelection), items);
                         main.post(() -> {
                             if (created) callback.onReady(fresh);
-                            else callback.onFailed("Orbit could not create the new chat. "
-                                    + "This chat is unchanged.");
+                            else callback.onFailed(c.getString(R.string.cch_create_failed));
                         });
                     }
 
                     @Override public void onError(String message) {
-                        main.post(() -> callback.onFailed("Orbit could not write a summary: "
-                                + (message == null ? "unknown error" : message)
-                                + ". This chat is unchanged."));
+                        main.post(() -> callback.onFailed(c.getString(R.string.cch_summary_error,
+                                message == null ? c.getString(R.string.cch_unknown_error) : message)));
                     }
                 });
     }

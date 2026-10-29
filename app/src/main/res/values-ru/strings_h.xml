@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="h_page_of">Страница %1$d из %2$d</string>
+    <plurals name="h_page_count">
+        <item quantity="one">%d страница</item>
+        <item quantity="few">%d страницы</item>
+        <item quantity="many">%d страниц</item>
+        <item quantity="other">%d страницы</item>
+    </plurals>
+    <string name="h_attachment_attached">Вложение добавлено: %1$s</string>
+    <plurals name="h_attachments_added">
+        <item quantity="one">Добавлено вложений: %d</item>
+        <item quantity="few">Добавлено вложений: %d</item>
+        <item quantity="many">Добавлено вложений: %d</item>
+        <item quantity="other">Добавлено вложений: %d</item>
+    </plurals>
+    <plurals name="h_attachments_unreadable">
+        <item quantity="one">%d не удалось прочитать</item>
+        <item quantity="few">%d не удалось прочитать</item>
+        <item quantity="many">%d не удалось прочитать</item>
+        <item quantity="other">%d не удалось прочитать</item>
+    </plurals>
+    <string name="h_trigger_running">Сработало · выполняется</string>
+    <string name="h_state_on">Включено</string>
+    <string name="h_state_off">Выключено</string>
+    <string name="h_selected_suffix">, выбрано</string>
+    <string name="h_kept_suffix">, сохранено в этом чате</string>
+    <string name="h_opens_document_suffix">, открывает просмотр документа</string>
+    <string name="h_opens_full_suffix">, открывает на весь экран</string>
+    <string name="h_dial_cancel_desc">%1$s, закрыть без открытия номеронабирателя</string>
+    <string name="h_dial_confirm_desc">%1$s: %2$s</string>
+    <string name="h_subject_chat">чат</string>
+    <string name="h_swipe_pin">Закрепить: %1$s</string>
+    <string name="h_swipe_unpin">Открепить: %1$s</string>
+    <string name="h_swipe_delete">Удалить: %1$s</string>
+</resources>

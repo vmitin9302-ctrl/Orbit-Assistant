@@ -196,48 +196,49 @@ public final class RoutineTriggerDraft {
     /** Short human summary for the preview, e.g. "Weekdays at 11:00 PM". */
     public String summary(Context context) {
         if (isTime()) {
-            String when = RoutineActionCatalog.timeLabel(hour, minute);
+            String when = RoutineActionCatalog.timeLabel(context, hour, minute);
             switch (mode) {
-                case RoutineTriggerStore.MODE_ONCE: return "Once at " + when;
-                case RoutineTriggerStore.MODE_DAILY: return "Daily at " + when;
-                case RoutineTriggerStore.MODE_WEEKDAYS: return "Weekdays at " + when;
-                case RoutineTriggerStore.MODE_WEEKENDS: return "Weekends at " + when;
-                case RoutineTriggerStore.MODE_WEEKLY: return weekdayNames() + " at " + when;
-                default: return "Repeating at " + when;
+                case RoutineTriggerStore.MODE_ONCE: return context.getString(R.string.d_rtd_once_at, when);
+                case RoutineTriggerStore.MODE_DAILY: return context.getString(R.string.d_rtd_daily_at, when);
+                case RoutineTriggerStore.MODE_WEEKDAYS: return context.getString(R.string.d_rtd_weekdays_at, when);
+                case RoutineTriggerStore.MODE_WEEKENDS: return context.getString(R.string.d_rtd_weekends_at, when);
+                case RoutineTriggerStore.MODE_WEEKLY: return context.getString(R.string.d_rtd_at, weekdayNames(context), when);
+                default: return context.getString(R.string.d_rtd_repeating_at, when);
             }
         }
         if (isLocation()) {
-            String place = placeLabel.isEmpty() ? "a place" : placeLabel;
-            return ("arrive".equals(transition) ? "Arrive at " : "Leave ") + place;
+            String place = placeLabel.isEmpty() ? context.getString(R.string.d_rtd_a_place) : placeLabel;
+            return context.getString("arrive".equals(transition)
+                    ? R.string.d_rtd_arrive : R.string.d_rtd_leave, place);
         }
         return "";
     }
 
-    private String weekdayNames() {
-        String[] names = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
+    private String weekdayNames(Context context) {
+        String[] names = {context.getString(R.string.d_tte_mon), context.getString(R.string.d_tte_tue), context.getString(R.string.d_tte_wed), context.getString(R.string.d_tte_thu), context.getString(R.string.d_tte_fri), context.getString(R.string.d_tte_sat), context.getString(R.string.d_tte_sun)};
         StringBuilder out = new StringBuilder();
         for (int i = 0; i < names.length; i++) {
             if ((weekdayMask & (1 << i)) == 0) continue;
             if (out.length() > 0) out.append(", ");
             out.append(names[i]);
         }
-        return out.length() == 0 ? "Weekly" : out.toString();
+        return out.length() == 0 ? context.getString(R.string.d_tte_weekly) : out.toString();
     }
 
     /** Readiness for the preview, using the existing capability checks. */
     public String readiness(Context context) {
         if (context == null) return "";
-        if (!resolved) return "Needs a location";
+        if (!resolved) return context.getString(R.string.d_rtd_needs_location);
         if (isLocation()) {
             if (!OrbitDistribution.supportsLocationTriggers()) {
                 return OrbitDistribution.LOCATION_TRIGGER_UNAVAILABLE_STATE;
             }
             if (!RoutineLocationTriggerScheduler.hasBackgroundLocation(context))
-                return "Needs location access";
+                return context.getString(R.string.d_rtd_needs_access);
             if (!RoutineLocationTriggerScheduler.isLocationEnabled(context))
-                return "Phone location is off";
-            return "Ready";
+                return context.getString(R.string.d_rtrg_state_phone_off);
+            return context.getString(R.string.d_rtd_ready);
         }
-        return "Ready";
+        return context.getString(R.string.d_rtd_ready);
     }
 }

@@ -316,7 +316,7 @@ public final class ConversationContextTest {
         ledger.text(ContextLedger.Category.INSTRUCTIONS, "SECRET SYSTEM PROMPT");
         assertFalse(ledger.breakdown().toString().contains("SECRET"));
         for (ContextLedger.Category category : ContextLedger.Category.values()) {
-            assertFalse(category.label.toLowerCase(java.util.Locale.US).contains("system prompt"));
+            assertFalse(category.label(context).toLowerCase(java.util.Locale.US).contains("system prompt"));
         }
     }
 

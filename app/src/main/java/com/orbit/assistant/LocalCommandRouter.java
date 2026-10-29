@@ -18,10 +18,10 @@ public final class LocalCommandRouter {
         if (raw == null || raw.trim().isEmpty()) return false;
         List<String> parts = splitIntoCommandParts(raw.trim());
         if (parts.size() > 1) {
-            for (String part : parts) if (parseSingleCommand(part) == null) return false;
+            for (String part : parts) if (parseSingleCommand(null, part) == null) return false;
             return true;
         }
-        return parseSingleCommand(raw.trim()) != null;
+        return parseSingleCommand(null, raw.trim()) != null;
     }
 
     public static AssistantReply tryHandle(Context context, String raw) {
@@ -29,7 +29,7 @@ public final class LocalCommandRouter {
         String normalized = raw.trim();
         if (normalized.isEmpty()) return null;
 
-        AssistantReply clarify = clarifyAmbiguousFollowUp(normalized);
+        AssistantReply clarify = clarifyAmbiguousFollowUp(context, normalized);
         if (clarify != null) return clarify;
 
         List<String> parts = splitIntoCommandParts(normalized);
@@ -37,24 +37,24 @@ public final class LocalCommandRouter {
             List<AssistantReply.Action> actions = new ArrayList<>();
             List<String> spoken = new ArrayList<>();
             for (String part : parts) {
-                ParsedCommand parsed = parseSingleCommand(part);
+                ParsedCommand parsed = parseSingleCommand(context, part);
                 if (parsed == null) return null;
                 actions.add(parsed.action);
                 spoken.add(parsed.spokenLabel);
             }
             if (!actions.isEmpty()) {
-                return new AssistantReply(chainIntro(spoken), actions);
+                return new AssistantReply(chainIntro(context, spoken), actions);
             }
         }
 
-        ParsedCommand single = parseSingleCommand(normalized);
+        ParsedCommand single = parseSingleCommand(context, normalized);
         if (single == null) return null;
         List<AssistantReply.Action> a = new ArrayList<>();
         a.add(single.action);
         return new AssistantReply(single.responseText, a);
     }
 
-    private static ParsedCommand parseSingleCommand(String raw) {
+    private static ParsedCommand parseSingleCommand(Context c, String raw) {
         // Shared tidying, then the polite wrapper people put around a spoken instruction, so the
         // matchers below see the instruction itself rather than every way of asking for it.
         String q = LanguageNormalizer.stripPoliteness(LanguageNormalizer.canonical(raw));
@@ -66,13 +66,16 @@ public final class LocalCommandRouter {
                     || q.equals("open my phone settings") || q.equals("open phone settings")
                     || q.equals("open android settings") || q.equals("open the settings")) {
                 return new ParsedCommand(action("OPEN_SETTINGS", new JSONObject()),
-                        "Opening Settings.", "open Settings");
+                        t(c, R.string.lcr_open_settings, "Opening Settings."),
+                        t(c, R.string.lcr_sum_open_settings, "open Settings"));
             }
             if (q.contains("flashlight") || q.contains("torch")) {
                 boolean on = !(q.contains("off") || q.contains("disable") || q.contains("turn it off"));
                 return new ParsedCommand(action("FLASHLIGHT", new JSONObject().put("on", on)),
-                        on ? "Turning on the flashlight." : "Turning off the flashlight.",
-                        on ? "turn on the flashlight" : "turn off the flashlight");
+                        on ? t(c, R.string.lcr_flash_on, "Turning on the flashlight.")
+                                : t(c, R.string.lcr_flash_off, "Turning off the flashlight."),
+                        on ? t(c, R.string.lcr_sum_flash_on, "turn on the flashlight")
+                                : t(c, R.string.lcr_sum_flash_off, "turn off the flashlight"));
             }
             // "dnd" has already been expanded to "do not disturb" by the shared normalizer, so
             // every spelling of the feature reaches one matcher.
@@ -80,13 +83,15 @@ public final class LocalCommandRouter {
                 boolean off = q.matches(".*\\b(off|disable|disabled|stop|end|cancel|exit)\\b.*");
                 boolean enabled = !off;
                 return new ParsedCommand(action("SET_DND", new JSONObject().put("enabled", enabled)),
-                        enabled ? "Turning on Do Not Disturb." : "Turning off Do Not Disturb.",
-                        enabled ? "turn on Do Not Disturb" : "turn off Do Not Disturb");
+                        enabled ? t(c, R.string.lcr_dnd_on, "Turning on Do Not Disturb.")
+                                : t(c, R.string.lcr_dnd_off, "Turning off Do Not Disturb."),
+                        enabled ? t(c, R.string.lcr_sum_dnd_on, "turn on Do Not Disturb")
+                                : t(c, R.string.lcr_sum_dnd_off, "turn off Do Not Disturb"));
             }
             // A bare follow-up borrows the target Orbit last acted on, when there is exactly one
             // and the phrase names none of its own. Resolved before anything else so the rest of
             // the parsing sees an ordinary, fully-specified command.
-            ParsedCommand followUp = parseRecentActionFollowUp(q);
+            ParsedCommand followUp = parseRecentActionFollowUp(c, q);
             if (followUp != null) return followUp;
 
             // Relative requests are resolved first so clear relative grammar - "lower brightness
@@ -99,41 +104,41 @@ public final class LocalCommandRouter {
                 if (relative.absolute) params.put("percent", relative.percent);
                 else params.put("delta", relative.delta);
                 return new ParsedCommand(action(relative.actionType(), params),
-                        relative.confirmation(), relative.summary());
+                        relative.confirmation(c), relative.summary(c));
             }
             Matcher brightness = Pattern.compile("(?:set|change|make|put|lower|raise|increase|decrease)?\\s*(?:my\\s+)?brightness(?:\\s*(?:to|at))?\\s*(\\d{1,3})\\s*%?").matcher(q);
             if (brightness.find()) {
                 int percent = clampPercent(Integer.parseInt(brightness.group(1)));
                 return new ParsedCommand(action("SET_BRIGHTNESS", new JSONObject().put("percent", percent)),
-                        "Setting brightness to " + percent + "%.",
-                        "set brightness to " + percent + "%");
+                        t(c, R.string.lcr_bright_set, "Setting brightness to " + percent + "%.", percent),
+                        t(c, R.string.lcr_sum_bright_set, "set brightness to " + percent + "%", percent));
             }
             Matcher lowerBrightness = Pattern.compile("(?:lower|decrease|dim) (?:my\\s+)?brightness(?:\\s+to)?\\s*(\\d{1,3})\\s*%?").matcher(q);
             if (lowerBrightness.find()) {
                 int percent = clampPercent(Integer.parseInt(lowerBrightness.group(1)));
                 return new ParsedCommand(action("SET_BRIGHTNESS", new JSONObject().put("percent", percent)),
-                        "Lowering brightness to " + percent + "%.",
-                        "lower brightness to " + percent + "%");
+                        t(c, R.string.lcr_bright_lower, "Lowering brightness to " + percent + "%.", percent),
+                        t(c, R.string.lcr_sum_bright_lower, "lower brightness to " + percent + "%", percent));
             }
             Matcher volume = Pattern.compile("(?:set|change|make|put|lower|raise|increase|decrease) (?:my\\s+)?(?:media\\s+)?volume(?:\\s*(?:to|at))?\\s*(\\d{1,3})\\s*%?").matcher(q);
             if (volume.find()) {
                 int percent = clampPercent(Integer.parseInt(volume.group(1)));
                 return new ParsedCommand(action("SET_VOLUME", new JSONObject().put("percent", percent)),
-                        "Setting media volume to " + percent + "%.",
-                        "set media volume to " + percent + "%");
+                        t(c, R.string.lcr_vol_set, "Setting media volume to " + percent + "%.", percent),
+                        t(c, R.string.lcr_sum_vol_set, "set media volume to " + percent + "%", percent));
             }
             if (q.contains("timer")) {
-                ParsedCommand parsedTimer = parseTimer(q);
+                ParsedCommand parsedTimer = parseTimer(c, q);
                 if (parsedTimer != null) return parsedTimer;
             }
-            ParsedCommand parsedAlarm = parseAlarm(q);
+            ParsedCommand parsedAlarm = parseAlarm(c, q);
             if (parsedAlarm != null) return parsedAlarm;
 
             // Playback and the ringer, both of which are plain phrases with no numbers in them, so
             // they sit after every matcher that reads a level and cannot take a request from one.
-            ParsedCommand media = parseMedia(q);
+            ParsedCommand media = parseMedia(c, q);
             if (media != null) return media;
-            ParsedCommand ringer = parseRinger(q);
+            ParsedCommand ringer = parseRinger(c, q);
             if (ringer != null) return ringer;
 
             // Everyday ways of saying "launch this app". Anchored at the start so a sentence that
@@ -145,7 +150,8 @@ public final class LocalCommandRouter {
                 String name = cleanAppName(app.group(1));
                 if (!name.isEmpty() && name.length() < 60 && !looksLikeSentence(name)) {
                     return new ParsedCommand(action("OPEN_APP", new JSONObject().put("app", name)),
-                            "Opening " + name + ".", "open " + name);
+                            t(c, R.string.lcr_open_app, "Opening " + name + ".", name),
+                            t(c, R.string.lcr_sum_open_app, "open " + name, name));
                 }
             }
         } catch (Exception ignored) {
@@ -161,13 +167,13 @@ public final class LocalCommandRouter {
      * works when Orbit holds a real previous reading — it never guesses a level it did not
      * observe.
      */
-    private static ParsedCommand parseRecentActionFollowUp(String q) throws org.json.JSONException {
+    private static ParsedCommand parseRecentActionFollowUp(Context c, String q) throws org.json.JSONException {
         RecentActionContext.Target target = RecentActionContext.current();
         if (target == null) return null;
         if (!RecentActionContext.isBareFollowUp(q)) return null;
 
         if (RecentActionContext.isRestore(q)) {
-            RecentActionContext.Restore restore = RecentActionContext.restore();
+            RecentActionContext.Restore restore = RecentActionContext.restore(c);
             return restore == null ? null
                     : new ParsedCommand(restore.action, restore.spoken, restore.summary);
         }
@@ -177,7 +183,7 @@ public final class LocalCommandRouter {
         // did not just undo.
         String back = RecentActionContext.backOnOff(q);
         if (back != null) {
-            RecentActionContext.Restore restore = RecentActionContext.restore();
+            RecentActionContext.Restore restore = RecentActionContext.restore(c);
             if (restore == null) return null;
             boolean wantOn = "on".equals(back);
             switch (target) {
@@ -205,12 +211,16 @@ public final class LocalCommandRouter {
             if (on == null) return null;
             if (flashlight) {
                 return new ParsedCommand(action("FLASHLIGHT", new JSONObject().put("on", on)),
-                        on ? "Turning on the flashlight." : "Turning off the flashlight.",
-                        on ? "turn on the flashlight" : "turn off the flashlight");
+                        on ? t(c, R.string.lcr_flash_on, "Turning on the flashlight.")
+                                : t(c, R.string.lcr_flash_off, "Turning off the flashlight."),
+                        on ? t(c, R.string.lcr_sum_flash_on, "turn on the flashlight")
+                                : t(c, R.string.lcr_sum_flash_off, "turn off the flashlight"));
             }
             return new ParsedCommand(action("SET_DND", new JSONObject().put("enabled", on)),
-                    on ? "Turning on Do Not Disturb." : "Turning off Do Not Disturb.",
-                    on ? "turn on Do Not Disturb" : "turn off Do Not Disturb");
+                    on ? t(c, R.string.lcr_dnd_on, "Turning on Do Not Disturb.")
+                            : t(c, R.string.lcr_dnd_off, "Turning off Do Not Disturb."),
+                    on ? t(c, R.string.lcr_sum_dnd_on, "turn on Do Not Disturb")
+                            : t(c, R.string.lcr_sum_dnd_off, "turn off Do Not Disturb"));
         }
         // The ringer has three states, so nothing but an explicit restore resolves against it.
         if (target == RecentActionContext.Target.RINGER) return null;
@@ -233,7 +243,7 @@ public final class LocalCommandRouter {
         if (resolved.absolute) params.put("percent", resolved.percent);
         else params.put("delta", resolved.delta);
         return new ParsedCommand(action(resolved.actionType(), params),
-                resolved.confirmation(), resolved.summary());
+                resolved.confirmation(c), resolved.summary(c));
     }
 
     /**
@@ -243,11 +253,15 @@ public final class LocalCommandRouter {
      * Orbit changes nothing and asks, which is the one answer that cannot be wrong.
      */
     static AssistantReply clarifyAmbiguousFollowUp(String raw) {
+        return clarifyAmbiguousFollowUp(null, raw);
+    }
+
+    static AssistantReply clarifyAmbiguousFollowUp(Context c, String raw) {
         if (!RecentActionContext.isAmbiguous()) return null;
         String q = LanguageNormalizer.stripPoliteness(LanguageNormalizer.canonical(raw));
         if (q.isEmpty() || !RecentActionContext.isBareFollowUp(q)) return null;
         if (!RecentActionContext.looksLikeFollowUp(q)) return null;
-        String question = RecentActionContext.clarification();
+        String question = RecentActionContext.clarification(c);
         return question.isEmpty() ? null : new AssistantReply(question);
     }
 
@@ -278,11 +292,11 @@ public final class LocalCommandRouter {
                     + "|last\\s+(?:song|track)"
                     + "|(?:go\\s+)?back\\s+(?:a|one)\\s+(?:song|track|episode))$");
 
-    private static ParsedCommand parseMedia(String q) throws org.json.JSONException {
-        if (MEDIA_PAUSE.matcher(q).matches()) return media("PAUSE", "Pausing playback.", "pause playback");
-        if (MEDIA_PLAY.matcher(q).matches()) return media("PLAY", "Resuming playback.", "resume playback");
-        if (MEDIA_NEXT.matcher(q).matches()) return media("NEXT", "Skipping to the next track.", "skip to the next track");
-        if (MEDIA_PREVIOUS.matcher(q).matches()) return media("PREVIOUS", "Going back a track.", "go back a track");
+    private static ParsedCommand parseMedia(Context c, String q) throws org.json.JSONException {
+        if (MEDIA_PAUSE.matcher(q).matches()) return media("PAUSE", t(c, R.string.lcr_media_pause, "Pausing playback."), t(c, R.string.lcr_sum_media_pause, "pause playback"));
+        if (MEDIA_PLAY.matcher(q).matches()) return media("PLAY", t(c, R.string.lcr_media_play, "Resuming playback."), t(c, R.string.lcr_sum_media_play, "resume playback"));
+        if (MEDIA_NEXT.matcher(q).matches()) return media("NEXT", t(c, R.string.lcr_media_next, "Skipping to the next track."), t(c, R.string.lcr_sum_media_next, "skip to the next track"));
+        if (MEDIA_PREVIOUS.matcher(q).matches()) return media("PREVIOUS", t(c, R.string.lcr_media_prev, "Going back a track."), t(c, R.string.lcr_sum_media_prev, "go back a track"));
         return null;
     }
 
@@ -321,7 +335,7 @@ public final class LocalCommandRouter {
             "\\b(off (?:silent|vibrate)|out of (?:silent|vibrate)|un(?:mute|silence)|normal)\\b"
                     + "|\\bring(?:er)?\\b.*\\bon\\b|\\bon\\b.*\\bring(?:er)?\\b");
 
-    private static ParsedCommand parseRinger(String q) throws org.json.JSONException {
+    private static ParsedCommand parseRinger(Context c, String q) throws org.json.JSONException {
         boolean explicit = RINGER_EXPLICIT.matcher(q).find();
         boolean aboutThePhone = RINGER_QUIET_WORD.matcher(q).find()
                 && NAMES_THE_PHONE.matcher(q).find();
@@ -336,11 +350,16 @@ public final class LocalCommandRouter {
         else if (q.matches(".*\\bvibrat(?:e|ion)\\b.*")) mode = "vibrate";
         else mode = "silent";
 
-        String spoken = "normal".equals(mode) ? "Turning the ringer back on."
-                : "vibrate".equals(mode) ? "Putting the phone on vibrate."
-                : "Silencing the phone.";
-        String label = "normal".equals(mode) ? "turn the ringer back on"
-                : "vibrate".equals(mode) ? "put the phone on vibrate" : "silence the phone";
+        String spoken = "normal".equals(mode)
+                ? t(c, R.string.lcr_ringer_normal, "Turning the ringer back on.")
+                : "vibrate".equals(mode)
+                ? t(c, R.string.lcr_ringer_vibrate, "Putting the phone on vibrate.")
+                : t(c, R.string.lcr_ringer_silent, "Silencing the phone.");
+        String label = "normal".equals(mode)
+                ? t(c, R.string.lcr_sum_ringer_normal, "turn the ringer back on")
+                : "vibrate".equals(mode)
+                ? t(c, R.string.lcr_sum_ringer_vibrate, "put the phone on vibrate")
+                : t(c, R.string.lcr_sum_ringer_silent, "silence the phone");
         return new ParsedCommand(
                 action("SET_RINGER_MODE", new JSONObject().put("mode", mode)), spoken, label);
     }
@@ -439,7 +458,7 @@ public final class LocalCommandRouter {
      * run of duration words belonging to this timer, and stop at the end of that run, so a chained
      * "and remind me in 5 minutes" can never be added to it.
      */
-    private static ParsedCommand parseTimer(String q) throws org.json.JSONException {
+    private static ParsedCommand parseTimer(Context c, String q) throws org.json.JSONException {
         int at = q.indexOf("timer");
         if (at < 0) return null;
         String after = q.substring(at + "timer".length());
@@ -482,7 +501,7 @@ public final class LocalCommandRouter {
     private static final Pattern ALARM_TIME = Pattern.compile(
             "(?:alarm|wake me(?: up)?)\\s*(?:for|at)?\\s*(\\d{1,2})(?::(\\d{2}))?\\s*(am|pm)?\\b");
 
-    private static ParsedCommand parseAlarm(String q) throws org.json.JSONException {
+    private static ParsedCommand parseAlarm(Context c, String q) throws org.json.JSONException {
         if (!q.contains("alarm") && !q.contains("wake me")) return null;
 
         // The SET_ALARM action carries only an hour and a minute. Silently dropping "tomorrow"
@@ -502,7 +521,8 @@ public final class LocalCommandRouter {
         return new ParsedCommand(
                 action("SET_ALARM", new JSONObject().put("hour", hour).put("minute", minute)
                         .put("label", "Orbit alarm")),
-                "Opening your Clock app with that alarm.", "set an alarm");
+                t(c, R.string.lcr_alarm, "Opening your Clock app with that alarm."),
+                t(c, R.string.lcr_sum_alarm, "set an alarm"));
     }
 
     /** Trims filler that trails an app name in ordinary speech. */
@@ -587,22 +607,29 @@ public final class LocalCommandRouter {
      */
     private static boolean continuesDuration(String previous, String joiner, String part) {
         if (previous == null || part == null) return false;
-        if (parseSingleCommand(part) != null) return false;
+        if (parseSingleCommand(null, part) != null) return false;
         long before = DurationParser.parseFirstRun(previous).seconds;
         long after = DurationParser.parseFirstRun(previous + glue(joiner) + part).seconds;
         return after > before;
     }
 
-    private static String chainIntro(List<String> spoken) {
-        if (spoken == null || spoken.isEmpty()) return "Working on it.";
-        if (spoken.size() == 1) return "Okay, I'll " + spoken.get(0) + ".";
-        StringBuilder b = new StringBuilder("Okay, I'll ");
-        for (int i = 0; i < spoken.size(); i++) {
-            if (i > 0) b.append(i == spoken.size() - 1 ? ", and " : ", ");
-            b.append(spoken.get(i));
+    private static String chainIntro(Context c, List<String> spoken) {
+        if (spoken == null || spoken.isEmpty()) return t(c, R.string.lcr_chain_working, "Working on it.");
+        if (spoken.size() == 1) {
+            return t(c, R.string.lcr_chain_intro, "Okay, I'll " + spoken.get(0) + ".", spoken.get(0));
         }
-        b.append('.');
-        return b.toString();
+        StringBuilder head = new StringBuilder();
+        for (int i = 0; i < spoken.size() - 1; i++) {
+            if (i > 0) head.append(", ");
+            head.append(spoken.get(i));
+        }
+        String last = spoken.get(spoken.size() - 1);
+        String list = t(c, R.string.lcr_chain_last, head + ", and " + last, head.toString(), last);
+        return t(c, R.string.lcr_chain_intro, "Okay, I'll " + list + ".", list);
+    }
+
+    private static String t(Context c, int id, String english, Object... args) {
+        return c == null ? english : c.getString(id, args);
     }
 
     private static AssistantReply.Action action(String type, JSONObject params) {

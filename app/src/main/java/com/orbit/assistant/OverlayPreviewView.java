@@ -61,7 +61,7 @@ final class OverlayPreviewView extends FrameLayout {
         style = next;
         sheet = buildSheet(c, next);
         apply(controls);
-        setContentDescription("Preview of the " + next.label + " overlay");
+        setContentDescription(c.getString(R.string.ovp_desc, next.label));
         LayoutParams lp = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.BOTTOM);
         int margin = px(next.marginDp);
@@ -154,9 +154,9 @@ final class OverlayPreviewView extends FrameLayout {
         LinearLayout titles = new LinearLayout(c);
         titles.setOrientation(LinearLayout.VERTICAL);
         titles.addView(UiKit.text(c, UiKit.appTitle(c), s.titleSp * S, UiKit.TEXT, true));
-        titles.addView(UiKit.text(c, "Ready", 11 * S, UiKit.MUTED, false));
+        titles.addView(UiKit.text(c, c.getString(R.string.ui_ready_5fa7aac5), 11 * S, UiKit.MUTED, false));
         header.addView(titles, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
-        TextView chip = UiKit.text(c, "Auto  ▾", 10.5f * S, accent, true);
+        TextView chip = UiKit.text(c, AiSelection.autoLabel(c) + "  ▾", 10.5f * S, accent, true);
         chip.setGravity(Gravity.CENTER);
         chip.setPadding(px(10), 0, px(10), 0);
         chip.setBackground(UiKit.outlined(UiKit.blend(accent, UiKit.SURFACE_2, 0.08f),
@@ -172,8 +172,8 @@ final class OverlayPreviewView extends FrameLayout {
 
         LinearLayout screen = row(c);
         screen.setTag(TAG_SCREEN);
-        screen.addView(button(c, "Use screen", accent, s), spaced(ViewGroup.LayoutParams.WRAP_CONTENT, px(32)));
-        screen.addView(button(c, "Select area", accent, s),
+        screen.addView(button(c, c.getString(R.string.ui_use_screen_1479d77e), accent, s), spaced(ViewGroup.LayoutParams.WRAP_CONTENT, px(32)));
+        screen.addView(button(c, c.getString(R.string.ui_select_area_50b0e0f1), accent, s),
                 new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, px(32)));
         if (!s.integratedComposer) {
             // Classic's own screen bar, under the header.
@@ -181,7 +181,7 @@ final class OverlayPreviewView extends FrameLayout {
             bar.setPadding(px(10), px(6), px(8), px(6));
             bar.setMinimumHeight(px(52));
             bar.setBackground(UiKit.rounded(UiKit.SURFACE, 14 * S, c));
-            bar.addView(UiKit.text(c, "Current screen available", 12 * S, UiKit.MUTED, false),
+            bar.addView(UiKit.text(c, c.getString(R.string.ui_current_screen_available_b4cf6d1e), 12 * S, UiKit.MUTED, false),
                     new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
             bar.addView(screen);
             LinearLayout.LayoutParams barLp = new LinearLayout.LayoutParams(
@@ -195,7 +195,7 @@ final class OverlayPreviewView extends FrameLayout {
         LinearLayout talk = new LinearLayout(c);
         talk.setOrientation(LinearLayout.VERTICAL);
         talk.setPadding(0, px(8), 0, px(8));
-        TextView asked = UiKit.text(c, "What's on my screen?", 12 * S, UiKit.onAccent(c), false);
+        TextView asked = UiKit.text(c, c.getString(R.string.ovp_asked), 12 * S, UiKit.onAccent(c), false);
         asked.setPadding(px(10), px(6), px(10), px(6));
         asked.setBackground(UiKit.rounded(accent, 14 * S, c));
         LinearLayout.LayoutParams askedLp = new LinearLayout.LayoutParams(
@@ -232,7 +232,7 @@ final class OverlayPreviewView extends FrameLayout {
         if (s.integratedComposer) {
             LinearLayout status = row(c);
             status.setPadding(px(10), 0, px(4), 0);
-            status.addView(UiKit.text(c, "Current screen available", 11 * S, UiKit.MUTED, false));
+            status.addView(UiKit.text(c, c.getString(R.string.ui_current_screen_available_b4cf6d1e), 11 * S, UiKit.MUTED, false));
             composer.addView(status);
             composer.addView(hint);
             LinearLayout controls = row(c);

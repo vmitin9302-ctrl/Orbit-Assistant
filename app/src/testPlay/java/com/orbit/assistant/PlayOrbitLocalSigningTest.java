@@ -68,15 +68,15 @@ public final class PlayOrbitLocalSigningTest {
 
     /** Even a genuine GitHub component, were it installed, is described as unusable here. */
     @Test public void aGitHubComponentIsDescribedAsUnusableAndRemovable() {
-        String genuine = LocalAiActivity.playComponentDetails(OrbitLocalComponent.State.INSTALLED);
+        String genuine = LocalAiActivity.playComponentDetails(context, OrbitLocalComponent.State.INSTALLED);
         assertTrue(genuine.contains("GitHub edition"));
         assertTrue(genuine.contains("can't use it"));
         assertEquals(genuine,
-                LocalAiActivity.playComponentDetails(OrbitLocalComponent.State.UPDATE_REQUIRED));
+                LocalAiActivity.playComponentDetails(context, OrbitLocalComponent.State.UPDATE_REQUIRED));
         assertEquals(LocalAiActivity.PLAY_UNAVAILABLE,
-                LocalAiActivity.playComponentDetails(OrbitLocalComponent.State.NOT_INSTALLED));
+                LocalAiActivity.playComponentDetails(context, OrbitLocalComponent.State.NOT_INSTALLED));
         for (OrbitLocalComponent.State state : OrbitLocalComponent.State.values()) {
-            String text = LocalAiActivity.playComponentDetails(state);
+            String text = LocalAiActivity.playComponentDetails(context, state);
             assertFalse("never " + state + ": " + text, text.contains("install Orbit Local from here"));
             assertFalse(text.contains("Update it"));
         }

@@ -57,6 +57,10 @@ import java.util.concurrent.Executors;
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = {29, 35})
 public final class OrbitVaultBeta2Test {
+    private static String msgLabel(int res) {
+        return RuntimeEnvironment.getApplication().getString(res);
+    }
+
 
     private Context context;
 
@@ -274,18 +278,18 @@ public final class OrbitVaultBeta2Test {
 
     /** Save to Vault leaves the message menu while the Vault is off, rather than being greyed out. */
     @Test public void saveToVaultLeavesTheMessageMenuWhileTheVaultIsOff() {
-        assertTrue(Arrays.asList(MessageActions.assistantLabels(true, true))
-                .contains(MessageActions.SAVE_TO_VAULT_MENU_LABEL));
+        assertTrue(Arrays.asList(MessageActions.assistantLabels(RuntimeEnvironment.getApplication(), true, true))
+                .contains(msgLabel(MessageActions.SAVE_TO_VAULT_MENU_LABEL)));
         assertEquals(3, MessageActions.assistantIcons(true, true).length);
 
-        String[] off = MessageActions.assistantLabels(true, false);
-        assertFalse(Arrays.asList(off).contains(MessageActions.SAVE_TO_VAULT_MENU_LABEL));
-        assertTrue("Copy is untouched", Arrays.asList(off).contains(MessageActions.COPY_MENU_LABEL));
+        String[] off = MessageActions.assistantLabels(RuntimeEnvironment.getApplication(), true, false);
+        assertFalse(Arrays.asList(off).contains(msgLabel(MessageActions.SAVE_TO_VAULT_MENU_LABEL)));
+        assertTrue("Copy is untouched", Arrays.asList(off).contains(msgLabel(MessageActions.COPY_MENU_LABEL)));
         assertTrue("and so is Retry",
-                Arrays.asList(off).contains(MessageActions.RETRY_MENU_LABEL));
+                Arrays.asList(off).contains(msgLabel(MessageActions.RETRY_MENU_LABEL)));
         assertEquals("labels and icons must stay the same length",
                 off.length, MessageActions.assistantIcons(true, false).length);
-        assertEquals(1, MessageActions.assistantLabels(false, false).length);
+        assertEquals(1, MessageActions.assistantLabels(RuntimeEnvironment.getApplication(), false, false).length);
         assertEquals(1, MessageActions.assistantIcons(false, false).length);
         assertTrue("the menu reads the preference rather than assuming it",
                 source("MessageActions").contains("Prefs.vaultEnabled(bubble.getContext())"));
@@ -293,11 +297,11 @@ public final class OrbitVaultBeta2Test {
 
     /** The composer's Vault entry is absent while the Vault is off. */
     @Test public void attachFromVaultIsUnavailableWhileTheVaultIsOff() {
-        assertTrue(Arrays.asList(ChatActivity.attachmentMenuLabels(true)).contains("Vault"));
-        assertFalse(Arrays.asList(ChatActivity.attachmentMenuLabels(false)).contains("Vault"));
+        assertTrue(Arrays.asList(ChatActivity.attachmentMenuLabels(context, true)).contains("Vault"));
+        assertFalse(Arrays.asList(ChatActivity.attachmentMenuLabels(context, false)).contains("Vault"));
         assertEquals("every other way to attach is untouched",
-                5, ChatActivity.attachmentMenuLabels(false).length);
-        assertTrue(Arrays.asList(ChatActivity.attachmentMenuLabels(false)).contains("Gallery"));
+                5, ChatActivity.attachmentMenuLabels(context, false).length);
+        assertTrue(Arrays.asList(ChatActivity.attachmentMenuLabels(context, false)).contains("Gallery"));
     }
 
     /** The Chats header control disappears with the feature, and Share to Orbit does not. */
@@ -369,10 +373,10 @@ public final class OrbitVaultBeta2Test {
                 source("SettingsActivity").contains("VAULT_DELETE_TITLE")
                         && source("SettingsActivity").contains(
                                 "UiKit.styleOrbitDialog(dialog, this, true)"));
-        assertEquals("Delete all Vault data?", SettingsActivity.VAULT_DELETE_TITLE);
+        assertEquals("Delete all Vault data?", context.getString(SettingsActivity.VAULT_DELETE_TITLE));
         assertTrue("the confirmation says what survives",
-                SettingsActivity.VAULT_DELETE_MESSAGE.contains("Orbit Memory")
-                        && SettingsActivity.VAULT_DELETE_MESSAGE.contains("cannot be undone"));
+                context.getString(SettingsActivity.VAULT_DELETE_MESSAGE).contains("Orbit Memory")
+                        && context.getString(SettingsActivity.VAULT_DELETE_MESSAGE).contains("cannot be undone"));
     }
 
     // ---- what a saved item becomes when the user asks about it -------------------------------------
@@ -571,8 +575,8 @@ public final class OrbitVaultBeta2Test {
     @Test public void anemptyPickerExplainsItself() {
         Activity picker = Robolectric.buildActivity(OrbitVaultPickerActivity.class).setup().get();
         List<String> drawn = textOf(picker.getWindow().getDecorView());
-        assertTrue(drawn.contains(OrbitVaultPickerActivity.EMPTY_TITLE));
-        assertTrue(drawn.contains(OrbitVaultPickerActivity.EMPTY_BODY));
+        assertTrue(drawn.contains(picker.getString(OrbitVaultPickerActivity.EMPTY_TITLE)));
+        assertTrue(drawn.contains(picker.getString(OrbitVaultPickerActivity.EMPTY_BODY)));
     }
 
     /**
@@ -679,7 +683,7 @@ public final class OrbitVaultBeta2Test {
                 new Intent(context, OrbitVaultItemActivity.class)
                         .putExtra(OrbitVaultItemActivity.EXTRA_ITEM_ID, "bad")).setup().get();
         View open = findClickableWithDescription(screen.getWindow().getDecorView(),
-                OrbitVaultItemActivity.ACTION_OPEN_LINK);
+                org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.ACTION_OPEN_LINK));
         if (open != null) open.performClick();
         assertNull("no Intent may leave Orbit for a scheme it does not open",
                 Shadows.shadowOf(screen).getNextStartedActivity());
@@ -700,12 +704,12 @@ public final class OrbitVaultBeta2Test {
         Activity screen = openItem(link.id);
         List<String> drawn = textOf(screen.getWindow().getDecorView());
 
-        assertTrue(drawn.contains(OrbitVaultItemActivity.ACTION_OPEN_LINK));
-        assertTrue(drawn.contains(OrbitVaultItemActivity.ACTION_ASK));
-        assertTrue(drawn.contains(OrbitVaultItemActivity.ACTION_COPY));
-        assertTrue(drawn.contains(OrbitVaultItemActivity.ACTION_SHARE));
-        assertTrue(drawn.contains(OrbitVaultItemActivity.ACTION_RENAME));
-        assertTrue(drawn.contains(OrbitVaultItemActivity.ACTION_DELETE));
+        assertTrue(drawn.contains(org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.ACTION_OPEN_LINK)));
+        assertTrue(drawn.contains(org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.ACTION_ASK)));
+        assertTrue(drawn.contains(org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.ACTION_COPY)));
+        assertTrue(drawn.contains(org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.ACTION_SHARE)));
+        assertTrue(drawn.contains(org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.ACTION_RENAME)));
+        assertTrue(drawn.contains(org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.ACTION_DELETE)));
         assertTrue("the truthful line about the address stays",
                 String.join("\n", drawn).contains("has not opened or read this address"));
 
@@ -723,25 +727,25 @@ public final class OrbitVaultBeta2Test {
         OrbitVaultItem note = OrbitVaultStore.saveText(context, "Packing list", "Charger",
                 "Quick Capture");
         List<String> drawn = textOf(openItem(note.id).getWindow().getDecorView());
-        assertTrue(drawn.contains(OrbitVaultItemActivity.ACTION_ASK));
+        assertTrue(drawn.contains(org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.ACTION_ASK)));
         assertFalse("there is no address to open", drawn.contains(
-                OrbitVaultItemActivity.ACTION_OPEN_LINK));
-        assertTrue(drawn.contains(OrbitVaultItemActivity.ACTION_EDIT));
+                org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.ACTION_OPEN_LINK)));
+        assertTrue(drawn.contains(org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.ACTION_EDIT)));
     }
 
     /** The note section says what it is, in both of its states. */
     @Test public void theitemScreenShowsTheNoteSection() {
         OrbitVaultItem item = OrbitVaultStore.saveText(context, "Clip", "Body", "test");
         List<String> empty = textOf(openItem(item.id).getWindow().getDecorView());
-        assertTrue(empty.contains(OrbitVaultItemActivity.NOTE_HEADING));
+        assertTrue(empty.contains(org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.NOTE_HEADING)));
         assertTrue("an item with no note invites one",
-                empty.contains(OrbitVaultItemActivity.NOTE_EMPTY));
+                empty.contains(org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.NOTE_EMPTY)));
 
         assertTrue(OrbitVaultStore.updateNote(context, item.id, "Because of the animation."));
         List<String> written = textOf(openItem(item.id).getWindow().getDecorView());
-        assertTrue(written.contains(OrbitVaultItemActivity.NOTE_HEADING));
+        assertTrue(written.contains(org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.NOTE_HEADING)));
         assertTrue(written.contains("Because of the animation."));
-        assertFalse(written.contains(OrbitVaultItemActivity.NOTE_EMPTY));
+        assertFalse(written.contains(org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.NOTE_EMPTY)));
     }
 
     // ---- privacy -------------------------------------------------------------------------------------

@@ -606,7 +606,7 @@ public final class OpenRouterConnectTest {
         AiModelSpec llama = find(models, "meta-llama/llama-3.3-70b-instruct");
         assertFalse("Reasoning filter", ModelLibraryDialog.passesCapabilities(llama, false, true));
         assertEquals("Showing 60 of 412 models. Search to find more.",
-                ModelLibraryDialog.moreLabel(60, 412));
+                ModelLibraryDialog.moreLabel(org.robolectric.RuntimeEnvironment.getApplication(), 60, 412));
     }
 
     @Test public void theQuickPickerStaysShortWithHundredsOfModels() throws Exception {

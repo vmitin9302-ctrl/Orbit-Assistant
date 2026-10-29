@@ -134,7 +134,7 @@ public final class RoutinePlannerFlowTest {
         Result result = build(provider, REQUEST);
 
         assertNull(result.draft);
-        assertEquals(RoutinePlanner.UNREADABLE_MESSAGE, result.error);
+        assertEquals(RoutinePlanner.unreadableMessage(context), result.error);
         assertEquals("the third response must never be requested", 2, provider.prompts.size());
     }
 
@@ -144,7 +144,7 @@ public final class RoutinePlannerFlowTest {
 
         assertNull(result.draft);
         assertEquals(1, result.errors);
-        assertEquals(RoutinePlanner.UNREADABLE_MESSAGE, result.error);
+        assertEquals(RoutinePlanner.unreadableMessage(context), result.error);
     }
 
     @Test public void anUnsupportedRequestIsNotRepaired() {
@@ -155,7 +155,7 @@ public final class RoutinePlannerFlowTest {
         Result result = build(provider, "start my coffee maker");
 
         assertNull(result.draft);
-        assertEquals(RoutinePlanner.UNSUPPORTED_MESSAGE, result.error);
+        assertEquals(RoutinePlanner.unsupportedMessage(context), result.error);
         assertEquals("no pointless correction request", 1, provider.prompts.size());
     }
 
@@ -177,10 +177,10 @@ public final class RoutinePlannerFlowTest {
     }
 
     @Test public void theThreeFailuresReadDifferently() {
-        assertFalse(RoutinePlanner.UNREADABLE_MESSAGE.equals(RoutinePlanner.UNSUPPORTED_MESSAGE));
-        assertTrue(RoutinePlanner.UNREADABLE_MESSAGE.toLowerCase(java.util.Locale.US)
+        assertFalse(RoutinePlanner.unreadableMessage(context).equals(RoutinePlanner.unsupportedMessage(context)));
+        assertTrue(RoutinePlanner.unreadableMessage(context).toLowerCase(java.util.Locale.US)
                 .contains("planning response"));
-        assertTrue(RoutinePlanner.UNSUPPORTED_MESSAGE.toLowerCase(java.util.Locale.US)
+        assertTrue(RoutinePlanner.unsupportedMessage(context).toLowerCase(java.util.Locale.US)
                 .contains("supported routine actions"));
     }
 
@@ -237,7 +237,7 @@ public final class RoutinePlannerFlowTest {
 
         assertFalse(d.getBoolean("plan_parsed", true));
         assertTrue(d.getBoolean("plan_repair", false));
-        assertEquals(RoutinePlanner.UNREADABLE_MESSAGE, d.getString("plan_failure", ""));
+        assertEquals(RoutinePlanner.unreadableMessage(context), d.getString("plan_failure", ""));
         assertTrue("the raw response is what makes this diagnosable",
                 d.getString("plan_raw", "").contains("still nothing"));
     }

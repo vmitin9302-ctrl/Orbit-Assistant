@@ -158,6 +158,57 @@ public final class AppProfileStore {
         return !SCREENSHOT_BLOCK.equals(get(c, pkg).screenshotPolicy);
     }
 
+    static int categoryRes(String c) {
+        if (CATEGORY_CONVERSATION.equals(c)) return R.string.appprof_cat_conversation;
+        if (CATEGORY_PRODUCT.equals(c)) return R.string.appprof_cat_product;
+        if (CATEGORY_ARTICLE.equals(c)) return R.string.appprof_cat_article;
+        if (CATEGORY_MEDIA.equals(c)) return R.string.appprof_cat_media;
+        if (CATEGORY_MAP.equals(c)) return R.string.appprof_cat_map;
+        if (CATEGORY_DOCUMENT.equals(c)) return R.string.appprof_cat_document;
+        if (CATEGORY_EMAIL.equals(c)) return R.string.appprof_cat_email;
+        if (CATEGORY_GENERIC.equals(c)) return R.string.appprof_cat_generic;
+        if (CATEGORY_SETTINGS.equals(c)) return R.string.ui_settings_74a883a0;
+        return R.string.appprof_auto;
+    }
+
+    static int privacyRes(String p) {
+        if (PRIVACY_NORMAL.equals(p)) return R.string.appprof_priv_normal;
+        if (PRIVACY_SENSITIVE.equals(p)) return R.string.appprof_priv_sensitive;
+        if (PRIVACY_NEVER.equals(p)) return R.string.appprof_priv_never;
+        return R.string.appprof_auto;
+    }
+
+    static int screenRes(String s) {
+        if (SCREEN_ATTACH.equals(s)) return R.string.appprof_screen_attach;
+        if (SCREEN_NEVER.equals(s)) return R.string.appprof_screen_never;
+        return R.string.appprof_screen_global;
+    }
+
+    static int actionRes(String action) {
+        if (ACTION_DRAFT.equals(action)) return R.string.appprof_act_draft;
+        if (ACTION_SUMMARIZE.equals(action)) return R.string.appprof_act_summarize;
+        if (ACTION_EXPLAIN.equals(action)) return R.string.appprof_act_explain;
+        if (ACTION_TONE.equals(action)) return R.string.appprof_act_tone;
+        if (ACTION_NEEDS_ACTION.equals(action)) return R.string.appprof_act_needs_action;
+        if (ACTION_WORTH.equals(action)) return R.string.appprof_act_worth;
+        if (ACTION_COMPARE.equals(action)) return R.string.appprof_act_compare;
+        if (ACTION_KEY_SPECS.equals(action)) return R.string.appprof_act_key_specs;
+        if (ACTION_KEY_POINTS.equals(action)) return R.string.appprof_act_key_points;
+        if (ACTION_RECOMMEND.equals(action)) return R.string.appprof_act_recommend;
+        if (ACTION_WHAT_MATTERS.equals(action)) return R.string.appprof_act_what_matters;
+        if (ACTION_WHICH_OPTION.equals(action)) return R.string.appprof_act_which_option;
+        if (ACTION_ROUTE.equals(action)) return R.string.appprof_act_route;
+        if (ACTION_WHAT_NEXT.equals(action)) return R.string.appprof_act_what_next;
+        return R.string.appprof_auto;
+    }
+
+    /** Display-language labels; the English {@code *Label(String)} forms stay for prompts and comparisons. */
+    public static String categoryDisplayLabel(Context c, String category) { return c.getString(categoryRes(category)); }
+
+    public static String effectivePrivacyDisplayLabel(Context c, String pkg) {
+        return c.getString(privacyRes(effectivePrivacy(c, pkg)));
+    }
+
     public static String categoryLabel(String c) {
         if (CATEGORY_CONVERSATION.equals(c)) return "Conversation";
         if (CATEGORY_PRODUCT.equals(c)) return "Product / shopping";

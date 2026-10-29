@@ -1,5 +1,6 @@
 package com.orbit.assistant;
 
+import android.content.Context;
 import android.os.SystemClock;
 
 import org.json.JSONObject;
@@ -200,30 +201,46 @@ public final class RecentActionContext {
      * <p>Null whenever Orbit does not know exactly what "back" is: nothing recent, several changes,
      * or a level Orbit never read. Built by Orbit from recorded state only.
      */
-    static synchronized Restore restore() {
+    static synchronized Restore restore() { return restore(null); }
+
+    /** As {@link #restore()}, with Orbit's wording in the app language when a context is given. */
+    static synchronized Restore restore(Context c) {
         Entry entry = single();
         if (entry == null) return null;
         try {
             switch (entry.target) {
                 case FLASHLIGHT:
                     return new Restore(action("FLASHLIGHT", new JSONObject().put("on", entry.previousOn)),
-                            entry.previousOn ? "Turning the flashlight back on."
-                                    : "Turning the flashlight back off.",
-                            entry.previousOn ? "turn on the flashlight" : "turn off the flashlight");
+                            entry.previousOn
+                                    ? t(c, R.string.rac_flash_back_on, "Turning the flashlight back on.")
+                                    : t(c, R.string.rac_flash_back_off, "Turning the flashlight back off."),
+                            entry.previousOn
+                                    ? t(c, R.string.lcr_sum_flash_on, "turn on the flashlight")
+                                    : t(c, R.string.lcr_sum_flash_off, "turn off the flashlight"));
                 case DND:
                     if (entry.previousMode.isEmpty()) return null;
                     return new Restore(action("SET_DND", new JSONObject().put("enabled", entry.previousOn)),
-                            entry.previousOn ? "Turning Do Not Disturb back on."
-                                    : "Turning Do Not Disturb back off.",
-                            entry.previousOn ? "turn on Do Not Disturb" : "turn off Do Not Disturb");
+                            entry.previousOn
+                                    ? t(c, R.string.rac_dnd_back_on, "Turning Do Not Disturb back on.")
+                                    : t(c, R.string.rac_dnd_back_off, "Turning Do Not Disturb back off."),
+                            entry.previousOn
+                                    ? t(c, R.string.lcr_sum_dnd_on, "turn on Do Not Disturb")
+                                    : t(c, R.string.lcr_sum_dnd_off, "turn off Do Not Disturb"));
                 case RINGER: {
                     if (entry.previousMode.isEmpty()) return null;
                     String mode = entry.previousMode;
-                    String spoken = "normal".equals(mode) ? "Turning the ringer back on."
-                            : "vibrate".equals(mode) ? "Putting the phone back on vibrate."
-                            : "Silencing the phone again.";
+                    String spoken = "normal".equals(mode)
+                            ? t(c, R.string.lcr_ringer_normal, "Turning the ringer back on.")
+                            : "vibrate".equals(mode)
+                            ? t(c, R.string.rac_ringer_back_vibrate, "Putting the phone back on vibrate.")
+                            : t(c, R.string.rac_ringer_back_silent, "Silencing the phone again.");
+                    String modeName = "normal".equals(mode)
+                            ? t(c, R.string.rac_mode_normal, mode)
+                            : "vibrate".equals(mode) ? t(c, R.string.rac_mode_vibrate, mode)
+                            : "silent".equals(mode) ? t(c, R.string.rac_mode_silent, mode) : mode;
                     return new Restore(action("SET_RINGER_MODE", new JSONObject().put("mode", mode)),
-                            spoken, "set the ringer back to " + mode);
+                            spoken, t(c, R.string.rac_sum_ringer_back,
+                                    "set the ringer back to " + mode, modeName));
                 }
                 case BRIGHTNESS:
                 case VOLUME: {
@@ -233,8 +250,12 @@ public final class RecentActionContext {
                     String noun = brightness ? "brightness" : "media volume";
                     return new Restore(action(brightness ? "SET_BRIGHTNESS" : "SET_VOLUME",
                             new JSONObject().put("percent", entry.previousPercent)),
-                            "Putting " + noun + " back to " + entry.previousPercent + "%.",
-                            "set " + noun + " back to " + entry.previousPercent + "%");
+                            t(c, brightness ? R.string.rac_bright_back : R.string.rac_vol_back,
+                                    "Putting " + noun + " back to " + entry.previousPercent + "%.",
+                                    entry.previousPercent),
+                            t(c, brightness ? R.string.rac_sum_bright_back : R.string.rac_sum_vol_back,
+                                    "set " + noun + " back to " + entry.previousPercent + "%",
+                                    entry.previousPercent));
                 }
                 default:
                     return null;
@@ -248,25 +269,38 @@ public final class RecentActionContext {
      * What Orbit asks when a follow-up could mean more than one recent change, or "" when it could
      * not. Names Orbit's own targets only.
      */
-    static synchronized String clarification() {
+    static synchronized String clarification() { return clarification(null); }
+
+    /** As {@link #clarification()}, in the app language when a context is given. */
+    static synchronized String clarification(Context c) {
         if (!isAmbiguous()) return "";
         StringBuilder names = new StringBuilder();
-        for (int i = 0; i < batch.size(); i++) {
-            if (i > 0) names.append(i == batch.size() - 1 ? " and " : ", ");
-            names.append(name(batch.get(i).target));
+        for (int i = 0; i < batch.size() - 1; i++) {
+            if (i > 0) names.append(", ");
+            names.append(name(c, batch.get(i).target));
         }
-        return "I just changed " + names + ". Which one do you mean?";
+        String last = name(c, batch.get(batch.size() - 1).target);
+        String list = batch.size() == 1 ? last
+                : t(c, R.string.rac_join_last, names + " and " + last, names.toString(), last);
+        return t(c, R.string.rac_clarify, "I just changed " + list + ". Which one do you mean?", list);
     }
 
-    static String name(Target target) {
+
+    static String name(Target target) { return name(null, target); }
+
+    static String name(Context c, Target target) {
         switch (target) {
-            case BRIGHTNESS: return "brightness";
-            case VOLUME: return "media volume";
-            case FLASHLIGHT: return "the flashlight";
-            case DND: return "Do Not Disturb";
-            case RINGER: return "the ringer";
-            default: return "a setting";
+            case BRIGHTNESS: return t(c, R.string.rac_name_brightness, "brightness");
+            case VOLUME: return t(c, R.string.rac_name_volume, "media volume");
+            case FLASHLIGHT: return t(c, R.string.rac_name_flashlight, "the flashlight");
+            case DND: return t(c, R.string.rac_name_dnd, "Do Not Disturb");
+            case RINGER: return t(c, R.string.rac_name_ringer, "the ringer");
+            default: return t(c, R.string.rac_name_setting, "a setting");
         }
+    }
+
+    private static String t(Context c, int id, String english, Object... args) {
+        return c == null ? english : c.getString(id, args);
     }
 
     private static AssistantReply.Action action(String type, JSONObject params) {

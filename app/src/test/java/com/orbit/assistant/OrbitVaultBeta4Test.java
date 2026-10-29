@@ -543,7 +543,7 @@ public final class OrbitVaultBeta4Test {
                 OrbitVaultSource.QUICK_CAPTURE);
         Activity screen = itemScreen(item);
         View pin = findClickableWithDescription(screen.getWindow().getDecorView(),
-                OrbitVaultItemActivity.ACTION_PIN + " this saved item");
+                org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.ACTION_PIN) + " this saved item");
         assertNotNull("an unpinned item offers to pin it", pin);
         pin.performClick();
         assertTrue(OrbitVaultStore.get(context, item.id).pinned);
@@ -551,7 +551,7 @@ public final class OrbitVaultBeta4Test {
         Activity reopened = itemScreen(OrbitVaultStore.get(context, item.id));
         assertNotNull("and a pinned one offers to unpin it",
                 findClickableWithDescription(reopened.getWindow().getDecorView(),
-                        OrbitVaultItemActivity.ACTION_UNPIN + " this saved item"));
+                        org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.ACTION_UNPIN) + " this saved item"));
     }
 
     // ---- state kept across opening an item ------------------------------------------------------------
@@ -689,7 +689,8 @@ public final class OrbitVaultBeta4Test {
         Activity editor = screenSelectionEditor();
         View vault = vaultControl(editor);
         assertTrue(vault instanceof Button);
-        assertEquals(ScreenSelectionActivity.SAVE_TO_VAULT, ((Button) vault).getText().toString());
+        assertEquals(editor.getString(ScreenSelectionActivity.SAVE_TO_VAULT),
+                ((Button) vault).getText().toString());
         assertNotNull("with Orbit's own Vault glyph beside the word",
                 ((Button) vault).getCompoundDrawablesRelative()[0]);
         assertTrue("and enough room to read it",

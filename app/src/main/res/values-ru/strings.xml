@@ -1,0 +1,752 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Orbit Assistant</string>
+    <string name="process_text_label">Спросить Orbit</string>
+    <string name="widget_ask_description">Открыть чат Orbit для ввода сообщения</string>
+    <string name="widget_routine_description">Запустить выбранную автоматизацию Orbit</string>
+    <string name="widget_quick_description">Использовать выбранные быстрые действия Orbit</string>
+    <!-- Extracted UI strings: English fallback and Russian display text. -->
+    <string name="ui_1_item_d1ecad4a" formatted="false">"1 элемент"</string>
+    <string name="ui_a_chat_keeps_up_to_566a44c9" formatted="false">"В контексте чата можно сохранить до "</string>
+    <string name="ui_a_customizable_android_assistant_for_quick_an_26b8d046" formatted="false">"Настраиваемый помощник Android: быстрые ответы, контекст экрана, управление устройством, автоматизации, напоминания и многое другое."</string>
+    <string name="ui_a_restored_backup_brings_back_supported_local_dcfde50f" formatted="false">"Резервная копия восстанавливает поддерживаемые локальные данные и оформление. Данные входа в ChatGPT, разрешения Android и выбор помощника по умолчанию не восстанавливаются."</string>
+    <string name="ui_a_similar_memory_is_already_saved_1bd09e2b" formatted="false">"Похожая запись уже есть в памяти"</string>
+    <string name="ui_about_updates_1b0c2070" formatted="false">"О приложении и обновления"</string>
+    <string name="ui_account_backed_chatgpt_codex_allowance_and_do_9695bc17" formatted="false">"лимиты ChatGPT/Codex вашего аккаунта и не требует ключа API OpenAI."</string>
+    <string name="ui_accurate_reminders_and_routine_time_triggers_ac0b3cea" formatted="false">"Точное время напоминаний и запуска автоматизаций."</string>
+    <string name="ui_across_conversations_settings_and_orbit_s_oth_a0278d59" formatted="false">"в диалогах, настройках и других разделах Orbit. Отключите, чтобы "</string>
+    <string name="ui_act_locally_c0e2f78d" formatted="false">"Управляйте устройством"</string>
+    <string name="ui_action_chain_stopped_after_step_8dc93029" formatted="false">"Цепочка действий остановлена после шага "</string>
+    <string name="ui_actions_stay_on_the_chat_s_own_menu_56abb023" formatted="false">"действия остаются в меню чата."</string>
+    <string name="ui_active_de2433e0" formatted="false">"Активен: "</string>
+    <string name="ui_active_provider_4cee0d82" formatted="false">"Активный провайдер"</string>
+    <string name="ui_add_9fd728c6" formatted="false">"Добавить"</string>
+    <string name="ui_add_ask_orbit_widget_1b6545d8" formatted="false">"Добавить виджет чата Orbit"</string>
+    <string name="ui_add_integrations_and_new_actions_to_orbit_8ae30a02" formatted="false">"Интеграции и новые действия Orbit"</string>
+    <string name="ui_add_orbit_tile_b63bc190" formatted="false">"Добавить плитку Orbit"</string>
+    <string name="ui_add_orbit_widgets_from_your_launcher_s_widget_b29e45ac" formatted="false">"Добавьте виджеты Orbit через меню виджетов приложения запуска или закрепите виджет кнопкой ниже."</string>
+    <string name="ui_add_quick_actions_widget_aec2b089" formatted="false">"Добавить виджет быстрых действий"</string>
+    <string name="ui_add_routine_tile_b36fec6e" formatted="false">"Добавить плитку автоматизации"</string>
+    <string name="ui_add_run_routine_widget_889ddfe7" formatted="false">"Добавить виджет автоматизации"</string>
+    <string name="ui_add_the_orbit_tiles_manually_from_android_s_q_867f4d97" formatted="false">"Добавьте плитки Orbit вручную в редакторе быстрых настроек Android."</string>
+    <string name="ui_added_672e9bea" formatted="false">" — добавлено · "</string>
+    <string name="ui_added_up_to_282e0aa8" formatted="false">" — добавлено · до "</string>
+    <string name="ui_advanced_9f088dbe" formatted="false">"Дополнительно"</string>
+    <string name="ui_advanced_fallback_orbit_calls_a_private_https_119c0528" formatted="false">"Дополнительный вариант: Orbit обращается к вашему HTTPS-ретранслятору. Ключ API OpenAI остаётся на сервере и не хранится в Orbit. Данные входа в ChatGPT остаются защищённо сохранёнными, но не используются, пока выбран этот провайдер."</string>
+    <string name="ui_after_choosing_orbit_as_the_default_assistant_b3cab39f" formatted="false">"Выбрав Orbit помощником по умолчанию, используйте любую кнопку или жест вызова помощника, доступные в Android на вашем устройстве."</string>
+    <string name="ui_ai_account_6fa54ff1" formatted="false">"ИИ и аккаунт"</string>
+    <string name="ui_ai_auto_orbit_chooses_the_model_and_reasoning_02dbb66f" formatted="false">"ИИ: Авто. Orbit выбирает модель и уровень рассуждений "</string>
+    <string name="ui_ai_auto_orbit_chooses_the_model_and_reasoning_0a51b830" formatted="false">"ИИ: Авто. Orbit выбирает модель и уровень рассуждений "</string>
+    <string name="ui_ai_dd54be8d" formatted="false">"ИИ: "</string>
+    <string name="ui_ai_for_this_chat_1123aed6" formatted="false">"ИИ для этого чата"</string>
+    <string name="ui_ai_model_4d2e74ab" formatted="false">"Модель ИИ"</string>
+    <string name="ui_ai_providers_5aef60a9" formatted="false">"Провайдеры ИИ"</string>
+    <string name="ui_ai_providers_chatgpt_sign_in_and_default_ai_df2efdcd" formatted="false">"Провайдеры ИИ, вход в ChatGPT и модель по умолчанию"</string>
+    <string name="ui_alarm_d_02d_e6eb5e93" formatted="false">"Будильник · %d:%02d"</string>
+    <string name="ui_alarm_f3b67957" formatted="false">"Будильник"</string>
+    <string name="ui_all_items_saved_in_orbit_vault_and_their_loca_271cac8e" formatted="false">"Все элементы хранилища Orbit и связанные медиафайлы будут удалены с этого "</string>
+    <string name="ui_all_items_saved_in_orbit_vault_and_their_loca_37b6cc43" formatted="false">"Все элементы хранилища Orbit и связанные медиафайлы будут удалены с этого устройства. Отменить это нельзя.\n\nВаши чаты, память Orbit, провайдеры и остальные настройки не затрагиваются."</string>
+    <string name="ui_allow_4c0c78e7" formatted="false">"Разрешить "</string>
+    <string name="ui_allow_contact_name_lookup_057d65f9" formatted="false">"Разрешить поиск имён контактов"</string>
+    <string name="ui_allow_e213c161" formatted="false">"Разрешить"</string>
+    <string name="ui_allow_flashlight_control_a349547e" formatted="false">"Разрешить управление фонариком"</string>
+    <string name="ui_allow_longer_pauses_while_speaking_c7b5a7e2" formatted="false">"Допускать длинные паузы при речи"</string>
+    <string name="ui_allow_orbit_to_read_current_screen_text_560f7375" formatted="false">"Разрешить Orbit читать текст на экране"</string>
+    <string name="ui_allow_orbit_to_receive_screenshots_857a7a14" formatted="false">"Разрешить Orbit получать снимки экрана"</string>
+    <string name="ui_allow_screenshots_for_visual_context_and_scre_13e63642" formatted="false">"Разрешить снимки экрана для визуального контекста и выделения области"</string>
+    <string name="ui_allowed_1bb201d1" formatted="false">"Разрешено"</string>
+    <string name="ui_allows_orbit_to_change_system_brightness_d3f28a3b" formatted="false">"Разрешает Orbit изменять яркость экрана."</string>
+    <string name="ui_allows_orbit_to_control_do_not_disturb_376b1b83" formatted="false">"Разрешает Orbit управлять режимом «Не беспокоить»."</string>
+    <string name="ui_already_remembered_6595ce77" formatted="false">"Уже сохранено в памяти"</string>
+    <string name="ui_and_the_rest_of_your_settings_are_not_affecte_fa5d7eeb" formatted="false">"и остальные настройки не затрагиваются."</string>
+    <string name="ui_android_camera_access_lets_orbit_control_the__6bc49b66" formatted="false">"Доступ к камере Android позволяет Orbit управлять фонариком."</string>
+    <string name="ui_android_controls_this_setting_available_butto_98cf13fd" formatted="false">"Этот параметр управляется Android. Доступные кнопки и жесты зависят от устройства."</string>
+    <string name="ui_android_could_not_open_a_supported_default_as_c372b8db" formatted="false">"Android не удалось открыть настройки помощника по умолчанию на этом устройстве."</string>
+    <string name="ui_android_will_ask_before_adding_either_tile_58235e99" formatted="false">"Android запросит подтверждение перед добавлением каждой плитки."</string>
+    <string name="ui_answer_version_604157f5" formatted="false">"Версия ответа"</string>
+    <string name="ui_anything_to_your_ai_provider_which_tiles_you__c1acb8cc" formatted="false">"не отправляются провайдеру ИИ. Состав плиток и их "</string>
+    <string name="ui_app_0d04bfeb" formatted="false">"Приложение"</string>
+    <string name="ui_app_font_cad0292d" formatted="false">"Шрифт приложения"</string>
+    <string name="ui_approximate_location_a3162151" formatted="false">"Приблизительное местоположение"</string>
+    <string name="ui_approximate_location_enabled_for_weather_9c595d52" formatted="false">"Приблизительное местоположение для погоды разрешено"</string>
+    <string name="ui_arranged_is_edited_in_deck_itself_15f3058c" formatted="false">"расположение меняются на самой панели."</string>
+    <string name="ui_arrival_and_leave_routine_triggers_e3e3e201" formatted="false">"Запуск автоматизаций при прибытии и уходе."</string>
+    <string name="ui_ask_anything_da0e101a" formatted="false">"Задайте вопрос…"</string>
+    <string name="ui_ask_orbit_18ea298a" formatted="false">"Спросить Orbit"</string>
+    <string name="ui_ask_orbit_quick_settings_tile_cf969c5f" formatted="false">"Плитка «Спросить Orbit» в быстрых настройках"</string>
+    <string name="ui_ask_quickly_110e1409" formatted="false">"Спрашивайте без промедления"</string>
+    <string name="ui_assistant_settings_unavailable_7db001cf" formatted="false">"Настройки помощника недоступны"</string>
+    <string name="ui_assistant_setup_a047e8d4" formatted="false">"Настройка помощника"</string>
+    <string name="ui_attach_current_screen_1c161d52" formatted="false">"Прикрепить текущий экран"</string>
+    <string name="ui_attach_current_screen_by_default_f3780030" formatted="false">"Прикреплять текущий экран по умолчанию"</string>
+    <string name="ui_attach_d406ade2" formatted="false">"Прикрепить"</string>
+    <string name="ui_attach_to_message_0ada90a5" formatted="false">"Прикрепить к сообщению"</string>
+    <string name="ui_attached_7bcd3cb6" formatted="false">" прикреплено"</string>
+    <string name="ui_attached_86647942" formatted="false">"Прикреплено: "</string>
+    <string name="ui_attached_ac6d9b76" formatted="false">"Прикреплено"</string>
+    <string name="ui_attachment_040d2b36" formatted="false">"Вложение"</string>
+    <string name="ui_attachment_picker_could_not_be_opened_3b04904f" formatted="false">"Не удалось открыть выбор вложений"</string>
+    <string name="ui_attachment_picker_is_opening_adafa55e" formatted="false">"Открывается выбор вложений"</string>
+    <string name="ui_attachments_per_message_79deb9e0" formatted="false">" вложений в сообщении"</string>
+    <string name="ui_auto_can_use_a728a9aa" formatted="false">"Доступно для режима «Авто»"</string>
+    <string name="ui_auto_can_use_f7395827" formatted="false">"Доступно для режима «Авто»: "</string>
+    <string name="ui_auto_listen_still_works_and_the_mic_appears_w_7065f1c7" formatted="false">"Автопрослушивание продолжает работать; микрофон появляется, когда Orbit слушает."</string>
+    <string name="ui_automatic_profile_a4979345" formatted="false">"Автоматический профиль"</string>
+    <string name="ui_automatically_activate_the_microphone_when_th_fc73b405" formatted="false">"Автоматически включать микрофон при открытии плавающего окна помощника."</string>
+    <string name="ui_automation_9273c578" formatted="false">"АВТОМАТИЗАЦИЯ"</string>
+    <string name="ui_back_76900f1b" formatted="false">"Назад"</string>
+    <string name="ui_back_to_settings_ea37ec29" formatted="false">"Назад к настройкам"</string>
+    <string name="ui_background_response_notifications_enabled_ddfedf63" formatted="false">"Уведомления о фоновых ответах включены"</string>
+    <string name="ui_backup_files_contain_personal_data_and_are_no_3e29043b" formatted="false">"Файлы резервных копий содержат личные данные и не зашифрованы. Храните их в защищённом месте."</string>
+    <string name="ui_backup_restore_35a349d9" formatted="false">"РЕЗЕРВНОЕ КОПИРОВАНИЕ"</string>
+    <string name="ui_backup_restored_continue_setup_to_reconnect_a_3fb2aa17" formatted="false">"Резервная копия восстановлена. Продолжите настройку для входа в аккаунт и предоставления разрешений Android."</string>
+    <string name="ui_blocked_18f2a094" formatted="false">"Заблокировано"</string>
+    <string name="ui_brightness_control_fcfe685e" formatted="false">"Управление яркостью"</string>
+    <string name="ui_brightness_f04b5cd0" formatted="false">"Яркость · "</string>
+    <string name="ui_calendar_composer_876c0d9f" formatted="false">"Создание события · "</string>
+    <string name="ui_calendar_d5d0a30b" formatted="false">"Календарь"</string>
+    <string name="ui_call_8080d0e1" formatted="false">"Звонок · "</string>
+    <string name="ui_camera_03494b0d" formatted="false">"Камера"</string>
+    <string name="ui_camera_could_not_be_opened_46cde03b" formatted="false">"Не удалось открыть камеру"</string>
+    <string name="ui_camera_permission_is_needed_to_take_a_photo_c5e22d0e" formatted="false">"Для съёмки нужен доступ к камере"</string>
+    <string name="ui_camera_photo_d0674e0d" formatted="false">"Снимок камеры"</string>
+    <string name="ui_cancel_19766ed6" formatted="false">"Отмена"</string>
+    <string name="ui_casual_f32445a7" formatted="false">"Неформальный"</string>
+    <string name="ui_celsius_c_400b949d" formatted="false">"Цельсий (°C)"</string>
+    <string name="ui_changes_conversation_content_only_including_r_b3cc927d" formatted="false">"Меняет только содержимое диалогов, включая Markdown в полном чате и помощнике, вызываемом боковой кнопкой."</string>
+    <string name="ui_chat_behavior_1419bd36" formatted="false">"Поведение чата"</string>
+    <string name="ui_chat_deleted_150baea4" formatted="false">"Чат удалён"</string>
+    <string name="ui_chat_deleted_undo_is_available_02bde1b7" formatted="false">"Чат удалён. Удаление можно отменить."</string>
+    <string name="ui_chat_options_d3204452" formatted="false">"Действия с чатом"</string>
+    <string name="ui_chat_pinned_d9f52279" formatted="false">"Чат закреплён"</string>
+    <string name="ui_chat_restored_488c5c7d" formatted="false">"Чат восстановлен"</string>
+    <string name="ui_chat_swipe_actions_736fe66a" formatted="false">"Действия свайпами в чатах"</string>
+    <string name="ui_chat_text_size_dff7935f" formatted="false">"Размер текста чата"</string>
+    <string name="ui_chat_unpinned_e70a1387" formatted="false">"Чат откреплён"</string>
+    <string name="ui_chatgpt_account_mode_uses_your_account_backed_653d68a5" formatted="false">"Режим аккаунта ChatGPT использует лимиты вашего аккаунта. Orbit не переключается без вашего ведома на отдельно оплачиваемый ретранслятор API."</string>
+    <string name="ui_chatgpt_active_a6ed644f" formatted="false">"ChatGPT активен"</string>
+    <string name="ui_chatgpt_connected_eafcf1bf" formatted="false">"✓ ChatGPT подключён"</string>
+    <string name="ui_chatgpt_connected_to_orbit_61c51250" formatted="false">"ChatGPT подключён к Orbit"</string>
+    <string name="ui_chatgpt_sign_in_could_not_complete_2ffa82b4" formatted="false">"Не удалось войти в ChatGPT"</string>
+    <string name="ui_chats_ef5b4049" formatted="false">"Чаты"</string>
+    <string name="ui_checking_assistant_status_4430bc1d" formatted="false">"Проверка состояния помощника…"</string>
+    <string name="ui_checking_chatgpt_sign_in_edfa18ba" formatted="false">"Проверка входа в ChatGPT…"</string>
+    <string name="ui_choose_a_preset_2f311e68" formatted="false">"Выберите готовую тему"</string>
+    <string name="ui_choose_and_configure_orbit_s_active_ai_provid_c011daee" formatted="false">"Выберите и настройте провайдера ИИ, подключение ChatGPT и модель по умолчанию."</string>
+    <string name="ui_choose_calendar_c422fd93" formatted="false">"Выбрать календарь"</string>
+    <string name="ui_choose_how_orbit_deck_is_reached_and_whether__fbcbb056" formatted="false">"Способ открытия панели Orbit и предложения ярлыков."</string>
+    <string name="ui_choose_how_orbit_thinks_chatgpt_is_the_recomm_7f0fb2f0" formatted="false">"Выберите ИИ для Orbit. Для всех возможностей рекомендуется ChatGPT. Orbit Local работает конфиденциально на устройстве; его можно добавить позже."</string>
+    <string name="ui_choose_how_to_open_orbit_583ded88" formatted="false">"Выберите способ вызова Orbit"</string>
+    <string name="ui_choose_local_chat_storage_and_background_comp_5afe1d30" formatted="false">"Локальное хранение чатов и завершение запросов в фоне."</string>
+    <string name="ui_choose_quick_settings_routine_cddbc28f" formatted="false">"Выбрать автоматизацию для быстрых настроек"</string>
+    <string name="ui_choose_the_apps_and_units_orbit_uses_for_ever_c3b5c812" formatted="false">"Выберите приложения и единицы измерения для повседневных запросов."</string>
+    <string name="ui_choose_what_orbit_can_access_and_change_it_la_dabef9e7" formatted="false">"Выберите, к чему у Orbit будет доступ. Позже это можно изменить в настройках."</string>
+    <string name="ui_choose_what_orbit_can_do_74f9a229" formatted="false">"Выберите возможности Orbit"</string>
+    <string name="ui_choose_which_compatible_installed_app_orbit_u_eb32f575" formatted="false">"Выберите совместимое установленное приложение для добавления изображений. Если оно недоступно, используется системный выбор файлов."</string>
+    <string name="ui_choose_which_controls_stay_on_the_overlay_hid_62b0c736" formatted="false">"Выберите элементы плавающего окна. Скрытые элементы доступны в меню «Ещё», где Float всегда размещает недавние чаты и создание нового чата."</string>
+    <string name="ui_choosing_orbit_as_android_s_digital_assistant_3fda0183" formatted="false">"Выберите Orbit цифровым помощником Android, чтобы вызывать его поддерживаемыми кнопками и жестами из любого приложения."</string>
+    <string name="ui_clear_83b12c22" formatted="false">"Очистить"</string>
+    <string name="ui_clear_chat_10a9a815" formatted="false">"Очистить чат"</string>
+    <string name="ui_clear_orbit_conversation_history_23817ed7" formatted="false">"Очистить историю диалогов Orbit"</string>
+    <string name="ui_clear_orbit_history_a7df4bff" formatted="false">"Очистить историю Orbit?"</string>
+    <string name="ui_clear_settings_search_63c62e14" formatted="false">"Очистить поиск настроек"</string>
+    <string name="ui_clear_this_chat_1b52d32f" formatted="false">"Очистить этот чат?"</string>
+    <string name="ui_clipboard_285d69f0" formatted="false">"Буфер обмена"</string>
+    <string name="ui_clipboard_89ee20f8" formatted="false">"Буфер обмена · "</string>
+    <string name="ui_clipboard_does_not_contain_usable_text_or_an__2ca6d2eb" formatted="false">"В буфере обмена нет подходящего текста или изображения"</string>
+    <string name="ui_clipboard_has_no_usable_content_db8846c3" formatted="false">"В буфере обмена нет подходящих данных"</string>
+    <string name="ui_clipboard_is_empty_0d50f046" formatted="false">"Буфер обмена пуст"</string>
+    <string name="ui_clipboard_text_bdd2efed" formatted="false">"Текст из буфера обмена"</string>
+    <string name="ui_close_7d9eb7ac" formatted="false">"Закрыть"</string>
+    <string name="ui_close_orbit_ebe5e629" formatted="false">"Закрыть Orbit"</string>
+    <string name="ui_code_copied_39868c86" formatted="false">"Код скопирован"</string>
+    <string name="ui_condensed_ec5ac7c3" formatted="false">"Узкий"</string>
+    <string name="ui_connect_orbit_51a3d76f" formatted="false">"Подключите Orbit"</string>
+    <string name="ui_connected_to_chatgpt_93968197" formatted="false">"✓ ChatGPT подключён"</string>
+    <string name="ui_connection_provider_130e21b8" formatted="false">"ПОДКЛЮЧЕНИЕ И ПРОВАЙДЕР"</string>
+    <string name="ui_contact_2b5c3d26" formatted="false">"Контакт"</string>
+    <string name="ui_contact_lookup_e8d9dae8" formatted="false">"Поиск контактов"</string>
+    <string name="ui_context_a61adb68" formatted="false">"Контекст: "</string>
+    <string name="ui_context_a8bf80b5" formatted="false">"КОНТЕКСТ"</string>
+    <string name="ui_context_window_dadd1c23" formatted="false">"Окно контекста заполнено на "</string>
+    <string name="ui_continue_31fbef16" formatted="false">"Продолжить"</string>
+    <string name="ui_continues_an_earlier_chat_aea927b9" formatted="false">"Продолжение предыдущего чата"</string>
+    <string name="ui_control_voice_beta_screen_awareness_and_devic_43800609" formatted="false">"Управление голосовыми функциями (бета), контекстом экрана и разрешениями устройства."</string>
+    <string name="ui_conversation_history_is_disabled_in_orbit_set_d0d4c8f5" formatted="false">"История диалогов отключена в настройках Orbit."</string>
+    <string name="ui_conversations_1d432f58" formatted="false">"Диалоги"</string>
+    <string name="ui_conversations_25a8982a" formatted="false">"ДИАЛОГИ"</string>
+    <string name="ui_copied_58d73ef4" formatted="false">"Скопировано ✓"</string>
+    <string name="ui_copied_8d525e5f" formatted="false">"Скопировано"</string>
+    <string name="ui_copied_instead_f4358811" formatted="false">"Вместо этого скопировано ✓"</string>
+    <string name="ui_copied_text_026eaa7f" formatted="false">"Скопированный текст"</string>
+    <string name="ui_copy_code_49a0053f" formatted="false">"Копировать код"</string>
+    <string name="ui_copy_e21f935f" formatted="false">"Копировать"</string>
+    <string name="ui_core_setup_e575a0fb" formatted="false">"Основная настройка"</string>
+    <string name="ui_could_not_export_backup_98b2798a" formatted="false">"Не удалось экспортировать резервную копию"</string>
+    <string name="ui_could_not_open_backup_7902f459" formatted="false">"Не удалось открыть резервную копию"</string>
+    <string name="ui_could_not_open_source_1b744217" formatted="false">"Не удалось открыть источник"</string>
+    <string name="ui_could_not_open_your_vault_d30e83f6" formatted="false">"Не удалось открыть хранилище"</string>
+    <string name="ui_could_not_prepare_screen_selection_8f4a488b" formatted="false">"Не удалось подготовить выделение области экрана"</string>
+    <string name="ui_could_not_restore_backup_eaf9f738" formatted="false">"Не удалось восстановить резервную копию"</string>
+    <string name="ui_could_not_save_relay_settings_d1d62e26" formatted="false">"Не удалось сохранить настройки ретранслятора"</string>
+    <string name="ui_could_not_start_chatgpt_sign_in_41b65366" formatted="false">"Не удалось начать вход в ChatGPT"</string>
+    <string name="ui_could_not_start_microphone_bca3d1d5" formatted="false">"Не удалось включить микрофон"</string>
+    <string name="ui_create_edit_and_run_saved_action_engine_chain_346aeb38" formatted="false">"Создание, изменение и запуск цепочек действий"</string>
+    <string name="ui_current_screen_87e519a5" formatted="false">"Текущий экран"</string>
+    <string name="ui_current_screen_already_attached_3d395eda" formatted="false">"Текущий экран уже прикреплён"</string>
+    <string name="ui_current_screen_attached_87a4be41" formatted="false">"Текущий экран прикреплён"</string>
+    <string name="ui_current_screen_available_b4cf6d1e" formatted="false">"Текущий экран доступен"</string>
+    <string name="ui_current_screen_detached_c6a9ed00" formatted="false">"Текущий экран откреплён"</string>
+    <string name="ui_current_screen_preview_select_an_area_e1ff2d82" formatted="false">"Предпросмотр текущего экрана. Выберите область."</string>
+    <string name="ui_current_screen_unavailable_dae17a6b" formatted="false">"Текущий экран недоступен"</string>
+    <string name="ui_current_version_and_verified_official_orbit_r_0592f5c6" formatted="false">"Текущая версия и официальные обновления Orbit"</string>
+    <string name="ui_custom_app_profile_d7aaf65a" formatted="false">"Пользовательский профиль приложения"</string>
+    <string name="ui_customize_how_orbit_appears_over_other_apps_b45a0930" formatted="false">"Настройте отображение Orbit поверх других приложений."</string>
+    <string name="ui_customize_your_personal_orbit_shortcuts_f552b43c" formatted="false">"Настройка персональных ярлыков Orbit"</string>
+    <string name="ui_deck_arranges_shortcuts_to_things_orbit_alrea_8d77519d" formatted="false">"Панель объединяет ярлыки существующих функций Orbit. Предложения формируются на "</string>
+    <string name="ui_default_21b111cb" formatted="false">"По умолчанию"</string>
+    <string name="ui_default_ai_for_new_chats_30d2da45" formatted="false">"ИИ по умолчанию для новых чатов"</string>
+    <string name="ui_default_ai_for_new_chats_34971bb9" formatted="false">"ИИ по умолчанию для новых чатов: "</string>
+    <string name="ui_default_assistant_side_button_and_quick_setti_4f2c7cea" formatted="false">"Помощник по умолчанию, боковая кнопка и быстрые настройки"</string>
+    <string name="ui_default_for_new_chats_89994150" formatted="false">"По умолчанию для новых чатов"</string>
+    <string name="ui_default_reminder_app_da5aaab7" formatted="false">"Приложение напоминаний по умолчанию"</string>
+    <string name="ui_default_weather_location_cleared_c00de229" formatted="false">"Местоположение для погоды удалено"</string>
+    <string name="ui_default_weather_location_optional_027770b3" formatted="false">"Местоположение для погоды (необязательно)"</string>
+    <string name="ui_delete_all_97811183" formatted="false">"Удалить всё"</string>
+    <string name="ui_delete_all_vault_data_58d0eee9" formatted="false">"Удалить все данные хранилища?"</string>
+    <string name="ui_delete_chat_80aaa1b5" formatted="false">"Удалить чат?"</string>
+    <string name="ui_delete_chat_93291d9c" formatted="false">"Удалить чат"</string>
+    <string name="ui_delete_e2d0a549" formatted="false">"Удалить"</string>
+    <string name="ui_delete_vault_data_5ae7870a" formatted="false">"Удалить данные хранилища"</string>
+    <string name="ui_deleted_7960c0f2" formatted="false">"Удалено: "</string>
+    <string name="ui_design_orbit_s_colors_with_live_previews_pres_400addd3" formatted="false">"Настройте цвета Orbit с предпросмотром, готовыми и собственными сохранёнными темами."</string>
+    <string name="ui_design_orbit_s_theme_then_set_typography_and__39c0ef22" formatted="false">"Тема Orbit, оформление текста и виброотклик."</string>
+    <string name="ui_destination_293d404a" formatted="false">"Место назначения"</string>
+    <string name="ui_detach_current_screen_787e5e46" formatted="false">"Открепить текущий экран"</string>
+    <string name="ui_developer_tools_96f0c06b" formatted="false">"Инструменты разработчика"</string>
+    <string name="ui_device_action_50816511" formatted="false">"Действие на устройстве"</string>
+    <string name="ui_device_and_orbit_uses_a_saved_item_only_when__f110ed71" formatted="false">"устройстве. Orbit использует сохранённый элемент, только когда вы сами его выбираете."</string>
+    <string name="ui_device_controls_1c1afb89" formatted="false">"УПРАВЛЕНИЕ УСТРОЙСТВОМ"</string>
+    <string name="ui_device_this_cannot_be_undone_your_chats_orbit_c225853c" formatted="false">"устройства. Отменить это нельзя.\n\nВаши чаты, память Orbit, провайдеры "</string>
+    <string name="ui_diagnostics_and_developer_tools_3cd51c7f" formatted="false">"Диагностика и инструменты разработчика"</string>
+    <string name="ui_diagnostics_c34dc2ac" formatted="false">"ДИАГНОСТИКА"</string>
+    <string name="ui_dismiss_context_notice_f6a42d1a" formatted="false">"Скрыть уведомление о контексте"</string>
+    <string name="ui_do_not_disturb_control_eaafd178" formatted="false">"Управление режимом «Не беспокоить»"</string>
+    <string name="ui_do_not_disturb_off_0a9f7acd" formatted="false">"Режим «Не беспокоить» выключен"</string>
+    <string name="ui_do_not_disturb_on_796ce27f" formatted="false">"Режим «Не беспокоить» включён"</string>
+    <string name="ui_done_11a6767d" formatted="false">"Готово"</string>
+    <string name="ui_done_ed251864" formatted="false">"Готово."</string>
+    <string name="ui_editing_message_sends_as_a_new_branch_cee30730" formatted="false">"Редактирование сообщения · создаёт новую ветку"</string>
+    <string name="ui_editing_previous_message_383e156d" formatted="false">"Редактирование предыдущего сообщения"</string>
+    <string name="ui_empty_chat_4c57b8f0" formatted="false">"Пустой чат"</string>
+    <string name="ui_enter_an_https_relay_url_first_a096cb2f" formatted="false">"Сначала введите HTTPS-адрес ретранслятора."</string>
+    <string name="ui_event_4e1f49a9" formatted="false">"Событие"</string>
+    <string name="ui_everyday_preferences_5a70e1a5" formatted="false">"Повседневные настройки"</string>
+    <string name="ui_exit_setup_3f28c148" formatted="false">"Выйти из настройки?"</string>
+    <string name="ui_exit_setup_a8b459d5" formatted="false">"Выйти из настройки"</string>
+    <string name="ui_export_orbit_backup_ccc58e78" formatted="false">"Экспорт резервной копии Orbit"</string>
+    <string name="ui_extensions_fe3436af" formatted="false">"Расширения"</string>
+    <string name="ui_extra_large_cc16912b" formatted="false">"Очень большой"</string>
+    <string name="ui_fade_settle_e6a24610" formatted="false">"Проявление"</string>
+    <string name="ui_fahrenheit_f_9c9497df" formatted="false">"Фаренгейт (°F)"</string>
+    <string name="ui_file_50009ce1" formatted="false">"Файл"</string>
+    <string name="ui_file_attachment_1381b59f" formatted="false">"Прикреплённый файл"</string>
+    <string name="ui_finalizing_voice_input_cb29fdf6" formatted="false">"Завершение голосового ввода"</string>
+    <string name="ui_finish_the_current_reply_first_4816d741" formatted="false">"Сначала дождитесь завершения текущего ответа"</string>
+    <string name="ui_finishing_secure_chatgpt_sign_in_7777d7c7" formatted="false">"Завершение безопасного входа в ChatGPT…"</string>
+    <string name="ui_finishing_voice_2c96f4ae" formatted="false">"Завершение голосового ввода…"</string>
+    <string name="ui_flashlight_control_2b1b2637" formatted="false">"Управление фонариком"</string>
+    <string name="ui_flashlight_off_667a783b" formatted="false">"Фонарик выключен"</string>
+    <string name="ui_flashlight_on_efbf6bed" formatted="false">"Фонарик включён"</string>
+    <string name="ui_for_advanced_users_running_their_own_https_re_6d06e9df" formatted="false">"Для опытных пользователей с собственным HTTPS-ретранслятором. Orbit обращается к вашему серверу; ключ API остаётся на сервере и не передаётся в Orbit."</string>
+    <string name="ui_for_each_request_tap_to_change_a1d54c8b" formatted="false">"для каждого запроса. Нажмите для изменения."</string>
+    <string name="ui_full_continue_in_new_chat_e60ebb45" formatted="false">"% заполнено · Продолжить в новом чате"</string>
+    <string name="ui_gallery_316a1d87" formatted="false">"ГАЛЕРЕЯ"</string>
+    <string name="ui_gallery_352cfc74" formatted="false">"Галерея"</string>
+    <string name="ui_gallery_app_eabbd23f" formatted="false">"Приложение галереи"</string>
+    <string name="ui_gestures_eb8ed269" formatted="false">"ЖЕСТЫ"</string>
+    <string name="ui_get_started_61e8d44a" formatted="false">"Начать"</string>
+    <string name="ui_grant_access_8693768c" formatted="false">"Предоставить доступ"</string>
+    <string name="ui_grant_microphone_permission_65660d48" formatted="false">"Разрешить доступ к микрофону"</string>
+    <string name="ui_hands_free_voice_follow_ups_df5a6a10" formatted="false">"Продолжать голосовой диалог без рук"</string>
+    <string name="ui_haptic_feedback_153d8baf" formatted="false">"Виброотклик"</string>
+    <string name="ui_having_trouble_use_code_sign_in_62f97b7e" formatted="false">"Возникли трудности? Войдите с помощью кода"</string>
+    <string name="ui_hide_more_provider_options_e2abd48f" formatted="false">"Скрыть других провайдеров"</string>
+    <string name="ui_history_chat_behavior_and_background_notifica_992c2f7f" formatted="false">"История, поведение чата и фоновые уведомления"</string>
+    <string name="ui_home_screen_widgets_61423fa7" formatted="false">"ВИДЖЕТЫ ГЛАВНОГО ЭКРАНА"</string>
+    <string name="ui_how_full_screen_orbit_pages_move_when_you_ope_9daead9a" formatted="false">"Анимация открытия и закрытия полноэкранных страниц Orbit. «Сдвиг» перемещает страницу справа и обратно. «Проявление» сочетает плавное появление с небольшим движением вверх. «Нет» переключает страницы сразу. Системные настройки анимации Android также учитываются."</string>
+    <string name="ui_how_orbit_s_words_are_set_these_are_independe_b8b6bc90" formatted="false">"Оформление текста в Orbit. Эти параметры не зависят от выбранной темы."</string>
+    <string name="ui_https_relay_url_c7f52310" formatted="false">"HTTPS-адрес ретранслятора"</string>
+    <string name="ui_if_device_location_is_off_orbit_uses_the_save_b2985802" formatted="false">"Если местоположение отключено, Orbit использует сохранённый город. Если город не указан, помощник спросит его и запомнит последний город из запроса о погоде."</string>
+    <string name="ui_image_04139807" formatted="false">"Изображение "</string>
+    <string name="ui_in_aab38d73" formatted="false">", в разделе "</string>
+    <string name="ui_in_document_viewer_6e8404a5" formatted="false">" в просмотрщике документов"</string>
+    <string name="ui_in_reply_to_2d795379" formatted="false">"В ответ на "</string>
+    <string name="ui_input_awareness_dd9d9904" formatted="false">"Ввод и контекст"</string>
+    <string name="ui_inspect_local_diagnostics_and_developer_troub_3e8e05d2" formatted="false">"Локальная диагностика и сведения для устранения неполадок."</string>
+    <string name="ui_intelligence_4a3fa3f8" formatted="false">"ИНТЕЛЛЕКТ"</string>
+    <string name="ui_interrupt_and_speak_ef2ad74a" formatted="false">"Прервать и говорить"</string>
+    <string name="ui_invoke_orbit_with_the_side_button_on_the_scre_c3999434" formatted="false">"Сначала вызовите Orbit боковой кнопкой на нужном экране"</string>
+    <string name="ui_is_ready_to_view_orbit_will_not_download_it_w_bc15dd01" formatted="false">" доступен для ознакомления. Orbit не загрузит обновление без вашего согласия."</string>
+    <string name="ui_it_has_been_copied_complete_authorization_in__e08721d9" formatted="false">"\n\nКод скопирован. Завершите авторизацию в браузере и вернитесь в Orbit."</string>
+    <string name="ui_it_has_been_copied_to_your_clipboard_open_ope_f9fc44f2" formatted="false">"\n\nКод скопирован. Откройте страницу входа OpenAI, войдите в свой аккаунт ChatGPT и введите код. Orbit завершит подключение автоматически."</string>
+    <string name="ui_items_0f12f4b3" formatted="false">" — элементов"</string>
+    <string name="ui_items_this_one_was_sent_with_this_message_onl_a24cc0d1" formatted="false">" элементов. Этот элемент отправлен только с текущим сообщением."</string>
+    <string name="ui_its_own_choice_so_changing_this_never_changes_6058acb0" formatted="false">"свой выбор, поэтому изменение здесь не затрагивает существующие чаты. "</string>
+    <string name="ui_jump_to_latest_86752458" formatted="false">"К последнему сообщению"</string>
+    <string name="ui_keep_control_7971a6c2" formatted="false">"Всё под вашим контролем"</string>
+    <string name="ui_keep_in_this_chat_aef3be27" formatted="false">"Сохранить в контексте чата"</string>
+    <string name="ui_keep_setting_up_f0000e34" formatted="false">"Продолжить настройку"</string>
+    <string name="ui_kept_33adfd9e" formatted="false">"В контексте: "</string>
+    <string name="ui_kept_36c67038" formatted="false">" — в контексте"</string>
+    <string name="ui_kept_in_this_chat_b168ee7e" formatted="false">" — сохранено в контексте чата"</string>
+    <string name="ui_kept_in_this_chat_opens_the_list_fa322905" formatted="false">" — сохранено в контексте чата. Открывает список."</string>
+    <string name="ui_keyboard_aware_assistant_invocation_701c19ae" formatted="false">"Учитывать клавиатуру при вызове помощника"</string>
+    <string name="ui_large_ab80540d" formatted="false">"Большой"</string>
+    <string name="ui_later_73b6e48a" formatted="false">"Позже"</string>
+    <string name="ui_let_orbit_do_this_765280bf" formatted="false">"Разрешить Orbit это действие?"</string>
+    <string name="ui_level_for_each_request_tap_to_change_f15996c5" formatted="false">"для каждого запроса. Нажмите для изменения."</string>
+    <string name="ui_light_dbcd5e7b" formatted="false">"Тонкий"</string>
+    <string name="ui_listening_bbb4106e" formatted="false">"Слушаю…"</string>
+    <string name="ui_listening_dd6e525e" formatted="false">" · Слушаю…"</string>
+    <string name="ui_listening_tap_mic_when_done_61bfe400" formatted="false">"Слушаю · нажмите микрофон, когда закончите"</string>
+    <string name="ui_loading_attachment_416be39a" formatted="false">"Загрузка вложения…"</string>
+    <string name="ui_loading_attachments_4fb51e5b" formatted="false">"Загрузка вложений…"</string>
+    <string name="ui_loading_clipboard_attachment_b24fd9f5" formatted="false">"Загрузка вложения из буфера обмена"</string>
+    <string name="ui_local_context_cc1b01b6" formatted="false">"Локальный контекст"</string>
+    <string name="ui_local_weather_and_location_aware_features_cd8c9a09" formatted="false">"Местная погода и функции с учётом местоположения."</string>
+    <string name="ui_location_automation_3a5979c6" formatted="false">"Автоматизация по местоположению"</string>
+    <string name="ui_location_permission_not_granted_eb2e8150" formatted="false">"Доступ к местоположению не разрешён"</string>
+    <string name="ui_look_feel_a4103ab4" formatted="false">"Внешний вид"</string>
+    <string name="ui_look_feel_fdaac215" formatted="false">"ВНЕШНИЙ ВИД"</string>
+    <string name="ui_make_orbit_default_assistant_7a5864de" formatted="false">"Назначить Orbit помощником по умолчанию"</string>
+    <string name="ui_make_orbit_the_default_digital_assistant_app__e6e29a7f" formatted="false">"Выберите Orbit цифровым помощником по умолчанию, затем в настройках Samsung: Боковая кнопка → Долгое нажатие → Цифровой помощник."</string>
+    <string name="ui_make_orbit_your_assistant_25633010" formatted="false">"Сделайте Orbit своим помощником"</string>
+    <string name="ui_make_orbit_yours_d8e930a7" formatted="false">"Настройте Orbit под себя"</string>
+    <string name="ui_manage_5a234448" formatted="false">"Управление"</string>
+    <string name="ui_manage_app_profiles_79153c08" formatted="false">"Управление профилями приложений"</string>
+    <string name="ui_manage_assistant_settings_66c4945b" formatted="false">"Управление настройками помощника"</string>
+    <string name="ui_manage_default_assistant_89d6a0db" formatted="false">"Выбор помощника по умолчанию"</string>
+    <string name="ui_manage_notification_intelligence_3c2f1c73" formatted="false">"Управление умными уведомлениями"</string>
+    <string name="ui_manage_orbit_local_5a3f67f5" formatted="false">"Управление Orbit Local"</string>
+    <string name="ui_manage_orbit_memory_a1e81108" formatted="false">"Управление памятью Orbit"</string>
+    <string name="ui_manage_orbit_reminders_400661d7" formatted="false">"Управление напоминаниями Orbit"</string>
+    <string name="ui_manage_saved_places_07141853" formatted="false">"Управление сохранёнными местами"</string>
+    <string name="ui_manage_weather_preferences_and_the_local_info_7087536c" formatted="false">"Настройки погоды и локальных данных, используемых Orbit для персонализации работы помощника."</string>
+    <string name="ui_manual_only_be1016ce" formatted="false">"Только вручную"</string>
+    <string name="ui_many_ai_models_through_one_openrouter_account_d936f413" formatted="false">"Множество моделей ИИ через один аккаунт OpenRouter. Использование оплачивается с баланса OpenRouter отдельно от ChatGPT. Войти можно в любой момент в разделе провайдеров ИИ."</string>
+    <string name="ui_media_volume_c20a2d77" formatted="false">"Громкость медиа · "</string>
+    <string name="ui_memories_89ad77ff" formatted="false">" — записей памяти"</string>
+    <string name="ui_memories_provided_to_this_response_a3e2f02a" formatted="false">"Память, переданная для этого ответа"</string>
+    <string name="ui_memory_7f2956ec" formatted="false">" — записей памяти"</string>
+    <string name="ui_message_894fb8fb" formatted="false">"Сообщение · "</string>
+    <string name="ui_message_version_47704497" formatted="false">"Версия сообщения"</string>
+    <string name="ui_microphone_186352a8" formatted="false">"Микрофон"</string>
+    <string name="ui_microphone_permission_is_needed_for_voice_bet_b1d1ac71" formatted="false">"Для голосового режима (бета) нужен доступ к микрофону"</string>
+    <string name="ui_microphone_permission_is_not_granted_open_the_71d6f146" formatted="false">"Нет доступа к микрофону. Откройте приложение Orbit и нажмите «Разрешить доступ к микрофону»."</string>
+    <string name="ui_minimized_3d4319f2" formatted="false">" свёрнут, "</string>
+    <string name="ui_minimized_tap_to_expand_1197249e" formatted="false">" свёрнут. Нажмите, чтобы развернуть."</string>
+    <string name="ui_models_access_e33ea5fc" formatted="false">"Модели и доступ"</string>
+    <string name="ui_modern_is_orbit_s_full_floating_assistant_flo_69afb8f4" formatted="false">"Modern — полноценное плавающее окно Orbit. Float компактен и увеличивается по мере необходимости; на широком экране располагается справа внизу. Нажатие на ручку сворачивает его в небольшое окно Peek, сохраняя чат. Classic — исходное оформление. Во всех стилях доступны те же функции. Изменения применяются при следующем открытии помощника."</string>
+    <string name="ui_monospace_64c223c2" formatted="false">"Моноширинный"</string>
+    <string name="ui_more_options_bc79cdff" formatted="false">"Дополнительные действия"</string>
+    <string name="ui_more_provider_options_3fa79cbc" formatted="false">"Другие провайдеры"</string>
+    <string name="ui_more_provider_options_including_claude_and_ge_7343e53f" formatted="false">"В будущих версиях Orbit планируются другие провайдеры, включая Claude и Gemini."</string>
+    <string name="ui_naples_florida_cc9fa8a2" formatted="false">"Неаполь, Флорида"</string>
+    <string name="ui_navigate_6ab4ceec" formatted="false">"Маршрут · "</string>
+    <string name="ui_needs_access_67b0e137" formatted="false">"Требуется разрешение"</string>
+    <string name="ui_needs_attention_06e1b32c" formatted="false">"  •  Требует внимания"</string>
+    <string name="ui_needs_attention_c1ebc781" formatted="false">"Требует внимания"</string>
+    <string name="ui_never_sends_your_chat_prompt_or_vault_anywher_7aa422d6" formatted="false">"не отправляет для этого содержимое чата, запроса или хранилища."</string>
+    <string name="ui_never_shows_private_chain_of_thought_4b108433" formatted="false">"Внутренний ход рассуждений не показывается."</string>
+    <string name="ui_new_chat_10ebc197" formatted="false">"+  Новый чат"</string>
+    <string name="ui_new_chat_db18382a" formatted="false">"Новый чат"</string>
+    <string name="ui_new_chat_started_with_a_summary_of_2653c480" formatted="false">"Новый чат начат со сводки чата «"</string>
+    <string name="ui_new_chat_started_with_a_summary_of_the_last_o_66955a88" formatted="false">"Новый чат начат со сводки предыдущего"</string>
+    <string name="ui_new_reminders_are_saved_and_alerted_by_orbit_c73f8a7d" formatted="false">"Новые напоминания сохраняются в Orbit, который уведомляет о них."</string>
+    <string name="ui_next_cd447acb" formatted="false">"Следующая "</string>
+    <string name="ui_no_chats_yet_269208e4" formatted="false">"Чатов пока нет"</string>
+    <string name="ui_no_file_picker_is_available_87c95c0d" formatted="false">"Нет доступного приложения для выбора файлов"</string>
+    <string name="ui_no_gallery_picker_is_available_3f8958c1" formatted="false">"Нет доступного приложения для выбора изображений"</string>
+    <string name="ui_no_matching_chats_27e7713c" formatted="false">"Чаты не найдены"</string>
+    <string name="ui_no_saved_chats_yet_6038aa6e" formatted="false">"Сохранённых чатов пока нет."</string>
+    <string name="ui_no_settings_found_3e4d15d4" formatted="false">"Настройки не найдены"</string>
+    <string name="ui_none_dc937b59" formatted="false">"Нет"</string>
+    <string name="ui_not_now_a0e63d7c" formatted="false">"Не сейчас"</string>
+    <string name="ui_not_signed_in_with_chatgpt_c5d81e8b" formatted="false">"○ Вход в ChatGPT не выполнен"</string>
+    <string name="ui_notification_intelligence_b32b4ba2" formatted="false">"Анализ уведомлений"</string>
+    <string name="ui_notification_permission_not_granted_4392f380" formatted="false">"Уведомления не разрешены"</string>
+    <string name="ui_notifications_78801183" formatted="false">"Уведомления"</string>
+    <string name="ui_notify_me_when_a_background_response_finishes_0e484f9e" formatted="false">"Уведомлять о завершении ответа в фоне"</string>
+    <string name="ui_now_using_90e657d6" formatted="false">"Теперь используется "</string>
+    <string name="ui_of_7_42c4647a" formatted="false">" из 7"</string>
+    <string name="ui_offers_undo_with_this_off_chats_scroll_and_op_f429c375" formatted="false">"можно отменить. При отключении чаты прокручиваются и открываются как обычно, а оба "</string>
+    <string name="ui_ok_565339bc" formatted="false">"ОК"</string>
+    <string name="ui_on_be4a8ec8" formatted="false">" · Вкл."</string>
+    <string name="ui_only_documents_text_and_vault_items_can_be_ke_653ff114" formatted="false">"В этом чате можно сохранять только документы, текст и элементы хранилища"</string>
+    <string name="ui_only_reopen_the_microphone_when_orbit_is_wait_66dd8536" formatted="false">"Включать микрофон повторно, только когда Orbit ожидает вашего ответа."</string>
+    <string name="ui_open_a023a869" formatted="false">"Открыть · "</string>
+    <string name="ui_open_assistant_settings_44fda956" formatted="false">"Открыть настройки помощника"</string>
+    <string name="ui_open_b8039d1d" formatted="false">"Открыть "</string>
+    <string name="ui_open_chatgpt_sign_in_d7f07761" formatted="false">"Открыть вход в ChatGPT"</string>
+    <string name="ui_open_link_aab63f85" formatted="false">"Открыть ссылку"</string>
+    <string name="ui_open_orbit_deck_cb75535e" formatted="false">"Открыть панель Orbit"</string>
+    <string name="ui_open_orbit_diagnostics_029a161f" formatted="false">"Открыть диагностику Orbit"</string>
+    <string name="ui_open_orbit_instantly_from_android_quick_setti_ceaa1bcf" formatted="false">"Мгновенный вызов Orbit из быстрых настроек Android."</string>
+    <string name="ui_open_orbit_instantly_or_assign_one_saved_rout_df301a52" formatted="false">"Мгновенный вызов Orbit или запуск выбранной автоматизации через плитку быстрых настроек."</string>
+    <string name="ui_open_orbit_over_another_screen_first_b37ae638" formatted="false">"Сначала откройте Orbit поверх другого экрана"</string>
+    <string name="ui_open_orbit_over_the_screen_you_want_to_select_34fe1f6c" formatted="false">"Сначала откройте Orbit поверх нужного экрана."</string>
+    <string name="ui_open_orbit_s_dedicated_managers_for_saved_pla_31cd17e9" formatted="false">"Управляйте сохранёнными местами, памятью, хранилищем, настройками отдельных приложений и контекстом уведомлений."</string>
+    <string name="ui_open_orbit_vault_14687385" formatted="false">"Открыть хранилище Orbit"</string>
+    <string name="ui_open_provider_settings_bbcae464" formatted="false">"Открыть настройки провайдера"</string>
+    <string name="ui_open_source_5283af24" formatted="false">"Открыть источник · "</string>
+    <string name="ui_open_source_in_browser_5e5a8beb" formatted="false">"Открыть источник в браузере"</string>
+    <string name="ui_opened_saved_chat_d844bd20" formatted="false">"Сохранённый чат открыт"</string>
+    <string name="ui_opening_c926c2c5" formatted="false">"Открытие…"</string>
+    <string name="ui_opening_screen_selection_513a0263" formatted="false">"Открытие выделения области экрана…"</string>
+    <string name="ui_opening_screen_selection_b5aabc96" formatted="false">"Открытие выделения области экрана"</string>
+    <string name="ui_opens_full_screen_a6674f1b" formatted="false">", открывает на весь экран"</string>
+    <string name="ui_opens_orbit_s_color_designer_4e1be8e1" formatted="false">". Открывает редактор цветов Orbit."</string>
+    <string name="ui_optional_59be7133" formatted="false">"Необязательно"</string>
+    <string name="ui_orbit_also_supports_home_screen_widgets_add_t_e478c9a8" formatted="false">"Orbit также поддерживает виджеты главного экрана. Добавьте их позже через приложение запуска или настройки Orbit."</string>
+    <string name="ui_orbit_always_uses_exactly_the_model_you_choos_46a3a594" formatted="false">"Orbit всегда использует выбранную вами модель; автоматический выбор действует только в режиме «Авто»."</string>
+    <string name="ui_orbit_assistant_v_8b13250e" formatted="false">"Orbit Assistant версии "</string>
+    <string name="ui_orbit_backup_restored_review_android_permissi_9932be54" formatted="false">"Резервная копия Orbit восстановлена. Проверьте разрешения Android и выбор помощника по умолчанию."</string>
+    <string name="ui_orbit_backup_saved_599c72e2" formatted="false">"Резервная копия Orbit сохранена"</string>
+    <string name="ui_orbit_backups_stay_in_the_file_you_choose_the_778417ef" formatted="false">"Резервная копия Orbit сохраняется в выбранном файле. Она включает локальные чаты, память, хранилище, автоматизации, безопасные манифесты расширений, напоминания, сохранённые места и персонализацию. Данные входа в аккаунты не включаются. Разрешения Android и выбор помощника по умолчанию также не сохраняются; после переустановки их может потребоваться настроить заново."</string>
+    <string name="ui_orbit_can_answer_current_weather_and_forecast_db729daa" formatted="false">"Orbit показывает текущую погоду и прогноз Open-Meteo прямо в чате. Укажите город по умолчанию или разрешите приблизительное местоположение. Открывать браузер не требуется."</string>
+    <string name="ui_orbit_chatgpt_code_30d0c7fe" formatted="false">"Код ChatGPT для Orbit"</string>
+    <string name="ui_orbit_conversation_history_cleared_af9bc89c" formatted="false">"История диалогов Orbit очищена"</string>
+    <string name="ui_orbit_could_not_attach_that_saved_item_963d70fb" formatted="false">"Orbit не удалось прикрепить сохранённый элемент"</string>
+    <string name="ui_orbit_could_not_attach_those_saved_items_ef8e2c50" formatted="false">"Orbit не удалось прикрепить сохранённые элементы"</string>
+    <string name="ui_orbit_could_not_complete_this_backup_operatio_d02d6912" formatted="false">"Orbit не удалось завершить операцию с резервной копией."</string>
+    <string name="ui_orbit_could_not_complete_this_operation_9507ae61" formatted="false">"Orbit не удалось выполнить эту операцию."</string>
+    <string name="ui_orbit_could_not_create_a_camera_image_f05b6834" formatted="false">"Orbit не удалось создать снимок камеры"</string>
+    <string name="ui_orbit_could_not_finish_5bb52db0" formatted="false">"Orbit не удалось завершить"</string>
+    <string name="ui_orbit_could_not_finish_this_response_e795f0ce" formatted="false">"Orbit не удалось завершить этот ответ."</string>
+    <string name="ui_orbit_could_not_load_this_screen_selection_a69f4a31" formatted="false">"Orbit не удалось загрузить выделенную область экрана"</string>
+    <string name="ui_orbit_could_not_open_a_web_browser_on_this_ph_3ed952a5" formatted="false">"Orbit не удалось открыть браузер на этом телефоне."</string>
+    <string name="ui_orbit_could_not_prepare_this_screen_image_fb47bd8e" formatted="false">"Orbit не удалось подготовить снимок экрана"</string>
+    <string name="ui_orbit_could_not_securely_save_the_optional_re_3b8093b1" formatted="false">"Orbit не удалось защищённо сохранить токен доступа к ретранслятору."</string>
+    <string name="ui_orbit_deck_9ba2c945" formatted="false">"Панель Orbit"</string>
+    <string name="ui_orbit_deck_b9101ed0" formatted="false">"ПАНЕЛЬ ORBIT"</string>
+    <string name="ui_orbit_default_85a4dcf3" formatted="false">"Стандартный Orbit"</string>
+    <string name="ui_orbit_default_is_the_current_app_font_times_n_15df2450" formatted="false">"Стандартный Orbit — текущий шрифт приложения. Times New Roman использует одноимённый шрифт телефона, если он есть, иначе — встроенный шрифт Android с засечками. Файл шрифта в Orbit не включён."</string>
+    <string name="ui_orbit_diagnostics_c8a73789" formatted="false">"Диагностика Orbit"</string>
+    <string name="ui_orbit_forgets_this_chatgpt_connection_on_this_3f18235e" formatted="false">"Подключение к ChatGPT будет удалено с этого телефона. Войти снова можно в любой момент."</string>
+    <string name="ui_orbit_is_not_currently_your_default_assistant_fd04f0b1" formatted="false">"○ Orbit пока не выбран помощником по умолчанию"</string>
+    <string name="ui_orbit_is_not_the_active_assistant_yet_92ed56e2" formatted="false">"○ Orbit пока не выбран помощником"</string>
+    <string name="ui_orbit_is_ready_539e6f58" formatted="false">"Orbit готов"</string>
+    <string name="ui_orbit_is_ready_to_configure_at_your_pace_93e58d65" formatted="false">"Настраивайте Orbit в удобном темпе"</string>
+    <string name="ui_orbit_is_selected_as_your_assistant_your_devi_47ec47a0" formatted="false">"Orbit выбран помощником. Теперь его можно вызвать поддерживаемым на устройстве жестом."</string>
+    <string name="ui_orbit_is_thinking_9f7e69e2" formatted="false">"Orbit думает"</string>
+    <string name="ui_orbit_is_thinking_d4418dd5" formatted="false">"Orbit думает…"</string>
+    <string name="ui_orbit_is_using_this_account_s_chatgpt_codex_a_49e30102" formatted="false">"Orbit использует лимиты ChatGPT/Codex этого аккаунта. Ключ API не требуется."</string>
+    <string name="ui_orbit_is_your_default_assistant_7bea32a3" formatted="false">"✓ Orbit — помощник по умолчанию"</string>
+    <string name="ui_orbit_keeps_up_to_100_recent_chats_locally_wh_83d9a154" formatted="false">"При включённой истории Orbit хранит до 100 последних чатов на устройстве. В приложении их можно искать, переименовывать, открывать и удалять. Миниатюры экрана сохраняются только в закрытом хранилище Orbit при включённой соответствующей настройке."</string>
+    <string name="ui_orbit_keeps_using_the_securely_stored_session_aabaafe4" formatted="false">"Orbit продолжит использовать сеанс, уже защищённо сохранённый на этом телефоне."</string>
+    <string name="ui_orbit_local_active_38d55fa2" formatted="false">"Orbit Local активен"</string>
+    <string name="ui_orbit_local_answers_on_this_phone_with_no_acc_493b5c54" formatted="false">"Orbit Local отвечает на этом телефоне без аккаунта и интернета. Данные входа в ChatGPT остаются защищённо сохранёнными, но не используются, пока выбран Orbit Local."</string>
+    <string name="ui_orbit_power_assistant_9a4f13d6" formatted="false">"Orbit — умный помощник"</string>
+    <string name="ui_orbit_preset_a2d9179f" formatted="false">", тема Orbit"</string>
+    <string name="ui_orbit_reminders_are_scheduled_locally_on_this_5837cdb8" formatted="false">"Напоминания Orbit планируются на этом устройстве и появляются в виде уведомлений в выбранное время."</string>
+    <string name="ui_orbit_reminders_d6d1cb04" formatted="false">"Напоминания Orbit"</string>
+    <string name="ui_orbit_reply_c9eb8063" formatted="false">"Ответ Orbit"</string>
+    <string name="ui_orbit_s_fullest_experience_stronger_answers_h_a7ced39f" formatted="false">"Все возможности Orbit: качественные ответы, поиск в интернете, контекст экрана и изображений, планирование действий на устройстве."</string>
+    <string name="ui_orbit_s_own_themes_pick_the_one_you_like_the__280953e3" formatted="false">"Темы Orbit. Выберите ту, которая вам нравится."</string>
+    <string name="ui_orbit_sends_up_to_f0829664" formatted="false">"Orbit отправляет до "</string>
+    <string name="ui_orbit_set_as_assistant_bdc4052f" formatted="false">"✓ Orbit выбран помощником"</string>
+    <string name="ui_orbit_settings_fe42a133" formatted="false">"Настройки Orbit."</string>
+    <string name="ui_orbit_signs_in_through_openai_s_public_codex__d630681a" formatted="false">"Orbit использует публичный вход OpenAI через Codex OAuth — в браузере или по одноразовому коду. OpenAI не документирует сервер Codex как общедоступный API для сторонних мобильных приложений, поэтому интеграция экспериментальная. При необходимости можно вручную выбрать ретранслятор API."</string>
+    <string name="ui_orbit_tile_added_bd0fc37f" formatted="false">"Плитка Orbit добавлена"</string>
+    <string name="ui_orbit_update_available_007f25b6" formatted="false">"Доступно обновление Orbit"</string>
+    <string name="ui_orbit_updated_07ab468e" formatted="false">"Orbit обновлён"</string>
+    <string name="ui_orbit_vault_96a29fe6" formatted="false">"ХРАНИЛИЩЕ ORBIT"</string>
+    <string name="ui_orbit_widgets_e89c2cc6" formatted="false">"Виджеты Orbit"</string>
+    <string name="ui_original_images_774edc8f" formatted="false">" исходных изображений"</string>
+    <string name="ui_overlay_dffe7eb8" formatted="false">"ПЛАВАЮЩЕЕ ОКНО"</string>
+    <string name="ui_overlay_style_5b130bb0" formatted="false">"Стиль плавающего окна"</string>
+    <string name="ui_page_follows_your_finger_and_the_screen_you_c_6faa710e" formatted="false">"Страница следует за пальцем, открывая предыдущий экран, "</string>
+    <string name="ui_page_transitions_635bbc99" formatted="false">"Переходы между страницами"</string>
+    <string name="ui_percent_full_continue_in_a_new_chat_36340695" formatted="false">" процентов. Продолжите в новом чате."</string>
+    <string name="ui_permissions_capabilities_9853ebdc" formatted="false">"Разрешения и возможности"</string>
+    <string name="ui_personalization_context_f525de95" formatted="false">"ПЕРСОНАЛИЗАЦИЯ И КОНТЕКСТ"</string>
+    <string name="ui_personalization_data_853fcdf3" formatted="false">"Персонализация и данные"</string>
+    <string name="ui_pick_a_starting_look_everything_here_can_be_c_bc1b22df" formatted="false">"Выберите оформление. Всё это можно изменить позже в настройках."</string>
+    <string name="ui_pick_the_access_methods_that_fit_your_phone_n_90ea8df6" formatted="false">"Выберите подходящие для вашего телефона способы вызова. Чтобы продолжить, настраивать их необязательно."</string>
+    <string name="ui_pin_ff1cee74" formatted="false">"Закрепить"</string>
+    <string name="ui_pinned_feb05050" formatted="false">"ЗАКРЕПЛЁННЫЕ"</string>
+    <string name="ui_power_assistant_80cc1c3b" formatted="false">" • Умный помощник"</string>
+    <string name="ui_precise_timing_ffd890c4" formatted="false">"Точное время"</string>
+    <string name="ui_preferred_gallery_unavailable_using_system_pi_7216317f" formatted="false">"Выбранная галерея недоступна; используется системный выбор файлов"</string>
+    <string name="ui_previous_2ca88384" formatted="false">"Предыдущая "</string>
+    <string name="ui_private_api_relay_d6ca6fb6" formatted="false">"Личный ретранслятор API"</string>
+    <string name="ui_private_relay_saved_and_selected_64aea371" formatted="false">"Личный ретранслятор сохранён и выбран"</string>
+    <string name="ui_provider_f050385b" formatted="false">"Провайдер · "</string>
+    <string name="ui_provider_model_and_strength_for_new_chats_and_1e37ac22" formatted="false">"Провайдер, модель и уровень рассуждений для новых чатов и помощника. Каждый чат сохраняет "</string>
+    <string name="ui_puts_the_deck_control_in_the_chats_header_dec_b409e04f" formatted="false">"Добавляет кнопку панели в заголовок чатов. Панель в любом случае доступна отсюда."</string>
+    <string name="ui_queued_c0c05da9" formatted="false">"В очереди…"</string>
+    <string name="ui_quick_access_3ae0fc84" formatted="false">"БЫСТРЫЙ ДОСТУП"</string>
+    <string name="ui_quick_actions_2cc2b6f7" formatted="false">"Быстрые действия"</string>
+    <string name="ui_quick_controls_4b79a9d9" formatted="false">"Быстрые элементы управления"</string>
+    <string name="ui_quick_settings_routine_39095cb4" formatted="false">"Автоматизация быстрых настроек"</string>
+    <string name="ui_quick_settings_routine_46d7d0b4" formatted="false">"Автоматизация быстрых настроек: "</string>
+    <string name="ui_quick_settings_routine_none_dee991b8" formatted="false">"Автоматизация быстрых настроек: не выбрана"</string>
+    <string name="ui_quick_settings_tile_added_01e46d5c" formatted="false">"✓ Плитка быстрых настроек добавлена"</string>
+    <string name="ui_quick_settings_tiles_4b5739cc" formatted="false">"Плитки быстрых настроек"</string>
+    <string name="ui_ready_102d203b" formatted="false">" · Готово"</string>
+    <string name="ui_ready_5fa7aac5" formatted="false">"Готово"</string>
+    <string name="ui_ready_9fa4ddce" formatted="false">"Готово · "</string>
+    <string name="ui_recent_chats_2ccfecbc" formatted="false">"Недавние чаты"</string>
+    <string name="ui_recent_chats_88464bac" formatted="false">"НЕДАВНИЕ ЧАТЫ"</string>
+    <string name="ui_recent_d5d42c01" formatted="false">"НЕДАВНИЕ"</string>
+    <string name="ui_recommended_access_a5d8e826" formatted="false">"РЕКОМЕНДУЕМЫЕ РАЗРЕШЕНИЯ"</string>
+    <string name="ui_recommended_d70604e8" formatted="false">"Рекомендуется"</string>
+    <string name="ui_regenerate_response_dd7c31a5" formatted="false">"Создать ответ заново"</string>
+    <string name="ui_regenerating_with_21e30c11" formatted="false">"Повторное создание с "</string>
+    <string name="ui_regenerating_without_the_original_screen_imag_a2cb1701" formatted="false">"Повторное создание без исходного снимка экрана"</string>
+    <string name="ui_relay_access_token_optional_dffc0006" formatted="false">"Токен доступа к ретранслятору (необязательно)"</string>
+    <string name="ui_relay_saved_29654bda" formatted="false">"Ретранслятор сохранён"</string>
+    <string name="ui_relay_settings_saved_securely_abd9264e" formatted="false">"Настройки ретранслятора защищённо сохранены"</string>
+    <string name="ui_relay_url_required_68955a3c" formatted="false">"Укажите URL ретранслятора"</string>
+    <string name="ui_remember_this_93f0636e" formatted="false">"Запомнить это?"</string>
+    <string name="ui_remind_me_in_20_minutes_to_check_the_oven_3a9d7d7a" formatted="false">"«Напомни через 20 минут проверить духовку»"</string>
+    <string name="ui_reminder_31757bbf" formatted="false">"Напоминание"</string>
+    <string name="ui_reminder_3d70003f" formatted="false">"Напоминание · "</string>
+    <string name="ui_reminders_63f24c8f" formatted="false">"НАПОМИНАНИЯ"</string>
+    <string name="ui_reminders_routine_alerts_updates_and_backgrou_bbd63bc8" formatted="false">"Напоминания, уведомления автоматизаций, обновления и результаты фоновых задач."</string>
+    <string name="ui_remove_quoted_message_955e5839" formatted="false">"Убрать цитату"</string>
+    <string name="ui_rename_3064d79a" formatted="false">"Переименовать"</string>
+    <string name="ui_rename_chat_26076241" formatted="false">"Переименовать чат"</string>
+    <string name="ui_reopen_the_microphone_after_orbit_speaks_ac40d2a0" formatted="false">"Снова включать микрофон после ответа Orbit."</string>
+    <string name="ui_replace_send_with_stop_while_orbit_is_generat_b487e592" formatted="false">"Заменять кнопку отправки кнопкой остановки, пока Orbit готовит ответ."</string>
+    <string name="ui_replying_to_3d393bf1" formatted="false">"Ответ на сообщение "</string>
+    <string name="ui_resolve_saved_contact_names_for_voice_and_dev_6c039701" formatted="false">"Поиск сохранённых контактов по имени для голосовых команд и действий на устройстве."</string>
+    <string name="ui_response_details_062c9292" formatted="false">"Сведения об ответе"</string>
+    <string name="ui_response_failed_51769723" formatted="false">"Не удалось получить ответ"</string>
+    <string name="ui_response_stopped_34918255" formatted="false">"Ответ остановлен"</string>
+    <string name="ui_response_time_is_measured_on_this_phone_from__617481cd" formatted="false">"Время ответа измеряется на этом телефоне от отправки запроса до завершения ответа."</string>
+    <string name="ui_restore_a76e13b9" formatted="false">"Восстановить"</string>
+    <string name="ui_restore_orbit_backup_add4c9b6" formatted="false">"Восстановить резервную копию Orbit?"</string>
+    <string name="ui_restore_orbit_backup_f0a34e16" formatted="false">"Восстановить резервную копию Orbit"</string>
+    <string name="ui_restoring_orbit_backup_0f159073" formatted="false">"Восстановление резервной копии Orbit…"</string>
+    <string name="ui_retry_942087cc" formatted="false">"Повторить"</string>
+    <string name="ui_retry_failed_earlier_answer_kept_79775538" formatted="false">"Повторная попытка не удалась · предыдущий ответ сохранён"</string>
+    <string name="ui_retry_failed_the_earlier_answer_is_still_here_ac839393" formatted="false">"Повторная попытка не удалась. Предыдущий ответ сохранён."</string>
+    <string name="ui_retry_with_143a8e70" formatted="false">"Повторить через "</string>
+    <string name="ui_retry_with_d009aa79" formatted="false">"Повторить с помощью"</string>
+    <string name="ui_retrying_with_343d3123" formatted="false">"Повторная попытка с "</string>
+    <string name="ui_retrying_without_the_original_screen_image_2b4fc248" formatted="false">"Повторная попытка без исходного снимка экрана"</string>
+    <string name="ui_routine_created_db380da8" formatted="false">" — создано автоматизаций"</string>
+    <string name="ui_routine_tile_6ce3113a" formatted="false">"Плитка автоматизации"</string>
+    <string name="ui_routines_61b7bb44" formatted="false">"Автоматизации"</string>
+    <string name="ui_run_device_actions_reminders_and_editable_rou_2737e70c" formatted="false">"Выполняйте действия на устройстве, создавайте напоминания и настраивайте автоматизации."</string>
+    <string name="ui_run_my_gaming_mode_routine_b5063e7b" formatted="false">"«Запусти мою автоматизацию Игровой режим»"</string>
+    <string name="ui_run_routine_489eaedb" formatted="false">"Запустить автоматизацию"</string>
+    <string name="ui_run_setup_again_bb6f72bc" formatted="false">"Повторить настройку"</string>
+    <string name="ui_runs_privately_on_this_phone_and_keeps_workin_98f90f9a" formatted="false">"Работает конфиденциально на этом телефоне, после настройки — без интернета. Использует небольшую модель, поэтому ответы проще, чем у облачного ИИ."</string>
+    <string name="ui_samsung_reminder_083ce02a" formatted="false">"Samsung Reminder · "</string>
+    <string name="ui_save_1509f561" formatted="false">"Сохранить"</string>
+    <string name="ui_save_and_use_private_relay_cfc7865b" formatted="false">"Сохранить и использовать личный ретранслятор"</string>
+    <string name="ui_save_recent_chats_on_this_device_92b8c3c6" formatted="false">"Сохранять недавние чаты на устройстве"</string>
+    <string name="ui_save_relay_settings_b18e848c" formatted="false">"Сохранить настройки ретранслятора"</string>
+    <string name="ui_save_screen_attachment_thumbnails_in_chat_his_c2f84eef" formatted="false">"Сохранять миниатюры снимков экрана в истории"</string>
+    <string name="ui_save_text_links_images_and_useful_orbit_answe_0dc96c0d" formatted="false">"Сохраняйте текст, ссылки, изображения и полезные ответы Orbit. Всё остаётся на этом устройстве. Orbit использует сохранённый элемент, только когда вы сами его выбираете."</string>
+    <string name="ui_save_text_links_images_and_useful_orbit_answe_4b8928bd" formatted="false">"Сохраняйте текст, ссылки, изображения и полезные ответы Orbit. Всё остаётся на этом "</string>
+    <string name="ui_save_weather_location_0966b123" formatted="false">"Сохранить местоположение"</string>
+    <string name="ui_saved_item_90fa7289" formatted="false">" — сохранённых элементов"</string>
+    <string name="ui_saved_items_5fef97f8" formatted="false">" — сохранённых элементов"</string>
+    <string name="ui_saved_to_memory_a3e69a82" formatted="false">"Сохранено в памяти"</string>
+    <string name="ui_saved_to_orbit_memory_672c6c00" formatted="false">"Сохранено в памяти Orbit"</string>
+    <string name="ui_say_create_a_samsung_reminder_to_use_samsung__0a9a1cd4" formatted="false">" Скажите «создай напоминание Samsung», чтобы один раз использовать Samsung Reminder."</string>
+    <string name="ui_screen_6e56137e" formatted="false">"Экран"</string>
+    <string name="ui_screen_attached_b5c6a9f2" formatted="false">"Экран прикреплён"</string>
+    <string name="ui_screen_attached_f32d803b" formatted="false">"  •  Экран прикреплён"</string>
+    <string name="ui_screen_buttons_e922b121" formatted="false">"Кнопки экрана"</string>
+    <string name="ui_screen_disabled_for_1597f201" formatted="false">"Экран отключён для "</string>
+    <string name="ui_screen_disabled_for_this_app_0e4d8a2a" formatted="false">"Экран для этого приложения отключён"</string>
+    <string name="ui_screen_eae0e9c3" formatted="false">"Экран · "</string>
+    <string name="ui_screen_selection_could_not_be_opened_35e921c4" formatted="false">"Не удалось открыть выделение области экрана"</string>
+    <string name="ui_screen_selection_couldn_t_be_applied_daf129e1" formatted="false">"Не удалось применить выделение области экрана"</string>
+    <string name="ui_screen_selection_is_blocked_for_this_app_2f02a2a8" formatted="false">"Выделение области экрана для этого приложения заблокировано."</string>
+    <string name="ui_screen_selection_needs_available_screenshot_c_4349675c" formatted="false">"Для выделения области нужен доступный снимок экрана"</string>
+    <string name="ui_screen_selection_needs_screenshot_context_39d5d964" formatted="false">"Для выделения области нужен снимок экрана"</string>
+    <string name="ui_screen_selection_needs_screenshot_context_ena_257fdf33" formatted="false">"Для выделения области нужен снимок экрана. Включите снимки экрана в настройках помощника."</string>
+    <string name="ui_screen_text_b73327b8" formatted="false">"текст экрана"</string>
+    <string name="ui_screen_use_blocked_by_this_app_profile_6e66d590" formatted="false">"Использование экрана заблокировано профилем приложения"</string>
+    <string name="ui_screen_use_is_disabled_for_this_app_3567d3f7" formatted="false">"Использование экрана для этого приложения отключено"</string>
+    <string name="ui_screen_use_is_disabled_for_this_app_9e3b7ca1" formatted="false">"Использование экрана для этого приложения отключено."</string>
+    <string name="ui_search_for_a_control_or_choose_a_section_orbi_04807c36" formatted="false">"Найдите параметр или выберите раздел. Часто используемые настройки всегда под рукой, а дополнительные не мешают."</string>
+    <string name="ui_search_orbit_chats_5a08389f" formatted="false">"Поиск по чатам Orbit"</string>
+    <string name="ui_search_settings_255b076d" formatted="false">"Поиск по настройкам"</string>
+    <string name="ui_see_all_templates_b852c331" formatted="false">"Все шаблоны"</string>
+    <string name="ui_select_area_50b0e0f1" formatted="false">"Выбрать область"</string>
+    <string name="ui_select_or_mark_area_99bb3322" formatted="false">"Выделить или отметить область"</string>
+    <string name="ui_select_or_mark_part_of_the_current_screen_d0679c57" formatted="false">"Выделить или отметить часть текущего экрана"</string>
+    <string name="ui_selected_bd44f3ef" formatted="false">", выбрано"</string>
+    <string name="ui_selection_attached_2a488dbb" formatted="false">"Область прикреплена"</string>
+    <string name="ui_selection_ca406707" formatted="false">"Выделенная область"</string>
+    <string name="ui_send_f6f4688f" formatted="false">"Отправить"</string>
+    <string name="ui_send_message_93a26b1e" formatted="false">"Отправить сообщение"</string>
+    <string name="ui_send_this_message_with_202df23c" formatted="false">"Отправить это сообщение с помощью"</string>
+    <string name="ui_send_with_c889ac71" formatted="false">"Отправить через "</string>
+    <string name="ui_sending_with_e29e65b5" formatted="false">"Отправка через "</string>
+    <string name="ui_sensitive_app_screen_available_manually_0da0c730" formatted="false">"Приложение с конфиденциальными данными · экран доступен вручную"</string>
+    <string name="ui_set_orbit_as_your_assistant_and_configure_sid_918c212e" formatted="false">"Выберите Orbit помощником и настройте вызов боковой кнопкой и через быстрые настройки."</string>
+    <string name="ui_set_up_4da10f1f" formatted="false">"Настроить"</string>
+    <string name="ui_set_up_only_the_access_you_want_every_action__5fc768b0" formatted="false">"Предоставьте только нужные разрешения. После возвращения из настроек Android вы останетесь на этом шаге."</string>
+    <string name="ui_set_up_openrouter_b9f8c5d0" formatted="false">"Настроить OpenRouter"</string>
+    <string name="ui_set_up_orbit_local_6660808d" formatted="false">"Настроить Orbit Local"</string>
+    <string name="ui_settings_74a883a0" formatted="false">"Настройки"</string>
+    <string name="ui_setup_7175b033" formatted="false">"НАСТРОЙКА"</string>
+    <string name="ui_setup_complete_d0e3858f" formatted="false">"НАСТРОЙКА ЗАВЕРШЕНА"</string>
+    <string name="ui_share_29887a5f" formatted="false">"Поделиться"</string>
+    <string name="ui_shared_items_added_cf001020" formatted="false">" — добавлено общих элементов · "</string>
+    <string name="ui_shortcuts_46e978d0" formatted="false">"Ярлыки"</string>
+    <string name="ui_show_a_useful_picture_inside_an_answer_when_o_2690118f" formatted="false">"Показывать полезные изображения в ответах. Orbit получает только "</string>
+    <string name="ui_show_brief_updates_about_what_orbit_is_workin_5b7d2bee" formatted="false">"Показывать краткий статус работы Orbit во время подготовки ответа. "</string>
+    <string name="ui_show_contextual_screen_action_chips_when_atta_14fb250e" formatted="false">"Показывать действия для прикреплённого экрана"</string>
+    <string name="ui_show_deck_shortcut_on_chats_4b733f70" formatted="false">"Показывать панель Orbit в чатах"</string>
+    <string name="ui_show_relevant_shortcuts_from_recent_orbit_con_2d66fc10" formatted="false">"Предлагать подходящие ярлыки на основе недавнего контекста Orbit."</string>
+    <string name="ui_show_stop_button_while_replying_56b08e68" formatted="false">"Показывать кнопку «Стоп» во время ответа"</string>
+    <string name="ui_side_button_and_assistant_gesture_22694cb5" formatted="false">"Боковая кнопка и жест вызова помощника"</string>
+    <string name="ui_sign_in_again_51fbe1dc" formatted="false">"Войти снова"</string>
+    <string name="ui_sign_in_with_chatgpt_f6de6480" formatted="false">"Войти через ChatGPT"</string>
+    <string name="ui_sign_in_with_your_normal_chatgpt_account_in_y_3622df7d" formatted="false">"Войдите в свой аккаунт ChatGPT через браузер. Orbit использует "</string>
+    <string name="ui_sign_out_48f0d3d3" formatted="false">"Выйти"</string>
+    <string name="ui_sign_out_of_chatgpt_4525b711" formatted="false">"Выйти из ChatGPT?"</string>
+    <string name="ui_sign_out_of_chatgpt_62438657" formatted="false">"Выйти из ChatGPT"</string>
+    <string name="ui_signed_out_of_chatgpt_in_orbit_1c963642" formatted="false">"Вы вышли из ChatGPT в Orbit"</string>
+    <string name="ui_skip_for_now_b58eb52c" formatted="false">"Пока пропустить"</string>
+    <string name="ui_skip_setup_59e693cd" formatted="false">"Пропустить настройку"</string>
+    <string name="ui_skip_setup_ef1de933" formatted="false">"Пропустить настройку?"</string>
+    <string name="ui_slide_6bb4c117" formatted="false">"Сдвиг"</string>
+    <string name="ui_small_5263293f" formatted="false">"Маленький"</string>
+    <string name="ui_smart_follow_ups_e8e28278" formatted="false">"Умные уточнения"</string>
+    <string name="ui_smart_suggestions_7cc9446c" formatted="false">"Умные предложения"</string>
+    <string name="ui_smart_vault_4750978a" formatted="false">"Умное хранилище"</string>
+    <string name="ui_sourced_images_in_answers_3a51b566" formatted="false">"Изображения с указанием источников"</string>
+    <string name="ui_speak_replies_to_voice_requests_149b600e" formatted="false">"Озвучивать ответы на голосовые запросы"</string>
+    <string name="ui_speaking_e86dd1c9" formatted="false">"Говорю…"</string>
+    <string name="ui_speaking_tap_mic_to_interrupt_cc97ae3c" formatted="false">"Говорю · нажмите микрофон, чтобы прервать"</string>
+    <string name="ui_speech_recognition_unavailable_27121d96" formatted="false">"Распознавание речи недоступно"</string>
+    <string name="ui_start_a_chat_here_or_summon_orbit_with_the_si_30dcdbc8" formatted="false">"Начните чат здесь или вызовите Orbit боковой кнопкой."</string>
+    <string name="ui_start_a_new_chat_each_time_orbit_opens_ae9f2427" formatted="false">"Начинать новый чат при каждом запуске Orbit"</string>
+    <string name="ui_start_listening_when_overlay_opens_f2765c60" formatted="false">"Включать прослушивание при открытии помощника"</string>
+    <string name="ui_start_using_orbit_4fd85706" formatted="false">"Начать пользоваться Orbit"</string>
+    <string name="ui_start_with_something_useful_e4bb6568" formatted="false">"Начните с полезного"</string>
+    <string name="ui_starting_secure_chatgpt_sign_in_98283674" formatted="false">"Начало безопасного входа в ChatGPT…"</string>
+    <string name="ui_step_474a987f" formatted="false">"Шаг "</string>
+    <string name="ui_still_thinking_17e220f6" formatted="false">"ЕЩЁ ДУМАЮ"</string>
+    <string name="ui_stop_editing_previous_message_b0b63965" formatted="false">"Отменить редактирование предыдущего сообщения"</string>
+    <string name="ui_stop_keeping_a9fd9ab8" formatted="false">"Убрать из контекста "</string>
+    <string name="ui_stop_keeping_in_this_chat_60eaf7ae" formatted="false">"Убрать из контекста чата"</string>
+    <string name="ui_stop_listening_94fa9b23" formatted="false">"Остановить прослушивание"</string>
+    <string name="ui_strength_064e9e9e" formatted="false">"Уровень рассуждений · "</string>
+    <string name="ui_strength_2d81f085" formatted="false">"Уровень рассуждений: "</string>
+    <string name="ui_style_feedback_25c3ba2c" formatted="false">"Стиль и отклик"</string>
+    <string name="ui_suggested_custom_command_61f89281" formatted="false">"Предлагаемая пользовательская команда: «"</string>
+    <string name="ui_swipe_a_chat_left_to_delete_it_or_right_to_pi_49945a5a" formatted="false">"Смахните чат влево для удаления или вправо для закрепления и открепления. Удаление всегда "</string>
+    <string name="ui_swipe_to_go_back_cb5e33aa" formatted="false">"Свайп для возврата"</string>
+    <string name="ui_swipe_up_to_open_this_chat_swipe_down_to_clos_04939638" formatted="false">"Смахните вверх, чтобы открыть чат, или вниз, чтобы закрыть Orbit."</string>
+    <string name="ui_system_default_b0459211" formatted="false">"Системные настройки"</string>
+    <string name="ui_tap_to_change_d99928ba" formatted="false">". Нажмите для изменения."</string>
+    <string name="ui_tap_to_change_provider_or_model_af8ec914" formatted="false">". Нажмите для смены провайдера или модели."</string>
+    <string name="ui_tap_to_expand_e70b7435" formatted="false">". Нажмите, чтобы развернуть."</string>
+    <string name="ui_tap_to_minimize_orbit_swipe_up_to_open_this_c_3fadac87" formatted="false">"Нажмите, чтобы свернуть Orbit. Смахните вверх, чтобы открыть чат, или вниз, чтобы закрыть Orbit."</string>
+    <string name="ui_templates_create_normal_editable_routines_not_2de69d9b" formatted="false">"Шаблоны создают обычные редактируемые автоматизации. Во время настройки ничего не запускается."</string>
+    <string name="ui_text_and_readability_b4345cc3" formatted="false">"Текст и удобство чтения"</string>
+    <string name="ui_text_screenshot_637a2fd8" formatted="false">"текст + снимок экрана"</string>
+    <string name="ui_that_chat_is_no_longer_available_d6a86837" formatted="false">"Этот чат больше недоступен"</string>
+    <string name="ui_that_document_is_no_longer_available_eeacb880" formatted="false">"Этот документ больше недоступен"</string>
+    <string name="ui_that_message_is_no_longer_here_724e5555" formatted="false">"Этого сообщения больше нет"</string>
+    <string name="ui_the_buttons_below_add_new_widgets_to_change_o_7955d677" formatted="false">"Кнопки ниже добавляют новые виджеты. Чтобы изменить виджет, удерживайте его на главном экране и выберите «Настройки», «Изменить» или «Настроить». Название зависит от приложения запуска."</string>
+    <string name="ui_the_preview_image_a_page_it_already_cited_dec_163273a1" formatted="false">"изображение для предпросмотра, указанное на уже процитированной странице, и "</string>
+    <string name="ui_theme_studio_20f4c4c9" formatted="false">"Студия тем. "</string>
+    <string name="ui_theme_studio_d64bfbb6" formatted="false">"Студия тем"</string>
+    <string name="ui_theme_studio_font_chat_text_size_and_haptics_bf74c1e7" formatted="false">"Темы, шрифты, размер текста и виброотклик"</string>
+    <string name="ui_these_are_the_memories_orbit_supplied_as_cont_a09547f2" formatted="false">"\n\nЭти записи памяти Orbit передал как контекст. Модели могли понадобиться не все записи."</string>
+    <string name="ui_thinking_a02f1cea" formatted="false">"Думаю…"</string>
+    <string name="ui_thinking_a20d12c5" formatted="false">"Думаю"</string>
+    <string name="ui_thinking_c42e2779" formatted="false">"  •  Обдумывание"</string>
+    <string name="ui_thinking_updates_1f86f314" formatted="false">"Сообщения о ходе работы"</string>
+    <string name="ui_this_answer_already_has_f4469498" formatted="false">"Число версий этого ответа: "</string>
+    <string name="ui_this_chat_now_uses_000ac347" formatted="false">"Теперь в этом чате используется "</string>
+    <string name="ui_this_deletes_orbit_s_locally_saved_recent_cha_c52b9668" formatted="false">"Будут удалены последние чаты, сохранённые на устройстве. Аккаунт ChatGPT не затрагивается."</string>
+    <string name="ui_this_message_only_6202948e" formatted="false">"Только это сообщение"</string>
+    <string name="ui_this_phone_from_context_orbit_already_has_and_2ba8a210" formatted="false">"этом телефоне на основе имеющегося контекста. При открытии панели никакие данные "</string>
+    <string name="ui_this_removes_the_local_orbit_conversation_6bfd7a45" formatted="false">"Этот диалог будет удалён из локальной истории Orbit."</string>
+    <string name="ui_this_removes_the_messages_but_keeps_the_conve_74cb8daf" formatted="false">"Сообщения будут удалены, но чат и выбранный для него ИИ сохранятся."</string>
+    <string name="ui_those_saved_items_are_no_longer_in_your_vault_040b6519" formatted="false">"Этих элементов больше нет в хранилище"</string>
+    <string name="ui_timer_d4b19bf4" formatted="false">"Таймер · "</string>
+    <string name="ui_trigger_alerts_db53cdd6" formatted="false">"Уведомления о запуске"</string>
+    <string name="ui_try_a_different_search_2e6d79de" formatted="false">"Измените поисковый запрос."</string>
+    <string name="ui_try_a_shorter_word_or_the_name_of_the_thing_y_593ba50b" formatted="false">"Попробуйте другое слово или название нужной функции."</string>
+    <string name="ui_try_asking_695b5a73" formatted="false">"Попробуйте спросить"</string>
+    <string name="ui_turn_off_06f0e210" formatted="false">"Выключить"</string>
+    <string name="ui_typography_feedback_0f49aa48" formatted="false">"ТЕКСТ И ОТКЛИК"</string>
+    <string name="ui_understand_notifications_only_when_this_acces_60483955" formatted="false">"Анализировать уведомления только при включённом доступе."</string>
+    <string name="ui_undo_a8283ade" formatted="false">"Отменить"</string>
+    <string name="ui_undo_deleting_this_chat_1bdc67c1" formatted="false">"Отменить удаление этого чата"</string>
+    <string name="ui_unpin_ee3c7161" formatted="false">"Открепить"</string>
+    <string name="ui_up_to_08c05ead" formatted="false">"До "</string>
+    <string name="ui_use_approximate_device_location_for_local_wea_033b63bc" formatted="false">"Использовать приблизительное местоположение для местной погоды"</string>
+    <string name="ui_use_bb33dbdb" formatted="false">"Использовать "</string>
+    <string name="ui_use_chatgpt_f8f99c44" formatted="false">"Использовать ChatGPT"</string>
+    <string name="ui_use_code_sign_in_25c62930" formatted="false">"Войти с помощью кода"</string>
+    <string name="ui_use_full_screen_a4fee062" formatted="false">"Использовать весь экран"</string>
+    <string name="ui_use_orbit_local_144ca50f" formatted="false">"Использовать Orbit Local"</string>
+    <string name="ui_use_orbit_reminders_a3edaab8" formatted="false">"Использовать напоминания Orbit"</string>
+    <string name="ui_use_orbit_s_interactive_edge_gesture_when_ret_770490df" formatted="false">"Использовать интерактивный жест от края для возврата на предыдущий экран. "</string>
+    <string name="ui_use_orbit_s_page_transition_instead_back_itse_462f21c7" formatted="false">"использовать обычную анимацию перехода. Возврат работает в любом "</string>
+    <string name="ui_use_orbit_vault_3e080f1d" formatted="false">"Использовать хранилище Orbit"</string>
+    <string name="ui_use_screen_1479d77e" formatted="false">"Использовать экран"</string>
+    <string name="ui_use_screen_and_select_area_also_in_attach_und_96d44f97" formatted="false">"«Использовать экран» и «Выбрать область». Также доступны в меню вложений, в разделе «Экран»."</string>
+    <string name="ui_use_template_351dd54e" formatted="false">"Использовать шаблон"</string>
+    <string name="ui_use_the_app_quick_settings_or_your_system_ass_e45e0cde" formatted="false">"Откройте приложение, используйте быстрые настройки или системный жест вызова помощника."</string>
+    <string name="ui_use_true_black_amoled_backgrounds_ebcfe7fb" formatted="false">"Использовать полностью чёрный фон AMOLED"</string>
+    <string name="ui_used_a154d96a" formatted="false">"Использовано: "</string>
+    <string name="ui_used_for_orbit_voice_33d1df94" formatted="false">"Для голосовых функций Orbit."</string>
+    <string name="ui_uses_light_tactile_ticks_for_orbit_controls_a_e89d7325" formatted="false">"Лёгкая вибрация при работе с элементами Orbit и настройками. Отключите для отмены виброотклика."</string>
+    <string name="ui_versions_81edcc11" formatted="false">" — версий"</string>
+    <string name="ui_view_full_capabilities_dashboard_9786e312" formatted="false">"Открыть все возможности"</string>
+    <string name="ui_view_local_routing_context_account_capability_865240bb" formatted="false">"Сведения о локальной маршрутизации запросов, контексте, аккаунте, возможностях и неполадках."</string>
+    <string name="ui_view_update_97850a87" formatted="false">"Посмотреть обновление"</string>
+    <string name="ui_visible_handoffs_when_an_automatic_routine_ne_b040e40b" formatted="false">"Уведомлять, когда автоматически запущенная автоматизация требует внимания."</string>
+    <string name="ui_visual_context_previews_and_screen_region_sel_d0c0da0c" formatted="false">"Визуальный контекст, предпросмотр и выделение области экрана."</string>
+    <string name="ui_voice_87bf2bc0" formatted="false">"Голос"</string>
+    <string name="ui_voice_beta_gives_you_more_time_to_pause_and_t_87c7880b" formatted="false">"Голосовой режим (бета) даёт больше времени на паузы, прежде чем Orbit решит, что вы закончили. Для завершения нажмите микрофон ещё раз."</string>
+    <string name="ui_voice_beta_screen_context_and_capabilities_724fcc4f" formatted="false">"Голосовое управление, экран и возможности"</string>
+    <string name="ui_voice_context_46ffef58" formatted="false">"ГОЛОС И КОНТЕКСТ"</string>
+    <string name="ui_voice_context_permissions_4f431dc7" formatted="false">"Голос, контекст и разрешения"</string>
+    <string name="ui_voice_input_8748f239" formatted="false">"Голосовой ввод"</string>
+    <string name="ui_voice_input_unavailable_59516e88" formatted="false">"Голосовой ввод недоступен"</string>
+    <string name="ui_wait_for_the_current_response_to_finish_615ac88f" formatted="false">"Дождитесь завершения текущего ответа"</string>
+    <string name="ui_waiting_for_chatgpt_sign_in_in_your_browser_24e86bd8" formatted="false">"Ожидание входа в ChatGPT через браузер…"</string>
+    <string name="ui_waiting_for_current_screen_379a48d9" formatted="false">"Ожидание текущего экрана"</string>
+    <string name="ui_waiting_for_screen_c1e06156" formatted="false">"Ожидание экрана"</string>
+    <string name="ui_way_from_the_gesture_the_navigation_buttons_a_59597cba" formatted="false">"случае: жестом, системной кнопкой и кнопками «Назад»."</string>
+    <string name="ui_weather_0a244108" formatted="false">"ПОГОДА"</string>
+    <string name="ui_weather_gallery_reminders_saved_places_memory_2260a1c6" formatted="false">"Погода, галерея, напоминания, места, память и резервные копии"</string>
+    <string name="ui_weather_location_saved_e676354f" formatted="false">"Местоположение для погоды сохранено"</string>
+    <string name="ui_weather_units_4887463b" formatted="false">"Единицы измерения погоды"</string>
+    <string name="ui_web_search_7711faa7" formatted="false">"Поиск в интернете"</string>
+    <string name="ui_welcome_to_orbit_9c4a3ca1" formatted="false">"Добро пожаловать в Orbit"</string>
+    <string name="ui_what_can_i_help_with_e43f5ab3" formatted="false">"Чем могу помочь?"</string>
+    <string name="ui_what_s_new_561b17ed" formatted="false">"Что нового"</string>
+    <string name="ui_what_s_on_my_screen_f2f68c6f" formatted="false">"«Что у меня на экране?»"</string>
+    <string name="ui_works_with_any_preset_fc69d41c" formatted="false">"Работает с любой темой."</string>
+    <string name="ui_write_a_message_then_hold_send_03478eec" formatted="false">"Напишите сообщение и удерживайте кнопку отправки"</string>
+    <string name="ui_write_a_message_then_hold_send_to_choose_its__14f0f420" formatted="false">"Напишите сообщение и удерживайте кнопку отправки для выбора ИИ"</string>
+    <string name="ui_writing_a_summary_for_the_new_chat_4fd1ff8b" formatted="false">"Подготовка сводки для нового чата…"</string>
+    <string name="ui_you_can_assign_a_saved_routine_to_the_routine_d47c9435" formatted="false">"Позже можно назначить сохранённую автоматизацию плитке быстрых настроек: Настройки → Настройка помощника."</string>
+    <string name="ui_you_can_fine_tune_colors_messages_cards_and_b_e08c6dc3" formatted="false">"Позже можно настроить цвета, сообщения, карточки и фон в студии тем."</string>
+    <string name="ui_you_can_finish_setup_anytime_from_settings_as_9df1931d" formatted="false">"Настройку можно завершить в любое время: Настройки → Настройка помощника."</string>
+    <string name="ui_you_can_still_say_set_an_orbit_reminder_for_a_83fe8188" formatted="false">" Для отдельного напоминания можно сказать «создай напоминание Orbit»."</string>
+    <string name="ui_you_re_all_set_orbit_is_ready_when_you_are_9d102dc1" formatted="false">"Всё настроено. Можно пользоваться Orbit."</string>
+    <string name="ui_you_re_now_on_orbit_v_e7246272" formatted="false">"Теперь у вас Orbit версии "</string>
+    <string name="ui_your_browser_handles_authorization_orbit_neve_ad28b253" formatted="false">"Авторизация проходит в браузере. Orbit никогда не запрашивает пароль от ChatGPT."</string>
+    <string name="ui_your_current_orbit_settings_are_already_saved_f9d771fc" formatted="false">"Текущие настройки Orbit уже сохранены. Вернуться к настройке можно в любой момент из раздела «Настройка помощника»."</string>
+    <string name="ui_your_one_time_code_is_fe769007" formatted="false">"Ваш одноразовый код:\n\n"</string>
+    <string name="ui_your_vault_was_already_empty_d6d1fb58" formatted="false">"Хранилище уже было пустым"</string>
+</resources>

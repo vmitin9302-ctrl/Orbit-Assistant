@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="extb_developer_tools_name">Developer Tools</string>
+    <string name="extb_developer_tools_desc">Public Android and GitHub developer resources plus a harmless HTTPS GET test.</string>
+    <string name="extb_developer_tools_open_android_developers_name">Open Android Developers</string>
+    <string name="extb_developer_tools_open_android_developers_desc">Opens Android\'s official development documentation.</string>
+    <string name="extb_developer_tools_open_github_actions_docs_name">Open GitHub Actions Docs</string>
+    <string name="extb_developer_tools_open_github_actions_docs_desc">Opens GitHub\'s official Actions documentation.</string>
+    <string name="extb_developer_tools_test_public_https_get_name">Test Public HTTPS GET</string>
+    <string name="extb_developer_tools_test_public_https_get_desc">Makes a bounded unauthenticated GET request to GitHub\'s public Zen endpoint.</string>
+    <string name="extb_discord_webhook_name">Discord Webhook</string>
+    <string name="extb_discord_webhook_desc">Send a configured message to a Discord channel through a securely stored webhook URL.</string>
+    <string name="extb_discord_webhook_send_message_name">Send Discord message</string>
+    <string name="extb_discord_webhook_send_message_desc">Posts the configured Routine message to the saved Discord webhook.</string>
+    <string name="extb_ntfy_name">ntfy Notifications</string>
+    <string name="extb_ntfy_desc">Publish a configurable notification to an ntfy topic using its public HTTPS API.</string>
+    <string name="extb_ntfy_send_notification_name">Send notification</string>
+    <string name="extb_ntfy_send_notification_desc">Publishes a title, message and priority to the configured ntfy topic.</string>
+    <string name="extb_web_tools_name">Orbit Web Tools</string>
+    <string name="extb_web_tools_desc">Quick access to Orbit\'s official public GitHub pages.</string>
+    <string name="extb_web_tools_open_orbit_releases_name">Open Orbit Releases</string>
+    <string name="extb_web_tools_open_orbit_releases_desc">Opens Orbit\'s official release downloads.</string>
+    <string name="extb_web_tools_open_orbit_repository_name">Open Orbit Repository</string>
+    <string name="extb_web_tools_open_orbit_repository_desc">Opens the public Orbit Assistant source repository.</string>
+    <string name="extb_web_tools_open_orbit_issues_name">Open Orbit Issues</string>
+    <string name="extb_web_tools_open_orbit_issues_desc">Opens Orbit\'s public issue tracker.</string>
+    <string name="extb_quick_links_name">Quick Links</string>
+    <string name="extb_quick_links_desc">Simple public search, maps, and reference links for reusable Routines.</string>
+    <string name="extb_quick_links_open_web_search_name">Open Web Search</string>
+    <string name="extb_quick_links_open_web_search_desc">Opens the Google search home page.</string>
+    <string name="extb_quick_links_open_maps_name">Open Maps</string>
+    <string name="extb_quick_links_open_maps_desc">Opens the public OpenStreetMap map page.</string>
+    <string name="extb_quick_links_open_reference_name">Open Reference</string>
+    <string name="extb_quick_links_open_reference_desc">Opens Wikipedia\'s public reference portal.</string>
+</resources>

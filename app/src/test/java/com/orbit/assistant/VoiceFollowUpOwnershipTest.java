@@ -184,8 +184,7 @@ public final class VoiceFollowUpOwnershipTest {
         for (String base : new String[]{"", "app/", "../app/"}) {
             java.nio.file.Path path = java.nio.file.Paths.get(base + relative);
             if (java.nio.file.Files.exists(path)) {
-                return new String(java.nio.file.Files.readAllBytes(path),
-                        java.nio.charset.StandardCharsets.UTF_8);
+                return LocalizedSource.expand(new String(java.nio.file.Files.readAllBytes(path), java.nio.charset.StandardCharsets.UTF_8));
             }
         }
         throw new AssertionError("VoiceInputController.java was not found from "

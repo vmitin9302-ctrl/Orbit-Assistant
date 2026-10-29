@@ -70,4 +70,17 @@ public final class AttachmentBatch {
         if (rejected <= 0) return head;
         return head + " · " + rejected + (rejected == 1 ? " couldn't be read" : " couldn't be read");
     }
+
+    /** Localised twin of {@link #summary()} for display. */
+    public String summary(android.content.Context c) {
+        if (cancelled) return "";
+        if (attachments.isEmpty()) return error;
+        String head = attachments.size() == 1
+                ? c.getString(R.string.h_attachment_attached, attachments.get(0).label)
+                : c.getResources().getQuantityString(R.plurals.h_attachments_added,
+                        attachments.size(), attachments.size());
+        if (rejected <= 0) return head;
+        return head + " · " + c.getResources().getQuantityString(R.plurals.h_attachments_unreadable,
+                rejected, rejected);
+    }
 }

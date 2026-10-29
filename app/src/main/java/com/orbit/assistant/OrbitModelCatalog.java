@@ -318,6 +318,51 @@ public final class OrbitModelCatalog {
         return namesModel && refuses;
     }
 
+    /** The model's one-line descriptor in the app language (the spec's own text when unknown). */
+    public static String descriptor(android.content.Context c, AiModelSpec spec) {
+        if (spec == null) return "";
+        if ("historical_reference".equals(spec.metadataSource)) {
+            return c.getString(R.string.modelcat_not_reported);
+        }
+        String id = spec.id;
+        if (LUNA.equals(id)) return c.getString(R.string.modelcat_quick_everyday);
+        if (SOL.equals(id)) return c.getString(R.string.modelcat_complex_coding);
+        if (ASTRA.equals(id)) return c.getString(R.string.modelcat_deep_reasoning);
+        if (GPT_5_6_LUNA.equals(id)) return c.getString(R.string.modelcat_efficient);
+        if (GPT_5_6_TERRA.equals(id)) return c.getString(R.string.modelcat_balanced);
+        if (GPT_5_6_SOL.equals(id)) return c.getString(R.string.modelcat_professional);
+        if (ORBIT_LOCAL.equals(id)) return c.getString(R.string.modelcat_private_local);
+        if (CLAUDE_OPUS_5_5.equals(id) && Prefs.PROVIDER_ANTHROPIC.equals(spec.providerId)) {
+            return c.getString(R.string.modelcat_opus);
+        }
+        if (CLAUDE_SONNET_5_5.equals(id) && Prefs.PROVIDER_ANTHROPIC.equals(spec.providerId)) {
+            return c.getString(R.string.modelcat_sonnet);
+        }
+        if (CLAUDE_FABLE_5_1.equals(id)) return c.getString(R.string.modelcat_fable);
+        if (CLAUDE_HAIKU_4_5.equals(id)) return c.getString(R.string.modelcat_haiku);
+        if (GROK_4_7.equals(id)) return c.getString(R.string.modelcat_grok);
+        if (Prefs.PROVIDER_OPENROUTER.equals(spec.providerId)) {
+            if (OPENROUTER_AUTO.equals(id)) return c.getString(R.string.modelcat_openrouter_auto);
+            if (OR_GPT_6_LUNA.equals(id) || OR_GPT_6_1_SOL.equals(id)) {
+                return c.getString(R.string.modelcat_via_openrouter, "OpenAI");
+            }
+            if (OR_CLAUDE_SONNET_5_5.equals(id) || OR_CLAUDE_OPUS_5_5.equals(id)) {
+                return c.getString(R.string.modelcat_via_openrouter, "Anthropic");
+            }
+        }
+        return spec.descriptor;
+    }
+
+    /** {@link #unavailableMessage(String)} in the app language. */
+    public static String unavailableMessage(android.content.Context c, String modelId) {
+        String name = displayName(modelId);
+        if (name.isEmpty()) name = modelId == null || modelId.trim().isEmpty()
+                ? c.getString(R.string.modelcat_this_model) : modelId.trim();
+        return c.getString(spec(Prefs.PROVIDER_CHATGPT, modelId) == null
+                        ? R.string.modelcat_unavailable_provider : R.string.modelcat_unavailable_chatgpt,
+                name);
+    }
+
     /**
      * What Orbit says when an account cannot reach a model. Truthful, keeps the user's choice, and
      * says how to pick another one; Orbit never quietly answers with a different model instead.

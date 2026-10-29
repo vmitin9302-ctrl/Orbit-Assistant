@@ -88,14 +88,14 @@ public final class CalendarConfirmation {
         if (!plan.ok()) {
             // Still a confirmation rather than a silent failure: the user sees why nothing will be
             // written, and Cancel and Continue both end with zero events added.
-            lines.add(plan.error.isEmpty() ? "These events are not valid." : plan.error);
-            return new Preview("Add calendar events?", lines, resolved.selectorLabel(),
+            lines.add(plan.error.isEmpty() ? context.getString(R.string.calconf_invalid) : plan.error);
+            return new Preview(context.getString(R.string.calconf_add_title), lines, resolved.selectorLabel(context),
                     resolved.canChoose(), resolved.resolved(), resolved.needsChoice(), 0);
         }
 
         int count = plan.size();
-        String title = "Add " + count + (count == 1 ? " event to " : " events to ")
-                + resolved.destinationName() + "?";
+        String title = context.getResources().getQuantityString(R.plurals.calconf_add_to,
+                count, count, resolved.destinationName(context));
 
         String range = plan.dateRange();
         if (!range.isEmpty()) lines.add(range);
@@ -105,29 +105,29 @@ public final class CalendarConfirmation {
         }
         if (count > PREVIEW_EVENTS) {
             int remaining = count - PREVIEW_EVENTS;
-            lines.add("• and " + remaining + (remaining == 1 ? " more event" : " more events"));
+            lines.add(context.getResources().getQuantityString(
+                    R.plurals.calconf_more, remaining, remaining));
         }
         int tba = plan.tbaCount();
         if (tba > 0) {
-            lines.add(tba + (tba == 1 ? " event has" : " events have")
-                    + " no announced start time yet, so " + (tba == 1 ? "it becomes" : "they become")
-                    + " an all-day " + CalendarActionExecutor.TBA_MARKER + " entry.");
+            lines.add(context.getResources().getQuantityString(R.plurals.calconf_tba,
+                    tba, tba, CalendarActionExecutor.TBA_MARKER));
         }
         // Why the destination field reads the way it does, said once, only when it is not obvious.
         if (resolved.needsChoice()) {
-            lines.add("Choose a calendar before adding these events.");
+            lines.add(context.getString(R.string.calconf_choose));
         } else if (resolved.noWritableCalendar()) {
-            lines.add("No writable calendar is set up on this phone.");
+            lines.add(context.getString(R.string.calconf_no_writable));
         } else if (!resolved.permitted) {
-            lines.add("Orbit needs Calendar access to add these events.");
+            lines.add(context.getString(R.string.calconf_need_access));
         }
-        return new Preview(title, lines, resolved.selectorLabel(), resolved.canChoose(),
+        return new Preview(title, lines, resolved.selectorLabel(context), resolved.canChoose(),
                 resolved.resolved(), resolved.needsChoice(), count);
     }
 
     /** The calendar Orbit would use, named the way the confirmation and the result both name it. */
     public static String targetName(Context context) {
-        return CalendarTargetResolver.state(context).destinationName();
+        return CalendarTargetResolver.state(context).destinationName(context);
     }
 
     /**
@@ -157,10 +157,19 @@ public final class CalendarConfirmation {
 
     /** The short card title for a Calendar batch, e.g. {@code Calendar · 12 events}. */
     public static String cardTitle(AssistantReply.Action action) {
+        return cardTitle(null, action);
+    }
+
+    /** As {@link #cardTitle(AssistantReply.Action)}, in the app language when a context is given. */
+    public static String cardTitle(Context context, AssistantReply.Action action) {
         CalendarActionExecutor.Plan plan = CalendarActionExecutor.parse(
                 action == null ? null : action.params);
         int count = plan.ok() ? plan.size() : 0;
-        if (count <= 0) return "Calendar events";
-        return "Calendar · " + count + (count == 1 ? " event" : " events");
+        if (context == null) {
+            if (count <= 0) return "Calendar events";
+            return "Calendar · " + count + (count == 1 ? " event" : " events");
+        }
+        if (count <= 0) return context.getString(R.string.calconf_card_events);
+        return context.getResources().getQuantityString(R.plurals.calconf_card_count, count, count);
     }
 }

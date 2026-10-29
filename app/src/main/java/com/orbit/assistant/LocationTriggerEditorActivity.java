@@ -146,20 +146,20 @@ public final class LocationTriggerEditorActivity extends Activity {
 
         LinearLayout header = new LinearLayout(this);
         header.setGravity(Gravity.CENTER_VERTICAL);
-        ImageButton back = iconButton(R.drawable.ic_back, "Back");
+        ImageButton back = iconButton(R.drawable.ic_back, getString(R.string.ui_back_76900f1b));
         back.setOnClickListener(v -> onBackPressed());
         LinearLayout.LayoutParams backLp = new LinearLayout.LayoutParams(UiKit.dp(this, 48), UiKit.dp(this, 48));
         backLp.rightMargin = UiKit.dp(this, 12);
         header.addView(back, backLp);
         LinearLayout titles = new LinearLayout(this);
         titles.setOrientation(LinearLayout.VERTICAL);
-        titles.addView(UiKit.text(this, original == null ? "New location trigger" : "Edit location trigger", 25, UiKit.TEXT, true));
+        titles.addView(UiKit.text(this, original == null ? getString(R.string.loctrig_new_title) : getString(R.string.loctrig_edit_title), 25, UiKit.TEXT, true));
         titles.addView(UiKit.text(this, routine.name, 12, UiKit.MUTED, false));
         header.addView(titles, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         page.addView(header);
 
         TextView intro = UiKit.text(this,
-                "Run this routine when your phone arrives at or leaves an area. Choose a reusable saved place, use your current position, or enter coordinates manually.",
+                getString(R.string.loctrig_intro),
                 14, UiKit.MUTED, false);
         intro.setLineSpacing(0, 1.13f);
         LinearLayout.LayoutParams introLp = new LinearLayout.LayoutParams(-1, -2);
@@ -167,34 +167,34 @@ public final class LocationTriggerEditorActivity extends Activity {
         page.addView(intro, introLp);
 
         LinearLayout location = card();
-        location.addView(label("WHEN"));
+        location.addView(label(getString(R.string.loctrig_when)));
         transitionButton = selectorButton("");
         transitionButton.setOnClickListener(v -> showTransitionMenu());
         location.addView(transitionButton, selectorLp());
 
-        location.addView(label("SAVED PLACE (OPTIONAL)"));
-        savedPlaceButton = selectorButton("Choose saved place");
+        location.addView(label(getString(R.string.loctrig_saved_place_label)));
+        savedPlaceButton = selectorButton(getString(R.string.loctrig_choose_place));
         savedPlaceButton.setOnClickListener(v -> showSavedPlaceMenu());
         location.addView(savedPlaceButton, selectorLp());
         TextView savedHelp = UiKit.text(this,
-                "Choose a reusable place from Settings, use your current location, or enter coordinates manually.",
+                getString(R.string.loctrig_saved_help),
                 11, UiKit.MUTED, false);
         savedHelp.setPadding(0, UiKit.dp(this, 6), 0, 0);
         location.addView(savedHelp);
 
-        location.addView(label("LOCATION NAME"));
-        nameField = textField("Home, Work, Gym…", InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
+        location.addView(label(getString(R.string.loctrig_name_label)));
+        nameField = textField(getString(R.string.loctrig_name_hint), InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES);
         nameField.setText(original == null ? "" : original.locationName);
         location.addView(nameField, fieldLp());
 
-        currentLocationButton = secondaryButton("Use my current location");
+        currentLocationButton = secondaryButton(getString(R.string.loctrig_use_current));
         currentLocationButton.setOnClickListener(v -> captureCurrentLocation());
         LinearLayout.LayoutParams currentLp = new LinearLayout.LayoutParams(-1, UiKit.dp(this, 46));
         currentLp.setMargins(0, UiKit.dp(this, 10), 0, 0);
         location.addView(currentLocationButton, currentLp);
 
         TextView coordinateHelp = UiKit.text(this,
-                "Orbit stores only the coordinates and label you save for this trigger. Current location requires precise location access.",
+                getString(R.string.loctrig_coord_help),
                 11, UiKit.MUTED, false);
         coordinateHelp.setPadding(0, UiKit.dp(this, 7), 0, 0);
         location.addView(coordinateHelp);
@@ -203,14 +203,14 @@ public final class LocationTriggerEditorActivity extends Activity {
         coords.setGravity(Gravity.CENTER_VERTICAL);
         LinearLayout latBox = new LinearLayout(this);
         latBox.setOrientation(LinearLayout.VERTICAL);
-        latBox.addView(label("LATITUDE"));
+        latBox.addView(label(getString(R.string.loctrig_lat)));
         latitudeField = numberField(original == null ? "" : coordinate(original.latitude));
         latBox.addView(latitudeField, fieldLp());
         coords.addView(latBox, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
 
         LinearLayout lonBox = new LinearLayout(this);
         lonBox.setOrientation(LinearLayout.VERTICAL);
-        lonBox.addView(label("LONGITUDE"));
+        lonBox.addView(label(getString(R.string.loctrig_lon)));
         longitudeField = numberField(original == null ? "" : coordinate(original.longitude));
         lonBox.addView(longitudeField, fieldLp());
         LinearLayout.LayoutParams lonLp = new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
@@ -218,13 +218,13 @@ public final class LocationTriggerEditorActivity extends Activity {
         coords.addView(lonBox, lonLp);
         location.addView(coords);
 
-        location.addView(label("RADIUS"));
+        location.addView(label(getString(R.string.loctrig_radius)));
         radiusButton = selectorButton("");
         radiusButton.setOnClickListener(v -> showRadiusMenu());
         location.addView(radiusButton, selectorLp());
 
         enabledBox = new CheckBox(this);
-        enabledBox.setText("Enabled");
+        enabledBox.setText(getString(R.string.loctrig_enabled));
         enabledBox.setTextColor(UiKit.TEXT);
         enabledBox.setTextSize(14);
         enabledBox.setButtonTintList(ColorStateList.valueOf(UiKit.accent(this)));
@@ -244,15 +244,15 @@ public final class LocationTriggerEditorActivity extends Activity {
         page.addView(accessCard, cardLp());
 
         LinearLayout behavior = card();
-        behavior.addView(UiKit.text(this, "Background behavior", 14, UiKit.TEXT, true));
+        behavior.addView(UiKit.text(this, getString(R.string.loctrig_background_title), 14, UiKit.TEXT, true));
         TextView body = UiKit.text(this,
-                "Location triggers use Android's system proximity monitoring. The routine still follows Orbit's normal automatic-run rules: background-safe steps can finish silently, while steps that require Orbit visible or a confirmation use the existing trigger-alert handoff. Android location boundaries are approximate, so a transition can arrive late and very brief passes may not fire.",
+                getString(R.string.loctrig_background_body),
                 12, UiKit.MUTED, false);
         body.setPadding(0, UiKit.dp(this, 6), 0, 0);
         behavior.addView(body);
         page.addView(behavior, cardLp());
 
-        Button save = primaryButton(original == null ? "Save location trigger" : "Save changes");
+        Button save = primaryButton(original == null ? getString(R.string.loctrig_save) : getString(R.string.loctrig_save_changes));
         save.setOnClickListener(v -> save());
         page.addView(save, new LinearLayout.LayoutParams(-1, UiKit.dp(this, 50)));
         return scroll;
@@ -261,12 +261,12 @@ public final class LocationTriggerEditorActivity extends Activity {
     private void refreshFields() {
         if (transitionButton != null) {
             transitionButton.setText(RoutineTriggerStore.LOCATION_EXIT.equals(transition)
-                    ? "When I leave" : "When I arrive");
+                    ? getString(R.string.loctrig_when_leave) : getString(R.string.loctrig_when_arrive));
         }
-        if (radiusButton != null) radiusButton.setText(RoutineTriggerSchedule.radiusLabel(radiusMeters));
+        if (radiusButton != null) radiusButton.setText(RoutineTriggerSchedule.radiusLabel(this, radiusMeters));
         if (savedPlaceButton != null) {
             SavedPlaceStore.Place selectedPlace = SavedPlaceStore.get(this, selectedSavedPlaceId);
-            savedPlaceButton.setText(selectedPlace == null ? "Choose saved place" : selectedPlace.name);
+            savedPlaceButton.setText(selectedPlace == null ? getString(R.string.loctrig_choose_place) : selectedPlace.name);
         }
         if (enabledBox != null && enabledBox.isChecked() != enabled) enabledBox.setChecked(enabled);
     }
@@ -279,23 +279,23 @@ public final class LocationTriggerEditorActivity extends Activity {
         boolean locationOn = RoutineLocationTriggerScheduler.isLocationEnabled(this);
         boolean ready = fine && background && locationOn;
 
-        accessCard.addView(UiKit.text(this, ready ? "Location triggers ready" : "Location setup needed",
+        accessCard.addView(UiKit.text(this, ready ? getString(R.string.loctrig_ready) : getString(R.string.loctrig_setup_needed),
                 14, ready ? UiKit.SUCCESS : UiKit.TEXT, true));
         String detail;
         String button;
         if (!fine) {
-            detail = "Allow precise location so Orbit can tell when the phone crosses the saved radius.";
-            button = "Allow precise location";
+            detail = getString(R.string.loctrig_detail_fine);
+            button = getString(R.string.loctrig_btn_fine);
         } else if (!background) {
             String label = RoutineLocationTriggerScheduler.backgroundPermissionLabel(this);
-            detail = "Automatic arrive/leave triggers need background location. In Android's app permission page, set Location to “" + label + "”.";
-            button = "Allow background location";
+            detail = getString(R.string.loctrig_detail_background, label);
+            button = getString(R.string.loctrig_btn_background);
         } else if (!locationOn) {
-            detail = "Android location services are currently off. Turn them on for arrive/leave monitoring.";
-            button = "Turn on location";
+            detail = getString(R.string.loctrig_detail_off);
+            button = getString(R.string.loctrig_btn_turn_on);
         } else {
-            detail = "Precise and background location are available. Enabled location triggers can monitor even while Orbit is closed.";
-            button = "Manage location access";
+            detail = getString(R.string.loctrig_detail_ready);
+            button = getString(R.string.loctrig_btn_manage);
         }
         TextView note = UiKit.text(this, detail, 12, UiKit.MUTED, false);
         note.setPadding(0, UiKit.dp(this, 6), 0, UiKit.dp(this, 10));
@@ -329,17 +329,17 @@ public final class LocationTriggerEditorActivity extends Activity {
     private void showBackgroundLocationExplanation() {
         String label = RoutineLocationTriggerScheduler.backgroundPermissionLabel(this);
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Allow background location")
-                .setMessage("For arrive/leave Routines to work while Orbit is closed, Android requires Location to be set to “" + label + "”. Open Orbit's app settings, then choose Permissions → Location.")
-                .setNegativeButton("Not now", null)
-                .setPositiveButton("Open settings", (d, w) -> RoutineLocationTriggerScheduler.openAppLocationSettings(this))
+                .setTitle(getString(R.string.loctrig_btn_background))
+                .setMessage(getString(R.string.loctrig_background_explain, label))
+                .setNegativeButton(getString(R.string.ui_not_now_a0e63d7c), null)
+                .setPositiveButton(getString(R.string.loctrig_open_settings), (d, w) -> RoutineLocationTriggerScheduler.openAppLocationSettings(this))
                 .create();
         styleDialog(dialog, false);
         dialog.show();
     }
 
     private void showTransitionMenu() {
-        String[] labels = {"When I arrive", "When I leave"};
+        String[] labels = {getString(R.string.loctrig_when_arrive), getString(R.string.loctrig_when_leave)};
         int selected = RoutineTriggerStore.LOCATION_EXIT.equals(transition) ? 1 : 0;
         UiKit.showOrbitMenu(this, transitionButton, labels, selected, (index, label) -> {
             transition = index == 1 ? RoutineTriggerStore.LOCATION_EXIT : RoutineTriggerStore.LOCATION_ENTER;
@@ -351,7 +351,7 @@ public final class LocationTriggerEditorActivity extends Activity {
     private void showSavedPlaceMenu() {
         List<SavedPlaceStore.Place> places = SavedPlaceStore.list(this);
         if (places.isEmpty()) {
-            Toast.makeText(this, "No saved places yet. Add one first.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.loctrig_no_places), Toast.LENGTH_SHORT).show();
             startActivity(new Intent(this, SavedPlacesActivity.class));
             return;
         }
@@ -361,7 +361,7 @@ public final class LocationTriggerEditorActivity extends Activity {
             labels[i] = places.get(i).name;
             if (places.get(i).id.equals(selectedSavedPlaceId)) selected = i;
         }
-        labels[places.size()] = "Manage saved places…";
+        labels[places.size()] = getString(R.string.loctrig_manage_places);
         UiKit.showOrbitMenu(this, savedPlaceButton, labels, selected, (index, label) -> {
             if (index >= places.size()) {
                 startActivity(new Intent(this, SavedPlacesActivity.class));
@@ -378,7 +378,7 @@ public final class LocationTriggerEditorActivity extends Activity {
     }
 
     private void showRadiusMenu() {
-        String[] labels = {"100 m radius", "200 m radius", "300 m radius", "500 m radius", "1 km radius", "2 km radius", "5 km radius"};
+        String[] labels = {getString(R.string.loctrig_r100), getString(R.string.loctrig_r200), getString(R.string.loctrig_r300), getString(R.string.loctrig_r500), getString(R.string.loctrig_r1k), getString(R.string.loctrig_r2k), getString(R.string.loctrig_r5k)};
         float[] values = {100f, 200f, 300f, 500f, 1000f, 2000f, 5000f};
         int selected = 1;
         for (int i = 0; i < values.length; i++) {
@@ -399,13 +399,13 @@ public final class LocationTriggerEditorActivity extends Activity {
             return;
         }
         if (!RoutineLocationTriggerScheduler.isLocationEnabled(this)) {
-            Toast.makeText(this, "Turn on Android location first.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.loctrig_turn_on_first), Toast.LENGTH_SHORT).show();
             RoutineLocationTriggerScheduler.openLocationServices(this);
             return;
         }
         LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
         if (lm == null) {
-            Toast.makeText(this, "Android location service is unavailable.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.loctrig_service_unavailable), Toast.LENGTH_SHORT).show();
             return;
         }
         Location cached = bestLastKnown(lm);
@@ -416,11 +416,11 @@ public final class LocationTriggerEditorActivity extends Activity {
         String provider = preferredProvider(lm);
         if (provider == null) {
             if (cached != null) applyLocation(cached);
-            else Toast.makeText(this, "Could not find an enabled location provider.", Toast.LENGTH_SHORT).show();
+            else Toast.makeText(this, getString(R.string.loctrig_no_provider), Toast.LENGTH_SHORT).show();
             return;
         }
         currentLocationButton.setEnabled(false);
-        currentLocationButton.setText("Finding location…");
+        currentLocationButton.setText(getString(R.string.loctrig_finding));
         try {
             if (Build.VERSION.SDK_INT >= 30) {
                 final Location fallback = cached;
@@ -479,54 +479,54 @@ public final class LocationTriggerEditorActivity extends Activity {
     private void applyLocation(Location location) {
         runOnUiThread(() -> {
             currentLocationButton.setEnabled(true);
-            currentLocationButton.setText("Use my current location");
+            currentLocationButton.setText(getString(R.string.loctrig_use_current));
             selectedSavedPlaceId = "";
             latitudeField.setText(coordinate(location.getLatitude()));
             longitudeField.setText(coordinate(location.getLongitude()));
-            if (nameField.getText().toString().trim().isEmpty()) nameField.setText("My location");
+            if (nameField.getText().toString().trim().isEmpty()) nameField.setText(getString(R.string.loctrig_my_location));
             refreshFields();
             dirty = true;
-            Toast.makeText(this, "Current location added.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.loctrig_added), Toast.LENGTH_SHORT).show();
         });
     }
 
     private void locationFailed() {
         runOnUiThread(() -> {
             currentLocationButton.setEnabled(true);
-            currentLocationButton.setText("Use my current location");
-            Toast.makeText(this, "Orbit could not get a current location fix. Try again outdoors or paste coordinates.", Toast.LENGTH_LONG).show();
+            currentLocationButton.setText(getString(R.string.loctrig_use_current));
+            Toast.makeText(this, getString(R.string.loctrig_fix_failed), Toast.LENGTH_LONG).show();
         });
     }
 
     private void save() {
         String name = RoutineTriggerStore.sanitizeLocationName(nameField.getText().toString());
         if (name.isEmpty()) {
-            Toast.makeText(this, "Give this location a name.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.loctrig_need_name), Toast.LENGTH_SHORT).show();
             return;
         }
         Double latitude = parseDouble(latitudeField.getText().toString());
         Double longitude = parseDouble(longitudeField.getText().toString());
         if (latitude == null || latitude < -90d || latitude > 90d || longitude == null || longitude < -180d || longitude > 180d) {
-            Toast.makeText(this, "Use valid latitude and longitude coordinates.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.loctrig_bad_coords), Toast.LENGTH_LONG).show();
             return;
         }
         RoutineTriggerStore.Trigger trigger = original == null
                 ? RoutineTriggerStore.createLocation(routineId, name, latitude, longitude, radiusMeters, transition).withEnabled(enabled)
                 : original.withLocation(enabled, name, latitude, longitude, radiusMeters, transition);
         if (RoutineTriggerStore.hasEnabledScheduleConflict(this, trigger)) {
-            Toast.makeText(this, "An enabled location trigger with this same area and event already exists for this routine.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.loctrig_duplicate), Toast.LENGTH_LONG).show();
             return;
         }
         if (!RoutineTriggerStore.upsert(this, trigger)) {
-            Toast.makeText(this, "Could not save this location trigger.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.loctrig_save_failed), Toast.LENGTH_SHORT).show();
             return;
         }
         boolean scheduled = !enabled || RoutineLocationTriggerScheduler.schedule(this, trigger);
         if (enabled && !scheduled) {
             if (RoutineLocationTriggerScheduler.ready(this)) {
-                Toast.makeText(this, "Saved, but Android could not start location monitoring. Check Location access and try enabling the trigger again.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.loctrig_monitor_failed), Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(this, "Saved. Finish Location setup to activate this trigger in the background.", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.loctrig_finish_setup), Toast.LENGTH_LONG).show();
             }
         }
         dirty = false;
@@ -535,10 +535,10 @@ public final class LocationTriggerEditorActivity extends Activity {
 
     private void confirmDiscard() {
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Discard location-trigger changes?")
-                .setMessage("Your unsaved location and trigger changes will be lost.")
-                .setNegativeButton("Keep editing", null)
-                .setPositiveButton("Discard", (d, w) -> { dirty = false; finish(); })
+                .setTitle(getString(R.string.loctrig_discard_title))
+                .setMessage(getString(R.string.loctrig_discard_message))
+                .setNegativeButton(getString(R.string.loctrig_keep_editing), null)
+                .setPositiveButton(getString(R.string.loctrig_discard), (d, w) -> { dirty = false; finish(); })
                 .create();
         styleDialog(dialog, true);
         dialog.show();

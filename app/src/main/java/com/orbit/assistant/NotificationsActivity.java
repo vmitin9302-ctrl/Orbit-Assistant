@@ -75,7 +75,7 @@ public class NotificationsActivity extends Activity {
         LinearLayout titles = new LinearLayout(this);
         titles.setOrientation(LinearLayout.VERTICAL);
         titles.setPadding(UiKit.dp(this, 8), 0, 0, 0);
-        titles.addView(UiKit.text(this, "Notifications", 25, UiKit.TEXT, true));
+        titles.addView(UiKit.text(this, getString(R.string.ntf_title), 25, UiKit.TEXT, true));
         subtitle = UiKit.text(this, "", 12, UiKit.MUTED, false);
         titles.addView(subtitle);
         top.addView(titles, new LinearLayout.LayoutParams(
@@ -94,29 +94,29 @@ public class NotificationsActivity extends Activity {
     }
 
     private void addAccessCard() {
-        page.addView(sectionTitle("ACCESS"));
+        page.addView(sectionTitle(getString(R.string.ntf_sec_access)));
         LinearLayout card = card();
 
         boolean enabled = NotificationAccess.enabled(this);
         TextView status = UiKit.text(this,
-                enabled ? "Notification access is enabled" : "Notification access is not enabled",
+                getString(enabled ? R.string.ntf_access_on : R.string.ntf_access_off),
                 15, enabled ? UiKit.SUCCESS : UiKit.TEXT, true);
         card.addView(status);
 
         TextView desc = UiKit.text(this,
-                enabled
-                        ? "Orbit can now build a private local history from notifications that arrive on this phone."
-                        : "Android requires you to explicitly grant Notification access before Orbit can see notification content.",
+                getString(enabled
+                        ? R.string.ntf_desc_on
+                        : R.string.ntf_desc_off),
                 13, UiKit.MUTED, false);
         desc.setPadding(0, UiKit.dp(this, 7), 0, UiKit.dp(this, 12));
         card.addView(desc);
 
-        Button access = primaryButton(enabled ? "Open notification access settings"
-                : "Open notification access");
+        Button access = primaryButton(getString(enabled ? R.string.ntf_open_settings
+                : R.string.ntf_open_access));
         access.setOnClickListener(v -> {
             try { startActivity(NotificationAccess.settingsIntent()); }
             catch (Exception e) { Toast.makeText(this,
-                    "Could not open notification access settings", Toast.LENGTH_SHORT).show(); }
+                    getString(R.string.ntf_open_failed), Toast.LENGTH_SHORT).show(); }
         });
         card.addView(access, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 48)));
@@ -125,26 +125,27 @@ public class NotificationsActivity extends Activity {
     }
 
     private void addPrivacyCard() {
-        page.addView(sectionTitle("PRIVACY & RETENTION"));
+        page.addView(sectionTitle(getString(R.string.ntf_sec_privacy)));
         LinearLayout card = card();
 
         OrbitSwitch ai = new OrbitSwitch(this);
         ai.setChecked(Prefs.notificationAiEnabled(this), false);
         ai.setOnCheckedChangeListener((button, checked) ->
                 Prefs.get(this).edit().putBoolean(Prefs.NOTIFICATION_AI_ENABLED, checked).apply());
-        card.addView(UiKit.switchRow(this, "Use relevant notification history in AI answers", null, ai));
+        card.addView(UiKit.switchRow(this, getString(R.string.ntf_use_in_ai), null, ai));
 
         TextView help = UiKit.text(this,
-                "Orbit stores notification history locally. It only supplies that history to the AI when your prompt is clearly asking about notifications, missed messages, or what you missed.",
+                getString(R.string.ntf_help),
                 12, UiKit.MUTED, false);
         help.setPadding(0, UiKit.dp(this, 7), 0, UiKit.dp(this, 12));
         card.addView(help);
 
-        Button retention = secondaryButton("Keep history: " +
-                retentionLabel(Prefs.notificationRetentionDays(this)));
+        Button retention = secondaryButton(getString(R.string.ntf_keep_history,
+                retentionLabel(Prefs.notificationRetentionDays(this))));
         retention.setOnClickListener(v -> {
-            String[] labels = {"1 day", "3 days", "7 days", "14 days", "30 days"};
             int[] values = {1,3,7,14,30};
+            String[] labels = new String[values.length];
+            for (int i = 0; i < values.length; i++) labels[i] = retentionLabel(values[i]);
             int selected = 2;
             int current = Prefs.notificationRetentionDays(this);
             for (int i = 0; i < values.length; i++) if (values[i] == current) selected = i;
@@ -160,22 +161,22 @@ public class NotificationsActivity extends Activity {
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 46)));
 
         TextView warning = UiKit.text(this,
-                "For sensitive apps such as banking, authenticator, password-manager, or private-work apps, exclude them below. Excluded apps are not kept in Orbit notification history.",
+                getString(R.string.ntf_warning),
                 12, UiKit.MUTED, false);
         warning.setPadding(0, UiKit.dp(this, 10), 0, 0);
         card.addView(warning);
 
-        Button clear = secondaryButton("Clear local notification history");
+        Button clear = secondaryButton(getString(R.string.ntf_clear_btn));
         LinearLayout.LayoutParams clearLp = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 46));
         clearLp.setMargins(0, UiKit.dp(this, 12), 0, 0);
         card.addView(clear, clearLp);
         clear.setOnClickListener(v -> {
             AlertDialog dialog = new AlertDialog.Builder(this)
-                    .setTitle("Clear notification history?")
-                    .setMessage("This deletes the locally saved notification contents. Your app include/exclude choices stay unchanged.")
-                    .setNegativeButton("Cancel", null)
-                    .setPositiveButton("Clear", (d,w) -> {
+                    .setTitle(getString(R.string.ntf_clear_title))
+                    .setMessage(getString(R.string.ntf_clear_msg))
+                    .setNegativeButton(getString(R.string.ntf_cancel), null)
+                    .setPositiveButton(getString(R.string.ntf_clear), (d,w) -> {
                         NotificationStore.clear(this);
                         rebuild();
                     }).create();
@@ -190,7 +191,7 @@ public class NotificationsActivity extends Activity {
         List<NotificationStore.AppSummary> apps = NotificationStore.appSummaries(this);
         if (apps.isEmpty()) return;
 
-        page.addView(sectionTitle("APPS"));
+        page.addView(sectionTitle(getString(R.string.ntf_sec_apps)));
         for (NotificationStore.AppSummary app : apps) {
             LinearLayout row = card();
             row.setOrientation(LinearLayout.HORIZONTAL);
@@ -201,21 +202,22 @@ public class NotificationsActivity extends Activity {
             info.addView(UiKit.text(this,
                     app.appLabel.isEmpty() ? app.packageName : app.appLabel,
                     14, UiKit.TEXT, true));
-            String count = app.count == 0 ? "No saved notifications"
-                    : app.count + (app.count == 1 ? " saved notification" : " saved notifications");
+            String count = app.count == 0 ? getString(R.string.ntf_none_saved)
+                    : getResources().getQuantityString(R.plurals.ntf_saved, app.count, app.count);
             TextView meta = UiKit.text(this, count, 11, UiKit.MUTED, false);
             meta.setPadding(0, UiKit.dp(this, 4), 0, 0);
             info.addView(meta);
             row.addView(info, new LinearLayout.LayoutParams(
                     0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
 
-            Button toggle = smallButton(app.blocked ? "Excluded" : "Included");
+            Button toggle = smallButton(getString(app.blocked ? R.string.ntf_excluded
+                    : R.string.ntf_included));
             if (!app.blocked) toggle.setTextColor(UiKit.accent(this));
             toggle.setOnClickListener(v -> {
                 NotificationStore.setBlocked(this, app.packageName, !app.blocked);
                 Toast.makeText(this,
-                        app.blocked ? app.appLabel + " included"
-                                : app.appLabel + " excluded and its saved notifications removed",
+                        getString(app.blocked ? R.string.ntf_app_included
+                                : R.string.ntf_app_excluded, app.appLabel),
                         Toast.LENGTH_SHORT).show();
                 rebuild();
             });
@@ -226,16 +228,16 @@ public class NotificationsActivity extends Activity {
     }
 
     private void addRecentHistory() {
-        page.addView(sectionTitle("RECENT HISTORY"));
+        page.addView(sectionTitle(getString(R.string.ntf_sec_recent)));
         List<NotificationStore.Item> items = NotificationStore.all(this);
 
         if (items.isEmpty()) {
             LinearLayout empty = card();
-            empty.addView(UiKit.text(this, "Nothing captured yet", 15, UiKit.TEXT, true));
+            empty.addView(UiKit.text(this, getString(R.string.ntf_empty), 15, UiKit.TEXT, true));
             TextView body = UiKit.text(this,
-                    NotificationAccess.enabled(this)
-                            ? "New notifications will appear here as they arrive."
-                            : "Grant Notification access first. Orbit cannot read past notifications retroactively.",
+                    getString(NotificationAccess.enabled(this)
+                            ? R.string.ntf_empty_on
+                            : R.string.ntf_empty_off),
                     12, UiKit.MUTED, false);
             body.setPadding(0, UiKit.dp(this, 6), 0, 0);
             empty.addView(body);
@@ -281,12 +283,12 @@ public class NotificationsActivity extends Activity {
 
     private void refreshSubtitle() {
         if (subtitle == null) return;
-        subtitle.setText(NotificationStore.count(this) +
-                (NotificationStore.count(this) == 1 ? " saved notification" : " saved notifications"));
+        subtitle.setText(getResources().getQuantityString(R.plurals.ntf_saved,
+                NotificationStore.count(this), NotificationStore.count(this)));
     }
 
     private String retentionLabel(int days) {
-        return days == 1 ? "1 day" : days + " days";
+        return getResources().getQuantityString(R.plurals.ntf_days, days, days);
     }
 
     private TextView sectionTitle(String text) {

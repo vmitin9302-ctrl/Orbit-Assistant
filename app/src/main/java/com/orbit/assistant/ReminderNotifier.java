@@ -49,7 +49,7 @@ public final class ReminderNotifier {
                 ? new Notification.Builder(c, CHANNEL)
                 : new Notification.Builder(c);
         b.setSmallIcon(R.drawable.ic_orbit)
-                .setContentTitle("Orbit reminder")
+                .setContentTitle(c.getString(R.string.reminder_notif_title))
                 .setContentText(item.message)
                 .setStyle(new Notification.BigTextStyle().bigText(item.message))
                 .setContentIntent(pi)

@@ -23,19 +23,22 @@ import java.util.Map;
 final class ContextLedger {
     /** The groups the breakdown can show. Order is display order. */
     enum Category {
-        CONVERSATION("Conversation"),
-        DOCUMENTS("Documents"),
-        VAULT("Vault"),
-        SCREEN("Screen"),
-        IMAGES("Images"),
-        NOTIFICATIONS("Notifications"),
-        MEMORY("Memory"),
-        KEPT("Kept in this chat"),
-        INSTRUCTIONS("Orbit's instructions"),
-        OTHER("Other");
+        CONVERSATION(R.string.ctxl_conversation),
+        DOCUMENTS(R.string.ctxl_documents),
+        VAULT(R.string.ctxl_vault),
+        SCREEN(R.string.ctxl_screen),
+        IMAGES(R.string.ctxl_images),
+        NOTIFICATIONS(R.string.ctxl_notifications),
+        MEMORY(R.string.ctxl_memory),
+        KEPT(R.string.ctxl_kept),
+        INSTRUCTIONS(R.string.ctxl_instructions),
+        OTHER(R.string.ctxl_other);
 
-        final String label;
-        Category(String label) { this.label = label; }
+        final int labelRes;
+        Category(int labelRes) { this.labelRes = labelRes; }
+
+        /** The category name as shown to the user. */
+        String label(android.content.Context context) { return context.getString(labelRes); }
     }
 
     /** The estimate for one image the model will look at. A middle value for a phone screenshot. */

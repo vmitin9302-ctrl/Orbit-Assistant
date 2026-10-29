@@ -1,5 +1,7 @@
 package com.orbit.assistant;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -163,8 +165,14 @@ public final class AttachmentViewerModel {
 
     /** The counter, or empty when there is only one image and a counter would be noise. */
     public String counterText() {
+        return counterText(null);
+    }
+
+    /** The counter in the app language (English when there is no Context). */
+    public String counterText(Context context) {
         if (items.size() <= 1) return "";
-        return (index + 1) + " of " + items.size();
+        return context == null ? (index + 1) + " of " + items.size()
+                : context.getString(R.string.attachviewer_counter, index + 1, items.size());
     }
 
     /**
@@ -177,21 +185,39 @@ public final class AttachmentViewerModel {
      * set. A document keeps its name, because for a document the name is the information.
      */
     public String descriptionAt(int position) {
+        return descriptionAt(null, position);
+    }
+
+    /** The description in the app language (English when there is no Context). */
+    public String descriptionAt(Context context, int position) {
         Item item = at(position);
         if (item == null) return "";
-        String place = "Image " + (position + 1) + " of " + items.size();
+        String place = context == null ? "Image " + (position + 1) + " of " + items.size()
+                : context.getString(R.string.attachviewer_image_place, position + 1, items.size());
         if (isViewableImage(item.kind)) return place;
         return item.label.isEmpty() ? place : place + ", " + item.label;
     }
 
+
     public String currentDescription() { return descriptionAt(index); }
+
+    public String currentDescription(Context context) { return descriptionAt(context, index); }
 
     /** What the remove control is called, so which image is being removed is never ambiguous. */
     public String removeDescription() {
-        if (isEmpty()) return "Remove image";
-        return items.size() <= 1
-                ? "Remove this image"
-                : "Remove image " + (index + 1) + " of " + items.size();
+        return removeDescription(null);
+    }
+
+    /** The remove control's name in the app language (English when there is no Context). */
+    public String removeDescription(Context context) {
+        if (isEmpty()) return context == null ? "Remove image"
+                : context.getString(R.string.attachviewer_remove_image);
+        if (items.size() <= 1) {
+            return context == null ? "Remove this image"
+                    : context.getString(R.string.attachviewer_remove_this);
+        }
+        return context == null ? "Remove image " + (index + 1) + " of " + items.size()
+                : context.getString(R.string.attachviewer_remove_nth, index + 1, items.size());
     }
 
     private int clamp(int position) {

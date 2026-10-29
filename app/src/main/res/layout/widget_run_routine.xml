@@ -33,7 +33,7 @@
             android:fontFamily="sans"
             android:includeFontPadding="false"
             android:maxLines="1"
-            android:text="Choose Routine"
+            android:text="@string/res_widget_choose_routine"
             android:textColor="#FFF4F4F8"
             android:textSize="15sp"
             android:textStyle="bold" />
@@ -47,7 +47,7 @@
             android:fontFamily="sans"
             android:includeFontPadding="false"
             android:maxLines="1"
-            android:text="Tap to run"
+            android:text="@string/res_widget_tap_to_run"
             android:textColor="#FFA6ABB9"
             android:textSize="11sp" />
     </LinearLayout>

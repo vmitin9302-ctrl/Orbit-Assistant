@@ -269,7 +269,7 @@ public final class OrbitLocalVisibilityTest {
         Path file = repositoryRoot().resolve(relativePath);
         if (!Files.isRegularFile(file)) fail("expected file is missing: " + relativePath);
         try {
-            return new String(Files.readAllBytes(file), StandardCharsets.UTF_8);
+            return LocalizedSource.expand(new String(Files.readAllBytes(file), StandardCharsets.UTF_8));
         } catch (IOException e) {
             throw new AssertionError("could not read " + relativePath, e);
         }

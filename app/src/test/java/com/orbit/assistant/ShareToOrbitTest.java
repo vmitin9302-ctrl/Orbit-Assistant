@@ -490,7 +490,7 @@ public final class ShareToOrbitTest {
      * old behaviour, now reached through the choice rather than around it. Shares the Vault cannot
      * hold are never asked about at all, so for those this does nothing.
      */
-    private void runShare(Intent intent, String destination) {
+    private void runShare(Intent intent, Integer destination) {
         drain();
         lastStarted.clear();
         org.robolectric.shadows.ShadowDialog.reset();
@@ -513,12 +513,12 @@ public final class ShareToOrbitTest {
     private boolean lastAsked;
 
     /** Answers Orbit's destination prompt, or does nothing when there was never one. */
-    private void answerDestinationPrompt(String destination) {
+    private void answerDestinationPrompt(Integer destination) {
         android.app.AlertDialog dialog =
                 org.robolectric.shadows.ShadowAlertDialog.getLatestAlertDialog();
         lastAsked = dialog != null && dialog.isShowing();
         if (!lastAsked || destination == null) return;
-        int button = ShareToOrbitActivity.SAVE_TO_VAULT.equals(destination)
+        int button = destination == ShareToOrbitActivity.SAVE_TO_VAULT
                 ? android.app.AlertDialog.BUTTON_NEGATIVE
                 : android.app.AlertDialog.BUTTON_POSITIVE;
         android.widget.Button control = dialog.getButton(button);

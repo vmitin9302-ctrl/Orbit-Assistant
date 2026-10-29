@@ -189,17 +189,17 @@ public final class LocalAiActivity extends Activity {
         if (outcome == RemovalOutcome.CANCELLED) {
             // Still here. Either the user backed out, or Android refused — and in both cases the
             // honest thing is to change nothing and say so.
-            String reported = OrbitLocalUninstaller.message(lastRemovalStage(this));
+            String reported = OrbitLocalUninstaller.message(this, lastRemovalStage(this));
             removalMessage = reported.isEmpty()
-                    ? "Orbit Local was not removed. Nothing was deleted." : reported;
+                    ? getString(R.string.localai_not_removed) : reported;
             return;
         }
         // Confirmed absent. Android took the component and, with it, the model that lived in the
         // component's own private storage — so what is left is only what belongs to Orbit.
         finishOrbitSideRemoval(scope);
         removalMessage = outcome == RemovalOutcome.REMOVED_COMPONENT
-                ? "The Orbit Local component was uninstalled."
-                : "Orbit Local was removed.";
+                ? getString(R.string.localai_component_uninstalled)
+                : getString(R.string.localai_removed);
         // A complete removal takes the card that message would have been shown on with it, so the
         // confirmation is said out loud instead of being written somewhere that no longer exists.
         if (!hasAnythingToRemove()) {
@@ -335,7 +335,7 @@ public final class LocalAiActivity extends Activity {
         back.setImageResource(R.drawable.ic_back);
         back.setImageTintList(ColorStateList.valueOf(UiKit.accent(this)));
         back.setBackground(UiKit.ripple(UiKit.SURFACE_2, UiKit.accent(this), 18, this));
-        back.setContentDescription("Back to AI Providers");
+        back.setContentDescription(getString(R.string.localai_back_to_providers));
         back.setPadding(UiKit.dp(this, 10), UiKit.dp(this, 10),
                 UiKit.dp(this, 10), UiKit.dp(this, 10));
         back.setOnClickListener(v -> navigation.performBack());
@@ -346,13 +346,13 @@ public final class LocalAiActivity extends Activity {
         titles.setOrientation(LinearLayout.VERTICAL);
         titles.setPadding(UiKit.dp(this, 13), 0, 0, 0);
         titles.addView(UiKit.text(this, "Orbit Local", 24, UiKit.TEXT, true));
-        titles.addView(UiKit.text(this, "Private AI on your phone", 13, UiKit.MUTED, false));
+        titles.addView(UiKit.text(this, getString(R.string.localai_tagline), 13, UiKit.MUTED, false));
         header.addView(titles, new LinearLayout.LayoutParams(
                 0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         page.addView(header);
 
         TextView intro = UiKit.text(this,
-                "Orbit Local answers on the phone itself. Conversations never leave the device, and chat keeps working with no internet at all. It is optional: nothing is installed until you ask for it, and everything can be removed again.",
+                getString(R.string.localai_intro),
                 13, UiKit.MUTED, false);
         intro.setLineSpacing(0, 1.14f);
         LinearLayout.LayoutParams introLp = new LinearLayout.LayoutParams(
@@ -427,7 +427,7 @@ public final class LocalAiActivity extends Activity {
     private View deviceCard() {
         DeviceCapabilityCheck.Assessment assessment = DeviceCapabilityCheck.assess(this);
         LinearLayout card = card();
-        card.addView(UiKit.text(this, "This device", 12, UiKit.MUTED, true));
+        card.addView(UiKit.text(this, getString(R.string.localai_this_device), 12, UiKit.MUTED, true));
 
         LinearLayout row = new LinearLayout(this);
         row.setGravity(Gravity.CENTER_VERTICAL);
@@ -438,7 +438,7 @@ public final class LocalAiActivity extends Activity {
                 UiKit.dp(this, 9), UiKit.dp(this, 9));
         dotLp.rightMargin = UiKit.dp(this, 8);
         row.addView(dot, dotLp);
-        row.addView(UiKit.text(this, assessment.tierLabel(), 16, UiKit.TEXT, true));
+        row.addView(UiKit.text(this, assessment.tierLabel(this), 16, UiKit.TEXT, true));
         card.addView(row);
 
         TextView summary = UiKit.text(this, assessment.summary, 13, UiKit.MUTED, false);
@@ -449,7 +449,7 @@ public final class LocalAiActivity extends Activity {
         long free = LocalModelStore.freeStorageBytes(this);
         if (free >= 0) {
             TextView storage = UiKit.text(this,
-                    "Free storage: " + LocalModelStore.formatBytes(free), 12, UiKit.MUTED, false);
+                    getString(R.string.localai_free_storage, LocalModelStore.formatBytes(free)), 12, UiKit.MUTED, false);
             storage.setPadding(0, UiKit.dp(this, 5), 0, 0);
             card.addView(storage);
         }
@@ -476,7 +476,7 @@ public final class LocalAiActivity extends Activity {
     private View capabilityCard() {
         List<OrbitLocalCapabilities.Capability> all = OrbitLocalCapabilities.evaluate(this);
         LinearLayout card = card();
-        card.addView(UiKit.text(this, "What works on this phone", 12, UiKit.MUTED, true));
+        card.addView(UiKit.text(this, getString(R.string.localai_what_works), 12, UiKit.MUTED, true));
         LinearLayout local = new LinearLayout(this);
         local.setOrientation(LinearLayout.VERTICAL);
         local.setPadding(0, UiKit.dp(this, 6), 0, 0);
@@ -490,13 +490,12 @@ public final class LocalAiActivity extends Activity {
             }
         }
         card.addView(local);
-        TextView cloudTitle = UiKit.text(this, "Needs a cloud provider", 12, UiKit.MUTED, true);
+        TextView cloudTitle = UiKit.text(this, getString(R.string.localai_needs_cloud), 12, UiKit.MUTED, true);
         cloudTitle.setPadding(0, UiKit.dp(this, 12), 0, UiKit.dp(this, 2));
         card.addView(cloudTitle);
         card.addView(cloud);
         TextView promise = UiKit.text(this,
-                "Orbit Local never passes a request to the cloud. When something needs one, "
-                        + "Orbit says so and you choose.", 12, UiKit.MUTED, false);
+                getString(R.string.localai_cloud_promise), 12, UiKit.MUTED, false);
         promise.setLineSpacing(0, 1.12f);
         promise.setPadding(0, UiKit.dp(this, 10), 0, 0);
         card.addView(promise);
@@ -522,16 +521,16 @@ public final class LocalAiActivity extends Activity {
         LinearLayout words = new LinearLayout(this);
         words.setOrientation(LinearLayout.VERTICAL);
         boolean cloudOnly = capability.availability == OrbitLocalCapabilities.Availability.CLOUD_ONLY;
-        words.addView(UiKit.text(this, capability.name, 14,
+        words.addView(UiKit.text(this, capability.label(this), 14,
                 cloudOnly ? UiKit.MUTED : UiKit.TEXT, !cloudOnly));
-        if (!capability.detail.isEmpty()) {
-            words.addView(UiKit.text(this, capability.detail, 12, UiKit.MUTED, false));
+        if (!capability.detail(this).isEmpty()) {
+            words.addView(UiKit.text(this, capability.detail(this), 12, UiKit.MUTED, false));
         }
         row.addView(words, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         String state = capability.availability == OrbitLocalCapabilities.Availability.READY
-                ? "works on this phone" : cloudOnly ? "needs a cloud provider" : "not ready yet";
-        row.setContentDescription(capability.name + ", " + state
-                + (capability.detail.isEmpty() ? "" : ". " + capability.detail));
+                ? getString(R.string.localai_state_works) : cloudOnly ? getString(R.string.localai_state_needs_cloud) : getString(R.string.localai_state_not_ready);
+        row.setContentDescription(capability.label(this) + ", " + state
+                + (capability.detail(this).isEmpty() ? "" : ". " + capability.detail(this)));
         return row;
     }
 
@@ -540,9 +539,9 @@ public final class LocalAiActivity extends Activity {
     private View componentCard() {
         OrbitLocalComponent.State state = OrbitLocalComponent.state(this);
         LinearLayout card = card();
-        card.addView(UiKit.text(this, "Orbit Local component", 12, UiKit.MUTED, true));
-        card.addView(titleRow("On-device AI component",
-                OrbitLocalComponent.stateLabel(state), state == OrbitLocalComponent.State.INSTALLED));
+        card.addView(UiKit.text(this, getString(R.string.localai_component_header), 12, UiKit.MUTED, true));
+        card.addView(titleRow(getString(R.string.localai_component_title),
+                OrbitLocalComponent.stateLabel(this, state), state == OrbitLocalComponent.State.INSTALLED));
 
         TextView details = UiKit.text(this, componentDetails(state), 13, UiKit.MUTED, false);
         details.setLineSpacing(0, 1.13f);
@@ -558,7 +557,7 @@ public final class LocalAiActivity extends Activity {
             barLp.topMargin = UiKit.dp(this, 11);
             card.addView(bar, barLp);
             TextView progressText = UiKit.text(this,
-                    installPercent < 0 ? "Preparing download…" : installPercent + "%",
+                    installPercent < 0 ? getString(R.string.localai_preparing) : installPercent + "%",
                     12, UiKit.MUTED, false);
             progressText.setPadding(0, UiKit.dp(this, 6), 0, 0);
             card.addView(progressText);
@@ -583,19 +582,18 @@ public final class LocalAiActivity extends Activity {
     }
 
     private String componentDetails(OrbitLocalComponent.State state) {
-        if (!OrbitDistribution.supportsOrbitLocal()) return playComponentDetails(state);
+        if (!OrbitDistribution.supportsOrbitLocal()) return playComponentDetails(this, state);
         String size = componentSizeText();
         switch (state) {
             case INSTALLED:
-                return "Runs AI privately on this device · " + size
-                        + "\nVersion " + OrbitVersion.displayName(
-                                OrbitLocalComponent.installedVersionName(this));
+                return getString(R.string.localai_component_installed, size, OrbitVersion.displayName(
+                                OrbitLocalComponent.installedVersionName(this)));
             case UPDATE_REQUIRED:
-                return "The installed component was built for a different version of Orbit. Update it to use Orbit Local again.";
+                return getString(R.string.localai_component_update_required);
             case UNTRUSTED:
-                return "A package named Orbit Local is installed but was not published by Orbit, so it will not be used. Remove it, then install Orbit Local from here.";
+                return getString(R.string.localai_untrusted_install);
             default:
-                return "Required to run AI privately on this device · " + size;
+                return getString(R.string.localai_component_required, size);
         }
     }
 
@@ -606,28 +604,27 @@ public final class LocalAiActivity extends Activity {
      * component only serves an Orbit carrying the GitHub certificate, so no installed component
      * can ever work with it. What is left to offer is removing one that is present.
      */
-    static String playComponentDetails(OrbitLocalComponent.State state) {
+    static String playComponentDetails(android.content.Context context,
+            OrbitLocalComponent.State state) {
         switch (state) {
             case NOT_INSTALLED:
-                return PLAY_UNAVAILABLE;
+                return context.getString(R.string.localai_play_unavailable);
             case UNTRUSTED:
-                return "A package named Orbit Local is installed but was not published by Orbit, "
-                        + "so it will not be used. You can remove it here.";
+                return context.getString(R.string.localai_untrusted_play);
             default:
-                return "An Orbit Local component from the GitHub edition of Orbit is installed. "
-                        + "The Google Play edition can't use it. You can uninstall it here.";
+                return context.getString(R.string.localai_github_component_play);
         }
     }
 
     private String componentSizeText() {
         long bytes = OrbitLocalInstaller.knownComponentBytes(this);
-        return bytes > 0L ? LocalModelStore.formatBytes(bytes) : "a small download";
+        return bytes > 0L ? LocalModelStore.formatBytes(bytes) : getString(R.string.localai_small_download);
     }
 
     private void buildComponentActions(LinearLayout actions, OrbitLocalComponent.State state) {
         boolean allowed = DeviceCapabilityCheck.allowsLocalAi(DeviceCapabilityCheck.assess(this));
         if (installing) {
-            Button working = secondaryButton("Downloading…");
+            Button working = secondaryButton(getString(R.string.localai_downloading));
             working.setEnabled(false);
             working.setAlpha(0.62f);
             addPrimaryAction(actions, working);
@@ -637,11 +634,11 @@ public final class LocalAiActivity extends Activity {
             // Nothing to set up or update in the Play edition; see playComponentDetails. Only a
             // component that is actually present can be removed, through Android's own flow.
             if (state == OrbitLocalComponent.State.UNTRUSTED) {
-                Button remove = dangerButton("Remove untrusted component");
+                Button remove = dangerButton(getString(R.string.localai_remove_untrusted));
                 remove.setOnClickListener(v -> removeOrbitLocal(SCOPE_COMPONENT));
                 addPrimaryAction(actions, remove);
             } else if (state != OrbitLocalComponent.State.NOT_INSTALLED) {
-                Button uninstall = dangerButton("Uninstall component");
+                Button uninstall = dangerButton(getString(R.string.localai_uninstall_component));
                 uninstall.setOnClickListener(v -> confirmUninstallComponent());
                 addDestructiveAction(actions, uninstall);
             }
@@ -651,13 +648,13 @@ public final class LocalAiActivity extends Activity {
             case INSTALLED: {
                 // The component is a real installed package, so removing just it is a real thing
                 // to want — separate from Remove Orbit Local, which also clears what Orbit holds.
-                Button uninstall = dangerButton("Uninstall component");
+                Button uninstall = dangerButton(getString(R.string.localai_uninstall_component));
                 uninstall.setOnClickListener(v -> confirmUninstallComponent());
                 addDestructiveAction(actions, uninstall);
                 return;
             }
             case UPDATE_REQUIRED: {
-                Button update = primaryButton("Update component");
+                Button update = primaryButton(getString(R.string.localai_update_component));
                 update.setOnClickListener(v -> startComponentDownload());
                 addPrimaryAction(actions, update);
                 return;
@@ -665,7 +662,7 @@ public final class LocalAiActivity extends Activity {
             case UNTRUSTED: {
                 // A package pretending to be Orbit Local. Removing it goes through exactly the
                 // same Android flow, and its outcome is read back from the package manager too.
-                Button remove = dangerButton("Remove untrusted component");
+                Button remove = dangerButton(getString(R.string.localai_remove_untrusted));
                 remove.setOnClickListener(v -> removeOrbitLocal(SCOPE_COMPONENT));
                 addPrimaryAction(actions, remove);
                 return;
@@ -675,7 +672,7 @@ public final class LocalAiActivity extends Activity {
                 // downloads. The component always comes first, because a model without it cannot
                 // run and downloading 1.6 GB into that situation would be indefensible.
                 boolean firstTime = !LocalModelStore.hasLegacyModel(this);
-                Button install = primaryButton(firstTime ? "Set up Orbit Local" : "Install component");
+                Button install = primaryButton(firstTime ? getString(R.string.ui_set_up_orbit_local_6660808d) : getString(R.string.localai_install_component));
                 install.setEnabled(allowed);
                 if (!allowed) install.setAlpha(0.5f);
                 install.setOnClickListener(v -> {
@@ -698,24 +695,23 @@ public final class LocalAiActivity extends Activity {
         content.setOrientation(LinearLayout.VERTICAL);
         content.setPadding(UiKit.dp(this, 24), UiKit.dp(this, 20),
                 UiKit.dp(this, 24), UiKit.dp(this, 6));
-        TextView title = UiKit.text(this, "Set up Orbit Local", 20, UiKit.TEXT, true);
+        TextView title = UiKit.text(this, getString(R.string.ui_set_up_orbit_local_6660808d), 20, UiKit.TEXT, true);
         title.setAccessibilityHeading(true);
         content.addView(title);
 
-        TextView lead = UiKit.text(this, "Orbit Local needs two optional downloads:",
+        TextView lead = UiKit.text(this, getString(R.string.localai_needs_two),
                 14, UiKit.TEXT, false);
         lead.setPadding(0, UiKit.dp(this, 12), 0, 0);
         content.addView(lead);
 
-        content.addView(setupItem("Orbit Local component · " + componentSizeText(),
-                "Lets Orbit run AI privately on this device."));
-        content.addView(setupItem("AI model · "
-                        + LocalModelStore.formatBytes(LocalModelStore.MODEL_SIZE_BYTES),
-                "Contains the local AI model itself."));
+        content.addView(setupItem(getString(R.string.localai_setup_component, componentSizeText()),
+                getString(R.string.localai_setup_component_desc)));
+        content.addView(setupItem(getString(R.string.localai_setup_model,
+                        LocalModelStore.formatBytes(LocalModelStore.MODEL_SIZE_BYTES)),
+                getString(R.string.localai_setup_model_desc)));
 
         TextView footer = UiKit.text(this,
-                "Both can be removed later. A separate, optional action model can be added "
-                        + "afterwards if you want Orbit Local to handle phone commands too.",
+                getString(R.string.localai_setup_footer),
                 13, UiKit.MUTED, false);
         footer.setLineSpacing(0, 1.13f);
         footer.setPadding(0, UiKit.dp(this, 12), 0, 0);
@@ -730,8 +726,8 @@ public final class LocalAiActivity extends Activity {
 
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setView(scroll)
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Continue", (d, w) -> startComponentDownload())
+                .setNegativeButton(R.string.ui_cancel_19766ed6, null)
+                .setPositiveButton(R.string.ui_continue_31fbef16, (d, w) -> startComponentDownload())
                 .create();
         UiKit.styleOrbitDialog(dialog, this, false);
         dialog.show();
@@ -803,7 +799,7 @@ public final class LocalAiActivity extends Activity {
     private void launchComponentInstaller(File apk) {
         if (!OrbitUpdater.canRequestPackageInstalls(this)) {
             waitingForInstallPermission = true;
-            installMessage = "Android needs permission to install the component from Orbit. Allow this source, then return to Orbit.";
+            installMessage = getString(R.string.localai_need_install_permission);
             rebuild();
             OrbitUpdater.openUnknownSourcesSettings(this);
             return;
@@ -815,7 +811,7 @@ public final class LocalAiActivity extends Activity {
             // one message that was only ever accurate for the last of them.
             String message = e.getMessage();
             installMessage = message == null || message.trim().isEmpty()
-                    ? "Android could not open the package installer." : message;
+                    ? getString(R.string.localai_installer_failed) : message;
             rebuild();
         }
     }
@@ -831,21 +827,21 @@ public final class LocalAiActivity extends Activity {
                     UiKit.blend(UiKit.SURFACE, UiKit.accent(this), 0.93f),
                     UiKit.accent(this), 22, this));
         }
-        card.addView(UiKit.text(this, "Local model", 12, UiKit.MUTED, true));
+        card.addView(UiKit.text(this, getString(R.string.localai_model_header), 12, UiKit.MUTED, true));
 
         String pillLabel;
         boolean accentPill;
         if (!componentReady) {
-            pillLabel = "Requires Orbit Local component";
+            pillLabel = getString(R.string.localai_requires_component);
             accentPill = false;
         } else if (status == null) {
-            pillLabel = "Checking…";
+            pillLabel = getString(R.string.localai_checking);
             accentPill = false;
         } else if (active) {
-            pillLabel = "Active";
+            pillLabel = getString(R.string.localai_active);
             accentPill = true;
         } else {
-            pillLabel = status.stateLabel();
+            pillLabel = status.stateLabel(this);
             accentPill = status.modelReady();
         }
         card.addView(titleRow(LocalModelStore.MODEL_DISPLAY_NAME, pillLabel, accentPill));
@@ -901,62 +897,59 @@ public final class LocalAiActivity extends Activity {
         String total = LocalModelStore.formatBytes(status.modelSizeBytes);
         switch (status.modelState) {
             case OrbitLocalStatus.VALIDATING:
-                return "Verifying the model…";
+                return getString(R.string.localai_verifying);
             case OrbitLocalStatus.IMPORTING:
-                return "Moving your existing model · " + have + " of " + total;
+                return getString(R.string.localai_moving_progress, have, total);
             case OrbitLocalStatus.QUEUED:
-                return have + " of " + total + " · starting…";
+                return getString(R.string.localai_progress_starting, have, total);
             case OrbitLocalStatus.WAITING_FOR_NETWORK:
-                return have + " of " + total + " · waiting for a connection";
+                return getString(R.string.localai_progress_waiting, have, total);
             default:
-                return have + " of " + total + " · " + (status.progressPerMille() / 10) + "%";
+                return getString(R.string.localai_progress_percent, have, total, status.progressPerMille() / 10);
         }
     }
 
     private String modelDetails(boolean componentReady) {
         String size = LocalModelStore.formatBytes(LocalModelStore.MODEL_SIZE_BYTES);
         if (!componentReady) {
-            String base = "Local AI model · about " + size;
-            if (!OrbitDistribution.installsOrbitLocalComponent()) return base + "\n" + PLAY_UNAVAILABLE;
+            String base = getString(R.string.localai_model_about, size);
+            if (!OrbitDistribution.installsOrbitLocalComponent()) return base + "\n" + getString(R.string.localai_play_unavailable);
             if (LocalModelStore.hasLegacyModel(this)) {
-                return base + "\nYou already have this model on the phone. Install the Orbit Local "
-                        + "component and Orbit can move it across instead of downloading it again.";
+                return base + getString(R.string.localai_legacy_hint_a);
             }
-            return base + "\nInstall the Orbit Local component first.";
+            return base + getString(R.string.localai_install_first);
         }
-        if (status == null) return "Checking the Orbit Local component…";
+        if (status == null) return getString(R.string.localai_checking_component);
         switch (status.modelState) {
             case OrbitLocalStatus.READY:
                 // The action model is a separate install and does not change what *this* model can
                 // do, so the sentence changes only to stop claiming device commands are impossible
                 // on a phone where they demonstrably are not.
-                return size + " installed · Works completely offline\n"
-                        + "Good for private chat, drafting, and quick answers. "
+                return getString(R.string.localai_model_ready, size)
                         + (status.actionModelReady()
-                                ? "Phone commands are handled by the action model below; screen reading stays with cloud providers."
-                                : "Device actions and screen reading stay with cloud providers for now.");
+                                ? getString(R.string.localai_model_ready_actions)
+                                : getString(R.string.localai_model_ready_no_actions));
             case OrbitLocalStatus.DOWNLOADING:
-                return "Downloading in the background. You can leave this screen, lock the phone, or use other apps; the download keeps going and picks up where it left off after any interruption.";
+                return getString(R.string.localai_model_downloading);
             case OrbitLocalStatus.QUEUED:
-                return "The download is starting. It runs in the background and does not need this screen to stay open.";
+                return getString(R.string.localai_model_queued);
             case OrbitLocalStatus.WAITING_FOR_NETWORK:
-                return "Waiting for a connection. The download continues on its own once this phone is back online; nothing already downloaded is lost.";
+                return getString(R.string.localai_model_waiting);
             case OrbitLocalStatus.VALIDATING:
-                return "Making sure every byte arrived intact before the model is enabled.";
+                return getString(R.string.localai_model_validating);
             case OrbitLocalStatus.IMPORTING:
-                return "Moving the model you already downloaded into Orbit Local. Your existing copy is kept until this finishes and verifies.";
+                return getString(R.string.localai_model_importing);
             case OrbitLocalStatus.PAUSED:
-                return "You paused this download. Resume any time; already-downloaded data is kept.";
+                return getString(R.string.localai_paused);
             case OrbitLocalStatus.INTERRUPTED:
-                return "The download stopped before it finished. Tap Resume to continue from where it got to; already-downloaded data is kept.";
+                return getString(R.string.localai_model_interrupted);
             case OrbitLocalStatus.ERROR:
-                return "One-time download · " + size + " · stored only on this device.";
+                return getString(R.string.localai_one_time, size);
             default:
                 if (LocalModelStore.hasLegacyModel(this)) {
-                    return "You already have this model on the phone from an earlier version of Orbit. "
-                            + "Orbit can move it into Orbit Local instead of downloading " + size + " again.";
+                    return getString(R.string.localai_model_legacy_found, size);
                 }
-                return "One-time download · about " + size + " · stored only on this device. After that, Orbit Local needs no internet and no account.";
+                return getString(R.string.localai_model_default, size);
         }
     }
 
@@ -967,12 +960,12 @@ public final class LocalAiActivity extends Activity {
             case OrbitLocalStatus.NOT_INSTALLED:
             case OrbitLocalStatus.ERROR: {
                 if (LocalModelStore.hasLegacyModel(this)) {
-                    Button move = primaryButton("Move existing model");
+                    Button move = primaryButton(getString(R.string.localai_move_model));
                     move.setOnClickListener(v -> confirmMigration());
                     addPrimaryAction(actions, move);
                 }
                 Button download = primaryButton(
-                        OrbitLocalStatus.ERROR.equals(status.modelState) ? "Try again" : "Download model");
+                        OrbitLocalStatus.ERROR.equals(status.modelState) ? getString(R.string.localai_try_again) : getString(R.string.localai_download_model));
                 download.setEnabled(allowed);
                 if (!allowed) download.setAlpha(0.5f);
                 download.setOnClickListener(v -> {
@@ -986,13 +979,13 @@ public final class LocalAiActivity extends Activity {
             case OrbitLocalStatus.INTERRUPTED: {
                 // Whoever stopped it, the same two things are worth offering: continue from the
                 // bytes already here, or give them up deliberately.
-                Button resume = primaryButton("Resume download");
+                Button resume = primaryButton(getString(R.string.localai_resume));
                 resume.setOnClickListener(v -> {
                     OrbitLocalClient.startModelDownload(this);
                     bumpRefresh();
                 });
                 addPrimaryAction(actions, resume);
-                Button discard = dangerButton("Remove downloaded data");
+                Button discard = dangerButton(getString(R.string.localai_remove_downloaded));
                 discard.setOnClickListener(v -> confirmDeleteModel(true));
                 addDestructiveAction(actions, discard);
                 break;
@@ -1000,7 +993,7 @@ public final class LocalAiActivity extends Activity {
             case OrbitLocalStatus.DOWNLOADING:
             case OrbitLocalStatus.QUEUED:
             case OrbitLocalStatus.WAITING_FOR_NETWORK: {
-                Button pause = secondaryButton("Pause");
+                Button pause = secondaryButton(getString(R.string.localai_pause));
                 pause.setOnClickListener(v -> {
                     OrbitLocalClient.pauseModelDownload(this);
                     bumpRefresh();
@@ -1009,7 +1002,7 @@ public final class LocalAiActivity extends Activity {
                 break;
             }
             case OrbitLocalStatus.IMPORTING: {
-                Button stop = secondaryButton("Stop moving");
+                Button stop = secondaryButton(getString(R.string.localai_stop_moving));
                 stop.setOnClickListener(v -> {
                     OrbitLocalClient.abortModelImport(this);
                     bumpRefresh();
@@ -1021,10 +1014,10 @@ public final class LocalAiActivity extends Activity {
                 break;
             case OrbitLocalStatus.READY: {
                 if (!Prefs.PROVIDER_LOCAL.equals(AiProviders.active(this).id())) {
-                    Button use = primaryButton("Use Orbit Local");
+                    Button use = primaryButton(getString(R.string.ui_use_orbit_local_144ca50f));
                     use.setOnClickListener(v -> {
                         if (AiProviders.select(this, Prefs.PROVIDER_LOCAL)) {
-                            Toast.makeText(this, "Orbit Local is now the active provider",
+                            Toast.makeText(this, getString(R.string.localai_now_active),
                                     Toast.LENGTH_SHORT).show();
                             rebuild();
                         }
@@ -1034,13 +1027,12 @@ public final class LocalAiActivity extends Activity {
                 if (LocalModelStore.hasLegacyModel(this)) {
                     // The component has its own verified copy now, so Orbit's old one is pure
                     // duplication. Offered, never done silently.
-                    Button reclaim = secondaryButton("Free "
-                            + LocalModelStore.formatBytes(LocalModelStore.legacyBytes(this))
-                            + " of old model data");
+                    Button reclaim = secondaryButton(getString(R.string.localai_free_old,
+                            LocalModelStore.formatBytes(LocalModelStore.legacyBytes(this))));
                     reclaim.setOnClickListener(v -> confirmReclaimLegacy());
                     addPrimaryAction(actions, reclaim);
                 }
-                Button delete = dangerButton("Delete local model");
+                Button delete = dangerButton(getString(R.string.localai_delete_model));
                 delete.setOnClickListener(v -> confirmDeleteModel(false));
                 addDestructiveAction(actions, delete);
                 break;
@@ -1069,13 +1061,10 @@ public final class LocalAiActivity extends Activity {
             return;
         }
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Existing Orbit Local model found")
-                .setMessage("Orbit can move your existing local model into the new Orbit Local "
-                        + "component instead of downloading it again.\n\nYour current copy is kept "
-                        + "until the moved copy has been verified, so nothing is lost if this is "
-                        + "interrupted.")
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Move existing model", (d, w) -> startMigration())
+                .setTitle(getString(R.string.localai_migrate_title))
+                .setMessage(getString(R.string.localai_migrate_message))
+                .setNegativeButton(R.string.ui_cancel_19766ed6, null)
+                .setPositiveButton(getString(R.string.localai_move_model), (d, w) -> startMigration())
                 .create();
         UiKit.styleOrbitDialog(dialog, this, false);
         dialog.show();
@@ -1083,16 +1072,13 @@ public final class LocalAiActivity extends Activity {
 
     private void confirmLowStorageReplace() {
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Not enough space to move the model")
-                .setMessage("Moving the model needs room for a second copy until the first is "
-                        + "removed, and this device does not have it.\n\nOrbit can instead delete "
-                        + "the old model and download a fresh copy into Orbit Local. Local AI will "
-                        + "be unavailable until that download finishes.")
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Replace with new copy", (d, w) -> {
+                .setTitle(getString(R.string.localai_lowspace_title))
+                .setMessage(getString(R.string.localai_lowspace_message))
+                .setNegativeButton(R.string.ui_cancel_19766ed6, null)
+                .setPositiveButton(getString(R.string.localai_replace_copy), (d, w) -> {
                     LocalModelStore.deleteLegacy(this);
                     OrbitLocalClient.startModelDownload(this);
-                    Toast.makeText(this, "Downloading the model into Orbit Local",
+                    Toast.makeText(this, getString(R.string.localai_downloading_model_toast),
                             Toast.LENGTH_SHORT).show();
                     bumpRefresh();
                 })
@@ -1109,7 +1095,7 @@ public final class LocalAiActivity extends Activity {
             main.post(() -> {
                 if (isFinishing() || isDestroyed()) return;
                 if (!started) {
-                    Toast.makeText(this, "Orbit Local could not start moving the model",
+                    Toast.makeText(this, getString(R.string.localai_migrate_failed),
                             Toast.LENGTH_LONG).show();
                 }
                 bumpRefresh();
@@ -1120,15 +1106,13 @@ public final class LocalAiActivity extends Activity {
     /** Removing Orbit's now-duplicate copy, only after the component verified its own. */
     private void confirmReclaimLegacy() {
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Free up the old copy?")
-                .setMessage("Orbit Local now has its own verified copy of the model. The older copy "
-                        + "stored by Orbit is no longer used, and removing it frees about "
-                        + LocalModelStore.formatBytes(LocalModelStore.legacyBytes(this))
-                        + ".\n\nOrbit Local keeps working exactly as it does now.")
-                .setNegativeButton("Keep it", null)
-                .setPositiveButton("Free up space", (d, w) -> {
+                .setTitle(getString(R.string.localai_reclaim_title))
+                .setMessage(getString(R.string.localai_reclaim_message,
+                        LocalModelStore.formatBytes(LocalModelStore.legacyBytes(this))))
+                .setNegativeButton(getString(R.string.localai_keep_it), null)
+                .setPositiveButton(getString(R.string.localai_free_up), (d, w) -> {
                     LocalModelStore.deleteLegacy(this);
-                    Toast.makeText(this, "Old model data removed", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.localai_old_removed_toast), Toast.LENGTH_SHORT).show();
                     rebuild();
                 })
                 .create();
@@ -1150,24 +1134,24 @@ public final class LocalAiActivity extends Activity {
     private View actionModelCard() {
         boolean componentReady = OrbitLocalComponent.isUsable(this);
         LinearLayout card = card();
-        card.addView(UiKit.text(this, "Device actions", 12, UiKit.MUTED, true));
+        card.addView(UiKit.text(this, getString(R.string.localai_actions_header), 12, UiKit.MUTED, true));
 
         String pillLabel;
         boolean accentPill = false;
         if (!componentReady) {
-            pillLabel = "Requires Orbit Local component";
+            pillLabel = getString(R.string.localai_requires_component);
         } else if (status == null) {
-            pillLabel = "Checking…";
+            pillLabel = getString(R.string.localai_checking);
         } else if (status.actionModelReady()) {
             boolean enabled = Prefs.localDeviceActions(this);
-            pillLabel = enabled ? "On" : "Off";
+            pillLabel = enabled ? getString(R.string.localai_on) : getString(R.string.localai_off);
             accentPill = enabled;
         } else {
-            pillLabel = status.actionStateLabel();
+            pillLabel = status.actionStateLabel(this);
         }
         card.addView(titleRow(
                 status == null || status.actionModelDisplayName.isEmpty()
-                        ? "Local action model" : status.actionModelDisplayName,
+                        ? getString(R.string.localai_action_model_title) : status.actionModelDisplayName,
                 pillLabel, accentPill));
 
         TextView details = UiKit.text(this, actionModelDetails(componentReady), 13, UiKit.MUTED, false);
@@ -1197,9 +1181,7 @@ public final class LocalAiActivity extends Activity {
         if (componentReady && status != null && status.actionModelReady()) {
             card.addView(actionsEnabledRow());
             TextView covers = UiKit.text(this,
-                    "Understands: flashlight, brightness, media volume, Do Not Disturb, ringer mode, "
-                            + "play/pause/skip, timers, alarms, opening an app, and opening Settings. "
-                            + "Nothing else, and nothing it suggests runs without Orbit checking it first.",
+                    getString(R.string.localai_understands),
                     12, UiKit.MUTED, false);
             covers.setLineSpacing(0, 1.13f);
             covers.setPadding(0, UiKit.dp(this, 10), 0, 0);
@@ -1224,9 +1206,9 @@ public final class LocalAiActivity extends Activity {
         row.setPadding(0, UiKit.dp(this, 12), 0, 0);
         LinearLayout labels = new LinearLayout(this);
         labels.setOrientation(LinearLayout.VERTICAL);
-        labels.addView(UiKit.text(this, "Use for device commands", 15, UiKit.TEXT, false));
+        labels.addView(UiKit.text(this, getString(R.string.localai_use_for_commands), 15, UiKit.TEXT, false));
         labels.addView(UiKit.text(this,
-                "Orbit's own command recognition always runs first. This only handles what it cannot.",
+                getString(R.string.localai_own_first),
                 12, UiKit.MUTED, false));
         row.addView(labels, new LinearLayout.LayoutParams(
                 0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
@@ -1246,12 +1228,12 @@ public final class LocalAiActivity extends Activity {
         String total = LocalModelStore.formatBytes(status.actionModelSizeBytes);
         String text;
         switch (status.actionModelState) {
-            case OrbitLocalStatus.VALIDATING: text = "Verifying the model…"; break;
-            case OrbitLocalStatus.QUEUED: text = have + " of " + total + " · starting…"; break;
+            case OrbitLocalStatus.VALIDATING: text = getString(R.string.localai_verifying); break;
+            case OrbitLocalStatus.QUEUED: text = getString(R.string.localai_progress_starting, have, total); break;
             case OrbitLocalStatus.WAITING_FOR_NETWORK:
-                text = have + " of " + total + " · waiting for a connection"; break;
+                text = getString(R.string.localai_progress_waiting, have, total); break;
             default:
-                text = have + " of " + total + " · " + (status.actionProgressPerMille() / 10) + "%";
+                text = getString(R.string.localai_progress_percent, have, total, status.actionProgressPerMille() / 10);
         }
         TextView line = UiKit.text(this, text, 12, UiKit.MUTED, false);
         line.setPadding(0, UiKit.dp(this, 6), 0, 0);
@@ -1260,41 +1242,34 @@ public final class LocalAiActivity extends Activity {
 
     private String actionModelDetails(boolean componentReady) {
         String size = status == null || status.actionModelSizeBytes <= 0L
-                ? "about 520 MB"
+                ? getString(R.string.localai_about_520)
                 : LocalModelStore.formatBytes(status.actionModelSizeBytes);
         if (!componentReady) {
             if (!OrbitDistribution.installsOrbitLocalComponent()) {
-                return "Lets Orbit Local understand phone commands it has no exact wording for, entirely "
-                        + "on the device. " + PLAY_UNAVAILABLE;
+                return getString(R.string.localai_action_lets_play, getString(R.string.localai_play_unavailable));
             }
-            return "Lets Orbit Local understand phone commands it has no exact wording for, entirely "
-                    + "on the device. Install the Orbit Local component first.";
+            return getString(R.string.localai_action_lets_install);
         }
-        if (status == null) return "Checking the Orbit Local component…";
+        if (status == null) return getString(R.string.localai_checking_component);
         switch (status.actionModelState) {
             case OrbitLocalStatus.READY:
-                return size + " installed · Works completely offline\n"
-                        + "Turns everyday phrasing like \"kill the torch\" or \"a bit quieter\" into an "
-                        + "Orbit action, on the phone. It never chats and never controls Android itself.";
+                return getString(R.string.localai_action_ready, size);
             case OrbitLocalStatus.DOWNLOADING:
-                return "Downloading in the background. You can leave this screen or use other apps; "
-                        + "the download continues and resumes after any interruption.";
+                return getString(R.string.localai_action_downloading);
             case OrbitLocalStatus.QUEUED:
-                return "The download is starting. It runs in the background and does not need this screen open.";
+                return getString(R.string.localai_action_queued);
             case OrbitLocalStatus.WAITING_FOR_NETWORK:
-                return "Waiting for a connection. The download continues on its own once this phone is back online.";
+                return getString(R.string.localai_action_waiting);
             case OrbitLocalStatus.VALIDATING:
-                return "Making sure every byte arrived intact before the model is enabled.";
+                return getString(R.string.localai_model_validating);
             case OrbitLocalStatus.PAUSED:
-                return "You paused this download. Resume any time; already-downloaded data is kept.";
+                return getString(R.string.localai_paused);
             case OrbitLocalStatus.INTERRUPTED:
-                return "The download stopped before it finished. Resume to continue from where it got to.";
+                return getString(R.string.localai_action_interrupted);
             case OrbitLocalStatus.ERROR:
-                return "One-time download · " + size + " · stored only on this device.";
+                return getString(R.string.localai_one_time, size);
             default:
-                return "Optional · one-time download of " + size + " · stored only on this device.\n"
-                        + "Lets Orbit Local act on phone commands that do not match Orbit's exact wording, "
-                        + "with no internet and no account. Chat works without it.";
+                return getString(R.string.localai_action_default, size);
         }
     }
 
@@ -1306,7 +1281,7 @@ public final class LocalAiActivity extends Activity {
             case OrbitLocalStatus.ERROR: {
                 Button download = primaryButton(
                         OrbitLocalStatus.ERROR.equals(status.actionModelState)
-                                ? "Try again" : "Download action model");
+                                ? getString(R.string.localai_try_again) : getString(R.string.localai_download_action));
                 download.setEnabled(allowed);
                 if (!allowed) download.setAlpha(0.5f);
                 download.setOnClickListener(v -> {
@@ -1318,13 +1293,13 @@ public final class LocalAiActivity extends Activity {
             }
             case OrbitLocalStatus.PAUSED:
             case OrbitLocalStatus.INTERRUPTED: {
-                Button resume = primaryButton("Resume download");
+                Button resume = primaryButton(getString(R.string.localai_resume));
                 resume.setOnClickListener(v -> {
                     OrbitLocalClient.startActionModelDownload(this);
                     bumpRefresh();
                 });
                 addPrimaryAction(actions, resume);
-                Button discard = dangerButton("Remove downloaded data");
+                Button discard = dangerButton(getString(R.string.localai_remove_downloaded));
                 discard.setOnClickListener(v -> confirmDeleteActionModel(true));
                 addDestructiveAction(actions, discard);
                 break;
@@ -1332,7 +1307,7 @@ public final class LocalAiActivity extends Activity {
             case OrbitLocalStatus.DOWNLOADING:
             case OrbitLocalStatus.QUEUED:
             case OrbitLocalStatus.WAITING_FOR_NETWORK: {
-                Button pause = secondaryButton("Pause");
+                Button pause = secondaryButton(getString(R.string.localai_pause));
                 pause.setOnClickListener(v -> {
                     OrbitLocalClient.pauseActionModelDownload(this);
                     bumpRefresh();
@@ -1343,7 +1318,7 @@ public final class LocalAiActivity extends Activity {
             case OrbitLocalStatus.VALIDATING:
                 break;
             case OrbitLocalStatus.READY: {
-                Button delete = dangerButton("Delete action model");
+                Button delete = dangerButton(getString(R.string.localai_delete_action));
                 delete.setOnClickListener(v -> confirmDeleteActionModel(false));
                 addDestructiveAction(actions, delete);
                 break;
@@ -1356,22 +1331,19 @@ public final class LocalAiActivity extends Activity {
     private void confirmDeleteActionModel(boolean partialOnly) {
         long bytes = status == null ? 0L : status.actionModelTotalBytes;
         String size = LocalModelStore.formatBytes(bytes);
-        String title = partialOnly ? "Remove downloaded data?" : "Remove the action model?";
+        String title = partialOnly ? getString(R.string.localai_remove_downloaded_q) : getString(R.string.localai_remove_action_q);
         String message = partialOnly
-                ? "About " + size + " of partly downloaded model data will be removed, freeing that "
-                        + "storage. You can start the download again at any time."
-                : "About " + size + " of downloaded model data will be removed, freeing that storage. "
-                        + "Orbit Local chat and its own model are not affected, and Orbit's built-in "
-                        + "command recognition keeps working exactly as it does now.";
+                ? getString(R.string.localai_partial_message, size)
+                : getString(R.string.localai_action_remove_message, size);
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle(title)
                 .setMessage(message)
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton(partialOnly ? "Remove" : "Remove model", (d, w) -> {
+                .setNegativeButton(R.string.ui_cancel_19766ed6, null)
+                .setPositiveButton(partialOnly ? getString(R.string.localai_remove) : getString(R.string.localai_remove_model), (d, w) -> {
                     OrbitLocalClient.deleteActionModel(this);
                     OrbitLocalProvider.invalidateStatus();
                     if (!partialOnly) {
-                        Toast.makeText(this, "Action model removed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.localai_action_removed_toast), Toast.LENGTH_SHORT).show();
                     }
                     bumpRefresh();
                 })
@@ -1382,7 +1354,7 @@ public final class LocalAiActivity extends Activity {
 
     private View storageCard() {
         LinearLayout card = card();
-        card.addView(UiKit.text(this, "Orbit Local storage", 12, UiKit.MUTED, true));
+        card.addView(UiKit.text(this, getString(R.string.localai_storage_header), 12, UiKit.MUTED, true));
 
         long componentBytes = OrbitLocalComponent.installedApkBytes(this);
         long modelBytes = status == null ? 0L : status.modelTotalBytes;
@@ -1393,14 +1365,14 @@ public final class LocalAiActivity extends Activity {
         LinearLayout totalRow = new LinearLayout(this);
         totalRow.setGravity(Gravity.CENTER_VERTICAL);
         totalRow.setPadding(0, UiKit.dp(this, 7), 0, 0);
-        totalRow.addView(UiKit.text(this, total > 0L ? LocalModelStore.formatBytes(total) : "Nothing installed",
+        totalRow.addView(UiKit.text(this, total > 0L ? LocalModelStore.formatBytes(total) : getString(R.string.localai_nothing_installed),
                 17, UiKit.TEXT, true), new LinearLayout.LayoutParams(
                 0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         card.addView(totalRow);
 
         if (total <= 0L) {
             TextView none = UiKit.text(this,
-                    "Orbit Local uses no storage on this device yet. The normal Orbit app is not counted here.",
+                    getString(R.string.localai_no_storage),
                     13, UiKit.MUTED, false);
             none.setLineSpacing(0, 1.13f);
             none.setPadding(0, UiKit.dp(this, 6), 0, 0);
@@ -1409,22 +1381,22 @@ public final class LocalAiActivity extends Activity {
         }
 
         if (componentBytes > 0L) {
-            card.addView(storageLine("Component", LocalModelStore.formatBytes(componentBytes)));
+            card.addView(storageLine(getString(R.string.localai_storage_component), LocalModelStore.formatBytes(componentBytes)));
         }
         if (modelBytes > 0L) {
             String label = status != null && status.modelReady()
                     ? LocalModelStore.MODEL_DISPLAY_NAME
-                    : LocalModelStore.MODEL_DISPLAY_NAME + " (partial)";
+                    : getString(R.string.localai_model_partial, LocalModelStore.MODEL_DISPLAY_NAME);
             card.addView(storageLine(label, LocalModelStore.formatBytes(modelBytes)));
         }
         if (actionBytes > 0L) {
             String label = status != null && status.actionModelReady()
-                    ? "Action model" : "Action model (partial)";
+                    ? getString(R.string.localai_storage_action) : getString(R.string.localai_storage_action_partial);
             card.addView(storageLine(label, LocalModelStore.formatBytes(actionBytes)));
         }
         if (legacyBytes > 0L) {
             card.addView(storageLine(
-                    LocalModelStore.hasLegacyModel(this) ? "Earlier Orbit copy" : "Earlier partial download",
+                    LocalModelStore.hasLegacyModel(this) ? getString(R.string.localai_earlier_copy) : getString(R.string.localai_earlier_partial),
                     LocalModelStore.formatBytes(legacyBytes)));
         }
         return card;
@@ -1450,18 +1422,11 @@ public final class LocalAiActivity extends Activity {
     private View removeCard() {
         boolean componentInstalled = OrbitLocalComponent.isInstalled(this);
         LinearLayout card = card();
-        card.addView(UiKit.text(this, "Remove Orbit Local", 12, UiKit.MUTED, true));
+        card.addView(UiKit.text(this, getString(R.string.localai_remove_orbit_local), 12, UiKit.MUTED, true));
         TextView details = UiKit.text(this,
                 componentInstalled
-                        ? "Removes everything Orbit Local uses on this device: the component, the "
-                                + "AI model it stores, any model data left by an earlier version of "
-                                + "Orbit, and the downloaded component installer.\n\nOrbit itself, "
-                                + "your conversations, memories, Routines, settings, and cloud "
-                                + "providers are all untouched."
-                        : "The Orbit Local component is not installed, but model data from an "
-                                + "earlier version of Orbit is still stored on this device. This "
-                                + "removes it.\n\nOrbit itself, your conversations, memories, "
-                                + "Routines, settings, and cloud providers are all untouched.",
+                        ? getString(R.string.localai_remove_details_full)
+                        : getString(R.string.localai_remove_details_legacy),
                 13, UiKit.MUTED, false);
         details.setLineSpacing(0, 1.13f);
         details.setPadding(0, UiKit.dp(this, 7), 0, 0);
@@ -1478,7 +1443,7 @@ public final class LocalAiActivity extends Activity {
         actions.setOrientation(LinearLayout.VERTICAL);
         actions.setPadding(0, UiKit.dp(this, 12), 0, 0);
         Button remove = dangerButton(componentInstalled
-                ? "Remove Orbit Local" : "Remove old local model data");
+                ? getString(R.string.localai_remove_orbit_local) : getString(R.string.localai_remove_old_data));
         remove.setOnClickListener(v -> {
             if (componentInstalled) confirmRemoveOrbitLocal();
             else confirmRemoveLegacyOnly();
@@ -1495,19 +1460,13 @@ public final class LocalAiActivity extends Activity {
                 + LocalModelStore.legacyBytes(this);
         boolean active = Prefs.PROVIDER_LOCAL.equals(AiProviders.active(this).id());
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Remove Orbit Local?")
-                .setMessage("This removes everything Orbit Local uses on this device — the "
-                        + "component, the AI model, any model data left by an earlier version of "
-                        + "Orbit, and the downloaded installer — freeing about "
-                        + LocalModelStore.formatBytes(freed)
-                        + ".\n\nOrbit itself stays installed. Your conversations, memories, "
-                        + "Routines, and settings are not affected, and your cloud providers keep "
-                        + "working."
-                        + (active ? " ChatGPT becomes the active provider." : "")
-                        + "\n\nAndroid asks you to confirm next. Nothing is deleted unless you "
-                        + "confirm it there.")
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Remove Orbit Local", null)
+                .setTitle(getString(R.string.localai_remove_q))
+                .setMessage(getString(R.string.localai_remove_message,
+                        LocalModelStore.formatBytes(freed))
+                        + (active ? getString(R.string.localai_chatgpt_active_inline) : "")
+                        + getString(R.string.localai_android_confirm))
+                .setNegativeButton(R.string.ui_cancel_19766ed6, null)
+                .setPositiveButton(getString(R.string.localai_remove_orbit_local), null)
                 .create();
         UiKit.styleOrbitDialog(dialog, this, true, () -> {
             Button remove = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
@@ -1536,11 +1495,11 @@ public final class LocalAiActivity extends Activity {
         if (launch == OrbitLocalUninstaller.Launch.NOT_INSTALLED) {
             // Removed from Android Settings while this screen was open. Settle the rest.
             finishOrbitSideRemoval(scope);
-            removalMessage = "Orbit Local was already removed.";
+            removalMessage = getString(R.string.localai_already_removed);
         } else {
             // Never silent again. The button did nothing, and the user is told so along with the
             // one thing they can do about it.
-            removalMessage = OrbitLocalUninstaller.message(
+            removalMessage = OrbitLocalUninstaller.message(this, 
                     OrbitLocalUninstaller.Stage.NOT_LAUNCHED);
         }
         rebuild();
@@ -1557,21 +1516,17 @@ public final class LocalAiActivity extends Activity {
     private void confirmRemoveLegacyOnly() {
         long bytes = LocalModelStore.legacyBytes(this);
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Remove old local model data?")
-                .setMessage("About " + LocalModelStore.formatBytes(bytes)
-                        + " of model data stored by an earlier version of Orbit will be deleted, "
-                        + "freeing that storage.\n\nOrbit itself, your conversations, memories, "
-                        + "Routines, settings, and cloud providers are not affected. You can set "
-                        + "Orbit Local up again at any time.")
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Remove", (d, w) -> {
+                .setTitle(getString(R.string.localai_remove_old_q))
+                .setMessage(getString(R.string.localai_remove_old_message, LocalModelStore.formatBytes(bytes)))
+                .setNegativeButton(R.string.ui_cancel_19766ed6, null)
+                .setPositiveButton(getString(R.string.localai_remove), (d, w) -> {
                     LocalModelStore.deleteLegacy(this);
                     OrbitLocalInstaller.cleanup(this);
                     OrbitLocalProvider.invalidateStatus();
                     if (Prefs.PROVIDER_LOCAL.equals(Prefs.provider(this))) {
                         AiProviders.select(this, Prefs.PROVIDER_CHATGPT);
                     }
-                    removalMessage = "Old local model data removed.";
+                    removalMessage = getString(R.string.localai_old_removed);
                     rebuild();
                 })
                 .create();
@@ -1592,20 +1547,17 @@ public final class LocalAiActivity extends Activity {
     void confirmUninstallComponent() {
         long modelBytes = status == null ? 0L : status.modelTotalBytes;
         String modelWarning = modelBytes > 0L
-                ? "\n\nThe local AI model is stored inside the component, so Android removes the "
-                        + LocalModelStore.formatBytes(modelBytes)
-                        + " of model data with it. It cannot be kept separately."
+                ? getString(R.string.localai_uninstall_model_warning,
+                        LocalModelStore.formatBytes(modelBytes))
                 : "";
         boolean active = Prefs.PROVIDER_LOCAL.equals(AiProviders.active(this).id());
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Uninstall the component?")
-                .setMessage("Orbit stops being able to run AI on this device until the component "
-                        + "is installed again." + modelWarning
-                        + (active ? "\n\nChatGPT becomes the active provider." : "")
-                        + "\n\nAndroid asks you to confirm next. Nothing is deleted unless you "
-                        + "confirm it there.")
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Uninstall component", null)
+                .setTitle(getString(R.string.localai_uninstall_q))
+                .setMessage(getString(R.string.localai_uninstall_message) + modelWarning
+                        + (active ? getString(R.string.localai_chatgpt_active_para) : "")
+                        + getString(R.string.localai_android_confirm))
+                .setNegativeButton(R.string.ui_cancel_19766ed6, null)
+                .setPositiveButton(getString(R.string.localai_uninstall_component), null)
                 .create();
         UiKit.styleOrbitDialog(dialog, this, true, () -> {
             Button uninstall = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
@@ -1623,33 +1575,28 @@ public final class LocalAiActivity extends Activity {
         String title;
         String message;
         if (partialOnly) {
-            title = "Remove downloaded data?";
-            message = "About " + LocalModelStore.formatBytes(bytes)
-                    + " of partly downloaded model data will be removed, freeing that storage. "
-                    + "You can start the download again at any time.";
+            title = getString(R.string.localai_remove_downloaded_q);
+            message = getString(R.string.localai_partial_message, LocalModelStore.formatBytes(bytes));
         } else {
-            title = "Remove " + LocalModelStore.MODEL_DISPLAY_NAME + "?";
-            message = "About " + LocalModelStore.formatBytes(bytes)
-                    + " of downloaded model data will be removed, freeing that storage. "
-                    + "The Orbit Local component stays installed, so another model can be "
-                    + "downloaded without setting it up again."
-                    + (active ? " ChatGPT becomes the active provider." : "")
-                    + " Your conversations, settings, and other providers are not affected.";
+            title = getString(R.string.localai_remove_named_q, LocalModelStore.MODEL_DISPLAY_NAME);
+            message = getString(R.string.localai_model_remove_message, LocalModelStore.formatBytes(bytes))
+                    + (active ? getString(R.string.localai_chatgpt_active_inline) : "")
+                    + getString(R.string.localai_model_remove_tail);
         }
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle(title)
                 .setMessage(message)
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton(partialOnly ? "Remove" : "Remove model", (d, w) -> {
+                .setNegativeButton(R.string.ui_cancel_19766ed6, null)
+                .setPositiveButton(partialOnly ? getString(R.string.localai_remove) : getString(R.string.localai_remove_model), (d, w) -> {
                     boolean wasActive = Prefs.PROVIDER_LOCAL.equals(AiProviders.active(this).id());
                     OrbitLocalClient.deleteModel(this);
                     OrbitLocalProvider.invalidateStatus();
                     if (wasActive) {
                         AiProviders.select(this, Prefs.PROVIDER_CHATGPT);
-                        Toast.makeText(this, "Model removed. ChatGPT is the active provider again.",
+                        Toast.makeText(this, getString(R.string.localai_removed_chatgpt_toast),
                                 Toast.LENGTH_LONG).show();
                     } else if (!partialOnly) {
-                        Toast.makeText(this, "Local model removed", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, getString(R.string.localai_local_removed_toast), Toast.LENGTH_SHORT).show();
                     }
                     bumpRefresh();
                 })

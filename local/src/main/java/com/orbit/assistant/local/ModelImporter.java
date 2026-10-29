@@ -62,7 +62,7 @@ final class ModelImporter {
             if (!ComponentModelStore.enoughStorageToImport(app)) {
                 closeQuietly(source);
                 ComponentModelStore.setState(app, ComponentModelStore.State.ERROR,
-                        "Not enough free storage to move the existing model.");
+                        app.getString(R.string.local_err_move_no_storage));
                 return false;
             }
             cancelled = new AtomicBoolean(false);
@@ -101,14 +101,14 @@ final class ModelImporter {
                 written += read;
                 if (written > ComponentModelStore.MODEL_SIZE_BYTES) {
                     ComponentModelStore.setState(app, ComponentModelStore.State.ERROR,
-                            "The existing model was larger than expected and was not moved.");
+                            app.getString(R.string.local_err_move_too_large));
                     return;
                 }
             }
             out.getFD().sync();
             if (written != ComponentModelStore.MODEL_SIZE_BYTES) {
                 ComponentModelStore.setState(app, ComponentModelStore.State.ERROR,
-                        "The existing model could not be moved completely. Nothing was removed.");
+                        app.getString(R.string.local_err_move_incomplete));
                 return;
             }
             ComponentModelStore.setState(app, ComponentModelStore.State.VALIDATING, "");
@@ -118,7 +118,7 @@ final class ModelImporter {
         } catch (Throwable t) {
             Log.w(TAG, "model import failed: " + t.getClass().getSimpleName());
             ComponentModelStore.setState(app, ComponentModelStore.State.ERROR,
-                    "The existing model could not be moved. Nothing was removed; you can try again.");
+                    app.getString(R.string.local_err_move_failed));
         } finally {
             if (!promoted) {
                 //noinspection ResultOfMethodCallIgnored

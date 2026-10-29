@@ -610,8 +610,7 @@ public final class ChatSwipeActionTest {
     }
 
     private static String read(String path) throws Exception {
-        return new String(java.nio.file.Files.readAllBytes(new File(path).toPath()),
-                java.nio.charset.StandardCharsets.UTF_8);
+        return LocalizedSource.expand(new String(java.nio.file.Files.readAllBytes(new File(path).toPath()), java.nio.charset.StandardCharsets.UTF_8));
     }
 
     // ---- helpers ------------------------------------------------------------------------------------

@@ -86,7 +86,7 @@ public final class AutoPermissions {
             if (out.length() > 0) out.append(", ");
             out.append(shortName(provider));
         }
-        return out.length() == 0 ? "No providers" : out.toString();
+        return out.length() == 0 ? c.getString(R.string.d_autoperm_no_providers) : out.toString();
     }
 
     /** The name the Auto sheet uses: the company for API providers, the product otherwise. */

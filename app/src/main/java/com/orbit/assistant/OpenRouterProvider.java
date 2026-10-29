@@ -46,6 +46,8 @@ final class OpenRouterProvider implements AiProvider {
         return "Many AI models through one OpenRouter account. Usage is billed to your OpenRouter credits.";
     }
 
+    @Override public String description(Context context) { return context.getString(R.string.prov_openrouter_description); }
+
     @Override public AiCapabilities capabilities() { return CAPABILITIES; }
 
     @Override public Status status(Context context) {
@@ -54,9 +56,9 @@ final class OpenRouterProvider implements AiProvider {
 
     @Override public String statusDetail(Context context) {
         String source = SecureStore.openRouterKeySource(context);
-        if (SecureStore.OPENROUTER_SOURCE_OAUTH.equals(source)) return "Connected with OpenRouter";
-        if (SecureStore.OPENROUTER_SOURCE_MANUAL.equals(source)) return "Connected with API key";
-        return "Not connected";
+        if (SecureStore.OPENROUTER_SOURCE_OAUTH.equals(source)) return context.getString(R.string.openrouter_connected_oauth);
+        if (SecureStore.OPENROUTER_SOURCE_MANUAL.equals(source)) return context.getString(R.string.openrouter_connected_key);
+        return context.getString(R.string.openrouter_not_connected);
     }
 
     @Override public boolean selectable(Context context) { return true; }
@@ -65,7 +67,7 @@ final class OpenRouterProvider implements AiProvider {
                                AssistantClient.Callback callback) {
         String key = SecureStore.loadOpenRouterKey(context);
         if (key.isEmpty()) {
-            callback.onError("OpenRouter is not connected. Sign in with OpenRouter in Settings > AI Providers.");
+            callback.onError(context.getString(R.string.openrouter_err_not_connected));
             return;
         }
         ApiKeyProviderClient.send(context, id(), key, request, callback);
@@ -74,7 +76,7 @@ final class OpenRouterProvider implements AiProvider {
     @Override public void plan(Context context, String planningPrompt, AiSelection selection,
                                AssistantClient.PlanCallback callback) {
         String key = SecureStore.loadOpenRouterKey(context);
-        if (key.isEmpty()) { callback.onError("Connect OpenRouter first."); return; }
+        if (key.isEmpty()) { callback.onError(context.getString(R.string.openrouter_err_connect_first)); return; }
         ApiKeyProviderClient.complete(context, id(), key, AiSelections.resolve(selection),
                 "Return only the requested valid JSON. Do not add Markdown fences.", planningPrompt,
                 callback);
@@ -87,7 +89,7 @@ final class OpenRouterProvider implements AiProvider {
     @Override public void complete(Context context, String instructions, String prompt,
                                    AssistantClient.PlanCallback callback) {
         String key = SecureStore.loadOpenRouterKey(context);
-        if (key.isEmpty()) { callback.onError("Connect OpenRouter first."); return; }
+        if (key.isEmpty()) { callback.onError(context.getString(R.string.openrouter_err_connect_first)); return; }
         AiSelection selection = ModelLibraryStore.providerDefault(context, id());
         ApiKeyProviderClient.complete(context, id(), key, AiSelections.resolve(selection),
                 instructions, prompt, callback);

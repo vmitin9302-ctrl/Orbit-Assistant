@@ -99,7 +99,7 @@ public class RoutinesActivity extends Activity {
 
         LinearLayout header = new LinearLayout(this);
         header.setGravity(Gravity.CENTER_VERTICAL);
-        ImageButton back = iconButton(R.drawable.ic_back, "Back");
+        ImageButton back = iconButton(R.drawable.ic_back, getString(R.string.rtn_back));
         back.setOnClickListener(v -> navigation.performBack());
         LinearLayout.LayoutParams backLp = new LinearLayout.LayoutParams(UiKit.dp(this, 48), UiKit.dp(this, 48));
         backLp.rightMargin = UiKit.dp(this, 12);
@@ -107,13 +107,13 @@ public class RoutinesActivity extends Activity {
 
         LinearLayout titles = new LinearLayout(this);
         titles.setOrientation(LinearLayout.VERTICAL);
-        titles.addView(UiKit.text(this, "Routines", 26, UiKit.TEXT, true));
-        titles.addView(UiKit.text(this, "Automation", 12, UiKit.MUTED, false));
+        titles.addView(UiKit.text(this, getString(R.string.rtn_title), 26, UiKit.TEXT, true));
+        titles.addView(UiKit.text(this, getString(R.string.rtn_subtitle), 12, UiKit.MUTED, false));
         header.addView(titles, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         page.addView(header);
 
         TextView intro = UiKit.text(this,
-                "Save reliable device-action chains once, run them here or ask Orbit by name, and add automatic schedules when you want them. Routines use the same Action Engine as normal Orbit commands.",
+                getString(R.string.rtn_intro),
                 14, UiKit.MUTED, false);
         intro.setLineSpacing(0, 1.13f);
         LinearLayout.LayoutParams introLp = new LinearLayout.LayoutParams(
@@ -121,10 +121,10 @@ public class RoutinesActivity extends Activity {
         introLp.setMargins(UiKit.dp(this, 2), UiKit.dp(this, 16), UiKit.dp(this, 2), UiKit.dp(this, 16));
         page.addView(intro, introLp);
 
-        Button create = primaryButton("+  New routine");
+        Button create = primaryButton(getString(R.string.rtn_new));
         create.setOnClickListener(v -> {
             if (RoutineStore.list(this).size() >= RoutineStore.MAX_ROUTINES) {
-                Toast.makeText(this, "Orbit supports up to " + RoutineStore.MAX_ROUTINES + " routines.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.rtn_limit_toast, RoutineStore.MAX_ROUTINES), Toast.LENGTH_SHORT).show();
                 return;
             }
             startActivity(new Intent(this, RoutineEditorActivity.class));
@@ -132,7 +132,7 @@ public class RoutinesActivity extends Activity {
         page.addView(create, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 50)));
 
-        Button createWithOrbit = secondaryButton("Create with Orbit");
+        Button createWithOrbit = secondaryButton(getString(R.string.rtn_create_with_orbit));
         createWithOrbit.setOnClickListener(v ->
                 startActivity(new Intent(this, RoutineBuilderActivity.class)));
         LinearLayout.LayoutParams createLp = new LinearLayout.LayoutParams(
@@ -140,7 +140,7 @@ public class RoutinesActivity extends Activity {
         createLp.setMargins(0, UiKit.dp(this, 10), 0, 0);
         page.addView(createWithOrbit, createLp);
 
-        Button templates = secondaryButton("Templates");
+        Button templates = secondaryButton(getString(R.string.rtn_templates));
         templates.setOnClickListener(v ->
                 startActivity(new Intent(this, RoutineTemplatesActivity.class)));
         LinearLayout.LayoutParams templatesLp = new LinearLayout.LayoutParams(
@@ -148,7 +148,7 @@ public class RoutinesActivity extends Activity {
         templatesLp.setMargins(0, UiKit.dp(this, 10), 0, 0);
         page.addView(templates, templatesLp);
 
-        Button customCommands = secondaryButton("Custom Commands");
+        Button customCommands = secondaryButton(getString(R.string.rtn_custom_commands));
         customCommands.setOnClickListener(v ->
                 startActivity(new Intent(this, CustomCommandsActivity.class)));
         LinearLayout.LayoutParams customLp = new LinearLayout.LayoutParams(
@@ -156,7 +156,7 @@ public class RoutinesActivity extends Activity {
         customLp.setMargins(0, UiKit.dp(this, 8), 0, 0);
         page.addView(customCommands, customLp);
 
-        Button runHistory = secondaryButton("Run history");
+        Button runHistory = secondaryButton(getString(R.string.rtn_run_history));
         runHistory.setOnClickListener(v ->
                 startActivity(new Intent(this, RoutineRunHistoryActivity.class)));
         LinearLayout.LayoutParams historyLp = new LinearLayout.LayoutParams(
@@ -166,7 +166,7 @@ public class RoutinesActivity extends Activity {
 
         runPanel = card();
         runPanel.setVisibility(View.GONE);
-        runTitle = UiKit.text(this, "Running routine", 15, UiKit.TEXT, true);
+        runTitle = UiKit.text(this, getString(R.string.rtn_running_routine), 15, UiKit.TEXT, true);
         runPanel.addView(runTitle);
         runSubtitle = UiKit.text(this, "", 12, UiKit.MUTED, false);
         runSubtitle.setPadding(0, UiKit.dp(this, 5), 0, 0);
@@ -175,7 +175,7 @@ public class RoutinesActivity extends Activity {
         runLp.setMargins(0, UiKit.dp(this, 14), 0, 0);
         page.addView(runPanel, runLp);
 
-        TextView saved = sectionTitle("SAVED ROUTINES");
+        TextView saved = sectionTitle(getString(R.string.rtn_saved_section));
         LinearLayout.LayoutParams savedLp = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         savedLp.setMargins(0, UiKit.dp(this, 14), 0, 0);
@@ -187,8 +187,7 @@ public class RoutinesActivity extends Activity {
         page.addView(routinesList);
 
         TextView hint = UiKit.text(this,
-                "Tip: press and hold a routine to reorder it, run one by name, "
-                        + "or open Automatic triggers on its card to schedule it.",
+                getString(R.string.rtn_tip),
                 12, UiKit.MUTED, false);
         hint.setGravity(Gravity.CENTER);
         hint.setPadding(UiKit.dp(this, 8), UiKit.dp(this, 12), UiKit.dp(this, 8), 0);
@@ -424,9 +423,9 @@ public class RoutinesActivity extends Activity {
         List<RoutineStore.Routine> routines = RoutineStore.list(this);
         if (routines.isEmpty()) {
             LinearLayout empty = card();
-            empty.addView(UiKit.text(this, "No routines yet", 16, UiKit.TEXT, true));
+            empty.addView(UiKit.text(this, getString(R.string.rtn_empty_title), 16, UiKit.TEXT, true));
             TextView note = UiKit.text(this,
-                    "Create a routine for repeated setups such as Bedtime, Gaming, or Driving.",
+                    getString(R.string.rtn_empty_note),
                     13, UiKit.MUTED, false);
             note.setPadding(0, UiKit.dp(this, 6), 0, 0);
             empty.addView(note);
@@ -451,7 +450,8 @@ public class RoutinesActivity extends Activity {
         name.setMaxLines(1);
         name.setEllipsize(TextUtils.TruncateAt.END);
         text.addView(name);
-        String stepText = routine.actions.size() == 1 ? "1 step" : routine.actions.size() + " steps";
+        String stepText = getResources().getQuantityString(R.plurals.rtn_steps_count,
+                routine.actions.size(), routine.actions.size());
         TextView steps = UiKit.text(this, stepText, 12, UiKit.MUTED, false);
         steps.setPadding(0, UiKit.dp(this, 4), 0, 0);
         text.addView(steps);
@@ -464,14 +464,14 @@ public class RoutinesActivity extends Activity {
             pinned.setImageResource(R.drawable.ic_pin);
             pinned.setScaleType(ImageView.ScaleType.FIT_CENTER);
             pinned.setColorFilter(UiKit.accent(this));
-            pinned.setContentDescription("Pinned routine");
+            pinned.setContentDescription(getString(R.string.rtn_pinned_desc));
             LinearLayout.LayoutParams pinnedLp = new LinearLayout.LayoutParams(
                     UiKit.dp(this, 18), UiKit.dp(this, 18));
             pinnedLp.rightMargin = UiKit.dp(this, 6);
             top.addView(pinned, pinnedLp);
         }
 
-        ImageButton more = iconButton(R.drawable.ic_more, "Routine options");
+        ImageButton more = iconButton(R.drawable.ic_more, getString(R.string.rtn_options_desc));
         more.setOnClickListener(v -> showRoutineMenu(more, routine));
         top.addView(more, new LinearLayout.LayoutParams(UiKit.dp(this, 44), UiKit.dp(this, 44)));
         card.addView(top);
@@ -490,11 +490,11 @@ public class RoutinesActivity extends Activity {
 
         LinearLayout actions = new LinearLayout(this);
         actions.setGravity(Gravity.CENTER_VERTICAL);
-        Button run = primaryButton("Run");
+        Button run = primaryButton(getString(R.string.rtn_run));
         run.setOnClickListener(v -> runRoutine(routine));
         actions.addView(run, new LinearLayout.LayoutParams(0, UiKit.dp(this, 44), 1));
 
-        Button edit = secondaryButton("Edit");
+        Button edit = secondaryButton(getString(R.string.rtn_edit));
         edit.setOnClickListener(v -> openEditor(routine.id));
         LinearLayout.LayoutParams editLp = new LinearLayout.LayoutParams(0, UiKit.dp(this, 44), 1);
         editLp.leftMargin = UiKit.dp(this, 9);
@@ -504,8 +504,10 @@ public class RoutinesActivity extends Activity {
     }
 
     private void showRoutineMenu(View anchor, RoutineStore.Routine routine) {
-        String[] labels = {routine.pinned ? "Unpin" : "Pin", "Edit", "Automatic triggers",
-                "Duplicate", "Delete"};
+        String[] labels = {getString(routine.pinned ? R.string.rtn_menu_unpin
+                : R.string.rtn_menu_pin), getString(R.string.rtn_menu_edit),
+                getString(R.string.rtn_menu_triggers), getString(R.string.rtn_menu_duplicate),
+                getString(R.string.rtn_menu_delete)};
         UiKit.showOrbitMenuWithDialogHandoff(this, anchor, labels, 4, (index, label) -> {
             if (index == 0) {
                 togglePinned(routine);
@@ -524,16 +526,17 @@ public class RoutinesActivity extends Activity {
     private void togglePinned(RoutineStore.Routine routine) {
         boolean pin = !routine.pinned;
         if (!RoutineStore.setPinned(this, routine.id, pin)) {
-            Toast.makeText(this, "Could not update this routine.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.rtn_update_failed), Toast.LENGTH_SHORT).show();
             return;
         }
         refresh(true);
-        Toast.makeText(this, (pin ? "Pinned " : "Unpinned ") + routine.name, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, getString(pin ? R.string.rtn_pinned_toast
+                : R.string.rtn_unpinned_toast, routine.name), Toast.LENGTH_SHORT).show();
     }
 
     private void duplicateRoutine(RoutineStore.Routine source) {
         if (RoutineStore.list(this).size() >= RoutineStore.MAX_ROUTINES) {
-            Toast.makeText(this, "Routine limit reached.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.rtn_limit_reached), Toast.LENGTH_SHORT).show();
             return;
         }
         String name = uniqueCopyName(source.name);
@@ -541,9 +544,9 @@ public class RoutinesActivity extends Activity {
         if (RoutineStore.upsert(this, copy)) {
             placeDuplicateAfterSource(source.id, copy.id);
             refresh();
-            Toast.makeText(this, "Duplicated " + source.name, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.rtn_duplicated, source.name), Toast.LENGTH_SHORT).show();
         } else {
-            Toast.makeText(this, "Could not duplicate routine.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.rtn_duplicate_failed), Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -563,7 +566,7 @@ public class RoutinesActivity extends Activity {
     }
 
     private String uniqueCopyName(String source) {
-        String base = RoutineStore.sanitizeName(source + " Copy");
+        String base = RoutineStore.sanitizeName(getString(R.string.rtn_copy_name, source));
         if (!RoutineStore.nameExists(this, base, null)) return base;
         for (int i = 2; i < 100; i++) {
             String suffix = " (" + i + ")";
@@ -572,15 +575,15 @@ public class RoutinesActivity extends Activity {
             String candidate = RoutineStore.sanitizeName(root + suffix);
             if (!RoutineStore.nameExists(this, candidate, null)) return candidate;
         }
-        return "Routine " + System.currentTimeMillis() % 10000;
+        return getString(R.string.rtn_fallback_name, System.currentTimeMillis() % 10000);
     }
 
     private void confirmDelete(RoutineStore.Routine routine) {
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Delete " + routine.name + "?")
-                .setMessage("This removes the saved routine from Orbit. It does not change any current device settings.")
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Delete", (d, w) -> {
+                .setTitle(getString(R.string.rtn_delete_title, routine.name))
+                .setMessage(getString(R.string.rtn_delete_msg))
+                .setNegativeButton(getString(R.string.rtn_cancel), null)
+                .setPositiveButton(getString(R.string.rtn_delete), (d, w) -> {
                     if (RoutineStore.delete(this, routine.id)) refresh();
                 }).create();
         styleOrbitDialog(dialog, true);
@@ -599,8 +602,10 @@ public class RoutinesActivity extends Activity {
         int remaining = routine.actions.size() - safeStart;
         preserveListPosition(() -> {
             runPanel.setVisibility(View.VISIBLE);
-            runTitle.setText((scheduledContinuation ? "Finishing " : "Running ") + routine.name);
-            runSubtitle.setText("Starting " + remaining + (remaining == 1 ? " remaining step…" : " remaining steps…"));
+            runTitle.setText(getString(scheduledContinuation ? R.string.rtn_finishing
+                    : R.string.rtn_running, routine.name));
+            runSubtitle.setText(getResources().getQuantityString(R.plurals.rtn_starting_remaining,
+                    remaining, remaining));
             while (runPanel.getChildCount() > 2) runPanel.removeViewAt(2);
         });
 
@@ -620,7 +625,7 @@ public class RoutinesActivity extends Activity {
                             retryFromIndex = shownIndex;
                             if (result.message != null) lastFailure = result.message.trim();
                         }
-                        runSubtitle.setText("Step " + (shownIndex + 1) + " of " + originalTotal);
+                        runSubtitle.setText(getString(R.string.rtn_step_of, shownIndex + 1, originalTotal));
                     }
 
                     @Override public void onFinished(boolean completedAllSteps, int completedSteps, int totalSteps) {
@@ -633,7 +638,8 @@ public class RoutinesActivity extends Activity {
                                 completedAllSteps ? null : actionAt(routine, retryFromIndex),
                                 lastFailure);
                         if (completedAllSteps) {
-                            runSubtitle.setText("Completed " + originalTotal + (originalTotal == 1 ? " step" : " steps"));
+                            runSubtitle.setText(getResources().getQuantityString(
+                                    R.plurals.rtn_completed_steps, originalTotal, originalTotal));
                             updateScheduledContinuationStatus(scheduledContinuation, scheduledTriggerId,
                                     "Completed after tap");
                         } else {
@@ -641,8 +647,9 @@ public class RoutinesActivity extends Activity {
                                     ? "Continuation stopped at step " + shownCompleted
                                     : "Continuation stopped · " + lastFailure;
                             updateScheduledContinuationStatus(scheduledContinuation, scheduledTriggerId, continuationResult);
-                            runSubtitle.setText("Stopped after step " + shownCompleted + " of " + originalTotal);
-                            Button retry = secondaryButton("Retry from failed step");
+                            runSubtitle.setText(getString(R.string.rtn_stopped_after, shownCompleted,
+                                    originalTotal));
+                            Button retry = secondaryButton(getString(R.string.rtn_retry));
                             final int retryStart = Math.max(0, Math.min(retryFromIndex, originalTotal - 1));
                             retry.setOnClickListener(v -> runRoutineFromIndex(routine, retryStart, scheduledContinuation, scheduledTriggerId));
                             LinearLayout.LayoutParams retryLp = new LinearLayout.LayoutParams(
@@ -685,11 +692,11 @@ public class RoutinesActivity extends Activity {
         LinearLayout titleRow = new LinearLayout(this);
         titleRow.setGravity(Gravity.CENTER_VERTICAL);
         String prefix = handedOff ? "↗ " : (success && !reversibleOff) ? "✓ " : (success ? "○ " : "! ");
-        TextView title = UiKit.text(this, prefix + RoutineActionCatalog.title(action), 13, tone, true);
+        TextView title = UiKit.text(this, prefix + RoutineActionCatalog.title(this, action), 13, tone, true);
         titleRow.addView(title, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
 
         if (success && ReversibleActionHelper.canTurnOff(action)) {
-            Button off = runCardControlButton("Turn off", red);
+            Button off = runCardControlButton(getString(R.string.rtn_turn_off), red);
             off.setOnClickListener(v -> {
                 AssistantReply.Action offAction = ReversibleActionHelper.turnOffAction(action);
                 if (offAction == null) return;
@@ -704,8 +711,8 @@ public class RoutinesActivity extends Activity {
         }
         row.addView(titleRow);
 
-        String message = result == null ? "No result" : result.message;
-        TextView detail = UiKit.text(this, "Step " + (index + 1) + " of " + total + " · " + message, 11, UiKit.MUTED, false);
+        String message = result == null ? getString(R.string.rtn_no_result) : result.message;
+        TextView detail = UiKit.text(this, getString(R.string.rtn_step_detail, index + 1, total, message), 11, UiKit.MUTED, false);
         detail.setPadding(0, UiKit.dp(this, 3), 0, 0);
         row.addView(detail);
 
@@ -743,7 +750,7 @@ public class RoutinesActivity extends Activity {
 
     private Button permissionButtonFor(AssistantReply.Action action) {
         if (action == null || action.type == null) return null;
-        Button access = secondaryButton("Grant access");
+        Button access = secondaryButton(getString(R.string.rtn_grant_access));
         if (RoutineActionCatalog.SET_BRIGHTNESS.equals(action.type)) {
             access.setOnClickListener(v -> OrbitPermissionHelper.openWriteSettings(this));
             return access;
@@ -761,10 +768,10 @@ public class RoutinesActivity extends Activity {
 
     private void showActionConfirmation(AssistantReply.Action action, Runnable onAllow, Runnable onCancel) {
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Let Orbit do this?")
-                .setMessage(action == null ? "Device action" : RoutineActionCatalog.title(action))
-                .setNegativeButton("Cancel", (d, w) -> onCancel.run())
-                .setPositiveButton("Continue", (d, w) -> onAllow.run())
+                .setTitle(getString(R.string.rtn_confirm_title))
+                .setMessage(action == null ? getString(R.string.rtn_device_action) : RoutineActionCatalog.title(this, action))
+                .setNegativeButton(getString(R.string.rtn_cancel), (d, w) -> onCancel.run())
+                .setPositiveButton(getString(R.string.rtn_continue), (d, w) -> onAllow.run())
                 .create();
         styleOrbitDialog(dialog, false);
         dialog.show();
@@ -795,13 +802,13 @@ public class RoutinesActivity extends Activity {
             if (t.nextRunAt > 0 && (next == 0L || t.nextRunAt < next)) next = t.nextRunAt;
         }
         String text;
-        if (triggers.isEmpty()) text = "Automatic triggers · None";
-        else if (enabled == 0) text = "Automatic triggers · Off";
+        if (triggers.isEmpty()) text = getString(R.string.rtn_trig_none);
+        else if (enabled == 0) text = getString(R.string.rtn_trig_off);
         else {
-            String detail = next > 0 && enabledLocations > 0 ? " · time + location"
-                    : next > 0 ? " · scheduled"
-                    : enabledLocations > 0 ? " · location" : "";
-            text = "Automatic triggers · " + enabled + " on" + detail;
+            text = getString(next > 0 && enabledLocations > 0 ? R.string.rtn_trig_on_both
+                    : next > 0 ? R.string.rtn_trig_on_time
+                    : enabledLocations > 0 ? R.string.rtn_trig_on_location
+                    : R.string.rtn_trig_on, enabled);
         }
         Button b = secondaryButton(text);
         b.setTextSize(12);
@@ -836,14 +843,14 @@ public class RoutinesActivity extends Activity {
     }
 
     private String routinePreview(RoutineStore.Routine routine) {
-        if (routine == null || routine.actions.isEmpty()) return "No steps";
+        if (routine == null || routine.actions.isEmpty()) return getString(R.string.rtn_no_steps);
         StringBuilder out = new StringBuilder();
         int max = Math.min(3, routine.actions.size());
         for (int i = 0; i < max; i++) {
             if (i > 0) out.append("  →  ");
-            out.append(RoutineActionCatalog.title(routine.actions.get(i)));
+            out.append(RoutineActionCatalog.title(this, routine.actions.get(i)));
         }
-        if (routine.actions.size() > max) out.append("  →  +").append(routine.actions.size() - max).append(" more");
+        if (routine.actions.size() > max) out.append("  →  ").append(getString(R.string.rtn_more, routine.actions.size() - max));
         return out.toString();
     }
 

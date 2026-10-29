@@ -1,5 +1,7 @@
 package com.orbit.assistant;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -82,12 +84,24 @@ public final class ActionNarration {
 
     /** The only true thing to say about a protected dial nobody has confirmed yet. */
     public static String awaitingConfirmationText(String number) {
-        return "I can open the dialer for " + number + ". Confirm below.";
+        return awaitingConfirmationText(null, number);
+    }
+
+    /** Same sentence in the app language (English when there is no Context). */
+    public static String awaitingConfirmationText(Context context, String number) {
+        return context == null ? "I can open the dialer for " + number + ". Confirm below."
+                : context.getString(R.string.narration_awaiting_dial, number);
     }
 
     /** Said after Android has actually been handed the Intent, and never before. */
     public static String dialerOpenedText(String number) {
-        return "Opened the dialer for " + number;
+        return dialerOpenedText(null, number);
+    }
+
+    /** Same sentence in the app language (English when there is no Context). */
+    public static String dialerOpenedText(Context context, String number) {
+        return context == null ? "Opened the dialer for " + number
+                : context.getString(R.string.narration_dialer_opened, number);
     }
 
     /**
@@ -100,6 +114,12 @@ public final class ActionNarration {
      * surface. Placed here, a provider Orbit has not written yet inherits it.
      */
     public static AssistantClient.Callback guard(AssistantClient.Callback downstream) {
+        return guard(null, downstream);
+    }
+
+    /** Same guard whose corrective sentence is in the app language. */
+    public static AssistantClient.Callback guard(Context context,
+                                                 AssistantClient.Callback downstream) {
         if (downstream == null) return null;
         return new AssistantClient.Callback() {
             @Override public void onDelta(String text) { downstream.onDelta(text); }
@@ -109,7 +129,7 @@ public final class ActionNarration {
             }
 
             @Override public void onSuccess(AssistantReply reply) {
-                downstream.onSuccess(withTruthfulActionState(reply));
+                downstream.onSuccess(withTruthfulActionState(context, reply));
             }
 
             @Override public void onError(String message) { downstream.onError(message); }
@@ -125,10 +145,15 @@ public final class ActionNarration {
      * already careful is not padded with a line the confirmation card is about to say anyway.
      */
     public static AssistantReply withTruthfulActionState(AssistantReply reply) {
+        return withTruthfulActionState(null, reply);
+    }
+
+    /** Same correction whose replacement sentence is in the app language. */
+    public static AssistantReply withTruthfulActionState(Context context, AssistantReply reply) {
         if (reply == null) return null;
         List<String> numbers = awaitingProtectedNumbers(reply);
         if (numbers.isEmpty()) return reply;
-        String corrected = withoutExecutionClaims(reply.text, numbers.get(0));
+        String corrected = withoutExecutionClaims(context, reply.text, numbers.get(0));
         if (corrected.equals(reply.text == null ? "" : reply.text)) return reply;
         return new AssistantReply(corrected, reply.actions, reply.memoryUsage,
                 reply.suggestedMemoryText, reply.suggestedMemoryCategory, reply.sourceUrls, reply.details);
@@ -155,6 +180,11 @@ public final class ActionNarration {
      * an answer that still reads as though a person wrote it.
      */
     public static String withoutExecutionClaims(String text, String number) {
+        return withoutExecutionClaims(null, text, number);
+    }
+
+    /** Same, with the replacement sentence in the app language. */
+    public static String withoutExecutionClaims(Context context, String text, String number) {
         String original = text == null ? "" : text;
         List<String> kept = new ArrayList<>();
         boolean removedAny = false;
@@ -169,7 +199,7 @@ public final class ActionNarration {
         StringBuilder rebuilt = new StringBuilder();
         for (String sentence : kept) rebuilt.append(sentence);
         String remainder = rebuilt.toString().trim();
-        String conditional = awaitingConfirmationText(number);
+        String conditional = awaitingConfirmationText(context, number);
         return remainder.isEmpty() ? conditional : conditional + " " + remainder;
     }
 

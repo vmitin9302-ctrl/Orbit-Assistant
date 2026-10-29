@@ -515,7 +515,7 @@ public final class SmartRoutingTest {
         assertEquals(ContextEstimate.Level.UNKNOWN, auto.level());
         assertFalse(auto.nearlyFull());
         assertTrue(auto.tokens > 0);
-        assertTrue(ContextMeterView.describe(auto).contains("Auto chooses the model per request"));
+        assertTrue(ContextMeterView.describe(context, auto).contains("Auto chooses the model per request"));
 
         ContextEstimate explicit = ContextEstimate.measure(context, id, TERRA, ContextEstimate.Draft.EMPTY);
         assertFalse(explicit.auto);
@@ -613,7 +613,7 @@ public final class SmartRoutingTest {
         assertEquals(Boolean.FALSE, switches.get(Prefs.PROVIDER_ANTHROPIC));
         assertEquals(Boolean.FALSE, switches.get(Prefs.PROVIDER_XAI));
         assertTrue(AutoSheets.describe(context, Prefs.PROVIDER_ANTHROPIC, false)
-                .contains(AutoSheets.METERED_NOTE));
+                .contains(org.robolectric.RuntimeEnvironment.getApplication().getString(AutoSheets.METERED_NOTE)));
         assertFalse("no repeated warning once opted in",
                 AutoSheets.describe(context, Prefs.PROVIDER_XAI, true).contains("credits"));
         assertTrue(AutoSheets.introNeeded(context));

@@ -99,6 +99,26 @@ public final class OrbitDistribution {
     public static final String LOCATION_TRIGGER_UNAVAILABLE_STATE =
             "Not available in the Google Play edition";
 
+    /** {@link #PLAY_REFUSAL} in the app language. */
+    public static String playRefusal(Context context) {
+        return context.getString(R.string.distribution_play_refusal);
+    }
+
+    /** {@link #PLAY_UPDATES_MESSAGE} in the app language. */
+    public static String playUpdatesMessage(Context context) {
+        return context.getString(R.string.distribution_play_updates_message);
+    }
+
+    /** {@link #LOCATION_TRIGGERS_UNAVAILABLE} in the app language. */
+    public static String locationTriggersUnavailable(Context context) {
+        return context.getString(R.string.distribution_location_triggers_unavailable);
+    }
+
+    /** {@link #LOCATION_TRIGGER_UNAVAILABLE_STATE} in the app language. */
+    public static String locationTriggerUnavailableState(Context context) {
+        return context.getString(R.string.distribution_location_trigger_state);
+    }
+
     /** A short name for Diagnostics. */
     public static String label() {
         return label(current());

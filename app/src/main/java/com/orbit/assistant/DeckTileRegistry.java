@@ -1,5 +1,8 @@
 package com.orbit.assistant;
 
+import android.content.Context;
+import androidx.annotation.StringRes;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -41,14 +44,18 @@ public final class DeckTileRegistry {
 
     /** The Add-tile groupings. Deliberately five, so the sheet stays one calm screen. */
     public enum Category {
-        ORBIT("Orbit"),
-        ACTIONS("Actions"),
-        ROUTINES("Routines"),
-        APPS("Apps"),
-        PROMPT("Prompt");
+        ORBIT("Orbit", R.string.decktile_cat_orbit),
+        ACTIONS("Actions", R.string.decktile_cat_actions),
+        ROUTINES("Routines", R.string.decktile_cat_routines),
+        APPS("Apps", R.string.decktile_cat_apps),
+        PROMPT("Prompt", R.string.decktile_cat_prompt);
 
         public final String label;
-        Category(String label) { this.label = label; }
+        @StringRes public final int labelRes;
+        Category(String label, @StringRes int labelRes) { this.label = label; this.labelRes = labelRes; }
+
+        /** The name in the app language. */
+        public String label(Context context) { return context.getString(labelRes); }
     }
 
     /**
@@ -70,10 +77,17 @@ public final class DeckTileRegistry {
         public final Category category;
         /** What TalkBack calls this kind of tile, read after the tile's own name. */
         public final String roleLabel;
+        @StringRes public final int titleRes;
+        @StringRes public final int descriptionRes;
+        @StringRes public final int roleLabelRes;
 
         Definition(String type, String title, String description, int iconRes,
                    EnumSet<DeckTile.Size> sizes, boolean singleton, boolean configurable,
-                   Category category, String roleLabel) {
+                   Category category, String roleLabel,
+                   @StringRes int titleRes, @StringRes int descriptionRes, @StringRes int roleLabelRes) {
+            this.titleRes = titleRes;
+            this.descriptionRes = descriptionRes;
+            this.roleLabelRes = roleLabelRes;
             this.type = type;
             this.title = title;
             this.description = description;
@@ -84,6 +98,15 @@ public final class DeckTileRegistry {
             this.category = category;
             this.roleLabel = roleLabel;
         }
+
+        /** The tile name in the app language. */
+        public String title(Context context) { return context.getString(titleRes); }
+
+        /** The tile description in the app language. */
+        public String description(Context context) { return context.getString(descriptionRes); }
+
+        /** The TalkBack role in the app language. */
+        public String roleLabel(Context context) { return context.getString(roleLabelRes); }
 
         public boolean supports(DeckTile.Size size) {
             return size != null && sizes.contains(size);
@@ -112,46 +135,46 @@ public final class DeckTileRegistry {
     static {
         // ---- Orbit destinations: places the user already has, one tap closer -------------------
         put(new Definition(TYPE_NEW_CHAT, "New chat", "Start a new Orbit conversation",
-                R.drawable.ic_deck_new_chat, ALL_SIZES, true, false, Category.ORBIT, "Orbit shortcut"));
+                R.drawable.ic_deck_new_chat, ALL_SIZES, true, false, Category.ORBIT, "Orbit shortcut", R.string.decktile_newchat_title, R.string.decktile_newchat_desc, R.string.decktile_role_orbit));
         put(new Definition(TYPE_ROUTINES, "Routines", "Open your saved Routines",
-                R.drawable.ic_routine_tile, ALL_SIZES, true, false, Category.ORBIT, "Orbit shortcut"));
+                R.drawable.ic_routine_tile, ALL_SIZES, true, false, Category.ORBIT, "Orbit shortcut", R.string.decktile_routines_title, R.string.decktile_routines_desc, R.string.decktile_role_orbit));
         put(new Definition(TYPE_REMINDERS, "Reminders", "Open your Orbit reminders",
-                R.drawable.ic_widget_reminder, ALL_SIZES, true, false, Category.ORBIT, "Orbit shortcut"));
+                R.drawable.ic_widget_reminder, ALL_SIZES, true, false, Category.ORBIT, "Orbit shortcut", R.string.decktile_reminders_title, R.string.decktile_reminders_desc, R.string.decktile_role_orbit));
         put(new Definition(TYPE_MEMORIES, "Memories", "What Orbit remembers about you",
-                R.drawable.ic_deck_memory, ALL_SIZES, true, false, Category.ORBIT, "Orbit shortcut"));
+                R.drawable.ic_deck_memory, ALL_SIZES, true, false, Category.ORBIT, "Orbit shortcut", R.string.decktile_memories_title, R.string.decktile_memories_desc, R.string.decktile_role_orbit));
         put(new Definition(TYPE_CAPABILITIES, "Capabilities", "What Orbit can do on this phone",
-                R.drawable.ic_deck_capabilities, ALL_SIZES, true, false, Category.ORBIT, "Orbit shortcut"));
+                R.drawable.ic_deck_capabilities, ALL_SIZES, true, false, Category.ORBIT, "Orbit shortcut", R.string.decktile_capabilities_title, R.string.decktile_capabilities_desc, R.string.decktile_role_orbit));
         put(new Definition(TYPE_EXTENSIONS, "Extensions", "Manage your Orbit extensions",
-                R.drawable.ic_deck_extension, ALL_SIZES, true, false, Category.ORBIT, "Orbit shortcut"));
+                R.drawable.ic_deck_extension, ALL_SIZES, true, false, Category.ORBIT, "Orbit shortcut", R.string.decktile_extensions_title, R.string.decktile_extensions_desc, R.string.decktile_role_orbit));
         put(new Definition(TYPE_THEME_STUDIO, "Theme Studio", "Design how Orbit looks",
-                R.drawable.ic_deck_theme, ALL_SIZES, true, false, Category.ORBIT, "Orbit shortcut"));
+                R.drawable.ic_deck_theme, ALL_SIZES, true, false, Category.ORBIT, "Orbit shortcut", R.string.decktile_themestudio_title, R.string.decktile_themestudio_desc, R.string.decktile_role_orbit));
         put(new Definition(TYPE_VAULT, "Vault", "Open the things you have saved",
-                R.drawable.ic_vault, ALL_SIZES, true, false, Category.ORBIT, "Orbit shortcut"));
+                R.drawable.ic_vault, ALL_SIZES, true, false, Category.ORBIT, "Orbit shortcut", R.string.decktile_vault_title, R.string.decktile_vault_desc, R.string.decktile_role_orbit));
         // Quick Capture is a destination too, not a second capture implementation: tapping it
         // opens the Vault's own capture flow - write text, paste clipboard, add image - which
         // is the same one the Vault screen's own button opens.
         put(new Definition(TYPE_QUICK_CAPTURE, "Quick Capture", "Save something to your Vault",
-                R.drawable.ic_deck_note, ALL_SIZES, true, false, Category.ORBIT, "Orbit shortcut"));
+                R.drawable.ic_deck_note, ALL_SIZES, true, false, Category.ORBIT, "Orbit shortcut", R.string.decktile_quickcapture_title, R.string.decktile_quickcapture_desc, R.string.decktile_role_orbit));
         put(new Definition(TYPE_SETTINGS, "Settings", "Open Orbit settings",
-                R.drawable.ic_settings, ALL_SIZES, true, false, Category.ORBIT, "Orbit shortcut"));
+                R.drawable.ic_settings, ALL_SIZES, true, false, Category.ORBIT, "Orbit shortcut", R.string.decktile_settings_title, R.string.decktile_settings_desc, R.string.decktile_role_orbit));
 
         // ---- Direct device actions: immediate, and already implemented elsewhere ---------------
         put(new Definition(TYPE_FLASHLIGHT, "Flashlight", "Turn the flashlight on or off",
-                R.drawable.ic_widget_flashlight, ALL_SIZES, true, false, Category.ACTIONS, "Action"));
+                R.drawable.ic_widget_flashlight, ALL_SIZES, true, false, Category.ACTIONS, "Action", R.string.decktile_flashlight_title, R.string.decktile_flashlight_desc, R.string.decktile_role_action));
         put(new Definition(TYPE_MEDIA, "Play / Pause", "Control whatever is playing",
-                R.drawable.ic_deck_media, ALL_SIZES, true, false, Category.ACTIONS, "Action"));
+                R.drawable.ic_deck_media, ALL_SIZES, true, false, Category.ACTIONS, "Action", R.string.decktile_media_title, R.string.decktile_media_desc, R.string.decktile_role_action));
 
         // ---- Configured instances: the same definition, placed as many times as wanted ---------
         put(new Definition(TYPE_ROUTINE, "Routine", "Run one of your saved Routines",
-                R.drawable.ic_routine_tile, ALL_SIZES, false, true, Category.ROUTINES, "Routine"));
+                R.drawable.ic_routine_tile, ALL_SIZES, false, true, Category.ROUTINES, "Routine", R.string.decktile_routine_title, R.string.decktile_routine_desc, R.string.decktile_role_routine));
         // Standard only, deliberately. The wide slot exists to carry Orbit-owned secondary
         // information, and an app shortcut has none: the only extra text is the app's own label,
         // which is already the tile's title. A wide tile would be somebody else's icon and nothing
         // more, which is exactly the third-party visual takeover Deck is meant to avoid.
         put(new Definition(TYPE_APP, "App", "Launch an installed app",
-                R.drawable.ic_deck_app, STANDARD_ONLY, false, true, Category.APPS, "App shortcut"));
+                R.drawable.ic_deck_app, STANDARD_ONLY, false, true, Category.APPS, "App shortcut", R.string.decktile_app_title, R.string.decktile_app_desc, R.string.decktile_role_app));
         put(new Definition(TYPE_PROMPT, "Prompt", "Open a new chat with your text ready",
-                R.drawable.ic_deck_sparkle, ALL_SIZES, false, true, Category.PROMPT, "Prompt shortcut"));
+                R.drawable.ic_deck_sparkle, ALL_SIZES, false, true, Category.PROMPT, "Prompt shortcut", R.string.decktile_prompt_title, R.string.decktile_prompt_desc, R.string.decktile_role_prompt));
     }
 
     private DeckTileRegistry() {}
