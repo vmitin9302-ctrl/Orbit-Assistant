@@ -239,7 +239,7 @@ final class SmartVault {
             SmartVaultDb.Job job = SmartVaultDb.get(c).job(id);
             if (job == null) return "";
             if (SmartVaultDb.STATE_QUEUED.equals(job.state)) {
-                return "Waiting to suggest details. Needs a connection.";
+                return c.getString(R.string.smartvault_waiting_suggest);
             }
             if (SmartVaultDb.STATE_FAILED.equals(job.state)) return job.message;
             if (SmartVaultDb.STATE_DONE.equals(job.state) && !job.message.isEmpty()) {
@@ -261,7 +261,7 @@ final class SmartVault {
         AiProvider provider = AiProviders.active(c);
         if (provider.supportsCompletion(c)) return "";
         return provider.status(c) == AiProvider.Status.NEEDS_SETUP
-                ? "Sign in to " + provider.displayName() + " first"
+                ? c.getString(R.string.smartvault_sign_in_first, provider.displayName())
                 : AiProvider.COMPLETION_UNSUPPORTED;
     }
 

@@ -46,10 +46,9 @@ public final class RoutineCommandRouter {
         }
 
         if (!match.ambiguous.isEmpty()) {
-            StringBuilder text = new StringBuilder("I found more than one routine that could mean that: ");
-            appendRoutineNames(text, match.ambiguous, 5);
-            text.append(". Which one should I run?");
-            return new AssistantReply(text.toString());
+            StringBuilder names = new StringBuilder();
+            appendRoutineNames(context, names, match.ambiguous, 5);
+            return new AssistantReply(context.getString(R.string.routinecmd_ambiguous, names));
         }
 
         // If the user explicitly said “routine”, keep the miss local. This avoids a
@@ -58,13 +57,14 @@ public final class RoutineCommandRouter {
         // do not mention a routine are still allowed to fall through normally.
         if (looksExplicitlyRoutineSpecific(prompt)) {
             if (routines.isEmpty()) {
-                return new AssistantReply("You don't have any saved routines yet. You can create one in Settings → Routines.");
+                return new AssistantReply(context.getString(R.string.routinecmd_none_saved));
             }
-            StringBuilder text = new StringBuilder("I couldn't find a saved routine matching that. You have: ");
-            appendRoutineNames(text, routines, 5);
-            if (routines.size() > 5) text.append(", and ").append(routines.size() - 5).append(" more");
-            text.append('.');
-            return new AssistantReply(text.toString());
+            StringBuilder names = new StringBuilder();
+            appendRoutineNames(context, names, routines, 5);
+            if (routines.size() > 5) {
+                names.append(context.getString(R.string.routinecmd_and_more, routines.size() - 5));
+            }
+            return new AssistantReply(context.getString(R.string.routinecmd_not_found, names));
         }
         return null;
     }
@@ -74,8 +74,10 @@ public final class RoutineCommandRouter {
         if (context == null || routine == null) return null;
         RoutineStore.markRun(context, routine.id);
         List<AssistantReply.Action> actions = RoutineStore.copyActions(routine.actions);
-        String steps = actions.size() == 1 ? "1 step" : actions.size() + " steps";
-        return new AssistantReply("Running " + routine.name + " · " + steps + ".", actions);
+        String steps = context.getResources().getQuantityString(
+                R.plurals.routinecmd_steps, actions.size(), actions.size());
+        return new AssistantReply(context.getString(R.string.routinecmd_running, routine.name, steps),
+                actions);
     }
 
     static boolean isReservedCommandPhrase(String raw) {
@@ -92,20 +94,21 @@ public final class RoutineCommandRouter {
     private static AssistantReply routineListReply(Context context) {
         List<RoutineStore.Routine> routines = RoutineStore.list(context);
         if (routines.isEmpty()) {
-            return new AssistantReply("You don't have any saved routines yet. You can create one in Settings → Routines.");
+            return new AssistantReply(context.getString(R.string.routinecmd_none_saved));
         }
-        StringBuilder text = new StringBuilder("Your saved routines are: ");
-        appendRoutineNames(text, routines, routines.size());
-        text.append('.');
-        return new AssistantReply(text.toString());
+        StringBuilder names = new StringBuilder();
+        appendRoutineNames(context, names, routines, routines.size());
+        return new AssistantReply(context.getString(R.string.routinecmd_list, names));
     }
 
-    private static void appendRoutineNames(StringBuilder text, List<RoutineStore.Routine> routines, int limit) {
+    private static void appendRoutineNames(Context context, StringBuilder text,
+                                           List<RoutineStore.Routine> routines, int limit) {
         int count = Math.min(limit, routines.size());
         for (int i = 0; i < count; i++) {
             if (i > 0) {
-                if (count == 2) text.append(" and ");
-                else text.append(i == count - 1 ? ", and " : ", ");
+                if (count == 2) text.append(context.getString(R.string.routinecmd_join_two));
+                else text.append(context.getString(i == count - 1
+                        ? R.string.routinecmd_join_last : R.string.routinecmd_join_comma));
             }
             text.append(routines.get(i).name);
         }

@@ -70,13 +70,13 @@ public final class CustomCommandsActivity extends Activity {
         LinearLayout titles = new LinearLayout(this);
         titles.setOrientation(LinearLayout.VERTICAL);
         titles.setPadding(UiKit.dp(this, 13), 0, 0, 0);
-        titles.addView(UiKit.text(this, "Custom Commands", 24, UiKit.TEXT, true));
-        titles.addView(UiKit.text(this, "Natural shortcuts for Routines", 13, UiKit.MUTED, false));
+        titles.addView(UiKit.text(this, getString(R.string.cmds_title), 24, UiKit.TEXT, true));
+        titles.addView(UiKit.text(this, getString(R.string.cmds_subtitle), 13, UiKit.MUTED, false));
         header.addView(titles, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         page.addView(header);
 
         TextView intro = UiKit.text(this,
-                "Create exact phrases such as “bedtime” that run an existing saved Routine. Matching stays local and does not guess at similar wording.",
+                getString(R.string.cmds_intro),
                 14, UiKit.MUTED, false);
         intro.setLineSpacing(0, 1.12f);
         LinearLayout.LayoutParams introLp = new LinearLayout.LayoutParams(
@@ -84,12 +84,12 @@ public final class CustomCommandsActivity extends Activity {
         introLp.setMargins(UiKit.dp(this, 2), UiKit.dp(this, 18), UiKit.dp(this, 2), UiKit.dp(this, 16));
         page.addView(intro, introLp);
 
-        Button create = primaryButton("+  New command");
+        Button create = primaryButton(getString(R.string.cmds_new));
         create.setOnClickListener(v -> createCommand());
         page.addView(create, new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 50)));
 
-        TextView section = UiKit.text(this, "SAVED COMMANDS", 12, UiKit.MUTED, true);
+        TextView section = UiKit.text(this, getString(R.string.cmds_saved_header), 12, UiKit.MUTED, true);
         section.setLetterSpacing(0.16f);
         LinearLayout.LayoutParams sectionLp = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -101,7 +101,7 @@ public final class CustomCommandsActivity extends Activity {
         page.addView(commandList);
 
         TextView note = UiKit.text(this,
-                "You can also say “Orbit, …” or “please …”. Existing Orbit commands always keep priority.",
+                getString(R.string.cmds_note),
                 12, UiKit.MUTED, false);
         note.setGravity(Gravity.CENTER);
         note.setPadding(UiKit.dp(this, 7), UiKit.dp(this, 8), UiKit.dp(this, 7), 0);
@@ -112,11 +112,11 @@ public final class CustomCommandsActivity extends Activity {
 
     private void createCommand() {
         if (CustomCommandStore.list(this).size() >= CustomCommandStore.MAX_COMMANDS) {
-            Toast.makeText(this, "Custom Command limit reached.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.cmds_limit), Toast.LENGTH_SHORT).show();
             return;
         }
         if (RoutineStore.list(this).isEmpty()) {
-            Toast.makeText(this, "Create a Routine first.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.cmds_create_routine_first), Toast.LENGTH_SHORT).show();
             return;
         }
         startActivity(new Intent(this, CustomCommandEditorActivity.class));
@@ -128,9 +128,9 @@ public final class CustomCommandsActivity extends Activity {
         List<CustomCommandStore.Command> commands = CustomCommandStore.list(this);
         if (commands.isEmpty()) {
             LinearLayout empty = card();
-            empty.addView(UiKit.text(this, "No Custom Commands yet", 16, UiKit.TEXT, true));
+            empty.addView(UiKit.text(this, getString(R.string.cmds_empty_title), 16, UiKit.TEXT, true));
             TextView detail = UiKit.text(this,
-                    "Create a short phrase and connect it to one of your saved Routines.",
+                    getString(R.string.cmds_empty_body),
                     13, UiKit.MUTED, false);
             detail.setPadding(0, UiKit.dp(this, 6), 0, 0);
             empty.addView(detail);
@@ -153,7 +153,8 @@ public final class CustomCommandsActivity extends Activity {
         TextView phrase = UiKit.text(this, "“" + command.primaryPhrase + "”", 16, UiKit.TEXT, true);
         phrase.setMaxLines(2);
         labels.addView(phrase);
-        String target = routine == null ? "Needs attention · Routine unavailable" : "Runs: " + routine.name;
+        String target = routine == null ? getString(R.string.cmds_needs_attention)
+                : getString(R.string.cmds_runs, routine.name);
         TextView runs = UiKit.text(this, target, 12,
                 routine == null ? Color.rgb(239, 105, 105) : UiKit.MUTED, false);
         runs.setPadding(0, UiKit.dp(this, 4), 0, 0);
@@ -162,14 +163,14 @@ public final class CustomCommandsActivity extends Activity {
 
         OrbitSwitch enabled = new OrbitSwitch(this);
         enabled.setChecked(command.enabled, false);
-        enabled.setContentDescription(command.enabled ? "Disable command" : "Enable command");
+        enabled.setContentDescription(getString(command.enabled ? R.string.cmds_disable : R.string.cmds_enable));
         enabled.setOnCheckedChangeListener((button, checked) -> {
             CustomCommandStore.Command changed = command.withEnabled(checked);
             CustomCommandStore.Validation validation = CustomCommandStore.validate(this, changed, command.id);
             if (!validation.valid || !CustomCommandStore.upsert(this, changed)) {
                 // A programmatic correction does not re-enter this listener.
                 button.setChecked(command.enabled);
-                Toast.makeText(this, validation.valid ? "Could not update this command." : validation.message,
+                Toast.makeText(this, validation.valid ? getString(R.string.cmds_update_failed) : validation.message,
                         Toast.LENGTH_LONG).show();
                 refresh();
                 return;
@@ -179,18 +180,19 @@ public final class CustomCommandsActivity extends Activity {
         top.addView(enabled);
         card.addView(top);
 
-        String aliases = command.aliases.isEmpty() ? "No additional phrases" :
-                command.aliases.size() + (command.aliases.size() == 1 ? " additional phrase" : " additional phrases");
+        String aliases = command.aliases.isEmpty() ? getString(R.string.cmds_no_extra_phrases)
+                : getResources().getQuantityString(R.plurals.cmds_extra_phrases,
+                        command.aliases.size(), command.aliases.size());
         TextView aliasCount = UiKit.text(this, aliases, 12, UiKit.MUTED, false);
         aliasCount.setPadding(0, UiKit.dp(this, 9), 0, UiKit.dp(this, 10));
         card.addView(aliasCount);
 
         LinearLayout actions = new LinearLayout(this);
-        Button edit = secondaryButton(routine == null ? "Reassign / Edit" : "Edit");
+        Button edit = secondaryButton(getString(routine == null ? R.string.cmds_reassign_edit : R.string.cmds_edit));
         edit.setOnClickListener(v -> startActivity(new Intent(this, CustomCommandEditorActivity.class)
                 .putExtra(CustomCommandEditorActivity.EXTRA_COMMAND_ID, command.id)));
         actions.addView(edit, new LinearLayout.LayoutParams(0, UiKit.dp(this, 42), 1));
-        Button delete = secondaryButton("Delete");
+        Button delete = secondaryButton(getString(R.string.ui_delete_e2d0a549));
         delete.setTextColor(Color.rgb(239, 105, 105));
         delete.setOnClickListener(v -> confirmDelete(command));
         LinearLayout.LayoutParams deleteLp = new LinearLayout.LayoutParams(0, UiKit.dp(this, 42), 1);
@@ -202,10 +204,10 @@ public final class CustomCommandsActivity extends Activity {
 
     private void confirmDelete(CustomCommandStore.Command command) {
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Delete Custom Command?")
-                .setMessage("This removes the phrase shortcut. The saved Routine is not deleted.")
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Delete", (d, which) -> {
+                .setTitle(getString(R.string.cmds_delete_title))
+                .setMessage(getString(R.string.cmds_delete_message))
+                .setNegativeButton(getString(R.string.ui_cancel_19766ed6), null)
+                .setPositiveButton(getString(R.string.ui_delete_e2d0a549), (d, which) -> {
                     if (CustomCommandStore.delete(this, command.id)) refresh();
                 }).create();
         UiKit.styleOrbitDialog(dialog, this, true);
@@ -234,7 +236,7 @@ public final class CustomCommandsActivity extends Activity {
         button.setImageResource(R.drawable.ic_back);
         button.setImageTintList(ColorStateList.valueOf(UiKit.accent(this)));
         button.setBackground(UiKit.ripple(UiKit.SURFACE_2, UiKit.accent(this), 18, this));
-        button.setContentDescription("Back");
+        button.setContentDescription(getString(R.string.ui_back_76900f1b));
         button.setPadding(UiKit.dp(this, 10), UiKit.dp(this, 10), UiKit.dp(this, 10), UiKit.dp(this, 10));
         UiKit.pressScale(button);
         return button;

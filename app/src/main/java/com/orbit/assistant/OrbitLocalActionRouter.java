@@ -174,7 +174,7 @@ public final class OrbitLocalActionRouter {
                     @Override public void onDone(String fullText) {
                         if (settled.get()) return;
                         long took = System.currentTimeMillis() - startedAt;
-                        Decision decision = decide(prompt, fullText, resolver(app));
+                        Decision decision = decide(app, prompt, fullText, resolver(app));
                         if (decision.reply == null) {
                             DiagnosticStore.recordLocalAction(app, "provider", "",
                                     decision.outcome, took);
@@ -218,6 +218,12 @@ public final class OrbitLocalActionRouter {
      * itself recorded, or by asking when that record holds more than one change.
      */
     static Decision decide(String prompt, String rawOutput, LocalActionSchema.AppResolver apps) {
+        return decide(null, prompt, rawOutput, apps);
+    }
+
+    /** Same decision with Orbit's sentences in the app language (English when no Context). */
+    static Decision decide(Context context, String prompt, String rawOutput,
+                           LocalActionSchema.AppResolver apps) {
         LocalActionSchema.Plan plan = LocalActionSchema.validatePlan(rawOutput, apps, prompt);
         if (!plan.accepted()) return new Decision(null, plan.rejection, "");
 
@@ -241,7 +247,7 @@ public final class OrbitLocalActionRouter {
         for (AssistantReply.Action action : plan.actions) {
             if (refusedByOrbit(prompt, action)) return new Decision(null, "refused", "");
             if (spoken.length() > 0) spoken.append(' ');
-            spoken.append(speak(action));
+            spoken.append(speak(context, action));
         }
         return new Decision(new AssistantReply(spoken.toString(), new ArrayList<>(plan.actions)),
                 "accepted", plan.category);
@@ -282,54 +288,81 @@ public final class OrbitLocalActionRouter {
      * action result claims the outcome.
      */
     static String speak(AssistantReply.Action action) {
+        return speak(null, action);
+    }
+
+    /** {@link #speak(AssistantReply.Action)} in the app language (English when no Context). */
+    static String speak(Context c, AssistantReply.Action action) {
         org.json.JSONObject p = action.params;
         switch (action.type) {
             case "FLASHLIGHT":
                 return p.optBoolean("on", true)
-                        ? "Turning on the flashlight." : "Turning off the flashlight.";
+                        ? say(c, R.string.localrouter_flash_on, "Turning on the flashlight.")
+                        : say(c, R.string.localrouter_flash_off, "Turning off the flashlight.");
             case "SET_BRIGHTNESS":
-                return "Setting brightness to " + p.optInt("percent", 50) + "%.";
+                return say(c, R.string.localrouter_brightness, "Setting brightness to %1$d%%.",
+                        p.optInt("percent", 50));
             case "SET_VOLUME":
-                return "Setting media volume to " + p.optInt("percent", 50) + "%.";
+                return say(c, R.string.localrouter_volume, "Setting media volume to %1$d%%.",
+                        p.optInt("percent", 50));
             case "SET_DND":
                 return p.optBoolean("enabled", true)
-                        ? "Turning on Do Not Disturb." : "Turning off Do Not Disturb.";
+                        ? say(c, R.string.localrouter_dnd_on, "Turning on Do Not Disturb.")
+                        : say(c, R.string.localrouter_dnd_off, "Turning off Do Not Disturb.");
             case "SET_RINGER_MODE": {
                 String mode = p.optString("mode", "normal");
-                return "normal".equals(mode) ? "Turning the ringer back on."
-                        : "vibrate".equals(mode) ? "Putting the phone on vibrate."
-                        : "Silencing the phone.";
+                return "normal".equals(mode)
+                        ? say(c, R.string.localrouter_ringer_on, "Turning the ringer back on.")
+                        : "vibrate".equals(mode)
+                        ? say(c, R.string.localrouter_vibrate, "Putting the phone on vibrate.")
+                        : say(c, R.string.localrouter_silence, "Silencing the phone.");
             }
             case "MEDIA_CONTROL": {
                 switch (p.optString("command", "")) {
-                    case "PAUSE": return "Pausing playback.";
-                    case "PLAY": return "Resuming playback.";
-                    case "NEXT": return "Skipping to the next track.";
-                    case "PREVIOUS": return "Going back a track.";
-                    default: return "Sending that to the player.";
+                    case "PAUSE": return say(c, R.string.localrouter_pause, "Pausing playback.");
+                    case "PLAY": return say(c, R.string.localrouter_play, "Resuming playback.");
+                    case "NEXT":
+                        return say(c, R.string.localrouter_next, "Skipping to the next track.");
+                    case "PREVIOUS":
+                        return say(c, R.string.localrouter_previous, "Going back a track.");
+                    default:
+                        return say(c, R.string.localrouter_player, "Sending that to the player.");
                 }
             }
             case "SET_TIMER": {
                 int seconds = Math.max(1, p.optInt("seconds", 60));
                 String label = p.optString("label", "");
-                String spoken = "Setting a "
-                        + RoutineActionCatalog.durationModifierLabel(seconds) + " timer";
+                String length = c == null ? RoutineActionCatalog.durationModifierLabel(seconds)
+                        : RoutineActionCatalog.durationModifierLabel(c, seconds);
                 return label.isEmpty() || "Orbit timer".equals(label)
-                        ? spoken + "." : spoken + " for " + label.toLowerCase(Locale.US) + ".";
+                        ? say(c, R.string.localrouter_timer, "Setting a %1$s timer.", length)
+                        : say(c, R.string.localrouter_timer_label,
+                                "Setting a %1$s timer for %2$s.", length,
+                                label.toLowerCase(Locale.US));
             }
             case "SET_ALARM":
-                return "Opening your Clock app with that alarm.";
-            case "OPEN_APP":
-                return "Opening " + p.optString("app", "that app") + ".";
+                return say(c, R.string.localrouter_alarm, "Opening your Clock app with that alarm.");
+            case "OPEN_APP": {
+                String app = p.optString("app", "");
+                return !p.has("app")
+                        ? say(c, R.string.localrouter_open_that_app, "Opening that app.")
+                        : say(c, R.string.localrouter_open_app, "Opening %1$s.", app);
+            }
             case "OPEN_SETTINGS":
-                return "Opening Settings.";
+                return say(c, R.string.localrouter_settings, "Opening Settings.");
             case "OPEN_INTERNET_PANEL":
-                return "Opening your internet controls.";
+                return say(c, R.string.localrouter_internet, "Opening your internet controls.");
             case "OPEN_BLUETOOTH_SETTINGS":
-                return "Opening Bluetooth settings.";
+                return say(c, R.string.localrouter_bluetooth, "Opening Bluetooth settings.");
             default:
-                return "Working on it.";
+                return say(c, R.string.localrouter_working, "Working on it.");
         }
+    }
+
+    /** Wording from resources (the English fallback equals the English resource). */
+    private static String say(Context c, int res, String fallback, Object... args) {
+        if (c != null) return args.length == 0 ? c.getString(res) : c.getString(res, args);
+        return args.length == 0 ? fallback : String.format(Locale.US, fallback, args);
     }
 
     // ---- the prompt -------------------------------------------------------------------------------

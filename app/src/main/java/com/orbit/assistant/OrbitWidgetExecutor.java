@@ -36,7 +36,7 @@ final class OrbitWidgetExecutor {
             if (action != null && action.requiresConfirmation) {
                 try { openRoutineUi(context, routine.id, 0); }
                 catch (Exception e) {
-                    Toast.makeText(context, "Orbit could not open the Routine runner.",
+                    Toast.makeText(context, context.getString(R.string.widgetexec_cannot_open_runner),
                             Toast.LENGTH_LONG).show();
                 }
                 finally { if (completion != null) completion.finish(); }
@@ -76,7 +76,7 @@ final class OrbitWidgetExecutor {
                                     openRoutineUi(context, routine.id, Math.max(0, failedIndex[0]));
                                 } catch (Exception e) {
                                     MAIN.post(() -> Toast.makeText(context,
-                                            "Orbit could not open the Routine permission flow.",
+                                            context.getString(R.string.widgetexec_cannot_open_permission),
                                             Toast.LENGTH_LONG).show());
                                 }
                             } else if (failure != null) {
@@ -90,7 +90,7 @@ final class OrbitWidgetExecutor {
                 });
             } catch (Exception e) {
                 MAIN.post(() -> Toast.makeText(context,
-                        "Orbit could not run this Routine.", Toast.LENGTH_LONG).show());
+                        context.getString(R.string.widgetexec_cannot_run), Toast.LENGTH_LONG).show());
                 if (completion != null) completion.finish();
             }
         });
@@ -104,13 +104,13 @@ final class OrbitWidgetExecutor {
     static void toggleFlashlight(Context context, FlashlightCompletion completion) {
         if (context == null || !hasCameraPermission(context)) {
             finishFlashlight(completion,
-                    DeviceActionExecutor.Result.permission("Camera access is needed for flashlight control."));
+                    DeviceActionExecutor.Result.permission(context.getString(R.string.widgetexec_camera_needed)));
             return;
         }
         CameraManager manager = (CameraManager) context.getSystemService(Context.CAMERA_SERVICE);
         if (manager == null) {
             finishFlashlight(completion,
-                    DeviceActionExecutor.Result.unavailable("Flashlight controls are unavailable on this device."));
+                    DeviceActionExecutor.Result.unavailable(context.getString(R.string.widgetexec_flashlight_unavailable)));
             return;
         }
 
@@ -126,7 +126,7 @@ final class OrbitWidgetExecutor {
             }
             if (targetId == null) {
                 finishFlashlight(completion,
-                        DeviceActionExecutor.Result.unavailable("No flashlight found"));
+                        DeviceActionExecutor.Result.unavailable(context.getString(R.string.widgetexec_no_flashlight)));
                 return;
             }
             final String flashlightId = targetId;
@@ -138,7 +138,7 @@ final class OrbitWidgetExecutor {
                 try { manager.unregisterTorchCallback(callbackHolder[0]); }
                 catch (Exception ignored) {}
                 finishFlashlight(completion,
-                        DeviceActionExecutor.Result.failed("Orbit could not read the flashlight state."));
+                        DeviceActionExecutor.Result.failed(context.getString(R.string.widgetexec_flashlight_state)));
             };
             CameraManager.TorchCallback callback = new CameraManager.TorchCallback() {
                 @Override public void onTorchModeChanged(String cameraId, boolean enabled) {
@@ -161,7 +161,7 @@ final class OrbitWidgetExecutor {
             MAIN.postDelayed(timeout, 1500L);
         } catch (Exception e) {
             finishFlashlight(completion,
-                    DeviceActionExecutor.Result.unavailable("Flashlight controls are unavailable on this device."));
+                    DeviceActionExecutor.Result.unavailable(context.getString(R.string.widgetexec_flashlight_unavailable)));
         }
     }
 

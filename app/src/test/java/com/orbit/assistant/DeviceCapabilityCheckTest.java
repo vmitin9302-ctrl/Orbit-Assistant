@@ -5,11 +5,17 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
+import org.robolectric.annotation.Config;
 
 /**
  * The device assessment must stay evidence-based: it only reasons from facts Android exposes,
  * and its tiers follow those facts deterministically.
  */
+@RunWith(RobolectricTestRunner.class)
+@Config(sdk = {35})
 public final class DeviceCapabilityCheckTest {
     private static final long GB = 1024L * 1024 * 1024;
     private static final String[] ARM64 = {"arm64-v8a", "armeabi-v7a"};
@@ -50,7 +56,7 @@ public final class DeviceCapabilityCheckTest {
         DeviceCapabilityCheck.Assessment a = DeviceCapabilityCheck.assess(
                 ARM64, 35, 12 * GB, ROOMY_STORAGE, false);
         assertEquals(DeviceCapabilityCheck.Tier.EXCELLENT, a.tier);
-        assertEquals("Excellent", a.tierLabel());
+        assertEquals("Excellent", a.tierLabel(RuntimeEnvironment.getApplication()));
     }
 
     @Test public void anOrdinaryModernPhoneIsSupported() {

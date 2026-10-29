@@ -715,9 +715,10 @@ public final class ConversationStore {
                                                           AssistantClient.History edited) {
         if (c == null || id == null || edited == null || edited.content == null
                 || edited.content.trim().isEmpty() || !"user".equalsIgnoreCase(edited.role)) {
-            return BranchResult.refused("Nothing to send");
+            return BranchResult.refused(c == null ? "Nothing to send"
+                    : c.getString(R.string.convstore_nothing_to_send));
         }
-        if (!Prefs.historyEnabled(c)) return BranchResult.refused("Chat history is off");
+        if (!Prefs.historyEnabled(c)) return BranchResult.refused(c.getString(R.string.convstore_history_off));
         List<Conversation> all = readAll(c);
         for (int x = 0; x < all.size(); x++) {
             Conversation existing = all.get(x);
@@ -725,7 +726,7 @@ public final class ConversationStore {
             if (index < 0 || index >= existing.messages.size()
                     || !"user".equalsIgnoreCase(existing.messages.get(index).role)
                     || !ConversationBranches.fingerprint(existing.messages.get(index)).equals(expectedKey)) {
-                return BranchResult.refused("That message has changed. Try again.");
+                return BranchResult.refused(c.getString(R.string.convstore_message_changed));
             }
             try {
                 ConversationBranches.State next = ConversationBranches.branch(existing.state(), index,
@@ -739,7 +740,7 @@ public final class ConversationStore {
                 return BranchResult.refused(refusal.getMessage());
             }
         }
-        return BranchResult.refused("This chat is no longer available");
+        return BranchResult.refused(c.getString(R.string.convstore_chat_unavailable));
     }
 
     /**
@@ -793,7 +794,10 @@ public final class ConversationStore {
      * alternative, including the one being left, stays stored exactly as it was.
      */
     static synchronized BranchResult selectVariant(Context c, String id, int at, int target) {
-        if (c == null || id == null) return BranchResult.refused("This chat is no longer available");
+        if (c == null || id == null) {
+            return BranchResult.refused(c == null ? "This chat is no longer available"
+                    : c.getString(R.string.convstore_chat_unavailable));
+        }
         List<Conversation> all = readAll(c);
         for (int x = 0; x < all.size(); x++) {
             Conversation existing = all.get(x);
@@ -811,7 +815,7 @@ public final class ConversationStore {
                 return BranchResult.refused(refusal.getMessage());
             }
         }
-        return BranchResult.refused("This chat is no longer available");
+        return BranchResult.refused(c.getString(R.string.convstore_chat_unavailable));
     }
 
     // ---- kept context (0.8.3.0-beta.3) -----------------------------------------------------------

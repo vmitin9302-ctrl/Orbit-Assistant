@@ -156,7 +156,8 @@ public final class OrbitVaultSurfaceTest {
         assertEquals("Paste clipboard", OrbitVaultActivity.CAPTURE_PASTE);
         assertEquals("Add image", OrbitVaultActivity.CAPTURE_IMAGE);
         String screen = source("OrbitVaultActivity");
-        assertTrue(screen.contains("CAPTURE_WRITE, CAPTURE_PASTE, CAPTURE_IMAGE"));
+        assertTrue(screen.contains("\"Write text\"") && screen.contains("\"Paste clipboard\"")
+                && screen.contains("\"Add image\""));
         assertTrue("the gallery choice the user already made is reused",
                 screen.contains("GalleryAppPreference.createIntent"));
     }

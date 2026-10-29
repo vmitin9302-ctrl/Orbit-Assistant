@@ -1,5 +1,7 @@
 package com.orbit.assistant;
 
+import android.content.Context;
+
 import org.json.JSONObject;
 
 /**
@@ -39,6 +41,11 @@ public final class QuotedMessage {
 
     /** "Orbit" or "You". */
     public String speaker() { return fromAssistant() ? "Orbit" : "You"; }
+
+    /** Same, in the app language. */
+    public String speaker(Context context) {
+        return fromAssistant() ? "Orbit" : context.getString(R.string.quote_speaker_you);
+    }
 
     /** One line, short enough for a compact card. */
     public String preview() {

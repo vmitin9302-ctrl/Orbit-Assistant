@@ -72,7 +72,7 @@ public final class ReleaseNotesRepository {
             } catch (Exception ignored) {
                 List<ReleaseNote> cached = loadCached(app);
                 if (!cached.isEmpty()) callback.onLoaded(cached, true);
-                else callback.onError("Orbit could not load release notes. Check your connection and try again.");
+                else callback.onError(app.getString(R.string.releasenotes_load_error));
             }
         });
     }

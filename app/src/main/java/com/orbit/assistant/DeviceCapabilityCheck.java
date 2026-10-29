@@ -18,21 +18,45 @@ public final class DeviceCapabilityCheck {
 
     public static final class Assessment {
         public final Tier tier;
-        /** One plain sentence explaining the tier to the user. */
+        /** One plain sentence explaining the tier to the user (set once a Context has resolved it). */
         public final String summary;
+        private final int summaryRes;
+        private final String summaryArg;
+        private final String label;
 
-        Assessment(Tier tier, String summary) {
+        Assessment(Tier tier, int summaryRes, String summaryArg) {
+            this(tier, summaryRes, summaryArg, "", "");
+        }
+
+        private Assessment(Tier tier, int summaryRes, String summaryArg, String summary,
+                           String label) {
             this.tier = tier;
+            this.summaryRes = summaryRes;
+            this.summaryArg = summaryArg;
             this.summary = summary;
+            this.label = label;
+        }
+
+        /** The same assessment with its wording resolved in the app language. */
+        Assessment resolve(Context c) {
+            return new Assessment(tier, summaryRes, summaryArg, summary(c), tierLabel(c));
+        }
+
+        public String summary(Context c) {
+            return summaryArg == null ? c.getString(summaryRes) : c.getString(summaryRes, summaryArg);
         }
 
         public String tierLabel() {
+            return label;
+        }
+
+        public String tierLabel(Context c) {
             switch (tier) {
-                case EXCELLENT: return "Excellent";
-                case SUPPORTED: return "Supported";
-                case LIMITED: return "Limited";
-                case NOT_RECOMMENDED: return "Not recommended";
-                default: return "Unsupported";
+                case EXCELLENT: return c.getString(R.string.devcap_tier_excellent);
+                case SUPPORTED: return c.getString(R.string.devcap_tier_supported);
+                case LIMITED: return c.getString(R.string.devcap_tier_limited);
+                case NOT_RECOMMENDED: return c.getString(R.string.devcap_tier_not_recommended);
+                default: return c.getString(R.string.devcap_tier_unsupported);
             }
         }
     }
@@ -56,7 +80,7 @@ public final class DeviceCapabilityCheck {
         boolean modelPresent = (status != null && status.modelReady())
                 || LocalModelStore.hasLegacyModel(c);
         return assess(Build.SUPPORTED_ABIS, Build.VERSION.SDK_INT, totalMem,
-                LocalModelStore.freeStorageBytes(c), modelPresent);
+                LocalModelStore.freeStorageBytes(c), modelPresent).resolve(c);
     }
 
     /** Pure decision logic, separated so it can be tested without a device. */
@@ -68,11 +92,11 @@ public final class DeviceCapabilityCheck {
         }
         if (!arm64) {
             return new Assessment(Tier.UNSUPPORTED,
-                    "This device's processor type does not support Orbit's on-device AI runtime.");
+                    R.string.devcap_unsupported_cpu, null);
         }
         if (sdkInt < 31) {
             return new Assessment(Tier.NOT_RECOMMENDED,
-                    "On-device AI works best on Android 12 or newer. This Android version may be slow or unstable for it.");
+                    R.string.devcap_old_android, null);
         }
 
         long needed = LocalModelStore.MODEL_SIZE_BYTES + LocalModelStore.STORAGE_MARGIN_BYTES;
@@ -83,23 +107,22 @@ public final class DeviceCapabilityCheck {
         boolean memKnown = totalMemBytes > 0;
         if (memKnown && totalMemBytes < 4L * GB) {
             return new Assessment(Tier.NOT_RECOMMENDED,
-                    "This device has too little memory to run the local model comfortably.");
+                    R.string.devcap_low_memory, null);
         }
         if (storageTight) {
             return new Assessment(Tier.LIMITED,
-                    "This device can run local AI, but it needs about "
-                            + LocalModelStore.formatBytes(needed) + " of free storage first.");
+                    R.string.devcap_need_storage, LocalModelStore.formatBytes(needed));
         }
         if (memKnown && totalMemBytes < 6L * GB) {
             return new Assessment(Tier.LIMITED,
-                    "This device can run the local model, but memory is tight and responses may be slow.");
+                    R.string.devcap_tight_memory, null);
         }
         if (memKnown && totalMemBytes >= 10L * GB) {
             return new Assessment(Tier.EXCELLENT,
-                    "This device is well suited to on-device AI, with plenty of memory for the local model.");
+                    R.string.devcap_excellent, null);
         }
         return new Assessment(Tier.SUPPORTED,
-                "This device meets the requirements for Orbit's on-device AI.");
+                R.string.devcap_supported, null);
     }
 
     /** True when the tier allows installing and running the local model at all. */
