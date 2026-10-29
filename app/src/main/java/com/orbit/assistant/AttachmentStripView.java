@@ -308,7 +308,7 @@ public final class AttachmentStripView extends HorizontalScrollView {
             pinLp.setMarginEnd(UiKit.dp(c, 4));
             card.addView(pin, pinLp);
         }
-        TextView label = UiKit.text(c, AttachmentLabels.displayLabel(attachment, position),
+        TextView label = UiKit.text(c, AttachmentLabels.displayLabel(c, attachment, position),
                 compact ? 11.5f : 12, UiKit.TEXT, true);
         label.setSingleLine(true);
         label.setEllipsize(android.text.TextUtils.TruncateAt.MIDDLE);
@@ -347,7 +347,7 @@ public final class AttachmentStripView extends HorizontalScrollView {
         remove.setColorFilter(UiKit.MUTED);
         remove.setPadding(UiKit.dp(c, 7), UiKit.dp(c, 7), UiKit.dp(c, 7), UiKit.dp(c, 7));
         remove.setContentDescription(
-                AttachmentLabels.removeDescription(attachment, position, total));
+                AttachmentLabels.removeDescription(c, attachment, position, total));
         final String id = attachment.id;
         remove.setOnClickListener(v -> {
             if (Prefs.haptics(c)) UiKit.haptic(v, HapticFeedbackConstants.CLOCK_TICK);
@@ -364,7 +364,7 @@ public final class AttachmentStripView extends HorizontalScrollView {
         // remove control, so the order is "what this is" then "how to remove it". The shortened
         // caption never reaches this: a screen reader is told the kind and the position, and a
         // document is still told its name.
-        String description = AttachmentLabels.cardDescription(attachment, position, total)
+        String description = AttachmentLabels.cardDescription(c, attachment, position, total)
                 + (kept ? ", kept in this chat" : "");
         if (onLongPress != null) {
             final String held = attachment.id;

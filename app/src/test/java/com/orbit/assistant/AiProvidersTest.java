@@ -175,14 +175,14 @@ public final class AiProvidersTest {
         assertFalse("a chip may never claim an absent capability",
                 local.contains("Device actions"));
         assertTrue("missing device actions must be admitted, not hidden",
-                AiProvidersActivity.capabilityLimitation(
+                AiProvidersActivity.capabilityLimitation(context,
                         AiProviders.byId(Prefs.PROVIDER_LOCAL).capabilities())
                         .contains("Can't run device actions"));
 
         AiCapabilities chatgptCaps = AiProviders.byId(Prefs.PROVIDER_CHATGPT).capabilities();
         assertTrue(AiProvidersActivity.capabilityChips(chatgptCaps).contains("Device actions"));
         assertEquals("a fully capable provider has no limitation line",
-                "", AiProvidersActivity.capabilityLimitation(chatgptCaps));
+                "", AiProvidersActivity.capabilityLimitation(context, chatgptCaps));
     }
 
     /** Status and offered actions must always agree: not-ready providers are not selectable UI. */

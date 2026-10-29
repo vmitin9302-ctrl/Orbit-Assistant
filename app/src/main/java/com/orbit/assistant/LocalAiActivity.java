@@ -542,7 +542,7 @@ public final class LocalAiActivity extends Activity {
         LinearLayout card = card();
         card.addView(UiKit.text(this, "Orbit Local component", 12, UiKit.MUTED, true));
         card.addView(titleRow("On-device AI component",
-                OrbitLocalComponent.stateLabel(state), state == OrbitLocalComponent.State.INSTALLED));
+                OrbitLocalComponent.stateLabel(this, state), state == OrbitLocalComponent.State.INSTALLED));
 
         TextView details = UiKit.text(this, componentDetails(state), 13, UiKit.MUTED, false);
         details.setLineSpacing(0, 1.13f);

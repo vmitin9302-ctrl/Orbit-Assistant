@@ -63,12 +63,12 @@ public final class WeatherService {
             if (!locationQuery.isEmpty()) {
                 place = geocode(locationQuery);
                 if (place == null) {
-                    return text("I couldn't find that location. Try a city and state/country, for example Naples, Florida or Tokyo, Japan.");
+                    return text(context.getString(R.string.weather_location_not_found));
                 }
                 Prefs.get(context).edit().putString(Prefs.WEATHER_LOCATION, place.displayName).apply();
             } else if (Prefs.weatherUseDeviceLocation(context) && hasLocationPermission(context)) {
                 Location location = currentLocation(context);
-                if (location != null) place = new Place(location.getLatitude(), location.getLongitude(), "your current location");
+                if (location != null) place = new Place(location.getLatitude(), location.getLongitude(), context.getString(R.string.weather_current_location));
             }
 
             if (place == null) {
@@ -77,14 +77,14 @@ public final class WeatherService {
             }
 
             if (place == null) {
-                return text("I can give you the weather directly in Orbit now. Tell me a city once, or enable device location for weather in Orbit Settings.");
+                return text(context.getString(R.string.weather_needs_city));
             }
 
             Weather w = fetch(place, usesFahrenheit(context));
-            if (w == null) return text("I couldn't load the weather right now. Try again in a moment.");
-            return text(formatAnswer(place, w, p));
+            if (w == null) return text(context.getString(R.string.weather_load_failed));
+            return text(formatAnswer(context, place, w, p));
         } catch (Exception e) {
-            return text("I couldn't load the weather right now. Try again in a moment.");
+            return text(context.getString(R.string.weather_load_failed));
         }
     }
 
@@ -114,6 +114,8 @@ public final class WeatherService {
             String s = norm(h.content);
             if ((s.contains("weather") && (s.contains("city") || s.contains("location") || s.contains("area"))) ||
                     s.contains("tell me a city")) return true;
+            // The Russian wording of the same question (string weather_needs_city in values-ru).
+            if (s.contains("назовите город")) return true;
         }
         return false;
     }
@@ -182,49 +184,51 @@ public final class WeatherService {
         return w;
     }
 
-    private static String formatAnswer(Place place, Weather w, String prompt) {
+    private static String formatAnswer(Context context, Place place, Weather w, String prompt) {
         String p = norm(prompt);
         String unit = w.fahrenheit ? "°F" : "°C";
-        String windUnit = w.fahrenheit ? "mph" : "km/h";
+        String windUnit = context.getString(w.fahrenheit ? R.string.weather_unit_mph : R.string.weather_unit_kmh);
         boolean tomorrowOnly = p.contains("tomorrow") && !p.contains("today");
         boolean week = p.contains("week") || p.contains("next few days") || p.contains("forecast");
 
         if (tomorrowOnly && w.highs != null && w.highs.length() > 1) {
-            return "Tomorrow in " + place.displayName + ": " + condition(codeAt(w.codes, 1)) + ", high " + n(tempAt(w.highs, 1)) + unit +
-                    ", low " + n(tempAt(w.lows, 1)) + unit + ", with about a " + percentAt(w.rainChance, 1) + "% chance of precipitation. Weather data: Open-Meteo.";
+            return context.getString(R.string.weather_tomorrow_only, place.displayName,
+                    condition(context, codeAt(w.codes, 1)), n(tempAt(w.highs, 1)), unit,
+                    n(tempAt(w.lows, 1)), percentAt(w.rainChance, 1));
         }
 
         StringBuilder out = new StringBuilder();
         out.append(place.displayName).append(": ");
-        if (!Double.isNaN(w.currentTemp)) out.append(n(w.currentTemp)).append(unit).append(" and ");
-        out.append(condition(w.currentCode).toLowerCase(Locale.US)).append(" right now.");
+        String nowCondition = condition(context, w.currentCode).toLowerCase(Locale.US);
+        out.append(Double.isNaN(w.currentTemp)
+                ? context.getString(R.string.weather_now, nowCondition)
+                : context.getString(R.string.weather_now_with_temp, n(w.currentTemp), unit, nowCondition));
         if (w.highs != null && w.highs.length() > 0) {
-            out.append(" Today: high ").append(n(tempAt(w.highs, 0))).append(unit)
-                    .append(", low ").append(n(tempAt(w.lows, 0))).append(unit)
-                    .append(", with about a ").append(percentAt(w.rainChance, 0)).append("% chance of precipitation.");
+            out.append(" ").append(context.getString(R.string.weather_today,
+                    n(tempAt(w.highs, 0)), n(tempAt(w.lows, 0)), unit, percentAt(w.rainChance, 0)));
         }
-        if (!Double.isNaN(w.feels) && Math.abs(w.feels - w.currentTemp) >= 2) out.append(" Feels like ").append(n(w.feels)).append(unit).append(".");
-        if (!Double.isNaN(w.wind) && w.wind >= 1) out.append(" Wind around ").append(n(w.wind)).append(" ").append(windUnit).append(".");
+        if (!Double.isNaN(w.feels) && Math.abs(w.feels - w.currentTemp) >= 2) out.append(" ").append(context.getString(R.string.weather_feels_like, n(w.feels), unit));
+        if (!Double.isNaN(w.wind) && w.wind >= 1) out.append(" ").append(context.getString(R.string.weather_wind, n(w.wind), windUnit));
 
         if (week && w.highs != null) {
             int count = Math.min(5, w.highs.length());
-            out.append(" Next few days:");
+            out.append(" ").append(context.getString(R.string.weather_next_days));
             for (int i = 1; i < count; i++) {
-                out.append(" ").append(dayLabel(w.dates, i)).append(" ")
-                        .append(n(tempAt(w.highs, i))).append("/").append(n(tempAt(w.lows, i))).append(unit)
-                        .append(", ").append(condition(codeAt(w.codes, i)).toLowerCase(Locale.US))
-                        .append(" (").append(percentAt(w.rainChance, i)).append("% precip).");
+                out.append(" ").append(context.getString(R.string.weather_day_line,
+                        dayLabel(context, w.dates, i), n(tempAt(w.highs, i)), n(tempAt(w.lows, i)), unit,
+                        condition(context, codeAt(w.codes, i)).toLowerCase(Locale.US),
+                        percentAt(w.rainChance, i)));
             }
         } else if (w.highs != null && w.highs.length() > 1) {
-            out.append(" Tomorrow: high ").append(n(tempAt(w.highs, 1))).append(unit)
-                    .append(", low ").append(n(tempAt(w.lows, 1))).append(unit)
-                    .append(", ").append(condition(codeAt(w.codes, 1)).toLowerCase(Locale.US)).append(".");
+            out.append(" ").append(context.getString(R.string.weather_tomorrow,
+                    n(tempAt(w.highs, 1)), n(tempAt(w.lows, 1)), unit,
+                    condition(context, codeAt(w.codes, 1)).toLowerCase(Locale.US)));
         }
-        out.append(" Weather data: Open-Meteo.");
+        out.append(" ").append(context.getString(R.string.weather_data_source));
         return out.toString().replace("—", "-");
     }
 
-    private static String dayLabel(JSONArray dates, int i) {
+    private static String dayLabel(Context context, JSONArray dates, int i) {
         try {
             String s = dates == null ? "" : dates.optString(i, "");
             if (s.length() >= 10) {
@@ -232,7 +236,7 @@ public final class WeatherService {
                 return d.getDayOfWeek().getDisplayName(java.time.format.TextStyle.SHORT, Locale.getDefault());
             }
         } catch (Exception ignored) {}
-        return "Day " + (i + 1);
+        return context.getString(R.string.weather_day_n, i + 1);
     }
 
     private static double tempAt(JSONArray a, int i) { return a == null ? Double.NaN : a.optDouble(i, Double.NaN); }
@@ -244,20 +248,24 @@ public final class WeatherService {
     }
     private static String n(double v) { return Double.isNaN(v) ? "?" : String.valueOf((int) Math.round(v)); }
 
-    private static String condition(int code) {
+    private static String condition(Context context, int code) {
+        return context.getString(conditionRes(code));
+    }
+
+    private static int conditionRes(int code) {
         switch (code) {
-            case 0: return "Clear";
-            case 1: return "Mostly clear";
-            case 2: return "Partly cloudy";
-            case 3: return "Cloudy";
-            case 45: case 48: return "Foggy";
-            case 51: case 53: case 55: case 56: case 57: return "Drizzle";
-            case 61: case 63: case 65: case 66: case 67: return "Rain";
-            case 71: case 73: case 75: case 77: return "Snow";
-            case 80: case 81: case 82: return "Rain showers";
-            case 85: case 86: return "Snow showers";
-            case 95: case 96: case 99: return "Thunderstorms";
-            default: return "Mixed conditions";
+            case 0: return R.string.weather_cond_clear;
+            case 1: return R.string.weather_cond_mostly_clear;
+            case 2: return R.string.weather_cond_partly_cloudy;
+            case 3: return R.string.weather_cond_cloudy;
+            case 45: case 48: return R.string.weather_cond_foggy;
+            case 51: case 53: case 55: case 56: case 57: return R.string.weather_cond_drizzle;
+            case 61: case 63: case 65: case 66: case 67: return R.string.weather_cond_rain;
+            case 71: case 73: case 75: case 77: return R.string.weather_cond_snow;
+            case 80: case 81: case 82: return R.string.weather_cond_rain_showers;
+            case 85: case 86: return R.string.weather_cond_snow_showers;
+            case 95: case 96: case 99: return R.string.weather_cond_thunderstorms;
+            default: return R.string.weather_cond_mixed;
         }
     }
 

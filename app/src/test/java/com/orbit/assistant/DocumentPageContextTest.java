@@ -118,11 +118,11 @@ public final class DocumentPageContextTest {
         ComposerAttachment card = ComposerAttachment.documentPage(
                 new DocumentPageContext("Health Behavior Theory", 4, 388,
                         "Chapter four.", reference(), page()));
-        String description = AttachmentLabels.cardDescription(card, 1, 1);
+        String description = AttachmentLabels.cardDescription(context, card, 1, 1);
         assertTrue(description, description.contains("Health Behavior Theory"));
         assertTrue("the second line is spoken, since it is not read separately",
                 description.contains("Page 5 of 388"));
-        String remove = AttachmentLabels.removeDescription(card, 1, 1);
+        String remove = AttachmentLabels.removeDescription(context, card, 1, 1);
         assertTrue(remove, remove.startsWith("Remove"));
         assertTrue(remove, remove.contains("Page 5 of 388"));
     }

@@ -1,5 +1,7 @@
 package com.orbit.assistant;
 
+import android.content.Context;
+
 /**
  * What an attachment is called on screen, and what a screen reader is told about it.
  *
@@ -49,9 +51,9 @@ public final class AttachmentLabels {
      * in the strip, so the caption and the ordering a user can see always agree. Everything else
      * keeps the label it arrived with.
      */
-    public static String displayLabel(ComposerAttachment attachment, int position) {
+    public static String displayLabel(Context context, ComposerAttachment attachment, int position) {
         if (attachment == null) return "";
-        if (isPhoto(attachment)) return "Photo " + position;
+        if (isPhoto(attachment)) return context.getString(R.string.attlab_photo, position);
         return attachment.label;
     }
 
@@ -63,48 +65,60 @@ public final class AttachmentLabels {
      * attachment 2 of 4" locates them, where a read-aloud timestamp filename would not. A document
      * keeps its name, because for a document the name is the information.
      */
-    public static String cardDescription(ComposerAttachment attachment, int position, int total) {
+    public static String cardDescription(Context context, ComposerAttachment attachment, int position, int total) {
         if (attachment == null) return "";
-        String place = total <= 1 ? "" : " " + position + " of " + total;
-        if (isPhoto(attachment)) return "Photo attachment" + place;
+        boolean single = total <= 1;
+        if (isPhoto(attachment)) {
+            return single ? context.getString(R.string.attlab_card_photo)
+                    : context.getString(R.string.attlab_card_photo_n, position, total);
+        }
         // A page attachment is announced as the two things it is: which document, and where in it.
         // The card's second line is not read separately, so it is spoken here instead.
         if (attachment.isDocumentPage()) {
-            return "PDF page attachment" + place + ", " + attachment.label
+            return (single ? context.getString(R.string.attlab_card_pdf_page)
+                    : context.getString(R.string.attlab_card_pdf_page_n, position, total))
+                    + ", " + attachment.label
                     + (attachment.hasDetail() ? ", " + attachment.detail : "");
         }
         if (isDocument(attachment)) {
-            return leadingTypeWord(attachment) + " attachment" + place + ", " + attachment.label;
+            boolean pdf = "pdf".equals(attachment.kind);
+            String lead = single
+                    ? context.getString(pdf ? R.string.attlab_card_pdf : R.string.attlab_card_file)
+                    : context.getString(pdf ? R.string.attlab_card_pdf_n : R.string.attlab_card_file_n,
+                            position, total);
+            return lead + ", " + attachment.label;
         }
-        return total <= 1
-                ? "Attachment: " + attachment.label
-                : "Attachment " + position + " of " + total + ": " + attachment.label;
+        return single
+                ? context.getString(R.string.attlab_card_other, attachment.label)
+                : context.getString(R.string.attlab_card_other_n, position, total, attachment.label);
     }
 
     /** What the remove control is called, so "which one am I removing" is never ambiguous. */
-    public static String removeDescription(ComposerAttachment attachment, int position, int total) {
-        if (attachment == null) return "Remove attachment";
-        String place = total <= 1 ? "" : " " + position;
-        if (isPhoto(attachment)) return "Remove photo attachment" + place;
+    public static String removeDescription(Context context, ComposerAttachment attachment,
+                                           int position, int total) {
+        if (attachment == null) return context.getString(R.string.attlab_remove);
+        boolean single = total <= 1;
+        if (isPhoto(attachment)) {
+            return single ? context.getString(R.string.attlab_remove_photo)
+                    : context.getString(R.string.attlab_remove_photo_n, position);
+        }
         if (attachment.isDocumentPage()) {
-            return "Remove PDF page attachment" + place + ", " + attachment.label
+            return (single ? context.getString(R.string.attlab_remove_pdf_page)
+                    : context.getString(R.string.attlab_remove_pdf_page_n, position))
+                    + ", " + attachment.label
                     + (attachment.hasDetail() ? ", " + attachment.detail : "");
         }
         if (isDocument(attachment)) {
-            return "Remove " + typeWord(attachment) + " attachment" + place
-                    + ", " + attachment.label;
+            // "PDF" and "file" are what people call these; the internal kind names are never shown.
+            boolean pdf = "pdf".equals(attachment.kind);
+            String lead = single
+                    ? context.getString(pdf ? R.string.attlab_remove_pdf : R.string.attlab_remove_file)
+                    : context.getString(pdf ? R.string.attlab_remove_pdf_n : R.string.attlab_remove_file_n,
+                            position);
+            return lead + ", " + attachment.label;
         }
-        return total <= 1
-                ? "Remove " + attachment.label
-                : "Remove " + attachment.label + ", attachment " + position + " of " + total;
-    }
-
-    /** "PDF" and "file" are what people call these; the internal kind names are never shown. */
-    private static String leadingTypeWord(ComposerAttachment attachment) {
-        return "pdf".equals(attachment.kind) ? "PDF" : "File";
-    }
-
-    private static String typeWord(ComposerAttachment attachment) {
-        return "pdf".equals(attachment.kind) ? "PDF" : "file";
+        return single
+                ? context.getString(R.string.attlab_remove_other, attachment.label)
+                : context.getString(R.string.attlab_remove_other_n, attachment.label, position, total);
     }
 }

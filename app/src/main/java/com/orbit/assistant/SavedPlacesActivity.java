@@ -81,37 +81,37 @@ public final class SavedPlacesActivity extends Activity {
 
         LinearLayout header = new LinearLayout(this);
         header.setGravity(Gravity.CENTER_VERTICAL);
-        ImageButton back = iconButton(R.drawable.ic_back, "Back");
+        ImageButton back = iconButton(R.drawable.ic_back, getString(R.string.ui_back_76900f1b));
         back.setOnClickListener(v -> navigation.performBack());
         LinearLayout.LayoutParams backLp = new LinearLayout.LayoutParams(UiKit.dp(this, 48), UiKit.dp(this, 48));
         backLp.rightMargin = UiKit.dp(this, 12);
         header.addView(back, backLp);
         LinearLayout titles = new LinearLayout(this);
         titles.setOrientation(LinearLayout.VERTICAL);
-        titles.addView(UiKit.text(this, "Saved places", 26, UiKit.TEXT, true));
-        titles.addView(UiKit.text(this, "Reusable Routine locations", 12, UiKit.MUTED, false));
+        titles.addView(UiKit.text(this, getString(R.string.places_title), 26, UiKit.TEXT, true));
+        titles.addView(UiKit.text(this, getString(R.string.places_subtitle), 12, UiKit.MUTED, false));
         header.addView(titles, new LinearLayout.LayoutParams(0, -2, 1));
         page.addView(header);
 
         TextView intro = UiKit.text(this,
-                "Save places such as Home, Work, or Gym once, then choose them while creating location triggers or location-based IF conditions. Saved coordinates stay local to Orbit.",
+                getString(R.string.places_intro),
                 14, UiKit.MUTED, false);
         intro.setLineSpacing(0, 1.13f);
         LinearLayout.LayoutParams introLp = new LinearLayout.LayoutParams(-1, -2);
         introLp.setMargins(UiKit.dp(this, 2), UiKit.dp(this, 16), UiKit.dp(this, 2), UiKit.dp(this, 14));
         page.addView(intro, introLp);
 
-        Button addCurrent = primaryButton("Add my current location");
+        Button addCurrent = primaryButton(getString(R.string.places_add_current));
         addCurrent.setOnClickListener(v -> addFromCurrentLocation());
         page.addView(addCurrent, new LinearLayout.LayoutParams(-1, UiKit.dp(this, 50)));
 
-        Button addManual = secondaryButton("Add place manually");
+        Button addManual = secondaryButton(getString(R.string.places_add_manual));
         addManual.setOnClickListener(v -> showPlaceDialog(null, false));
         LinearLayout.LayoutParams manualLp = new LinearLayout.LayoutParams(-1, UiKit.dp(this, 48));
         manualLp.setMargins(0, UiKit.dp(this, 9), 0, 0);
         page.addView(addManual, manualLp);
 
-        TextView section = UiKit.text(this, "SAVED PLACES", 11, UiKit.MUTED, true);
+        TextView section = UiKit.text(this, getString(R.string.places_section), 11, UiKit.MUTED, true);
         section.setLetterSpacing(.13f);
         section.setPadding(UiKit.dp(this, 4), UiKit.dp(this, 22), 0, UiKit.dp(this, 8));
         page.addView(section);
@@ -128,9 +128,9 @@ public final class SavedPlacesActivity extends Activity {
         List<SavedPlaceStore.Place> places = SavedPlaceStore.list(this);
         if (places.isEmpty()) {
             LinearLayout empty = card();
-            empty.addView(UiKit.text(this, "No saved places yet", 16, UiKit.TEXT, true));
+            empty.addView(UiKit.text(this, getString(R.string.places_empty_title), 16, UiKit.TEXT, true));
             TextView note = UiKit.text(this,
-                    "Add your current location or enter coordinates for a place you want to reuse in Routines.",
+                    getString(R.string.places_empty_note),
                     13, UiKit.MUTED, false);
             note.setPadding(0, UiKit.dp(this, 6), 0, 0);
             empty.addView(note);
@@ -147,10 +147,10 @@ public final class SavedPlacesActivity extends Activity {
 
             LinearLayout actions = new LinearLayout(this);
             actions.setOrientation(LinearLayout.HORIZONTAL);
-            Button edit = secondaryButton("Edit");
+            Button edit = secondaryButton(getString(R.string.places_edit));
             edit.setOnClickListener(v -> showPlaceDialog(place, false));
             actions.addView(edit, new LinearLayout.LayoutParams(0, UiKit.dp(this, 42), 1));
-            Button delete = secondaryButton("Delete");
+            Button delete = secondaryButton(getString(R.string.ui_delete_e2d0a549));
             LinearLayout.LayoutParams deleteLp = new LinearLayout.LayoutParams(0, UiKit.dp(this, 42), 1);
             deleteLp.leftMargin = UiKit.dp(this, 8);
             actions.addView(delete, deleteLp);
@@ -168,7 +168,7 @@ public final class SavedPlacesActivity extends Activity {
             return;
         }
         if (!RoutineLocationTriggerScheduler.isLocationEnabled(this)) {
-            Toast.makeText(this, "Turn on Android location first.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.places_location_off), Toast.LENGTH_SHORT).show();
             RoutineLocationTriggerScheduler.openLocationServices(this);
             return;
         }
@@ -180,28 +180,28 @@ public final class SavedPlacesActivity extends Activity {
         form.setOrientation(LinearLayout.VERTICAL);
         form.setPadding(UiKit.dp(this, 20), UiKit.dp(this, 5), UiKit.dp(this, 20), 0);
 
-        TextView nameLabel = label("Place name");
+        TextView nameLabel = label(getString(R.string.places_name_label));
         form.addView(nameLabel);
-        EditText name = field("Home, Work, Gym…", old == null ? "" : old.name, false);
+        EditText name = field(getString(R.string.places_name_hint), old == null ? "" : old.name, false);
         form.addView(name, new LinearLayout.LayoutParams(-1, UiKit.dp(this, 52)));
 
-        form.addView(label("Latitude"));
+        form.addView(label(getString(R.string.places_latitude)));
         EditText lat = field("0.000000", old == null ? "" : coordinate(old.latitude), true);
         form.addView(lat, new LinearLayout.LayoutParams(-1, UiKit.dp(this, 52)));
-        form.addView(label("Longitude"));
+        form.addView(label(getString(R.string.places_longitude)));
         EditText lon = field("0.000000", old == null ? "" : coordinate(old.longitude), true);
         form.addView(lon, new LinearLayout.LayoutParams(-1, UiKit.dp(this, 52)));
 
-        Button useCurrent = secondaryButton("Use my current location");
+        Button useCurrent = secondaryButton(getString(R.string.places_use_current));
         LinearLayout.LayoutParams currentLp = new LinearLayout.LayoutParams(-1, UiKit.dp(this, 44));
         currentLp.setMargins(0, UiKit.dp(this, 10), 0, 0);
         form.addView(useCurrent, currentLp);
 
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle(old == null ? "Add saved place" : "Edit saved place")
+                .setTitle(getString(old == null ? R.string.places_dialog_add : R.string.places_dialog_edit))
                 .setView(form)
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton(old == null ? "Add" : "Save", null)
+                .setNegativeButton(getString(R.string.ui_cancel_19766ed6), null)
+                .setPositiveButton(getString(old == null ? R.string.ui_add_9fd728c6 : R.string.ui_save_1509f561), null)
                 .create();
         UiKit.styleOrbitDialog(dialog, this, false,
                 UiKit.outlined(UiKit.SURFACE, UiKit.withAlpha(UiKit.accent(this), 55), 22, this),
@@ -211,18 +211,18 @@ public final class SavedPlacesActivity extends Activity {
                 Double latitude = parseDouble(lat.getText().toString());
                 Double longitude = parseDouble(lon.getText().toString());
                 if (placeName.isEmpty()) {
-                    Toast.makeText(this, "Give this place a name.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.places_need_name), Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (latitude == null || longitude == null || !SavedPlaceStore.validCoordinates(latitude, longitude)) {
-                    Toast.makeText(this, "Use valid latitude and longitude coordinates.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getString(R.string.places_bad_coords), Toast.LENGTH_LONG).show();
                     return;
                 }
                 SavedPlaceStore.Place place = old == null
                         ? SavedPlaceStore.create(placeName, latitude, longitude)
                         : new SavedPlaceStore.Place(old.id, placeName, latitude, longitude, old.createdAt);
                 if (!SavedPlaceStore.upsert(this, place)) {
-                    Toast.makeText(this, "A saved place with that name already exists.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getString(R.string.places_duplicate), Toast.LENGTH_LONG).show();
                     return;
                 }
                 dialog.dismiss();
@@ -238,11 +238,11 @@ public final class SavedPlacesActivity extends Activity {
 
     private void fillCurrentLocation(EditText lat, EditText lon, Button button) {
         if (!RoutineLocationTriggerScheduler.hasFineLocation(this)) {
-            Toast.makeText(this, "Allow precise location first.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.places_need_precise), Toast.LENGTH_SHORT).show();
             return;
         }
         if (!RoutineLocationTriggerScheduler.isLocationEnabled(this)) {
-            Toast.makeText(this, "Turn on Android location first.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getString(R.string.places_location_off), Toast.LENGTH_SHORT).show();
             RoutineLocationTriggerScheduler.openLocationServices(this);
             return;
         }
@@ -261,7 +261,7 @@ public final class SavedPlacesActivity extends Activity {
             if (cached != null) {
                 lat.setText(coordinate(cached.getLatitude()));
                 lon.setText(coordinate(cached.getLongitude()));
-            } else Toast.makeText(this, "Could not get a current location fix.", Toast.LENGTH_SHORT).show();
+            } else Toast.makeText(this, getString(R.string.places_no_fix), Toast.LENGTH_SHORT).show();
             return;
         }
         button.setEnabled(false);
@@ -272,7 +272,7 @@ public final class SavedPlacesActivity extends Activity {
                 lm.getCurrentLocation(chosen, null, getMainExecutor(), location -> runOnUiThread(() -> {
                     button.setEnabled(true);
                     Location result = location != null ? location : fallback;
-                    if (result == null) Toast.makeText(this, "Could not get a current location fix.", Toast.LENGTH_SHORT).show();
+                    if (result == null) Toast.makeText(this, getString(R.string.places_no_fix), Toast.LENGTH_SHORT).show();
                     else {
                         lat.setText(coordinate(result.getLatitude()));
                         lon.setText(coordinate(result.getLongitude()));
@@ -284,7 +284,7 @@ public final class SavedPlacesActivity extends Activity {
                         runOnUiThread(() -> {
                             button.setEnabled(true);
                             Location result = location != null ? location : fallback;
-                            if (result == null) Toast.makeText(SavedPlacesActivity.this, "Could not get a current location fix.", Toast.LENGTH_SHORT).show();
+                            if (result == null) Toast.makeText(SavedPlacesActivity.this, getString(R.string.places_no_fix), Toast.LENGTH_SHORT).show();
                             else {
                                 lat.setText(coordinate(result.getLatitude()));
                                 lon.setText(coordinate(result.getLongitude()));
@@ -297,7 +297,7 @@ public final class SavedPlacesActivity extends Activity {
                             if (fallback != null) {
                                 lat.setText(coordinate(fallback.getLatitude()));
                                 lon.setText(coordinate(fallback.getLongitude()));
-                            } else Toast.makeText(SavedPlacesActivity.this, "Could not get a current location fix.", Toast.LENGTH_SHORT).show();
+                            } else Toast.makeText(SavedPlacesActivity.this, getString(R.string.places_no_fix), Toast.LENGTH_SHORT).show();
                         });
                     }
                     @Override public void onProviderEnabled(String provider) {}
@@ -315,10 +315,10 @@ public final class SavedPlacesActivity extends Activity {
 
     private void confirmDelete(SavedPlaceStore.Place place) {
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Delete " + place.name + "?")
-                .setMessage("Existing Routine triggers and IF conditions keep their saved coordinates. This only removes the reusable place preset.")
-                .setNegativeButton("Cancel", null)
-                .setPositiveButton("Delete", (d, w) -> {
+                .setTitle(getString(R.string.places_delete_title, place.name))
+                .setMessage(getString(R.string.places_delete_message))
+                .setNegativeButton(getString(R.string.ui_cancel_19766ed6), null)
+                .setPositiveButton(getString(R.string.ui_delete_e2d0a549), (d, w) -> {
                     SavedPlaceStore.remove(this, place.id);
                     refresh();
                 }).create();

@@ -138,7 +138,7 @@ public final class RoutineLocationTriggerScheduler {
                 if (label != null && label.length() > 0) return label.toString();
             } catch (Exception ignored) {}
         }
-        return "Allow all the time";
+        return c == null ? "" : c.getString(R.string.locsched_allow_always);
     }
 
     private static PendingIntent pending(Context c, String triggerId, int extraFlag) {

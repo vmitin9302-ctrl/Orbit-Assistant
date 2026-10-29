@@ -263,7 +263,7 @@ public final class LocationTriggerEditorActivity extends Activity {
             transitionButton.setText(RoutineTriggerStore.LOCATION_EXIT.equals(transition)
                     ? "When I leave" : "When I arrive");
         }
-        if (radiusButton != null) radiusButton.setText(RoutineTriggerSchedule.radiusLabel(radiusMeters));
+        if (radiusButton != null) radiusButton.setText(RoutineTriggerSchedule.radiusLabel(this, radiusMeters));
         if (savedPlaceButton != null) {
             SavedPlaceStore.Place selectedPlace = SavedPlaceStore.get(this, selectedSavedPlaceId);
             savedPlaceButton.setText(selectedPlace == null ? "Choose saved place" : selectedPlace.name);
