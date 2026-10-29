@@ -2357,7 +2357,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
             leloTapCount = 0;
             boolean enabled = !Prefs.leloMode(this);
             Prefs.get(this).edit().putBoolean(Prefs.LELO_MODE, enabled).apply();
-            Toast.makeText(this, enabled ? getString(R.string.ui_lelo_mode_unlocked_6baa72d6) : getString(R.string.ui_lelo_mode_hidden_again_94c91442), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, enabled ? "Lelo mode unlocked ✨" : "Lelo mode hidden again", Toast.LENGTH_SHORT).show();
             // Lelo mode decides which overlay styles exist, so the page rebuilds in place (same
             // scroll position) the way an accent change does, with the selector re-read.
             appliedStructuralAppearance = "";

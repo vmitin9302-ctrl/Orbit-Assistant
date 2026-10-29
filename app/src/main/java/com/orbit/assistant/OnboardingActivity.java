@@ -398,7 +398,7 @@ public final class OnboardingActivity extends Activity {
                 getString(R.string.ui_runs_privately_on_this_phone_and_keeps_workin_98f90f9a));
         addCapabilityLine(card, provider);
 
-        String missing = missingCapabilitySentence(provider.capabilities());
+        String missing = missingCapabilitySentence(this, provider.capabilities());
         if (!missing.isEmpty() && supported) {
             TextView limits = UiKit.text(this, missing, 12, UiKit.MUTED, false);
             limits.setLineSpacing(0, 1.12f);
@@ -488,17 +488,18 @@ public final class OnboardingActivity extends Activity {
      * One honest sentence about what a provider cannot do yet, derived from its declared
      * capabilities rather than written down a second time here.
      */
-    static String missingCapabilitySentence(AiCapabilities caps) {
+    static String missingCapabilitySentence(Context context, AiCapabilities caps) {
         if (caps == null) return "";
         java.util.List<String> missing = new java.util.ArrayList<>();
-        if (!caps.hostedWebSearch) missing.add("web search");
-        if (!caps.images) missing.add("screens and images");
-        if (!caps.deviceActions) missing.add("device actions");
-        if (!caps.routinePlanning) missing.add("Routine planning");
+        if (!caps.hostedWebSearch) missing.add(context.getString(R.string.core_missing_web_search));
+        if (!caps.images) missing.add(context.getString(R.string.core_missing_images));
+        if (!caps.deviceActions) missing.add(context.getString(R.string.core_missing_device_actions));
+        if (!caps.routinePlanning) missing.add(context.getString(R.string.core_missing_routine_planning));
         if (missing.isEmpty()) return "";
-        StringBuilder out = new StringBuilder("Not available in this mode yet: ");
+        StringBuilder out = new StringBuilder(context.getString(R.string.core_missing_prefix));
         for (int i = 0; i < missing.size(); i++) {
-            if (i > 0) out.append(i == missing.size() - 1 ? ", or " : ", ");
+            if (i > 0) out.append(context.getString(i == missing.size() - 1
+                    ? R.string.core_list_last_separator : R.string.core_list_separator));
             out.append(missing.get(i));
         }
         return out.append(".").toString();

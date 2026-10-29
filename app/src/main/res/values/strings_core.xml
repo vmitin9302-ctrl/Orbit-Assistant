@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="core_missing_web_search">web search</string>
+    <string name="core_missing_images">screens and images</string>
+    <string name="core_missing_device_actions">device actions</string>
+    <string name="core_missing_routine_planning">Routine planning</string>
+    <string name="core_missing_prefix">"Not available in this mode yet: "</string>
+    <string name="core_list_separator">", "</string>
+    <string name="core_list_last_separator">", or "</string>
+    <string name="core_attachment">Attachment</string>
+    <string name="core_multiple_attachments">Multiple attachments</string>
+    <string name="core_meta_text_loaded">" · Text loaded"</string>
+    <string name="core_meta_loaded">" · Loaded"</string>
+    <string name="core_text">Text</string>
+    <string name="core_image">Image</string>
+    <string name="core_text_loaded">Text · Loaded</string>
+    <string name="core_attach_camera">Camera</string>
+    <string name="core_attach_gallery">Gallery</string>
+    <string name="core_attach_file">File</string>
+    <string name="core_attach_screen">Screen</string>
+    <string name="core_attach_clipboard">Clipboard</string>
+    <string name="core_attach_vault">Vault</string>
+    <string name="core_device_action">Device action</string>
+    <string name="core_saved_chat">Saved chat</string>
+    <plurals name="core_attachments_count">
+        <item quantity="one">%d attachments</item>
+        <item quantity="other">%d attachments</item>
+    </plurals>
+</resources>
