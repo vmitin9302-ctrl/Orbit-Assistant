@@ -111,6 +111,16 @@ public final class CalendarActionExecutor {
                 && message != null && message.contains(NO_TARGET_CHOSEN);
     }
 
+    /** Same test, also recognising the refusal as worded in the app language. */
+    public static boolean needsTargetChoice(Context context, AssistantReply.Action action,
+                                            String status, String message) {
+        if (needsTargetChoice(action, status, message)) return true;
+        return context != null && isCalendarWrite(action)
+                && DeviceActionExecutor.STATUS_UNAVAILABLE.equals(status)
+                && message != null
+                && message.contains(context.getString(R.string.calexec_no_target_chosen));
+    }
+
     /**
      * True for an action that may never run without an explicit confirmation, whatever the
      * envelope that carried it happened to say.
@@ -261,29 +271,47 @@ public final class CalendarActionExecutor {
 
     /** The same validation with an explicit device zone, so the fallback is testable. */
     public static Plan parse(JSONObject params, ZoneId deviceZone) {
-        if (params == null) return new Plan(null, "No calendar events were provided");
+        return parse(null, params, deviceZone);
+    }
+
+    /** Wording from resources (the English fallback equals the English resource). */
+    private static String msg(Context c, int res, String fallback, Object... args) {
+        if (c != null) return args.length == 0 ? c.getString(res) : c.getString(res, args);
+        return args.length == 0 ? fallback : String.format(Locale.US, fallback, args);
+    }
+
+    /** The same validation with its refusals worded in the app language (English when null). */
+    public static Plan parse(Context c, JSONObject params, ZoneId deviceZone) {
+        if (params == null) {
+            return new Plan(null, msg(c, R.string.calexec_no_events, "No calendar events were provided"));
+        }
         JSONArray raw = params.optJSONArray("events");
         if (raw == null || raw.length() == 0) {
-            return new Plan(null, "No calendar events were provided");
+            return new Plan(null, msg(c, R.string.calexec_no_events, "No calendar events were provided"));
         }
         if (raw.length() > MAX_EVENTS) {
-            return new Plan(null, "That is more than " + MAX_EVENTS
-                    + " events; Orbit will not add an unbounded schedule in one step");
+            return new Plan(null, msg(c, R.string.calexec_too_many,
+                    "That is more than %1$d events; Orbit will not add an unbounded schedule in one step",
+                    MAX_EVENTS));
         }
         ZoneId fallbackZone = deviceZone == null ? ZoneId.systemDefault() : deviceZone;
         List<Event> events = new ArrayList<>();
         for (int i = 0; i < raw.length(); i++) {
             JSONObject item = raw.optJSONObject(i);
-            if (item == null) return new Plan(null, "Event " + (i + 1) + " is not readable");
+            if (item == null) return new Plan(null, msg(c, R.string.calexec_event_unreadable,
+                    "Event %1$d is not readable", i + 1));
 
             String title = clip(item.optString("title", "").trim(), MAX_TITLE_CHARS);
-            if (title.isEmpty()) return new Plan(null, "Event " + (i + 1) + " has no title");
+            if (title.isEmpty()) return new Plan(null, msg(c, R.string.calexec_event_no_title,
+                    "Event %1$d has no title", i + 1));
 
             String dateText = item.optString("date", "").trim();
             LocalDate date = strictDate(dateText);
             if (date == null) {
-                return new Plan(null, "Event " + (i + 1) + " has an invalid date"
-                        + (dateText.isEmpty() ? "" : " (" + clip(dateText, 40) + ")"));
+                return new Plan(null, dateText.isEmpty()
+                        ? msg(c, R.string.calexec_event_bad_date, "Event %1$d has an invalid date", i + 1)
+                        : msg(c, R.string.calexec_event_bad_date_value,
+                                "Event %1$d has an invalid date (%2$s)", i + 1, clip(dateText, 40)));
             }
 
             // A supplied timezone must be real. Silently accepting a nonsense id and falling back
@@ -294,8 +322,8 @@ public final class CalendarActionExecutor {
                 try {
                     zone = ZoneId.of(zoneText);
                 } catch (DateTimeException | IllegalArgumentException invalid) {
-                    return new Plan(null, "Event " + (i + 1) + " has an unknown timezone ("
-                            + clip(zoneText, 40) + ")");
+                    return new Plan(null, msg(c, R.string.calexec_event_bad_zone,
+                            "Event %1$d has an unknown timezone (%2$s)", i + 1, clip(zoneText, 40)));
                 }
             }
 
@@ -315,10 +343,12 @@ public final class CalendarActionExecutor {
                 minute = 0;
             } else {
                 if (hour < 0 || hour > 23) {
-                    return new Plan(null, "Event " + (i + 1) + " has an invalid hour");
+                    return new Plan(null, msg(c, R.string.calexec_event_bad_hour,
+                            "Event %1$d has an invalid hour", i + 1));
                 }
                 if (minute < 0 || minute > 59) {
-                    return new Plan(null, "Event " + (i + 1) + " has an invalid minute");
+                    return new Plan(null, msg(c, R.string.calexec_event_bad_minute,
+                            "Event %1$d has an invalid minute", i + 1));
                 }
             }
 
@@ -326,7 +356,8 @@ public final class CalendarActionExecutor {
             if (item.has("durationMinutes") && !item.isNull("durationMinutes")) {
                 duration = item.optInt("durationMinutes", DEFAULT_DURATION_MINUTES);
                 if (duration < 1 || duration > MAX_DURATION_MINUTES) {
-                    return new Plan(null, "Event " + (i + 1) + " has an invalid duration");
+                    return new Plan(null, msg(c, R.string.calexec_event_bad_duration,
+                            "Event %1$d has an invalid duration", i + 1));
                 }
             }
 
@@ -371,14 +402,14 @@ public final class CalendarActionExecutor {
         if (!OrbitCalendarStore.hasAccess(c)) {
             CalendarDiagnostics.recordBlocked(c, "permission", plannedCount(params));
             return DeviceActionExecutor.Result.permission(
-                    "Allow Calendar access so Orbit can add these events.");
+                    c.getString(R.string.calexec_allow_access));
         }
 
-        Plan plan = parse(params);
+        Plan plan = parse(c, params, ZoneId.systemDefault());
         if (!plan.ok()) {
             CalendarDiagnostics.recordBlocked(c, "invalid plan", plannedCount(params));
             return DeviceActionExecutor.Result.failed(
-                    plan.error.isEmpty() ? "Those calendar events are not valid" : plan.error);
+                    plan.error.isEmpty() ? c.getString(R.string.calexec_not_valid) : plan.error);
         }
 
         List<OrbitCalendarStore.Target> writable = OrbitCalendarStore.writableCalendars(c);
@@ -387,8 +418,8 @@ public final class CalendarActionExecutor {
         if (target == null && writable.size() == 1) target = writable.get(0);
         if (target == null) {
             String reason = writable.isEmpty()
-                    ? "No writable calendar is set up on this phone, so Orbit has nowhere to add these events."
-                    : NO_TARGET_CHOSEN;
+                    ? c.getString(R.string.calexec_no_writable)
+                    : c.getString(R.string.calexec_no_target_chosen);
             CalendarDiagnostics.recordBlocked(c,
                     writable.isEmpty() ? "no writable calendar" : "no target chosen", plan.size());
             return DeviceActionExecutor.Result.unavailable(reason);
@@ -396,14 +427,15 @@ public final class CalendarActionExecutor {
 
         Outcome outcome = write(c, plan, target);
         CalendarDiagnostics.recordWrite(c, writable.size(), outcome);
-        return resultFor(outcome);
+        return resultFor(c, outcome);
     }
 
     /** The insert-and-verify loop. Package-private so tests can drive it with a fake provider. */
     static Outcome write(Context c, Plan plan, OrbitCalendarStore.Target target) {
         ContentResolver resolver = c.getContentResolver();
         if (resolver == null) {
-            return new Outcome(0, 0, plan.size(), target.label(), "Calendar provider unavailable");
+            return new Outcome(0, 0, plan.size(), target.label(),
+                    c.getString(R.string.calexec_provider_unavailable));
         }
         int added = 0;
         int duplicates = 0;
@@ -438,13 +470,13 @@ public final class CalendarActionExecutor {
                 // lets this event be counted as added.
                 if (inserted == null || !verify(resolver, inserted, event)) {
                     failed++;
-                    if (lastError.isEmpty()) lastError = "the calendar did not keep the event";
+                    if (lastError.isEmpty()) lastError = c.getString(R.string.calexec_not_kept);
                     continue;
                 }
                 added++;
             } catch (SecurityException denied) {
                 failed++;
-                lastError = "calendar permission was withdrawn";
+                lastError = c.getString(R.string.calexec_permission_withdrawn);
             } catch (Exception failure) {
                 failed++;
                 if (lastError.isEmpty()) lastError = shortReason(failure);
@@ -539,31 +571,50 @@ public final class CalendarActionExecutor {
      * the provider reported.
      */
     static DeviceActionExecutor.Result resultFor(Outcome outcome) {
-        if (outcome == null) return DeviceActionExecutor.Result.failed("No events were added.");
-        String calendar = outcome.calendarName.isEmpty() ? "your calendar" : outcome.calendarName;
+        return resultFor(null, outcome);
+    }
+
+    /** {@link #resultFor(Outcome)} worded in the app language (English when no Context). */
+    static DeviceActionExecutor.Result resultFor(Context c, Outcome outcome) {
+        if (outcome == null) {
+            return DeviceActionExecutor.Result.failed(
+                    msg(c, R.string.calexec_none_added, "No events were added."));
+        }
+        String calendar = outcome.calendarName.isEmpty()
+                ? msg(c, R.string.calexec_your_calendar, "your calendar") : outcome.calendarName;
         if (outcome.added > 0) {
-            StringBuilder message = new StringBuilder("Added ")
-                    .append(outcome.added).append(outcome.added == 1 ? " event to " : " events to ")
-                    .append(calendar).append(".");
+            StringBuilder message = new StringBuilder(c != null
+                    ? c.getResources().getQuantityString(R.plurals.calexec_added, outcome.added,
+                            outcome.added, calendar)
+                    : "Added " + outcome.added + (outcome.added == 1 ? " event to " : " events to ")
+                            + calendar + ".");
             if (outcome.alreadyPresent > 0) {
-                message.append(" ").append(outcome.alreadyPresent)
-                        .append(outcome.alreadyPresent == 1 ? " was" : " were")
-                        .append(" already on your calendar.");
+                message.append(" ").append(c != null
+                        ? c.getResources().getQuantityString(R.plurals.calexec_already_present,
+                                outcome.alreadyPresent, outcome.alreadyPresent)
+                        : outcome.alreadyPresent
+                                + (outcome.alreadyPresent == 1 ? " was" : " were")
+                                + " already on your calendar.");
             }
             if (outcome.failed > 0) {
-                message.append(" ").append(outcome.failed)
-                        .append(outcome.failed == 1 ? " could" : " could")
-                        .append(" not be added.");
+                message.append(" ").append(c != null
+                        ? c.getResources().getQuantityString(R.plurals.calexec_not_added,
+                                outcome.failed, outcome.failed)
+                        : outcome.failed + " could not be added.");
             }
             return DeviceActionExecutor.Result.success(message.toString());
         }
         if (outcome.alreadyPresent > 0 && outcome.failed == 0) {
-            return DeviceActionExecutor.Result.success("No events were added. All "
-                    + outcome.alreadyPresent + (outcome.alreadyPresent == 1 ? " was" : " were")
-                    + " already on " + calendar + ".");
+            return DeviceActionExecutor.Result.success(c != null
+                    ? c.getResources().getQuantityString(R.plurals.calexec_all_present,
+                            outcome.alreadyPresent, outcome.alreadyPresent, calendar)
+                    : "No events were added. All "
+                            + outcome.alreadyPresent + (outcome.alreadyPresent == 1 ? " was" : " were")
+                            + " already on " + calendar + ".");
         }
         String reason = outcome.lastError.isEmpty() ? "" : " (" + outcome.lastError + ")";
-        return DeviceActionExecutor.Result.failed("No events were added." + reason);
+        return DeviceActionExecutor.Result.failed(
+                msg(c, R.string.calexec_none_added, "No events were added.") + reason);
     }
 
     // ---- helpers ---------------------------------------------------------------------------------

@@ -422,87 +422,114 @@ public final class OverlayLaunchTrace {
 
     /** A short sentence explaining a status, so the report reads without the source. */
     public static String explain(String status) {
+        return explain(null, status);
+    }
+
+    /** {@link #explain(String)} in the app language (English when there is no Context). */
+    public static String explain(Context c, String status) {
         if (COMPLETE_VISIBLE.equals(status)) {
-            return "the overlay was drawn and no ending was recorded";
+            return t(c, R.string.launchtrace_explain_complete,
+                    "the overlay was drawn and no ending was recorded");
         }
         if (EXPECTED_DISMISS.equals(status)) {
-            return "Orbit closed the overlay itself";
+            return t(c, R.string.launchtrace_explain_dismiss, "Orbit closed the overlay itself");
         }
         if (INTERNAL_TRANSITION.equals(status)) {
-            return "Orbit handed off to another of its own screens";
+            return t(c, R.string.launchtrace_explain_transition,
+                    "Orbit handed off to another of its own screens");
         }
         if (SYSTEM_HIDE.equals(status)) {
-            return "the overlay was drawn, then hidden without Orbit asking";
+            return t(c, R.string.launchtrace_explain_system_hide,
+                    "the overlay was drawn, then hidden without Orbit asking");
         }
         if (HIDDEN_BEFORE_VISIBLE.equals(status)) {
-            return "the overlay was hidden before any frame was drawn, and Orbit did not ask";
+            return t(c, R.string.launchtrace_explain_hidden_early,
+                    "the overlay was hidden before any frame was drawn, and Orbit did not ask");
         }
         if (INCOMPLETE.equals(status)) {
-            return "preparation began, nothing was drawn, and no ending arrived";
+            return t(c, R.string.launchtrace_explain_incomplete,
+                    "preparation began, nothing was drawn, and no ending arrived");
         }
         if (NEVER_SHOWN.equals(status)) {
-            return "a session was built but never asked to appear";
+            return t(c, R.string.launchtrace_explain_never_shown,
+                    "a session was built but never asked to appear");
         }
         if (EXCEPTION.equals(status)) {
-            return "something threw during the launch";
+            return t(c, R.string.launchtrace_explain_exception, "something threw during the launch");
         }
         if (IN_PROGRESS.equals(status)) {
-            return "still running in this process";
+            return t(c, R.string.launchtrace_explain_in_progress, "still running in this process");
         }
-        return "not enough was recorded to say";
+        return t(c, R.string.launchtrace_explain_unknown, "not enough was recorded to say");
+    }
+
+    /** Wording from resources (the English fallback equals the English resource). */
+    private static String t(Context c, int res, String fallback, Object... args) {
+        if (c != null) return args.length == 0 ? c.getString(res) : c.getString(res, args);
+        return args.length == 0 ? fallback : String.format(Locale.US, fallback, args);
     }
 
     /** One line for the ordinary diagnostic report. */
     public static String summary(Context context) {
         List<Attempt> all = attempts(context);
-        if (all.isEmpty()) return "No overlay launch recorded yet";
+        if (all.isEmpty()) return context.getString(R.string.launchtrace_none_yet);
         Attempt last = all.get(all.size() - 1);
-        return status(last, false) + " at "
-                + DateFormat.getDateTimeInstance().format(new Date(last.startedAtMs));
+        return context.getString(R.string.launchtrace_summary, status(last, false),
+                DateFormat.getDateTimeInstance().format(new Date(last.startedAtMs)));
     }
 
     /** The pasteable overlay launch report. */
     public static String report(Context context) {
         List<Attempt> all = attempts(context);
-        StringBuilder b = new StringBuilder("Orbit overlay launch diagnostics\n");
-        b.append("Version: ").append(versionOf(context)).append('\n');
-        b.append("This process: ").append(PROCESS_TOKEN).append('\n');
-        b.append("Stored attempts: ").append(all.size()).append('\n');
+        StringBuilder b = new StringBuilder(context.getString(R.string.launchtrace_title) + "\n");
+        b.append(context.getString(R.string.launchtrace_version)).append(versionOf(context)).append('\n');
+        b.append(context.getString(R.string.launchtrace_this_process)).append(PROCESS_TOKEN).append('\n');
+        b.append(context.getString(R.string.launchtrace_stored)).append(all.size()).append('\n');
         if (all.isEmpty()) {
-            b.append("\nNo Side-button overlay launch has been recorded yet. Open Orbit with the "
-                    + "Side-button gesture, then copy this again.\n");
+            b.append("\n").append(context.getString(R.string.launchtrace_report_empty)).append("\n");
             return b.toString();
         }
         for (int i = 0; i < all.size(); i++) {
             Attempt attempt = all.get(i);
             String status = status(attempt, i < all.size() - 1);
-            b.append("\nAttempt ").append(i + 1).append(" of ").append(all.size()).append('\n');
-            b.append("  Started: ")
+            b.append("\n").append(context.getString(R.string.launchtrace_attempt, i + 1, all.size()))
+                    .append('\n');
+            b.append("  ").append(context.getString(R.string.launchtrace_started))
                     .append(DateFormat.getDateTimeInstance().format(new Date(attempt.startedAtMs)))
                     .append('\n');
-            b.append("  Status: ").append(status).append(" — ").append(explain(status)).append('\n');
-            b.append("  Process: ").append(attempt.processToken)
-                    .append(attempt.fromLiveProcess() ? " (this process)" : " (earlier process)")
+            b.append("  ").append(context.getString(R.string.launchtrace_status)).append(status)
+                    .append(" — ").append(explain(context, status)).append('\n');
+            b.append("  ").append(context.getString(R.string.launchtrace_process))
+                    .append(attempt.processToken)
+                    .append(context.getString(attempt.fromLiveProcess()
+                            ? R.string.launchtrace_this_proc : R.string.launchtrace_earlier_proc))
                     .append('\n');
-            b.append("  App version: ").append(attempt.version).append('\n');
-            b.append("  Trigger: ").append(attempt.trigger).append('\n');
-            b.append("  Internal resume: ").append(attempt.internalResume()).append('\n');
-            b.append("  Foreground: ")
-                    .append(attempt.foreground.isEmpty() ? "not resolved" : attempt.foreground)
+            b.append("  ").append(context.getString(R.string.launchtrace_app_version))
+                    .append(attempt.version).append('\n');
+            b.append("  ").append(context.getString(R.string.launchtrace_trigger))
+                    .append(attempt.trigger).append('\n');
+            b.append("  ").append(context.getString(R.string.launchtrace_internal_resume))
+                    .append(attempt.internalResume()).append('\n');
+            b.append("  ").append(context.getString(R.string.launchtrace_foreground))
+                    .append(attempt.foreground.isEmpty()
+                            ? context.getString(R.string.launchtrace_not_resolved) : attempt.foreground)
                     .append('\n');
-            b.append("  Last stage: ")
-                    .append(attempt.lastStage().isEmpty() ? "none" : attempt.lastStage())
+            b.append("  ").append(context.getString(R.string.launchtrace_last_stage))
+                    .append(attempt.lastStage().isEmpty()
+                            ? context.getString(R.string.launchtrace_none) : attempt.lastStage())
                     .append('\n');
             if (!attempt.endingReason.isEmpty()) {
-                b.append("  Ending reason: ").append(attempt.endingReason).append('\n');
+                b.append("  ").append(context.getString(R.string.launchtrace_ending_reason))
+                        .append(attempt.endingReason).append('\n');
             }
             for (String line : attempt.lines) b.append("  ").append(line).append('\n');
             if (attempt.truncated) {
-                b.append("  … further events for this attempt were dropped at the ")
-                        .append(MAX_EVENTS_PER_ATTEMPT).append("-event limit\n");
+                b.append("  ").append(context.getString(R.string.launchtrace_truncated,
+                        MAX_EVENTS_PER_ATTEMPT)).append('\n');
             }
             if (attempt.hasException()) {
-                b.append("  EXCEPTION at ").append(attempt.exceptionStage).append('\n');
+                b.append("  ").append(context.getString(R.string.launchtrace_exception_at))
+                        .append(attempt.exceptionStage).append('\n');
                 for (String line : attempt.exceptionText.split("\n")) {
                     b.append("    ").append(line).append('\n');
                 }

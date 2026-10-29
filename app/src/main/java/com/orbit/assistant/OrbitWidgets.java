@@ -95,7 +95,7 @@ public final class OrbitWidgets {
                 .putExtra(ChatActivity.EXTRA_FOCUS_COMPOSER, true);
         views.setOnClickPendingIntent(R.id.widget_ask_card,
                 activityPendingIntent(context, intent, widgetId, 0, TYPE_ASK));
-        views.setContentDescription(R.id.widget_ask_card, "Ask Orbit. Opens a new Orbit chat.");
+        views.setContentDescription(R.id.widget_ask_card, context.getString(R.string.widgets_ask_description));
         manager.updateAppWidget(widgetId, views);
     }
 
@@ -110,15 +110,15 @@ public final class OrbitWidgets {
         RoutineStore.Routine routine = RoutineStore.findById(context, routineId);
         PendingIntent pending;
         if (routine == null) {
-            views.setTextViewText(R.id.widget_routine_name, "Routine unavailable");
-            views.setTextViewText(R.id.widget_routine_hint, "Tap to choose another");
+            views.setTextViewText(R.id.widget_routine_name, context.getString(R.string.widgets_routine_unavailable));
+            views.setTextViewText(R.id.widget_routine_hint, context.getString(R.string.widgets_tap_choose_another));
             views.setContentDescription(R.id.widget_routine_card,
-                    "Routine unavailable. Tap to reconfigure this Orbit widget.");
+                    context.getString(R.string.widgets_routine_unavailable_reconfigure));
             pending = configurationPendingIntent(context, widgetId, 0);
         } else {
             views.setTextViewText(R.id.widget_routine_name, routine.name);
-            views.setTextViewText(R.id.widget_routine_hint, "Tap to run");
-            views.setContentDescription(R.id.widget_routine_card, "Run " + routine.name);
+            views.setTextViewText(R.id.widget_routine_hint, context.getString(R.string.widgets_tap_to_run));
+            views.setContentDescription(R.id.widget_routine_card, context.getString(R.string.widgets_run_routine, routine.name));
             pending = actionPendingIntent(context,
                     OrbitWidgetActionReceiver.ACTION_RUN_ROUTINE, widgetId, -1);
         }
@@ -154,7 +154,7 @@ public final class OrbitWidgets {
             views.setContentDescription(containers[slot], presentation.description);
             views.setOnClickPendingIntent(containers[slot], presentation.pendingIntent);
         }
-        views.setContentDescription(R.id.widget_quick_card, "Orbit Quick Actions");
+        views.setContentDescription(R.id.widget_quick_card, context.getString(R.string.widgets_quick_actions));
         manager.updateAppWidget(widgetId, views);
     }
 
@@ -163,29 +163,31 @@ public final class OrbitWidgets {
             String routineId = quickRoutineId(context, widgetId, slot);
             RoutineStore.Routine routine = RoutineStore.findById(context, routineId);
             if (routine == null) {
-                return new Slot("Unavailable", R.drawable.ic_routine_tile,
-                        "Routine unavailable. Tap to configure Quick Actions.",
+                return new Slot(context.getString(R.string.widgets_unavailable), R.drawable.ic_routine_tile,
+                        context.getString(R.string.widgets_routine_unavailable_configure),
                         configurationPendingIntent(context, widgetId, slot + 1));
             }
-            return new Slot(routine.name, R.drawable.ic_routine_tile, "Run " + routine.name,
+            return new Slot(routine.name, R.drawable.ic_routine_tile,
+                    context.getString(R.string.widgets_run_routine, routine.name),
                     actionPendingIntent(context, OrbitWidgetActionReceiver.ACTION_RUN_ROUTINE,
                             widgetId, slot));
         }
         if (TYPE_FLASHLIGHT.equals(type)) {
-            return new Slot("Flashlight", R.drawable.ic_widget_flashlight,
-                    "Toggle flashlight", actionPendingIntent(context,
+            return new Slot(context.getString(R.string.widgets_flashlight), R.drawable.ic_widget_flashlight,
+                    context.getString(R.string.widgets_toggle_flashlight), actionPendingIntent(context,
                     OrbitWidgetActionReceiver.ACTION_TOGGLE_FLASHLIGHT, widgetId, slot));
         }
         if (TYPE_REMINDER.equals(type)) {
             Intent intent = new Intent(context, ChatActivity.class)
                     .putExtra(ChatActivity.EXTRA_FOCUS_COMPOSER, true)
                     .putExtra(ChatActivity.EXTRA_INITIAL_DRAFT, "Remind me ");
-            return new Slot("Reminder", R.drawable.ic_widget_reminder,
-                    "Create a reminder", activityPendingIntent(context, intent, widgetId, slot, type));
+            return new Slot(context.getString(R.string.widgets_reminder), R.drawable.ic_widget_reminder,
+                    context.getString(R.string.widgets_create_reminder), activityPendingIntent(context, intent, widgetId, slot, type));
         }
         Intent intent = new Intent(context, ChatActivity.class)
                 .putExtra(ChatActivity.EXTRA_FOCUS_COMPOSER, true);
-        return new Slot("Ask Orbit", R.drawable.ic_orbit_tile, "Ask Orbit",
+        return new Slot(context.getString(R.string.widgets_ask_orbit), R.drawable.ic_orbit_tile,
+                context.getString(R.string.widgets_ask_orbit),
                 activityPendingIntent(context, intent, widgetId, slot, TYPE_ASK));
     }
 
@@ -194,16 +196,16 @@ public final class OrbitWidgets {
         AppWidgetManager manager = AppWidgetManager.getInstance(activity);
         if (Build.VERSION.SDK_INT < 26 || !manager.isRequestPinAppWidgetSupported()) {
             Toast.makeText(activity,
-                    "Open your launcher's widget picker, then choose Orbit.", Toast.LENGTH_LONG).show();
+                    activity.getString(R.string.widgets_open_picker), Toast.LENGTH_LONG).show();
             return;
         }
         boolean requested = manager.requestPinAppWidget(
                 new ComponentName(activity, providerClass), null, null);
         if (!requested) {
             Toast.makeText(activity,
-                    "Open your launcher's widget picker, then choose Orbit.", Toast.LENGTH_LONG).show();
+                    activity.getString(R.string.widgets_open_picker), Toast.LENGTH_LONG).show();
         } else {
-            Toast.makeText(activity, "Choose where to place the " + label + " widget.",
+            Toast.makeText(activity, activity.getString(R.string.widgets_choose_place, label),
                     Toast.LENGTH_SHORT).show();
         }
     }

@@ -62,7 +62,7 @@ public final class OrbitVaultAttachment {
         // sends it with no message of their own has to match which of those it actually is.
         String contentState = item.isDocumentPage() && item.body.isEmpty()
                 ? ComposerAttachment.CONTENT_VISUAL_ONLY : ComposerAttachment.CONTENT_FULL_TEXT;
-        return new ComposerAttachment(KIND, label(item), context, image, null,
+        return new ComposerAttachment(KIND, c == null ? label(item) : label(c, item), context, image, null,
                 detail, contentState);
     }
 
@@ -76,6 +76,14 @@ public final class OrbitVaultAttachment {
         if (item == null) return "Vault item";
         String title = item.displayTitle().trim();
         return title.isEmpty() ? "Vault item" : "Vault: " + title;
+    }
+
+    /** {@link #label(OrbitVaultItem)} in the app language. */
+    public static String label(Context c, OrbitVaultItem item) {
+        if (item == null) return c.getString(R.string.vaultattach_item);
+        String title = item.displayTitle().trim();
+        return title.isEmpty() ? c.getString(R.string.vaultattach_item)
+                : c.getString(R.string.vaultattach_titled, title);
     }
 
     /**

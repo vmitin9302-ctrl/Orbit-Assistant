@@ -142,8 +142,8 @@ public final class RoutineDraft {
         if (steps != null) {
             for (int i = 0; i < steps.length(); i++) {
                 if (actions.size() >= RoutineActionCatalog.MAX_STEPS) {
-                    addWarning(warnings, "Only the first " + RoutineActionCatalog.MAX_STEPS
-                            + " steps were kept");
+                    addWarning(warnings, w(context, R.string.routinedraft_only_first_steps,
+                            "Only the first %1$d steps were kept", RoutineActionCatalog.MAX_STEPS));
                     break;
                 }
                 JSONObject step = steps.optJSONObject(i);
@@ -163,15 +163,16 @@ public final class RoutineDraft {
                     rejected.add((type.isEmpty() ? "(none)" : type) + " — "
                             + (RoutineActionCatalog.isSupported(type)
                                     ? "parameters failed validation" : "unsupported action type"));
-                    addWarning(warnings, "Orbit couldn't add: "
-                            + describeRejected(step.optString("describe", ""), type));
+                    addWarning(warnings, w(context, R.string.routinedraft_could_not_add,
+                            "Orbit couldn't add: %1$s",
+                            describeRejected(context, step.optString("describe", ""), type)));
                     continue;
                 }
                 actions.add(action);
                 plannedAt.add(i);
             }
         }
-        reconcileBranches(actions, plannedAt, warnings);
+        reconcileBranches(context, actions, plannedAt, warnings);
 
         if (actions.isEmpty()) {
             return new Outcome(null, response.shape, true, response.hasStepsArray(),
@@ -184,18 +185,20 @@ public final class RoutineDraft {
         JSONArray extraTriggers = root.optJSONArray("additionalTriggers");
         if (extraTriggers != null && extraTriggers.length() > 0) {
             // One trigger is drafted in this release; a second is reported rather than dropped.
-            addWarning(warnings, "Only the first automatic trigger was drafted. Add the others in "
-                    + "Automatic triggers.");
+            addWarning(warnings, w(context, R.string.routinedraft_first_trigger_only,
+                    "Only the first automatic trigger was drafted. Add the others in "
+                            + "Automatic triggers."));
         }
         // Kept for a planner that still answers in the pre-v0.7.5.0 shape: branching is supported
         // now, so this only matters when one was asked for and none survived into the draft.
         if (root.optBoolean("elseRequested", false) && !hasBranch(actions)) {
-            addWarning(warnings, "Orbit couldn't build the \"otherwise\" branch. Add it in the "
-                    + "IF step before saving.");
+            addWarning(warnings, w(context, R.string.routinedraft_else_failed,
+                    "Orbit couldn't build the \"otherwise\" branch. Add it in the "
+                            + "IF step before saving."));
         }
 
         String name = root.optString(KEY_NAME, "").trim();
-        if (name.isEmpty()) name = "New routine";
+        if (name.isEmpty()) name = w(context, R.string.rtpl_new_routine, "New routine");
         return new Outcome(new RoutineDraft(name, actions, warnings, trigger), response.shape,
                 true, response.hasStepsArray(), returnedTypes.size(), actions.size(),
                 returnedTypes, rejected);
@@ -234,7 +237,8 @@ public final class RoutineDraft {
         SavedPlaceStore.Place place = RoutineTriggerDraft.findPlace(context, label);
         if (place == null) {
             if (!label.isEmpty()) {
-                addWarning(warnings, "Choose a location for \"" + label + "\" before saving");
+                addWarning(warnings, w(context, R.string.routinedraft_choose_location,
+                        "Choose a location for \"%1$s\" before saving", label));
             }
             return params;
         }
@@ -270,7 +274,7 @@ public final class RoutineDraft {
      *
      * @param plannedAt the planner index each accepted step came from, parallel to {@code actions}
      */
-    private static void reconcileBranches(List<AssistantReply.Action> actions,
+    private static void reconcileBranches(Context context, List<AssistantReply.Action> actions,
                                           List<Integer> plannedAt, List<String> warnings) {
         if (actions == null || plannedAt == null || actions.size() != plannedAt.size()) return;
         boolean stripped = false;
@@ -302,8 +306,9 @@ public final class RoutineDraft {
             }
         }
         if (stripped) {
-            addWarning(warnings, "Orbit couldn't build the \"otherwise\" branch from that plan. "
-                    + "Add it in the IF step before saving.");
+            addWarning(warnings, w(context, R.string.routinedraft_else_failed_plan,
+                    "Orbit couldn't build the \"otherwise\" branch from that plan. "
+                            + "Add it in the IF step before saving."));
         }
     }
 
@@ -313,11 +318,18 @@ public final class RoutineDraft {
         return copy;
     }
 
-    private static String describeRejected(String described, String type) {
+    private static String describeRejected(Context context, String described, String type) {
         String value = clip(described);
         if (!value.isEmpty()) return value;
-        return type.isEmpty() ? "an unsupported action" : type.toLowerCase(java.util.Locale.US)
+        return type.isEmpty() ? w(context, R.string.routinedraft_unsupported_action,
+                "an unsupported action") : type.toLowerCase(java.util.Locale.US)
                 .replace('_', ' ');
+    }
+
+    /** Wording from resources (the English fallback equals the English resource). */
+    private static String w(Context c, int res, String fallback, Object... args) {
+        if (c != null) return args.length == 0 ? c.getString(res) : c.getString(res, args);
+        return args.length == 0 ? fallback : String.format(java.util.Locale.US, fallback, args);
     }
 
     private static void addWarning(List<String> warnings, String message) {
@@ -385,7 +397,7 @@ public final class RoutineDraft {
                 }
             }
             // The editor trusts nothing that was handed to it, branch geometry included.
-            reconcileBranches(actions, plannedAt, warnings);
+            reconcileBranches(context, actions, plannedAt, warnings);
             RoutineTriggerDraft trigger =
                     RoutineTriggerDraft.fromPayload(context, root.optJSONObject(KEY_TRIGGER));
             return new RoutineDraft(root.optString(KEY_NAME, ""), actions, warnings, trigger);
@@ -395,8 +407,15 @@ public final class RoutineDraft {
     }
 
     public List<String> stepSummaries() {
+        return stepSummaries(null);
+    }
+
+    /** Step titles in the app language (English when there is no Context). */
+    public List<String> stepSummaries(Context context) {
         List<String> out = new ArrayList<>();
-        for (AssistantReply.Action action : actions) out.add(RoutineActionCatalog.title(action));
+        for (AssistantReply.Action action : actions) {
+            out.add(RoutineActionCatalog.title(context, action));
+        }
         return Collections.unmodifiableList(out);
     }
 }

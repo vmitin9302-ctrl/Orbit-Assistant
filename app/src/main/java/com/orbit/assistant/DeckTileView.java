@@ -136,7 +136,7 @@ public final class DeckTileView extends FrameLayout {
         remove.setPadding(inset, inset, inset, inset);
         remove.setBackground(UiKit.rounded(
                 UiKit.blend(UiKit.DANGER, UiKit.SURFACE_3, 0.55f), 13, c));
-        remove.setContentDescription("Remove " + resolved.title);
+        remove.setContentDescription(c.getString(R.string.decktile_remove, resolved.title));
         LayoutParams removeLp = new LayoutParams(
                 UiKit.dp(c, 26), UiKit.dp(c, 26), Gravity.TOP | Gravity.END);
         int edge = UiKit.dp(c, 6);
@@ -195,10 +195,12 @@ public final class DeckTileView extends FrameLayout {
         icon.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
         title.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
         subtitle.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_NO);
-        String size = tile.size == DeckTile.Size.LARGE ? ", large tile"
-                : tile.size == DeckTile.Size.WIDE ? ", wide tile" : "";
+        String size = tile.size == DeckTile.Size.LARGE
+                ? ", " + getContext().getString(R.string.decktile_large)
+                : tile.size == DeckTile.Size.WIDE
+                ? ", " + getContext().getString(R.string.decktile_wide) : "";
         setContentDescription(editing
-                ? resolved.contentDescription + size + ", editing. Double tap for options."
+                ? resolved.contentDescription + size + ", " + getContext().getString(R.string.decktile_editing)
                 : resolved.contentDescription + size);
         setFocusable(true);
     }
