@@ -164,7 +164,7 @@
     <string name="upd_verifying">Verifying…</string>
     <string name="upd_ready">Ready to install</string>
     <string name="upd_install">Install update</string>
-    <string name="upd_verification_failed">Verification failed\n%1$s</string>
+    <string name="updf_verification_failed">Verification failed\n%1$s</string>
     <string name="upd_download_cancelled">Download cancelled.</string>
     <string name="upd_needs_install_permission">Android needs permission to install updates from Orbit. Allow this source, then return to Orbit.</string>
     <string name="upd_allow_install">Allow installation</string>

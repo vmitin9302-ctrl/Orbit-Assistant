@@ -719,7 +719,7 @@ public final class UpdateActivity extends Activity {
                     if (!alive()) return;
                     hideDownloadProgress();
                     download = null;
-                    status.setText(getString(verificationFailure ? R.string.upd_verification_failed
+                    status.setText(getString(verificationFailure ? R.string.updf_verification_failed
                             : R.string.upd_network_error, message));
                     status.setTextColor(Color.rgb(239, 105, 105));
                     setAction(getString(R.string.upd_try_again), () -> startDownload(release), true);
@@ -781,7 +781,7 @@ public final class UpdateActivity extends Activity {
                     if (!alive()) return;
                     readyApk = null;
                     readyRelease = null;
-                    status.setText(getString(R.string.upd_verification_failed, message));
+                    status.setText(getString(R.string.updf_verification_failed, message));
                     status.setTextColor(Color.rgb(239, 105, 105));
                     setAction(getString(R.string.upd_check_again), UpdateActivity.this::checkForUpdates, true);
                 });

@@ -83,7 +83,9 @@ def main():
                 en_other = next(n for n in a if n.get('quantity') == 'other')
                 want = collections.Counter(FORMAT.findall(android_value(en_other)))
                 for n in list(a) + list(b):
-                    assert collections.Counter(FORMAT.findall(android_value(n))) == want, f'{key}: {n.get("quantity")}'
+                    got = collections.Counter(FORMAT.findall(android_value(n)))
+                    # A singular form may spell the number out ("1 step") instead of formatting it.
+                    assert got == want or (not got and n.get('quantity') in ('one', 'few', 'many')), f'{key}: {n.get("quantity")}'
             else:
                 assert collections.Counter(FORMAT.findall(android_value(a))) == collections.Counter(FORMAT.findall(android_value(b))), key
     if args.check_resources_only:

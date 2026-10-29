@@ -164,7 +164,7 @@
     <string name="upd_verifying">Проверка…</string>
     <string name="upd_ready">Готово к установке</string>
     <string name="upd_install">Установить обновление</string>
-    <string name="upd_verification_failed">Проверка не пройдена\n%1$s</string>
+    <string name="updf_verification_failed">Проверка не пройдена\n%1$s</string>
     <string name="upd_download_cancelled">Загрузка отменена.</string>
     <string name="upd_needs_install_permission">Android нужно разрешение на установку обновлений из Orbit. Разрешите этот источник и вернитесь в Orbit.</string>
     <string name="upd_allow_install">Разрешить установку</string>
