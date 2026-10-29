@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="res_notification_intelligence_label">Orbit notification intelligence</string>
+    <string name="res_routine_tile_label">Orbit Routine</string>
+    <string name="res_widget_choose_routine">Choose Routine</string>
+    <string name="res_widget_tap_to_run">Tap to run</string>
+    <string name="res_widget_quick_title">Orbit Quick Actions</string>
+    <string name="res_widget_ask_orbit">Ask Orbit</string>
+    <string name="res_widget_flashlight">Flashlight</string>
+    <string name="res_widget_reminder">Reminder</string>
+    <string name="res_widget_routine">Routine</string>
+</resources>
