@@ -1176,14 +1176,14 @@ public class ChatActivity extends Activity {
         TextView name = UiKit.text(this, label, 14, UiKit.TEXT, false);
         name.setSingleLine(true);
         name.setEllipsize(android.text.TextUtils.TruncateAt.MIDDLE);
-        name.setContentDescription(getString(R.string.ui_attached_86647942) + label + ". " + attachmentMetadata(h));
+        name.setContentDescription(getString(R.string.ui_attached_86647942) + label + ". " + attachmentMetadata(this, h));
         words.addView(name);
-        TextView metadata = UiKit.text(this, attachmentMetadata(h), 11.5f, UiKit.MUTED, false);
+        TextView metadata = UiKit.text(this, attachmentMetadata(this, h), 11.5f, UiKit.MUTED, false);
         metadata.setSingleLine(true);
         metadata.setEllipsize(android.text.TextUtils.TruncateAt.END);
         words.addView(metadata);
         row.addView(words, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
-        row.setContentDescription(getString(R.string.ui_attached_86647942) + label + ". " + attachmentMetadata(h));
+        row.setContentDescription(getString(R.string.ui_attached_86647942) + label + ". " + attachmentMetadata(this, h));
         if (h.documents.size() == 1) {
             DocumentReference document = h.documents.get(0);
             row.setOnClickListener(v -> openDocumentAt(document));
@@ -1195,25 +1195,26 @@ public class ChatActivity extends Activity {
         messages.addView(row, lp);
     }
 
-    static String attachmentMetadata(AssistantClient.History h) {
-        if (h == null) return "Attachment";
+    static String attachmentMetadata(Context context, AssistantClient.History h) {
+        if (h == null) return context.getString(R.string.core_attachment);
         String kind = h.attachmentKind == null ? "" : h.attachmentKind.toLowerCase(Locale.US);
         boolean loaded = h.attachmentText != null && !h.attachmentText.trim().isEmpty();
         int count = Math.max(h.attachmentCount(), h.documents.size());
         if (count > 1 || "multiple".equals(kind)) {
-            String countLabel = count > 0 ? String.valueOf(count) : "Multiple";
-            return countLabel + " attachments"
-                    + (loaded ? " · Text loaded" : "");
+            String countLabel = count > 0
+                    ? context.getResources().getQuantityString(R.plurals.core_attachments_count, count, count)
+                    : context.getString(R.string.core_multiple_attachments);
+            return countLabel + (loaded ? context.getString(R.string.core_meta_text_loaded) : "");
         }
         if (kind.contains("pdf") || !h.documents.isEmpty()) {
             String page = !h.documents.isEmpty() && h.documents.get(0).namesPage()
                     ? " · " + h.documents.get(0).pageLabel() : "";
-            return "PDF" + page + (loaded ? " · Text loaded" : "");
+            return "PDF" + page + (loaded ? context.getString(R.string.core_meta_text_loaded) : "");
         }
         if (kind.contains("text") || kind.contains("clipboard") || kind.contains("vault"))
-            return "Text" + (loaded ? " · Loaded" : "");
-        if (AttachmentViewerModel.isViewableImage(kind)) return "Image";
-        return loaded ? "Text · Loaded" : "Attachment";
+            return context.getString(R.string.core_text) + (loaded ? context.getString(R.string.core_meta_loaded) : "");
+        if (AttachmentViewerModel.isViewableImage(kind)) return context.getString(R.string.core_image);
+        return loaded ? context.getString(R.string.core_text_loaded) : context.getString(R.string.core_attachment);
     }
 
     private void submit(boolean voiceRequest) {
@@ -2529,22 +2530,36 @@ public class ChatActivity extends Activity {
     }
 
     /** The attachment chooser's entries, with Vault present only when the user has it switched on. */
-    static String[] attachmentMenuLabels(boolean vault) {
+    static String[] attachmentMenuLabels(Context context, boolean vault) {
+        int[] ids = attachmentMenuIds(vault);
+        String[] labels = new String[ids.length];
+        for (int i = 0; i < ids.length; i++) labels[i] = context.getString(ids[i]);
+        return labels;
+    }
+
+    /** The same entries as resource ids, so a choice is told apart by position, never by wording. */
+    private static int[] attachmentMenuIds(boolean vault) {
         return vault
-                ? new String[]{"Camera", "Gallery", "File", "Screen", "Clipboard", "Vault"}
-                : new String[]{"Camera", "Gallery", "File", "Screen", "Clipboard"};
+                ? new int[]{R.string.core_attach_camera, R.string.core_attach_gallery,
+                        R.string.core_attach_file, R.string.core_attach_screen,
+                        R.string.core_attach_clipboard, R.string.core_attach_vault}
+                : new int[]{R.string.core_attach_camera, R.string.core_attach_gallery,
+                        R.string.core_attach_file, R.string.core_attach_screen,
+                        R.string.core_attach_clipboard};
     }
 
     private void showAttachmentMenu(View anchor) {
-        String[] labels = attachmentMenuLabels(Prefs.vaultEnabled(this));
+        int[] ids = attachmentMenuIds(Prefs.vaultEnabled(this));
+        String[] labels = attachmentMenuLabels(this, Prefs.vaultEnabled(this));
         // Drawn inside this Activity's own content frame, so the composer keeps input focus and
         // the keyboard is left exactly as the user had it.
         OrbitAttachmentMenu.show(menuHost(), anchor, labels, (index, label) -> {
-            if ("Camera".equals(label)) openCamera();
-            else if ("Gallery".equals(label)) openGallery();
-            else if ("File".equals(label)) openFile();
-            else if ("Screen".equals(label)) anchor.postOnAnimation(() -> showScreenAttachmentMenu(anchor));
-            else if ("Vault".equals(label)) openVaultPicker();
+            int choice = ids[index];
+            if (choice == R.string.core_attach_camera) openCamera();
+            else if (choice == R.string.core_attach_gallery) openGallery();
+            else if (choice == R.string.core_attach_file) openFile();
+            else if (choice == R.string.core_attach_screen) anchor.postOnAnimation(() -> showScreenAttachmentMenu(anchor));
+            else if (choice == R.string.core_attach_vault) openVaultPicker();
             else attachClipboard();
         });
     }

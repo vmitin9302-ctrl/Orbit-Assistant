@@ -297,11 +297,11 @@ public final class OrbitVaultBeta2Test {
 
     /** The composer's Vault entry is absent while the Vault is off. */
     @Test public void attachFromVaultIsUnavailableWhileTheVaultIsOff() {
-        assertTrue(Arrays.asList(ChatActivity.attachmentMenuLabels(true)).contains("Vault"));
-        assertFalse(Arrays.asList(ChatActivity.attachmentMenuLabels(false)).contains("Vault"));
+        assertTrue(Arrays.asList(ChatActivity.attachmentMenuLabels(context, true)).contains("Vault"));
+        assertFalse(Arrays.asList(ChatActivity.attachmentMenuLabels(context, false)).contains("Vault"));
         assertEquals("every other way to attach is untouched",
-                5, ChatActivity.attachmentMenuLabels(false).length);
-        assertTrue(Arrays.asList(ChatActivity.attachmentMenuLabels(false)).contains("Gallery"));
+                5, ChatActivity.attachmentMenuLabels(context, false).length);
+        assertTrue(Arrays.asList(ChatActivity.attachmentMenuLabels(context, false)).contains("Gallery"));
     }
 
     /** The Chats header control disappears with the feature, and Share to Orbit does not. */

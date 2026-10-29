@@ -27,7 +27,7 @@
         android:fontFamily="sans"
         android:includeFontPadding="false"
         android:maxLines="1"
-        android:text="Ask Orbit"
+        android:text="@string/res_widget_ask_orbit"
         android:textColor="#FFF4F4F8"
         android:textSize="16sp"
         android:textStyle="bold" />
