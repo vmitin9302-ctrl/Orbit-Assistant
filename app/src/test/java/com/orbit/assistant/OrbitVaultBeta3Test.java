@@ -99,7 +99,7 @@ public final class OrbitVaultBeta3Test {
                 "https://example.com/r", OrbitVaultSource.CLIPBOARD);
         Activity screen = itemScreen(item);
         View open = findClickableWithDescription(screen.getWindow().getDecorView(), null,
-                OrbitVaultItemActivity.ACTION_OPEN_LINK);
+                org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.ACTION_OPEN_LINK));
         assertNotNull("the link screen still offers Open link", open);
 
         View row = (View) open.getParent();

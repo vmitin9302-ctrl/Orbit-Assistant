@@ -41,6 +41,9 @@ public interface AiProvider {
     /** One-line user-facing description for provider management UI. */
     String description();
 
+    /** As {@link #description()}, in the language of the given context. */
+    default String description(Context context) { return description(); }
+
     /** Fixed capability metadata. Never varies with sign-in state; that is {@link #status}. */
     AiCapabilities capabilities();
 
@@ -87,6 +90,6 @@ public interface AiProvider {
      */
     default void complete(Context context, String instructions, String prompt,
                           AssistantClient.PlanCallback callback) {
-        callback.onError(COMPLETION_UNSUPPORTED);
+        callback.onError(context.getString(R.string.aip_completion_unsupported));
     }
 }

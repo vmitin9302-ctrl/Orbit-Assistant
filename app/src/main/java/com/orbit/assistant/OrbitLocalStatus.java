@@ -1,5 +1,6 @@
 package com.orbit.assistant;
 
+import android.content.Context;
 import android.os.Bundle;
 
 /**
@@ -251,8 +252,30 @@ public final class OrbitLocalStatus {
 
     public String actionStateLabel() { return labelFor(actionModelState); }
 
+    /** As {@link #actionStateLabel()}, in the language of the given context. */
+    public String actionStateLabel(Context context) { return labelFor(context, actionModelState); }
+
+    /** As {@link #stateLabel()}, in the language of the given context. */
+    public String stateLabel(Context context) { return labelFor(context, modelState); }
+
     /** The short pill label the Orbit Local screen shows for the model. */
     public String stateLabel() { return labelFor(modelState); }
+
+    /** The same vocabulary as {@link #labelFor(String)}, from resources. */
+    static String labelFor(Context context, String state) {
+        switch (state == null ? "" : state) {
+            case READY: return context.getString(R.string.olst_ready);
+            case DOWNLOADING: return context.getString(R.string.olst_downloading);
+            case QUEUED: return context.getString(R.string.olst_queued);
+            case WAITING_FOR_NETWORK: return context.getString(R.string.olst_waiting_for_network);
+            case INTERRUPTED: return context.getString(R.string.olst_interrupted);
+            case VALIDATING: return context.getString(R.string.olst_validating);
+            case IMPORTING: return context.getString(R.string.olst_importing);
+            case PAUSED: return context.getString(R.string.olst_paused);
+            case ERROR: return context.getString(R.string.olst_error);
+            default: return context.getString(R.string.olst_not_installed);
+        }
+    }
 
     /** One vocabulary for both models, so the two cards can never describe a state differently. */
     static String labelFor(String state) {

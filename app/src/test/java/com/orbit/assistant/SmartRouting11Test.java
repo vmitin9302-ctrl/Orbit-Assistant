@@ -305,7 +305,7 @@ public final class SmartRouting11Test {
         assertTrue(AutoPermissions.metered(Prefs.PROVIDER_OPENROUTER));
         assertTrue("the Auto sheet lists OpenRouter", AutoPermissions.PROVIDERS.contains(Prefs.PROVIDER_OPENROUTER));
         assertTrue(AutoSheets.describe(context, Prefs.PROVIDER_OPENROUTER, false)
-                .contains(AutoSheets.METERED_NOTE));
+                .contains(org.robolectric.RuntimeEnvironment.getApplication().getString(AutoSheets.METERED_NOTE)));
         assertFalse(Prefs.backupSnapshot(context).toString().contains(Prefs.AUTO_USE_OPENROUTER));
     }
 

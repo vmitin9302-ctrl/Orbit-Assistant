@@ -683,7 +683,7 @@ public final class OrbitVaultBeta2Test {
                 new Intent(context, OrbitVaultItemActivity.class)
                         .putExtra(OrbitVaultItemActivity.EXTRA_ITEM_ID, "bad")).setup().get();
         View open = findClickableWithDescription(screen.getWindow().getDecorView(),
-                OrbitVaultItemActivity.ACTION_OPEN_LINK);
+                org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.ACTION_OPEN_LINK));
         if (open != null) open.performClick();
         assertNull("no Intent may leave Orbit for a scheme it does not open",
                 Shadows.shadowOf(screen).getNextStartedActivity());
@@ -704,12 +704,12 @@ public final class OrbitVaultBeta2Test {
         Activity screen = openItem(link.id);
         List<String> drawn = textOf(screen.getWindow().getDecorView());
 
-        assertTrue(drawn.contains(OrbitVaultItemActivity.ACTION_OPEN_LINK));
-        assertTrue(drawn.contains(OrbitVaultItemActivity.ACTION_ASK));
-        assertTrue(drawn.contains(OrbitVaultItemActivity.ACTION_COPY));
-        assertTrue(drawn.contains(OrbitVaultItemActivity.ACTION_SHARE));
-        assertTrue(drawn.contains(OrbitVaultItemActivity.ACTION_RENAME));
-        assertTrue(drawn.contains(OrbitVaultItemActivity.ACTION_DELETE));
+        assertTrue(drawn.contains(org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.ACTION_OPEN_LINK)));
+        assertTrue(drawn.contains(org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.ACTION_ASK)));
+        assertTrue(drawn.contains(org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.ACTION_COPY)));
+        assertTrue(drawn.contains(org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.ACTION_SHARE)));
+        assertTrue(drawn.contains(org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.ACTION_RENAME)));
+        assertTrue(drawn.contains(org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.ACTION_DELETE)));
         assertTrue("the truthful line about the address stays",
                 String.join("\n", drawn).contains("has not opened or read this address"));
 
@@ -727,25 +727,25 @@ public final class OrbitVaultBeta2Test {
         OrbitVaultItem note = OrbitVaultStore.saveText(context, "Packing list", "Charger",
                 "Quick Capture");
         List<String> drawn = textOf(openItem(note.id).getWindow().getDecorView());
-        assertTrue(drawn.contains(OrbitVaultItemActivity.ACTION_ASK));
+        assertTrue(drawn.contains(org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.ACTION_ASK)));
         assertFalse("there is no address to open", drawn.contains(
-                OrbitVaultItemActivity.ACTION_OPEN_LINK));
-        assertTrue(drawn.contains(OrbitVaultItemActivity.ACTION_EDIT));
+                org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.ACTION_OPEN_LINK)));
+        assertTrue(drawn.contains(org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.ACTION_EDIT)));
     }
 
     /** The note section says what it is, in both of its states. */
     @Test public void theitemScreenShowsTheNoteSection() {
         OrbitVaultItem item = OrbitVaultStore.saveText(context, "Clip", "Body", "test");
         List<String> empty = textOf(openItem(item.id).getWindow().getDecorView());
-        assertTrue(empty.contains(OrbitVaultItemActivity.NOTE_HEADING));
+        assertTrue(empty.contains(org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.NOTE_HEADING)));
         assertTrue("an item with no note invites one",
-                empty.contains(OrbitVaultItemActivity.NOTE_EMPTY));
+                empty.contains(org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.NOTE_EMPTY)));
 
         assertTrue(OrbitVaultStore.updateNote(context, item.id, "Because of the animation."));
         List<String> written = textOf(openItem(item.id).getWindow().getDecorView());
-        assertTrue(written.contains(OrbitVaultItemActivity.NOTE_HEADING));
+        assertTrue(written.contains(org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.NOTE_HEADING)));
         assertTrue(written.contains("Because of the animation."));
-        assertFalse(written.contains(OrbitVaultItemActivity.NOTE_EMPTY));
+        assertFalse(written.contains(org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.NOTE_EMPTY)));
     }
 
     // ---- privacy -------------------------------------------------------------------------------------

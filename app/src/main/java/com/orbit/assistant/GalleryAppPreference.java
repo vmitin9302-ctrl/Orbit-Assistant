@@ -79,7 +79,8 @@ public final class GalleryAppPreference {
 
     public static List<Option> options(Context context) {
         List<Option> result = new ArrayList<>();
-        result.add(new Option(SYSTEM_PACKAGE, "", Intent.ACTION_PICK, "System picker"));
+        result.add(new Option(SYSTEM_PACKAGE, "", Intent.ACTION_PICK,
+                context == null ? "System picker" : context.getString(R.string.gap_system_picker)));
         if (context == null) return result;
 
         PackageManager packageManager = context.getPackageManager();

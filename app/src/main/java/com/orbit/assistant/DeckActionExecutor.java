@@ -62,7 +62,9 @@ public final class DeckActionExecutor {
      */
     public static void execute(Activity activity, DeckTile tile, Callback callback) {
         if (activity == null || tile == null) {
-            finish(callback, Outcome.failed("Orbit could not run this tile."));
+            finish(callback, Outcome.failed(activity == null
+                    ? "Orbit could not run this tile."
+                    : activity.getString(R.string.dax_run_failed)));
             return;
         }
 
@@ -80,9 +82,9 @@ public final class DeckActionExecutor {
             boolean vault = DeckTileRegistry.TYPE_VAULT.equals(tile.type)
                     || DeckTileRegistry.TYPE_QUICK_CAPTURE.equals(tile.type);
             finish(callback, Outcome.failed(vault
-                    ? DeckTileResolver.VAULT_OFF + ". Turn it back on in Settings."
+                    ? DeckTileResolver.VAULT_OFF + activity.getString(R.string.dax_turn_on)
                     : resolved.subtitle.isEmpty()
-                            ? "That is not available on this device." : resolved.subtitle));
+                            ? activity.getString(R.string.dax_unavailable) : resolved.subtitle));
             return;
         }
 
@@ -143,7 +145,7 @@ public final class DeckActionExecutor {
         if (DeckTileRegistry.TYPE_MEDIA.equals(type)) {
             runMedia(activity, callback); return;
         }
-        finish(callback, Outcome.failed("Orbit does not know how to run that tile."));
+        finish(callback, Outcome.failed(activity.getString(R.string.dax_unknown_tile)));
     }
 
     // ---- kinds ------------------------------------------------------------------------------------
@@ -179,12 +181,12 @@ public final class DeckActionExecutor {
         // Straight to the shared runner. A step needing confirmation still opens the Routine
         // runner, and a permission failure still routes to the same place it always did.
         OrbitWidgetExecutor.runRoutine(activity, routine,
-                () -> finish(callback, Outcome.ok("Ran " + name)));
+                () -> finish(callback, Outcome.ok(activity.getString(R.string.dax_ran, name))));
     }
 
     private static void runFlashlight(Activity activity, Callback callback) {
         OrbitWidgetExecutor.toggleFlashlight(activity, result -> {
-            if (result == null) { finish(callback, Outcome.failed("Orbit could not do that.")); return; }
+            if (result == null) { finish(callback, Outcome.failed(activity.getString(R.string.dax_could_not))); return; }
             finish(callback, result.success
                     ? Outcome.ok(result.message)
                     : Outcome.failed(result.message));
@@ -200,13 +202,14 @@ public final class DeckActionExecutor {
             try {
                 result = MediaControl.execute(app, MediaControl.Command.PLAY_PAUSE);
             } catch (Exception e) {
-                result = DeviceActionExecutor.Result.failed("Orbit could not reach media playback.");
+                result = DeviceActionExecutor.Result.failed(
+                        app.getString(R.string.dax_media_unreachable));
             }
             DeviceActionExecutor.Result finalResult = result;
             finish(callback, finalResult != null && finalResult.success
                     ? Outcome.ok(finalResult.message)
                     : Outcome.failed(finalResult == null
-                            ? "Orbit could not reach media playback." : finalResult.message));
+                            ? app.getString(R.string.dax_media_unreachable) : finalResult.message));
         });
     }
 
@@ -218,7 +221,7 @@ public final class DeckActionExecutor {
             UiKit.applyPageTransition(activity);
             finish(callback, Outcome.navigated());
         } catch (Exception e) {
-            finish(callback, Outcome.failed("Orbit could not open that."));
+            finish(callback, Outcome.failed(activity.getString(R.string.dax_open_failed)));
         }
     }
 

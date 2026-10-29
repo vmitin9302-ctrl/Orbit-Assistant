@@ -159,11 +159,11 @@ public final class SmartVaultScreensTest {
         OrbitVaultItemActivity page = Robolectric.buildActivity(OrbitVaultItemActivity.class,
                 intent).setup().get();
         List<String> shown = texts(page.getWindow().getDecorView());
-        assertTrue(anyContains(shown, OrbitVaultItemActivity.SUGGESTED_HEADING));
+        assertTrue(anyContains(shown, org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.SUGGESTED_HEADING)));
         assertTrue(anyContains(shown, "Suggested title"));
         assertTrue(anyContains(shown, "A baked salmon recipe."));
         assertTrue(anyContains(shown, "✦ recipes"));
-        assertTrue(anyContains(shown, OrbitVaultItemActivity.RELATED_HEADING));
+        assertTrue(anyContains(shown, org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.RELATED_HEADING)));
         assertTrue(anyContains(shown, "Miso soup with salmon"));
     }
 

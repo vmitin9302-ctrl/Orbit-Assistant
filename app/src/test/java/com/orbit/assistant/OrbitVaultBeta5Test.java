@@ -662,17 +662,17 @@ public final class OrbitVaultBeta5Test {
                 OrbitVaultSource.QUICK_CAPTURE);
         Activity screen = itemScreen(item);
         View pin = findClickableWithDescription(screen.getWindow().getDecorView(),
-                OrbitVaultItemActivity.ACTION_PIN + " this saved item");
+                org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.ACTION_PIN) + " this saved item");
         assertNotNull(pin);
         assertTrue("it is a utility cell, not a header button",
-                textOf(pin).contains(OrbitVaultItemActivity.ACTION_PIN));
+                textOf(pin).contains(org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.ACTION_PIN)));
 
         pin.performClick();
         assertTrue(OrbitVaultStore.get(context, item.id).pinned);
         Activity reopened = itemScreen(OrbitVaultStore.get(context, item.id));
         assertNotNull("and it offers Unpin afterwards",
                 findClickableWithDescription(reopened.getWindow().getDecorView(),
-                        OrbitVaultItemActivity.ACTION_UNPIN + " this saved item"));
+                        org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.ACTION_UNPIN) + " this saved item"));
     }
 
     /** Four utilities take two rows on a phone and one on a tablet; two always take one. */
@@ -692,9 +692,9 @@ public final class OrbitVaultBeta5Test {
         assertNotNull(image);
         Activity screen = itemScreen(image);
         View rename = findClickableWithDescription(screen.getWindow().getDecorView(),
-                OrbitVaultItemActivity.ACTION_RENAME);
+                org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.ACTION_RENAME));
         View pin = findClickableWithDescription(screen.getWindow().getDecorView(),
-                OrbitVaultItemActivity.ACTION_PIN + " this saved item");
+                org.robolectric.RuntimeEnvironment.getApplication().getString(OrbitVaultItemActivity.ACTION_PIN) + " this saved item");
         assertNotNull(rename);
         assertNotNull(pin);
         assertTrue("both on one row", rename.getParent() == pin.getParent());

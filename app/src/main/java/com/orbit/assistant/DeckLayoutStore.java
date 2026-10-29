@@ -416,7 +416,7 @@ public final class DeckLayoutStore {
         DeckLayout source = collection.layout(sourceLayoutId);
         if (source == null) return null;
         String name = DeckLayout.sanitizeName(rawName);
-        if (name.isEmpty()) name = DeckLayout.sanitizeName(source.name + " copy");
+        if (name.isEmpty()) name = DeckLayout.sanitizeName(c.getString(R.string.dls_copy_name, source.name));
         DeckLayout copy = duplicateWithFreshIds(source, name);
         return addAndActivate(c, copy);
     }
