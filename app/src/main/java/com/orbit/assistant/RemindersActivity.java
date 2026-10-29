@@ -63,7 +63,7 @@ public final class RemindersActivity extends Activity {
 
         LinearLayout header = new LinearLayout(this);
         header.setGravity(Gravity.CENTER_VERTICAL);
-        ImageButton back = iconButton(R.drawable.ic_back, "Back");
+        ImageButton back = iconButton(R.drawable.ic_back, getString(R.string.rem_back));
         back.setOnClickListener(v -> navigation.performBack());
         LinearLayout.LayoutParams backLp = new LinearLayout.LayoutParams(UiKit.dp(this, 48), UiKit.dp(this, 48));
         backLp.rightMargin = UiKit.dp(this, 12);
@@ -71,13 +71,13 @@ public final class RemindersActivity extends Activity {
 
         LinearLayout titles = new LinearLayout(this);
         titles.setOrientation(LinearLayout.VERTICAL);
-        titles.addView(UiKit.text(this, "Reminders", 26, UiKit.TEXT, true));
-        titles.addView(UiKit.text(this, "Scheduled tasks", 12, UiKit.MUTED, false));
+        titles.addView(UiKit.text(this, getString(R.string.rem_title), 26, UiKit.TEXT, true));
+        titles.addView(UiKit.text(this, getString(R.string.rem_subtitle), 12, UiKit.MUTED, false));
         header.addView(titles, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
         page.addView(header);
 
         TextView intro = UiKit.text(this,
-                "Reminders you create through Orbit live here until they fire or you cancel them.",
+                getString(R.string.rem_intro),
                 14, UiKit.MUTED, false);
         intro.setLineSpacing(0, 1.13f);
         LinearLayout.LayoutParams introLp = new LinearLayout.LayoutParams(
@@ -87,14 +87,14 @@ public final class RemindersActivity extends Activity {
 
         TextView timing = UiKit.text(this,
                 RoutineTriggerScheduler.canScheduleExact(this)
-                        ? "Precise timing is available."
-                        : "Approximate timing is active. Enable Alarms & reminders for minute-level delivery.",
+                        ? getString(R.string.rem_timing_exact)
+                        : getString(R.string.rem_timing_approx),
                 12, UiKit.MUTED, false);
         LinearLayout timingCard = card();
         timingCard.addView(timing);
         page.addView(timingCard, cardLp());
 
-        TextView section = UiKit.text(this, "PENDING REMINDERS", 11, UiKit.MUTED, true);
+        TextView section = UiKit.text(this, getString(R.string.rem_section), 11, UiKit.MUTED, true);
         section.setLetterSpacing(0.13f);
         section.setPadding(UiKit.dp(this, 4), UiKit.dp(this, 20), 0, UiKit.dp(this, 8));
         page.addView(section);
@@ -111,9 +111,9 @@ public final class RemindersActivity extends Activity {
         List<ReminderStore.Item> items = ReminderStore.list(this);
         if (items.isEmpty()) {
             LinearLayout empty = card();
-            empty.addView(UiKit.text(this, "No pending reminders", 16, UiKit.TEXT, true));
+            empty.addView(UiKit.text(this, getString(R.string.rem_empty), 16, UiKit.TEXT, true));
             TextView note = UiKit.text(this,
-                    "Ask Orbit something like “Remind me to wash clothes tomorrow at 10 AM.”",
+                    getString(R.string.rem_empty_hint),
                     13, UiKit.MUTED, false);
             note.setPadding(0, UiKit.dp(this, 6), 0, 0);
             empty.addView(note);
@@ -126,19 +126,19 @@ public final class RemindersActivity extends Activity {
             LinearLayout card = card();
             TextView message = UiKit.text(this, item.message, 16, UiKit.TEXT, true);
             card.addView(message);
-            String repeats = item.repeat.isEmpty() ? "" : " · Repeats " + item.repeat;
+            String repeats = item.repeat.isEmpty() ? "" : " · " + getString(R.string.rem_repeats, item.repeat);
             TextView when = UiKit.text(this, format.format(new Date(item.triggerAt)) + repeats,
                     12, UiKit.MUTED, false);
             when.setPadding(0, UiKit.dp(this, 5), 0, 0);
             card.addView(when);
-            Button cancel = secondaryButton("Cancel reminder");
+            Button cancel = secondaryButton(getString(R.string.rem_cancel));
             LinearLayout.LayoutParams cancelLp = new LinearLayout.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 44));
             cancelLp.setMargins(0, UiKit.dp(this, 12), 0, 0);
             card.addView(cancel, cancelLp);
             cancel.setOnClickListener(v -> {
                 ReminderScheduler.cancel(this, item.id);
-                Toast.makeText(this, "Reminder cancelled", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.rem_cancelled), Toast.LENGTH_SHORT).show();
                 refresh();
             });
             reminderList.addView(card, cardLp());

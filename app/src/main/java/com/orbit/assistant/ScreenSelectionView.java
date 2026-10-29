@@ -78,7 +78,7 @@ public final class ScreenSelectionView extends View {
         // cropped and marked up, so it stays a flat opaque colour whatever the theme page does.
         setBackgroundColor(UiKit.BG);
         setForceDarkAllowed(false);
-        setContentDescription("Screen preview. Drag to crop or mark up the screenshot.");
+        setContentDescription(context.getString(R.string.ssv_preview_desc));
         overlayPaint.setColor(Color.argb(168, 0, 0, 0));
         cropHaloPaint.setStyle(Paint.Style.STROKE);
         int accent = UiKit.accent(context);

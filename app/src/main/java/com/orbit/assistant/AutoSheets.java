@@ -20,11 +20,11 @@ import java.util.Map;
  */
 final class AutoSheets {
 
-    static final String INTRO_TITLE = "Auto";
-    static final String INTRO_BODY = AiSelection.AUTO_DESCRIPTION
-            + "\n\nYou control which providers Auto may use."
-            + "\n\nSeparately billed API providers stay off until you enable them.";
-    static final String METERED_NOTE = "May use API credits";
+    static final int INTRO_TITLE = R.string.auto_intro_title;
+    static String introBody(Context c) {
+        return AiSelection.AUTO_DESCRIPTION + c.getString(R.string.auto_intro_rest);
+    }
+    static final int METERED_NOTE = R.string.auto_metered_note;
 
     private AutoSheets() {}
 
@@ -32,9 +32,9 @@ final class AutoSheets {
     static AlertDialog showSettings(Context c, Runnable onChanged) {
         View content = settingsContent(c, onChanged);
         AlertDialog dialog = new AlertDialog.Builder(c)
-                .setTitle("Auto can use")
+                .setTitle(c.getString(R.string.auto_can_use))
                 .setView(content)
-                .setPositiveButton("Done", null)
+                .setPositiveButton(c.getString(R.string.auto_done), null)
                 .create();
         UiKit.styleOrbitDialog(dialog, c, false);
         dialog.show();
@@ -63,8 +63,7 @@ final class AutoSheets {
         }
 
         TextView note = UiKit.text(c,
-                "Auto only uses a provider that is switched on here and ready. Choosing a model "
-                        + "yourself always uses exactly that model.",
+                c.getString(R.string.auto_only_ready),
                 12, UiKit.MUTED, false);
         note.setLineSpacing(0, 1.12f);
         note.setPadding(0, UiKit.dp(c, 10), 0, 0);
@@ -133,7 +132,8 @@ final class AutoSheets {
         }
         String status = ready ? "" : p.statusDetail(c);
         if (AutoPermissions.metered(provider) && !allowed) {
-            return status.isEmpty() ? METERED_NOTE : METERED_NOTE + " · " + status;
+            String note = c.getString(METERED_NOTE);
+            return status.isEmpty() ? note : note + " · " + status;
         }
         return status;
     }
@@ -171,20 +171,20 @@ final class AutoSheets {
             proceed.run();
             return;
         }
-        TextView body = UiKit.text(c, INTRO_BODY, 14, UiKit.TEXT, false);
+        TextView body = UiKit.text(c, introBody(c), 14, UiKit.TEXT, false);
         body.setLineSpacing(0, 1.15f);
         int pad = UiKit.dp(c, 22);
         body.setPadding(pad, UiKit.dp(c, 4), pad, UiKit.dp(c, 6));
         AlertDialog dialog = new AlertDialog.Builder(c)
-                .setTitle(INTRO_TITLE)
+                .setTitle(c.getString(INTRO_TITLE))
                 .setView(body)
-                .setNegativeButton("Cancel", null)
-                .setNeutralButton("Providers", (d, w) -> {
+                .setNegativeButton(c.getString(R.string.auto_cancel), null)
+                .setNeutralButton(c.getString(R.string.auto_providers), (d, w) -> {
                     markIntroSeen(c);
                     showSettings(c, null);
                     proceed.run();
                 })
-                .setPositiveButton("Use Auto", (d, w) -> {
+                .setPositiveButton(c.getString(R.string.auto_use), (d, w) -> {
                     markIntroSeen(c);
                     proceed.run();
                 })

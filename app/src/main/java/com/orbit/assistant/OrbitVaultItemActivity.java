@@ -746,16 +746,16 @@ public final class OrbitVaultItemActivity extends Activity {
             // Open link keeps the priority it earned in Beta 1: it is what a saved address is for,
             // it is the action the device testing singled out as good, and it stays the one filled
             // control. Ask Orbit sits beside it, obvious without competing.
-            primary.addView(filledAction(getString(ACTION_OPEN_LINK), v -> openLink(item)), primaryCellLp(0));
-            primary.addView(outlinedAction(getString(ACTION_ASK), v -> askOrbit(item)), primaryCellLp(9));
+            primary.addView(filledAction(ACTION_OPEN_LINK, v -> openLink(item)), primaryCellLp(0));
+            primary.addView(outlinedAction(ACTION_ASK, v -> askOrbit(item)), primaryCellLp(9));
         } else if (item.hasSourceUrl()) {
             // A saved picture that remembers its page. Ask Orbit stays the filled control, because
             // the picture is the thing the user kept; Open source sits beside it for the times they
             // want to go back and read where it came from.
-            primary.addView(filledAction(getString(ACTION_ASK), v -> askOrbit(item)), primaryCellLp(0));
-            primary.addView(outlinedAction(getString(ACTION_OPEN_SOURCE), v -> openSource(item)), primaryCellLp(9));
+            primary.addView(filledAction(ACTION_ASK, v -> askOrbit(item)), primaryCellLp(0));
+            primary.addView(outlinedAction(ACTION_OPEN_SOURCE, v -> openSource(item)), primaryCellLp(9));
         } else {
-            primary.addView(filledAction(getString(ACTION_ASK), v -> askOrbit(item)), primaryCellLp(0));
+            primary.addView(filledAction(ACTION_ASK, v -> askOrbit(item)), primaryCellLp(0));
         }
         column.addView(primary, actionRowLp(ACTIONS_TOP_GAP_DP));
 
@@ -767,10 +767,10 @@ public final class OrbitVaultItemActivity extends Activity {
         // An image has no words to copy or share. A saved page has the text Orbit extracted
         // from it, which is exactly the thing somebody wants out of a page they kept.
         if (!item.isImage() && !item.body.isEmpty()) {
-            utilities.add(compactAction(getString(ACTION_COPY), R.drawable.ic_copy,
+            utilities.add(compactAction(ACTION_COPY, R.drawable.ic_copy,
                     v -> MessageActions.copy(this, "Orbit Vault", item.body,
                             () -> Toast.makeText(this, getString(R.string.vitem_copied), Toast.LENGTH_SHORT).show())));
-            utilities.add(compactAction(getString(ACTION_SHARE), R.drawable.ic_share,
+            utilities.add(compactAction(ACTION_SHARE, R.drawable.ic_share,
                     v -> shareText(item)));
         }
         // Pin arrives here from the header. It is still one tap and still without leaving the
@@ -781,7 +781,7 @@ public final class OrbitVaultItemActivity extends Activity {
                         : R.string.vitem_pin_description), v -> togglePin(item)));
         addUtilityRows(column, utilities);
 
-        Button delete = outlinedAction(getString(ACTION_DELETE), v -> confirmDelete(item));
+        Button delete = outlinedAction(ACTION_DELETE, v -> confirmDelete(item));
         delete.setTextColor(UiKit.DANGER);
         delete.setBackground(UiKit.rippleOutlined(UiKit.SURFACE_2,
                 UiKit.withAlpha(UiKit.DANGER, 90), UiKit.DANGER, 15, this));
@@ -1032,6 +1032,18 @@ public final class OrbitVaultItemActivity extends Activity {
     // ---- shared furniture -------------------------------------------------------------------------
 
     /** The one action this kind of item is really for: accent-filled, and the only one that is. */
+    private Button filledAction(int label, View.OnClickListener listener) {
+        return filledAction(getString(label), listener);
+    }
+
+    private Button outlinedAction(int label, View.OnClickListener listener) {
+        return outlinedAction(getString(label), listener);
+    }
+
+    private View compactAction(int label, int icon, View.OnClickListener listener) {
+        return compactAction(getString(label), icon, listener);
+    }
+
     private Button filledAction(String label, View.OnClickListener listener) {
         Button b = new Button(this);
         b.setText(label);

@@ -45,6 +45,12 @@ public final class DocumentPageContext {
     /** The document's own name, which is what the card's first line shows. */
     public String displayLabel() { return label; }
 
+    /** As {@link #pageLabel()}, in the language of the given context. */
+    public String pageLabel(android.content.Context context) {
+        return pageCount > 0 ? context.getString(R.string.dpc_page_of, page + 1, pageCount)
+                : context.getString(R.string.dpc_page, page + 1);
+    }
+
     /** "Page 5 of 388" — the card's second line. */
     public String pageLabel() {
         return pageCount > 0 ? "Page " + (page + 1) + " of " + pageCount : "Page " + (page + 1);
