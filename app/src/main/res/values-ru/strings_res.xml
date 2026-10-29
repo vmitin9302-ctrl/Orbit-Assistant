@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="res_notification_intelligence_label">Анализ уведомлений Orbit</string>
+    <string name="res_routine_tile_label">Автоматизация Orbit</string>
+    <string name="res_widget_choose_routine">Выберите автоматизацию</string>
+    <string name="res_widget_tap_to_run">Нажмите для запуска</string>
+    <string name="res_widget_quick_title">Быстрые действия Orbit</string>
+    <string name="res_widget_ask_orbit">Спросить Orbit</string>
+    <string name="res_widget_flashlight">Фонарик</string>
+    <string name="res_widget_reminder">Напоминание</string>
+    <string name="res_widget_routine">Автоматизация</string>
+</resources>
