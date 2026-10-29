@@ -21,10 +21,17 @@ public final class OrbitRequestWorker extends Worker {
     private static final class RequestOutcome {
         final AssistantReply reply;
         final String error;
+        /** The wait for the provider ran out; always worth one durable retry. */
+        final boolean timedOut;
 
         RequestOutcome(AssistantReply reply, String error) {
+            this(reply, error, false);
+        }
+
+        RequestOutcome(AssistantReply reply, String error, boolean timedOut) {
             this.reply = reply;
             this.error = error;
+            this.timedOut = timedOut;
         }
     }
 
@@ -94,7 +101,7 @@ public final class OrbitRequestWorker extends Worker {
             int at = item.variantAt();
             if (at > history.size()
                     || !ConversationBranches.parentKey(history, at).equals(item.variantParent())) {
-                failVariant(c, item, id, "This chat changed before the retry could run.");
+                failVariant(c, item, id, c.getString(R.string.worker_chat_changed));
                 return Result.success();
             }
             history = new ArrayList<>(history.subList(0, at));
@@ -109,7 +116,7 @@ public final class OrbitRequestWorker extends Worker {
         if (WeatherService.shouldHandle(item.prompt, history)) {
             AssistantReply weatherReply = WeatherService.handle(c, item.prompt, history);
             String text = weatherReply.text == null || weatherReply.text.trim().isEmpty()
-                    ? "I couldn't load the weather right now."
+                    ? c.getString(R.string.worker_weather_failed)
                     : weatherReply.text.trim().replace("—", "-");
             commit(c, item, id, new AssistantClient.History("assistant", text),
                     new AssistantReply(text, weatherReply.actions), text, attempt());
@@ -141,7 +148,7 @@ public final class OrbitRequestWorker extends Worker {
             return Result.success();
         }
 
-        if (error == null) error = "Orbit could not finish this response.";
+        if (error == null) error = c.getString(R.string.worker_could_not_finish);
         String friendly = error.replace("—", "-");
 
         // A stopped execution's "error" may be nothing but the stop itself. The cancellation
@@ -161,14 +168,15 @@ public final class OrbitRequestWorker extends Worker {
         // count (see WorkerAttempt), so this reads as "only a first execution may ask for one
         // more" — deliberately conservative: a request that has already been restarted for any
         // reason does not accumulate extra retries on top.
-        if (getRunAttemptCount() < 1 && looksTransient(friendly)) {
+        if (getRunAttemptCount() < 1 && (outcome.timedOut || looksTransient(friendly))) {
             if (cancelled(c, id)) return Result.success();
             RequestTrace.retryRequested(id, attempt(), "transient");
             return Result.retry();
         }
         String visible = friendly.startsWith("Orbit could not finish")
+                || friendly.equals(c.getString(R.string.worker_could_not_finish))
                 ? friendly
-                : "Orbit could not finish this response: " + friendly;
+                : c.getString(R.string.worker_could_not_finish_because, friendly);
         // Stopping a request is not a failure. Cancelling interrupts this worker, which surfaces
         // here as an ordinary error, so the same gate the success path uses decides whether
         // anything visible gets written at all.
@@ -210,7 +218,7 @@ public final class OrbitRequestWorker extends Worker {
      */
     static void completeProviderReply(Context c, PendingRequestStore.Item item,
                                       AssistantReply reply, WorkerAttempt attempt) {
-        String text = reply.text.trim().isEmpty() ? "Done." : reply.text.trim().replace("—", "-");
+        String text = reply.text.trim().isEmpty() ? c.getString(R.string.worker_done) : reply.text.trim().replace("—", "-");
         commit(c, item, item.id,
                 new AssistantClient.History("assistant", text, false, "", "", "", "",
                         reply.memoryUsage, reply.suggestedMemoryText, reply.suggestedMemoryCategory).withDetails(reply.details),
@@ -230,7 +238,7 @@ public final class OrbitRequestWorker extends Worker {
                 if (!stored) {
                     // The chat moved on (cleared, edited, or already at its version limit) while
                     // the retry ran. Nothing is written over it; the retry reports that it failed.
-                    String why = "Orbit could not keep this retry because the chat changed.";
+                    String why = c.getString(R.string.worker_retry_not_kept);
                     PendingRequestStore.markFailed(c, id, why);
                     AttachmentStore.deleteAll(item.screenshotPaths);
                     OrbitRequestManager.dispatchError(id, why);
@@ -393,19 +401,19 @@ public final class OrbitRequestWorker extends Worker {
                     }
 
                     @Override public void onError(String message) {
-                        errorRef.set(message == null ? "Orbit could not finish this response." : message);
+                        errorRef.set(message == null ? c.getString(R.string.worker_could_not_finish) : message);
                         latch.countDown();
                     }
                 });
 
         try {
             if (!latch.await(timeoutMinutes, TimeUnit.MINUTES)) {
-                return new RequestOutcome(null, "Orbit timed out while waiting for "
-                        + AiProviders.forSelection(c, selection).displayName() + ".");
+                return new RequestOutcome(null, c.getString(R.string.worker_timed_out,
+                        AiProviders.forSelection(c, selection).displayName()), true);
             }
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            return new RequestOutcome(null, "Orbit request was interrupted.");
+            return new RequestOutcome(null, c.getString(R.string.worker_interrupted));
         }
         return new RequestOutcome(replyRef.get(), errorRef.get());
     }

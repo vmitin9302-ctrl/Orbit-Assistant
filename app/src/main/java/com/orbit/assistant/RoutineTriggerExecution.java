@@ -27,7 +27,7 @@ public final class RoutineTriggerExecution {
         // a user handoff but Android cannot currently show Orbit's trigger alert.
         if (!visible && containsForegroundOrConfirmationStep(c, routine) &&
                 !RoutineTriggerNotifier.notificationsAllowed(c)) {
-            updateStatus(c, trigger.id, firedAt, "Skipped · trigger alerts unavailable");
+            updateStatus(c, trigger.id, firedAt, c.getString(R.string.rtexec_skipped));
             finish(completion);
             return;
         }
@@ -39,8 +39,8 @@ public final class RoutineTriggerExecution {
         if (missingAccessIndex >= 0) {
             AssistantReply.Action blocked = routine.actions.get(missingAccessIndex);
             String actionName = RoutineActionCatalog.title(blocked);
-            String reason = "Grant access for " + actionName + " before this routine can run automatically.";
-            updateStatus(c, trigger.id, firedAt, "Needs access · " + actionName);
+            String reason = c.getString(R.string.rtexec_grant, actionName);
+            updateStatus(c, trigger.id, firedAt, c.getString(R.string.rtexec_needs_access, actionName));
             RoutineTriggerNotifier.notifyFailure(c, routine, trigger.id, missingAccessIndex, reason);
             finish(completion);
             return;
@@ -85,11 +85,11 @@ public final class RoutineTriggerExecution {
             AssistantReply.Action blocked = routine.actions.get(firstBlocked);
             String actionName = RoutineActionCatalog.title(blocked);
             String state = blocked != null && blocked.requiresConfirmation
-                    ? "Needs attention · " + actionName + " requires confirmation"
-                    : "Needs attention · " + actionName + " needs Orbit visible";
+                    ? c.getString(R.string.rtexec_confirm, actionName)
+                    : c.getString(R.string.rtexec_visible, actionName);
             updateStatus(c, trigger.id, firedAt, state);
             RoutineTriggerNotifier.notifyNeedsContinuation(c, routine, trigger.id, firstBlocked,
-                    "Tap to continue at step " + (firstBlocked + 1) + ": " + actionName + ".");
+                    c.getString(R.string.rtexec_tap_continue, firstBlocked + 1, actionName));
             finish(completion);
             return;
         }
@@ -117,20 +117,19 @@ public final class RoutineTriggerExecution {
                             lastFailure);
                     if (!completedAllSteps) {
                         String reason = lastFailure == null || lastFailure.trim().isEmpty()
-                                ? "Stopped at step " + completedSteps
+                                ? c.getString(R.string.rtexec_stopped_at, completedSteps)
                                 : lastFailure.trim();
-                        updateStatus(c, trigger.id, firedAt, "Stopped · " + reason);
+                        updateStatus(c, trigger.id, firedAt, c.getString(R.string.rtexec_stopped, reason));
                         RoutineTriggerNotifier.notifyFailure(c, routine, trigger.id, lastFailureIndex, reason);
                         return;
                     }
                     if (firstBlocked >= 0) {
                         String actionName = RoutineActionCatalog.title(routine.actions.get(firstBlocked));
-                        updateStatus(c, trigger.id, firedAt, "Partially ran · waiting for " + actionName);
+                        updateStatus(c, trigger.id, firedAt, c.getString(R.string.rtexec_partial, actionName));
                         RoutineTriggerNotifier.notifyNeedsContinuation(c, routine, trigger.id, firstBlocked,
-                                "Orbit completed the background-safe steps. Tap to continue at step " +
-                                        (firstBlocked + 1) + ": " + actionName + ".");
+                                c.getString(R.string.rtexec_bg_done, firstBlocked + 1, actionName));
                     } else {
-                        updateStatus(c, trigger.id, firedAt, "Completed automatically");
+                        updateStatus(c, trigger.id, firedAt, c.getString(R.string.rtexec_completed));
                     }
                 } finally {
                     finish(completion);
@@ -138,7 +137,7 @@ public final class RoutineTriggerExecution {
             }
             });
         } catch (Exception ignored) {
-            updateStatus(c, trigger.id, firedAt, "Stopped · Orbit could not run this Routine");
+            updateStatus(c, trigger.id, firedAt, c.getString(R.string.rtexec_could_not_run));
             finish(completion);
         }
     }

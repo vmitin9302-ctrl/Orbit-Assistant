@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="localai_play_unavailable" formatted="false">Orbit Local пока недоступен в версии Orbit из Google Play.</string>
+    <string name="localai_not_removed" formatted="false">Orbit Local не удалён. Ничего не было удалено.</string>
+    <string name="localai_component_uninstalled" formatted="false">Компонент Orbit Local удалён.</string>
+    <string name="localai_removed" formatted="false">Orbit Local удалён.</string>
+    <string name="localai_back_to_providers" formatted="false">Назад к ИИ-провайдерам</string>
+    <string name="localai_tagline" formatted="false">Приватный ИИ на вашем телефоне</string>
+    <string name="localai_intro" formatted="false">Orbit Local отвечает прямо на телефоне. Разговоры не покидают устройство, а чат работает даже без интернета. Это необязательная функция: ничего не устанавливается, пока вы сами не попросите, и всё можно удалить.</string>
+    <string name="localai_this_device" formatted="false">Это устройство</string>
+    <string name="localai_free_storage">Свободно места: %1$s</string>
+    <string name="localai_what_works" formatted="false">Что работает на этом телефоне</string>
+    <string name="localai_needs_cloud" formatted="false">Нужен облачный провайдер</string>
+    <string name="localai_cloud_promise" formatted="false">Orbit Local никогда не передаёт запрос в облако. Если для чего-то нужен облачный провайдер, Orbit скажет об этом, и выбор останется за вами.</string>
+    <string name="localai_state_works" formatted="false">работает на этом телефоне</string>
+    <string name="localai_state_needs_cloud" formatted="false">нужен облачный провайдер</string>
+    <string name="localai_state_not_ready" formatted="false">пока не готово</string>
+    <string name="localai_component_header" formatted="false">Компонент Orbit Local</string>
+    <string name="localai_component_title" formatted="false">Компонент ИИ на устройстве</string>
+    <string name="localai_preparing" formatted="false">Подготовка загрузки…</string>
+    <string name="localai_component_installed">Запускает ИИ приватно на этом устройстве · %1$s\nВерсия %2$s</string>
+    <string name="localai_component_update_required" formatted="false">Установленный компонент собран для другой версии Orbit. Обновите его, чтобы снова пользоваться Orbit Local.</string>
+    <string name="localai_untrusted_install" formatted="false">Установлен пакет с именем Orbit Local, но он не выпущен Orbit, поэтому использоваться не будет. Удалите его, затем установите Orbit Local отсюда.</string>
+    <string name="localai_component_required">Нужен, чтобы запускать ИИ приватно на этом устройстве · %1$s</string>
+    <string name="localai_untrusted_play" formatted="false">Установлен пакет с именем Orbit Local, но он не выпущен Orbit, поэтому использоваться не будет. Вы можете удалить его здесь.</string>
+    <string name="localai_github_component_play" formatted="false">Установлен компонент Orbit Local из версии Orbit с GitHub. Версия из Google Play не может его использовать. Вы можете удалить его здесь.</string>
+    <string name="localai_small_download" formatted="false">небольшая загрузка</string>
+    <string name="localai_downloading" formatted="false">Загрузка…</string>
+    <string name="localai_remove_untrusted" formatted="false">Удалить ненадёжный компонент</string>
+    <string name="localai_uninstall_component" formatted="false">Удалить компонент</string>
+    <string name="localai_update_component" formatted="false">Обновить компонент</string>
+    <string name="localai_install_component" formatted="false">Установить компонент</string>
+    <string name="localai_needs_two" formatted="false">Orbit Local требует двух необязательных загрузок:</string>
+    <string name="localai_setup_component">Компонент Orbit Local · %1$s</string>
+    <string name="localai_setup_component_desc" formatted="false">Позволяет Orbit запускать ИИ приватно на этом устройстве.</string>
+    <string name="localai_setup_model">ИИ-модель · %1$s</string>
+    <string name="localai_setup_model_desc" formatted="false">Содержит саму локальную ИИ-модель.</string>
+    <string name="localai_setup_footer" formatted="false">Обе загрузки можно удалить позже. Отдельную необязательную модель действий можно добавить потом, если хотите, чтобы Orbit Local выполнял и команды телефону.</string>
+    <string name="localai_need_install_permission" formatted="false">Android требует разрешения на установку компонента из Orbit. Разрешите этот источник и вернитесь в Orbit.</string>
+    <string name="localai_installer_failed" formatted="false">Android не удалось открыть установщик пакетов.</string>
+    <string name="localai_model_header" formatted="false">Локальная модель</string>
+    <string name="localai_requires_component" formatted="false">Нужен компонент Orbit Local</string>
+    <string name="localai_checking" formatted="false">Проверка…</string>
+    <string name="localai_active" formatted="false">Активна</string>
+    <string name="localai_verifying" formatted="false">Проверка модели…</string>
+    <string name="localai_moving_progress">Перенос существующей модели · %1$s из %2$s</string>
+    <string name="localai_progress_starting">%1$s из %2$s · запуск…</string>
+    <string name="localai_progress_waiting">%1$s из %2$s · ожидание соединения</string>
+    <string name="localai_progress_percent">%1$s из %2$s · %3$d%%</string>
+    <string name="localai_model_about">Локальная ИИ-модель · около %1$s</string>
+    <string name="localai_legacy_hint_a" formatted="false">\nЭта модель уже есть на телефоне. Установите компонент Orbit Local, и Orbit сможет перенести её, не загружая заново.</string>
+    <string name="localai_install_first" formatted="false">\nСначала установите компонент Orbit Local.</string>
+    <string name="localai_checking_component" formatted="false">Проверка компонента Orbit Local…</string>
+    <string name="localai_model_ready">"%1$s установлена · Работает полностью офлайн\nПодходит для приватного чата, черновиков и быстрых ответов. "</string>
+    <string name="localai_model_ready_actions" formatted="false">Команды телефону выполняет модель действий ниже; чтение экрана остаётся за облачными провайдерами.</string>
+    <string name="localai_model_ready_no_actions" formatted="false">Действия на устройстве и чтение экрана пока остаются за облачными провайдерами.</string>
+    <string name="localai_model_downloading" formatted="false">Загрузка идёт в фоне. Можно выйти с этого экрана, заблокировать телефон или пользоваться другими приложениями: загрузка продолжится и после любого прерывания возобновится с того же места.</string>
+    <string name="localai_model_queued" formatted="false">Загрузка начинается. Она идёт в фоне, и этот экран держать открытым не нужно.</string>
+    <string name="localai_model_waiting" formatted="false">Ожидание соединения. Загрузка продолжится сама, когда телефон снова выйдет в сеть; уже загруженное не пропадёт.</string>
+    <string name="localai_model_validating" formatted="false">Проверяем, что каждый байт загружен без повреждений, прежде чем включить модель.</string>
+    <string name="localai_model_importing" formatted="false">Переносим уже загруженную модель в Orbit Local. Существующая копия сохраняется, пока перенос не завершится и не пройдёт проверку.</string>
+    <string name="localai_paused" formatted="false">Вы приостановили загрузку. Возобновить можно в любой момент; загруженные данные сохранены.</string>
+    <string name="localai_model_interrupted" formatted="false">Загрузка прервалась, не завершившись. Нажмите «Возобновить», чтобы продолжить с того же места; загруженные данные сохранены.</string>
+    <string name="localai_one_time">Однократная загрузка · %1$s · хранится только на этом устройстве.</string>
+    <string name="localai_model_legacy_found">Эта модель уже есть на телефоне от прежней версии Orbit. Orbit может перенести её в Orbit Local, не загружая %1$s заново.</string>
+    <string name="localai_model_default">Однократная загрузка · около %1$s · хранится только на этом устройстве. После этого Orbit Local не нужны ни интернет, ни аккаунт.</string>
+    <string name="localai_move_model" formatted="false">Перенести существующую модель</string>
+    <string name="localai_try_again" formatted="false">Повторить</string>
+    <string name="localai_download_model" formatted="false">Загрузить модель</string>
+    <string name="localai_resume" formatted="false">Возобновить загрузку</string>
+    <string name="localai_remove_downloaded" formatted="false">Удалить загруженные данные</string>
+    <string name="localai_pause" formatted="false">Пауза</string>
+    <string name="localai_stop_moving" formatted="false">Остановить перенос</string>
+    <string name="localai_now_active" formatted="false">Orbit Local теперь активный провайдер</string>
+    <string name="localai_free_old">Освободить %1$s от старых данных модели</string>
+    <string name="localai_delete_model" formatted="false">Удалить локальную модель</string>
+    <string name="localai_migrate_title" formatted="false">Найдена существующая модель Orbit Local</string>
+    <string name="localai_migrate_message" formatted="false">Orbit может перенести вашу существующую локальную модель в новый компонент Orbit Local, не загружая её заново.\n\nТекущая копия сохраняется, пока перенесённая не пройдёт проверку, поэтому при прерывании ничего не потеряется.</string>
+    <string name="localai_lowspace_title" formatted="false">Недостаточно места для переноса модели</string>
+    <string name="localai_lowspace_message" formatted="false">Для переноса нужно место под вторую копию, пока первая не удалена, а на этом устройстве его нет.\n\nВместо этого Orbit может удалить старую модель и загрузить новую копию в Orbit Local. Локальный ИИ будет недоступен, пока загрузка не завершится.</string>
+    <string name="localai_replace_copy" formatted="false">Заменить новой копией</string>
+    <string name="localai_downloading_model_toast" formatted="false">Модель загружается в Orbit Local</string>
+    <string name="localai_migrate_failed" formatted="false">Orbit Local не удалось начать перенос модели</string>
+    <string name="localai_reclaim_title" formatted="false">Освободить место от старой копии?</string>
+    <string name="localai_reclaim_message">У Orbit Local теперь есть собственная проверенная копия модели. Старая копия, хранимая Orbit, больше не используется, и её удаление освободит около %1$s.\n\nOrbit Local продолжит работать как сейчас.</string>
+    <string name="localai_keep_it" formatted="false">Оставить</string>
+    <string name="localai_free_up" formatted="false">Освободить место</string>
+    <string name="localai_old_removed_toast" formatted="false">Старые данные модели удалены</string>
+    <string name="localai_actions_header" formatted="false">Действия на устройстве</string>
+    <string name="localai_on" formatted="false">Вкл.</string>
+    <string name="localai_off" formatted="false">Выкл.</string>
+    <string name="localai_action_model_title" formatted="false">Локальная модель действий</string>
+    <string name="localai_understands" formatted="false">Понимает: фонарик, яркость, громкость мультимедиа, «Не беспокоить», режим звонка, воспроизведение/пауза/пропуск, таймеры, будильники, открытие приложения и настроек. Ничего другого, и ничто из предложенного не выполняется без проверки Orbit.</string>
+    <string name="localai_use_for_commands" formatted="false">Использовать для команд устройству</string>
+    <string name="localai_own_first" formatted="false">Собственное распознавание команд Orbit всегда срабатывает первым. Эта модель обрабатывает только то, что оно не может.</string>
+    <string name="localai_about_520" formatted="false">около 520 МБ</string>
+    <string name="localai_action_lets_play">Позволяет Orbit Local понимать команды телефону, для которых нет точной формулировки, полностью на устройстве. %1$s</string>
+    <string name="localai_action_lets_install" formatted="false">Позволяет Orbit Local понимать команды телефону, для которых нет точной формулировки, полностью на устройстве. Сначала установите компонент Orbit Local.</string>
+    <string name="localai_action_ready">%1$s установлена · Работает полностью офлайн\nПревращает обычные фразы вроде «выключи фонарик» или «потише» в действие Orbit прямо на телефоне. Она не ведёт чат и сама не управляет Android.</string>
+    <string name="localai_action_downloading" formatted="false">Загрузка идёт в фоне. Можно выйти с этого экрана или пользоваться другими приложениями: загрузка продолжится и возобновится после любого прерывания.</string>
+    <string name="localai_action_queued" formatted="false">Загрузка начинается. Она идёт в фоне, и этот экран открытым держать не нужно.</string>
+    <string name="localai_action_waiting" formatted="false">Ожидание соединения. Загрузка продолжится сама, когда телефон снова выйдет в сеть.</string>
+    <string name="localai_action_interrupted" formatted="false">Загрузка прервалась, не завершившись. Возобновите её, чтобы продолжить с того же места.</string>
+    <string name="localai_action_default">Необязательно · однократная загрузка, %1$s · хранится только на этом устройстве.\nПозволяет Orbit Local выполнять команды телефону, не совпадающие с точными формулировками Orbit, без интернета и аккаунта. Чат работает и без неё.</string>
+    <string name="localai_download_action" formatted="false">Загрузить модель действий</string>
+    <string name="localai_delete_action" formatted="false">Удалить модель действий</string>
+    <string name="localai_remove_downloaded_q" formatted="false">Удалить загруженные данные?</string>
+    <string name="localai_remove_action_q" formatted="false">Удалить модель действий?</string>
+    <string name="localai_partial_message">Будет удалено около %1$s частично загруженных данных модели, это освободит место. Загрузку можно начать снова в любой момент.</string>
+    <string name="localai_action_remove_message">Будет удалено около %1$s загруженных данных модели, это освободит место. Чат Orbit Local и его собственная модель не затрагиваются, а встроенное распознавание команд Orbit продолжит работать как сейчас.</string>
+    <string name="localai_remove" formatted="false">Удалить</string>
+    <string name="localai_remove_model" formatted="false">Удалить модель</string>
+    <string name="localai_action_removed_toast" formatted="false">Модель действий удалена</string>
+    <string name="localai_storage_header" formatted="false">Хранилище Orbit Local</string>
+    <string name="localai_nothing_installed" formatted="false">Ничего не установлено</string>
+    <string name="localai_no_storage" formatted="false">Orbit Local пока не занимает место на этом устройстве. Само приложение Orbit здесь не учитывается.</string>
+    <string name="localai_storage_component" formatted="false">Компонент</string>
+    <string name="localai_model_partial">%1$s (частично)</string>
+    <string name="localai_storage_action" formatted="false">Модель действий</string>
+    <string name="localai_storage_action_partial" formatted="false">Модель действий (частично)</string>
+    <string name="localai_earlier_copy" formatted="false">Копия прежней версии Orbit</string>
+    <string name="localai_earlier_partial" formatted="false">Прежняя частичная загрузка</string>
+    <string name="localai_remove_orbit_local" formatted="false">Удалить Orbit Local</string>
+    <string name="localai_remove_details_full" formatted="false">Удаляет всё, что Orbit Local использует на этом устройстве: компонент, хранимую им ИИ-модель, данные модели от прежней версии Orbit и загруженный установщик компонента.\n\nСам Orbit, ваши разговоры, память, автоматизации, настройки и облачные провайдеры остаются нетронутыми.</string>
+    <string name="localai_remove_details_legacy" formatted="false">Компонент Orbit Local не установлен, но данные модели от прежней версии Orbit всё ещё хранятся на этом устройстве. Это действие удалит их.\n\nСам Orbit, ваши разговоры, память, автоматизации, настройки и облачные провайдеры остаются нетронутыми.</string>
+    <string name="localai_remove_old_data" formatted="false">Удалить старые данные локальной модели</string>
+    <string name="localai_remove_q" formatted="false">Удалить Orbit Local?</string>
+    <string name="localai_remove_message">Будет удалено всё, что Orbit Local использует на этом устройстве, — компонент, ИИ-модель, данные модели от прежней версии Orbit и загруженный установщик, — это освободит около %1$s.\n\nСам Orbit останется установленным. Ваши разговоры, память, автоматизации и настройки не затрагиваются, а облачные провайдеры продолжат работать.</string>
+    <string name="localai_chatgpt_active_inline" formatted="false">" ChatGPT станет активным провайдером."</string>
+    <string name="localai_android_confirm" formatted="false">\n\nДалее Android попросит подтверждение. Ничего не удаляется, пока вы не подтвердите там.</string>
+    <string name="localai_already_removed" formatted="false">Orbit Local уже удалён.</string>
+    <string name="localai_remove_old_q" formatted="false">Удалить старые данные локальной модели?</string>
+    <string name="localai_remove_old_message">Будет удалено около %1$s данных модели, сохранённых прежней версией Orbit, это освободит место.\n\nСам Orbit, ваши разговоры, память, автоматизации, настройки и облачные провайдеры не затрагиваются. Настроить Orbit Local снова можно в любой момент.</string>
+    <string name="localai_old_removed" formatted="false">Старые данные локальной модели удалены.</string>
+    <string name="localai_uninstall_q" formatted="false">Удалить компонент?</string>
+    <string name="localai_uninstall_model_warning">\n\nЛокальная ИИ-модель хранится внутри компонента, поэтому Android удалит вместе с ним и %1$s данных модели. Сохранить её отдельно нельзя.</string>
+    <string name="localai_uninstall_message" formatted="false">Orbit не сможет запускать ИИ на этом устройстве, пока компонент не будет установлен снова.</string>
+    <string name="localai_chatgpt_active_para" formatted="false">\n\nChatGPT станет активным провайдером.</string>
+    <string name="localai_remove_named_q">Удалить %1$s?</string>
+    <string name="localai_model_remove_message">Будет удалено около %1$s загруженных данных модели, это освободит место. Компонент Orbit Local останется установленным, поэтому другую модель можно будет загрузить без повторной настройки.</string>
+    <string name="localai_model_remove_tail" formatted="false">" Ваши разговоры, настройки и другие провайдеры не затрагиваются."</string>
+    <string name="localai_removed_chatgpt_toast" formatted="false">Модель удалена. Снова активен провайдер ChatGPT.</string>
+    <string name="localai_local_removed_toast" formatted="false">Локальная модель удалена</string>
+    <string name="extv2_bad_id" formatted="false">Недопустимый идентификатор расширения.</string>
+    <string name="extv2_setup_array" formatted="false">Поле setupFields расширения должно быть массивом.</string>
+    <string name="extv2_actions_count">Расширение должно объявлять от 1 до %1$d действий.</string>
+    <string name="extv2_action_object" formatted="false">Каждое действие расширения должно быть объектом JSON.</string>
+    <string name="extv2_action_type">Неподдерживаемый тип действия расширения: %1$s</string>
+    <string name="extv2_params_array" formatted="false">Параметры HTTPS-запроса должны быть массивом.</string>
+    <string name="extv2_method" formatted="false">Метод HTTPS-запроса должен быть GET или POST.</string>
+    <string name="extv2_body_object" formatted="false">Тело HTTPS-запроса должно быть объектом JSON.</string>
+    <string name="extv2_get_body" formatted="false">Действия GET не могут содержать тело запроса.</string>
+    <string name="extv2_body_large" formatted="false">Тело HTTPS-запроса слишком большое.</string>
+    <string name="extv2_timeout">Тайм-аут HTTPS-запроса должен быть от 1 до %1$d секунд.</string>
+    <string name="extv2_headers_object" formatted="false">Заголовки HTTPS-запроса должны быть объектом.</string>
+    <string name="extv2_many_setup" formatted="false">Слишком много полей настройки расширения.</string>
+    <string name="extv2_setup_object" formatted="false">Каждое поле настройки должно быть объектом JSON.</string>
+    <string name="extv2_setup_type">Неподдерживаемый тип поля настройки: %1$s</string>
+    <string name="extv2_cred_secure" formatted="false">Поля настройки, похожие на учётные данные, должны использовать защищённое хранилище.</string>
+    <string name="extv2_setup_maxlen" formatted="false">Значение maxLength поля настройки вне допустимого диапазона.</string>
+    <string name="extv2_secret_default" formatted="false">Секретные поля настройки не могут иметь значений по умолчанию.</string>
+    <string name="extv2_many_params" formatted="false">Слишком много параметров действия.</string>
+    <string name="extv2_param_object" formatted="false">Каждый параметр действия должен быть объектом JSON.</string>
+    <string name="extv2_param_secret" formatted="false">Параметры действия нельзя использовать для учётных данных и секретов.</string>
+    <string name="extv2_param_type">Неподдерживаемый тип параметра действия: %1$s</string>
+    <string name="extv2_param_maxlen" formatted="false">Значение maxLength параметра действия вне допустимого диапазона.</string>
+    <string name="extv2_choice_required" formatted="false">Параметры с выбором должны объявлять варианты.</string>
+    <string name="extv2_choice_default" formatted="false">Значение по умолчанию для параметра с выбором не допускается.</string>
+    <string name="extv2_text_choices" formatted="false">Текстовые параметры не могут объявлять варианты.</string>
+    <string name="extv2_choices_invalid" formatted="false">Варианты параметра с выбором недопустимы.</string>
+    <string name="extv2_choice_object" formatted="false">Каждый вариант параметра должен быть объектом JSON.</string>
+    <string name="extv2_choice_unique" formatted="false">Значения вариантов параметра должны быть уникальными.</string>
+    <string name="extv2_many_headers" formatted="false">Слишком много заголовков запроса.</string>
+    <string name="extv2_header_name" formatted="false">Недопустимое имя заголовка запроса.</string>
+    <string name="extv2_header_unique" formatted="false">Имена заголовков запроса должны быть уникальными.</string>
+    <string name="extv2_header_blocked">Заголовок запроса не разрешён: %1$s</string>
+    <string name="extv2_header_text" formatted="false">Значения заголовков запроса должны быть текстом.</string>
+    <string name="extv2_header_value" formatted="false">Недопустимое значение заголовка запроса.</string>
+    <string name="extv2_cred_header_literal" formatted="false">Литералы заголовков с учётными данными не допускаются.</string>
+    <string name="extv2_cred_secure_fields" formatted="false">Заголовки с учётными данными могут использовать только защищённые поля настройки.</string>
+    <string name="extv2_cred_secret_fields" formatted="false">Заголовки с учётными данными могут использовать только секретные поля настройки.</string>
+    <string name="extv2_cred_prefix" formatted="false">Префиксы заголовков с учётными данными не допускаются.</string>
+    <string name="extv2_placeholder_keys" formatted="false">Заполнители не допускаются в ключах объектов JSON.</string>
+    <string name="extv2_config_unsupported" formatted="false">Конфигурация расширения содержит неподдерживаемое поле.</string>
+    <string name="extv2_config_text" formatted="false">Значения конфигурации расширения должны быть текстом.</string>
+    <string name="extv2_unknown_setup" formatted="false">Неизвестное поле настройки расширения.</string>
+    <string name="extv2_routine_param" formatted="false">Действие автоматизации содержит неподдерживаемый параметр.</string>
+    <string name="extv2_routine_text" formatted="false">Параметры действия автоматизации должны быть текстом.</string>
+    <string name="extv2_routine_choice" formatted="false">Вариант действия автоматизации не допускается.</string>
+    <string name="extv2_enter">Введите: %1$s.</string>
+    <string name="extv2_routine_large" formatted="false">Параметры действия автоматизации слишком большие.</string>
+    <string name="extv2_tpl_setup" formatted="false">Шаблон ссылается на неизвестное поле настройки.</string>
+    <string name="extv2_tpl_secure" formatted="false">Защищённое поле настройки используется в недопустимой части шаблона.</string>
+    <string name="extv2_tpl_param" formatted="false">Шаблон ссылается на неизвестный параметр действия.</string>
+    <string name="extv2_tpl_syntax" formatted="false">Недопустимый синтаксис заполнителя в шаблоне.</string>
+    <string name="extv2_tpl_endpoint" formatted="false">Конечные точки с шаблонами должны сохранять фиксированный HTTPS-хост или использовать одно URL-поле настройки.</string>
+    <string name="extv2_tpl_host" formatted="false">Хосты конечных точек не могут задаваться текстом или параметрами автоматизации.</string>
+    <string name="extv2_tpl_url" formatted="false">URL-поля настройки должны задавать конечную точку целиком.</string>
+    <string name="extv2_value_long" formatted="false">Заданное значение слишком длинное.</string>
+    <string name="extv2_value_control" formatted="false">Заданное значение содержит неподдерживаемые управляющие символы.</string>
+    <string name="extv2_missing">Отсутствует поле расширения: %1$s</string>
+    <string name="extv2_field_text">Поле расширения %1$s должно быть текстом.</string>
+    <string name="extv2_field_long">Поле расширения %1$s слишком длинное.</string>
+    <string name="extv2_field_control">Поле расширения %1$s содержит неподдерживаемые управляющие символы.</string>
+    <string name="extv2_field_bool">Поле расширения %1$s должно быть true или false.</string>
+    <string name="extv2_field_number">Поле расширения %1$s должно быть числом.</string>
+    <string name="extv2_field_whole">Поле расширения %1$s должно быть целым числом.</string>
+    <string name="extv2_json_unsafe" formatted="false">Не удалось безопасно обработать JSON расширения.</string>
+    <string name="extv2_action_ids" formatted="false">Идентификаторы действий расширения должны быть допустимыми и уникальными.</string>
+    <string name="extv2_setup_ids" formatted="false">Идентификаторы полей настройки должны быть допустимыми и уникальными.</string>
+    <string name="extv2_param_ids" formatted="false">Идентификаторы параметров действия должны быть допустимыми и уникальными.</string>
+    <string name="extv2_unsup_manifest">Неподдерживаемое поле в манифесте расширения: %1$s</string>
+    <string name="extv2_unsup_openurl">Неподдерживаемое поле в действии «Открыть URL»: %1$s</string>
+    <string name="extv2_unsup_https">Неподдерживаемое поле в действии «HTTPS-запрос»: %1$s</string>
+    <string name="extv2_unsup_setup">Неподдерживаемое поле в поле настройки: %1$s</string>
+    <string name="extv2_unsup_param">Неподдерживаемое поле в параметре действия: %1$s</string>
+    <string name="extv2_unsup_choice">Неподдерживаемое поле в варианте параметра: %1$s</string>
+    <string name="extv2_cred_literal" formatted="false">Литералы заголовков, похожие на учётные данные, не допускаются.</string>
+    <string name="extexec_needs_setup">Расширению «%1$s» требуется настройка</string>
+    <string name="extexec_endpoint_size" formatted="false">Конечная точка расширения превысила безопасный лимит размера Orbit.</string>
+    <string name="extexec_request_size" formatted="false">Запрос расширения превысил безопасный лимит размера Orbit.</string>
+    <string name="extexec_headers_invalid" formatted="false">Заголовки запроса расширения недопустимы.</string>
+    <string name="extexec_succeeded">Запрос расширения выполнен (HTTP %1$d)</string>
+    <string name="extexec_redirect">Запрос расширения остановлен на непроверенном перенаправлении (HTTP %1$d)</string>
+    <string name="extexec_failed">Запрос расширения не удался (HTTP %1$d)</string>
+    <string name="extexec_response_size" formatted="false">Ответ расширения превысил безопасный лимит размера Orbit.</string>
+    <string name="extexec_not_https" formatted="false">Конечная точка расширения — не публичный HTTPS-адрес.</string>
+    <string name="extexec_incomplete" formatted="false">Не удалось выполнить запрос расширения.</string>
+    <string name="extexec_no_browser" formatted="false">Для этого действия расширения нет доступного браузера.</string>
+    <string name="extexec_opened" formatted="false">Расширение открыло проверенный URL</string>
+    <string name="extexec_open_failed" formatted="false">Orbit не удалось открыть URL расширения.</string>
+    <string name="extexec_not_public" formatted="false">URL расширения — не публичный веб-адрес.</string>
+    <string name="extexec_unavailable" formatted="false">Действие расширения недоступно</string>
+    <string name="upd_stable_release" formatted="false">Последний релиз на GitHub не является опубликованным стабильным релизом.</string>
+    <string name="upd_tag_malformed" formatted="false">Тег последнего релиза Orbit имеет неверный формат.</string>
+    <string name="upd_latest_no_assets" formatted="false">В последнем релизе Orbit нет файлов.</string>
+    <string name="upd_not_eligible" formatted="false">Релиз Orbit не является подходящим опубликованным релизом.</string>
+    <string name="upd_no_assets" formatted="false">В релизе Orbit нет файлов.</string>
+    <string name="upd_file_unavailable" formatted="false">Загруженный файл обновления недоступен.</string>
+    <string name="upd_checksum_mismatch" formatted="false">Контрольная сумма загруженного APK не совпала с официальным релизом.</string>
+    <string name="upd_cannot_inspect" formatted="false">Android не смог проверить загруженный APK.</string>
+    <string name="upd_wrong_package" formatted="false">У загруженного APK неверное имя пакета.</string>
+    <string name="upd_version_mismatch" formatted="false">Версия загруженного APK не совпадает с манифестом релиза.</string>
+    <string name="upd_not_newer" formatted="false">Загруженный APK не новее установленной версии Orbit.</string>
+    <string name="upd_unexpected_signers" formatted="false">У загруженного APK неожиданный набор подписей.</string>
+    <string name="upd_signer_unverified" formatted="false">Не удалось проверить подпись загруженного APK.</string>
+    <string name="upd_not_orbit_signed" formatted="false">Загруженный APK не подписан постоянным сертификатом Orbit.</string>
+    <string name="upd_verified_unavailable" formatted="false">Проверенный файл обновления недоступен.</string>
+    <string name="upd_installer_prepare" formatted="false">Orbit не удалось подготовить установщик обновления.</string>
+    <string name="upd_apk_large" formatted="false">Официальный APK неожиданно большого размера.</string>
+    <string name="upd_size_mismatch" formatted="false">Размер загрузки APK не совпал с данными релиза.</string>
+    <string name="upd_download_limit" formatted="false">Загрузка APK превысила безопасный лимит размера.</string>
+    <string name="upd_download_incomplete" formatted="false">Загрузка APK не завершена.</string>
+    <string name="upd_download_finalize" formatted="false">Orbit не удалось завершить загрузку APK.</string>
+    <string name="upd_schema" formatted="false">Схема манифеста обновления Orbit не поддерживается.</string>
+    <string name="upd_manifest_package" formatted="false">В манифесте обновления Orbit указано неверное имя пакета.</string>
+    <string name="upd_apk_size" formatted="false">Недопустимый размер APK релиза Orbit.</string>
+    <string name="upd_version_metadata" formatted="false">Данные о версии релиза Orbit имеют неверный формат.</string>
+    <string name="upd_apk_name" formatted="false">Имя APK релиза Orbit не согласуется с релизом.</string>
+    <string name="upd_apk_checksum" formatted="false">Контрольная сумма APK релиза Orbit имеет неверный формат.</string>
+    <string name="upd_cert_metadata" formatted="false">Недопустимые данные сертификата релиза Orbit.</string>
+    <string name="upd_duplicate_assets" formatted="false">В релизе Orbit есть повторяющиеся файлы.</string>
+    <string name="upd_asset_url" formatted="false">В релизе Orbit неожиданный адрес файла.</string>
+    <string name="upd_https_required" formatted="false">Обновления Orbit требуют HTTPS.</string>
+    <string name="upd_insecure_redirect" formatted="false">Служба обновлений перенаправила на небезопасный URL.</string>
+    <string name="upd_asset_reference" formatted="false">Ссылка на файл релиза Orbit имеет неверный формат.</string>
+    <string name="upd_response_large" formatted="false">Ответ службы обновлений слишком большой.</string>
+    <string name="upd_download_http">Не удалось загрузить официальный APK (HTTP %1$d).</string>
+    <string name="upd_missing_asset">В релизе Orbit отсутствует %1$s.</string>
+    <string name="upd_service_http">Служба обновлений вернула HTTP %1$d.</string>
+    <string name="upd_check_failed" formatted="false">Orbit не удалось проверить наличие обновлений.</string>
+    <string name="upd_verify_failed" formatted="false">Не удалось проверить загруженное обновление.</string>
+    <string name="upd_verification_failed" formatted="false">Загруженное обновление не прошло проверку.</string>
+    <string name="upd_download_failed" formatted="false">Orbit не удалось загрузить обновление.</string>
+    <string name="loctrig_new_title" formatted="false">Новый триггер по местоположению</string>
+    <string name="loctrig_edit_title" formatted="false">Изменить триггер по местоположению</string>
+    <string name="loctrig_intro" formatted="false">Запускайте эту автоматизацию, когда телефон прибывает в зону или покидает её. Выберите сохранённое место, используйте текущее положение или введите координаты вручную.</string>
+    <string name="loctrig_when" formatted="false">КОГДА</string>
+    <string name="loctrig_saved_place_label" formatted="false">СОХРАНЁННОЕ МЕСТО (НЕОБЯЗАТЕЛЬНО)</string>
+    <string name="loctrig_choose_place" formatted="false">Выбрать сохранённое место</string>
+    <string name="loctrig_saved_help" formatted="false">Выберите место из настроек, используйте текущее местоположение или введите координаты вручную.</string>
+    <string name="loctrig_name_label" formatted="false">НАЗВАНИЕ МЕСТА</string>
+    <string name="loctrig_name_hint" formatted="false">Дом, работа, спортзал…</string>
+    <string name="loctrig_use_current" formatted="false">Использовать моё местоположение</string>
+    <string name="loctrig_coord_help" formatted="false">Orbit хранит только координаты и название, которые вы сохраняете для этого триггера. Для определения текущего местоположения нужен доступ к точной геолокации.</string>
+    <string name="loctrig_lat" formatted="false">ШИРОТА</string>
+    <string name="loctrig_lon" formatted="false">ДОЛГОТА</string>
+    <string name="loctrig_radius" formatted="false">РАДИУС</string>
+    <string name="loctrig_enabled" formatted="false">Включён</string>
+    <string name="loctrig_background_title" formatted="false">Работа в фоне</string>
+    <string name="loctrig_background_body" formatted="false">Триггеры по местоположению используют системное отслеживание близости Android. Автоматизация по-прежнему подчиняется обычным правилам автозапуска Orbit: шаги, безопасные для фона, могут завершиться без уведомления, а шаги, для которых нужен видимый Orbit или подтверждение, используют существующую передачу через оповещение триггера. Границы зон в Android приблизительны, поэтому переход может быть замечен с задержкой, а очень короткие проходы могут не сработать.</string>
+    <string name="loctrig_save" formatted="false">Сохранить триггер по местоположению</string>
+    <string name="loctrig_save_changes" formatted="false">Сохранить изменения</string>
+    <string name="loctrig_when_leave" formatted="false">Когда я ухожу</string>
+    <string name="loctrig_when_arrive" formatted="false">Когда я прихожу</string>
+    <string name="loctrig_ready" formatted="false">Триггеры по местоположению готовы</string>
+    <string name="loctrig_setup_needed" formatted="false">Нужна настройка геолокации</string>
+    <string name="loctrig_detail_fine" formatted="false">Разрешите точную геолокацию, чтобы Orbit мог понимать, когда телефон пересекает заданный радиус.</string>
+    <string name="loctrig_btn_fine" formatted="false">Разрешить точную геолокацию</string>
+    <string name="loctrig_detail_background">Для автоматических триггеров прихода и ухода нужна геолокация в фоне. На странице разрешений приложения в Android установите для геолокации значение «%1$s».</string>
+    <string name="loctrig_btn_background" formatted="false">Разрешить геолокацию в фоне</string>
+    <string name="loctrig_detail_off" formatted="false">Службы геолокации Android сейчас выключены. Включите их для отслеживания прихода и ухода.</string>
+    <string name="loctrig_btn_turn_on" formatted="false">Включить геолокацию</string>
+    <string name="loctrig_detail_ready" formatted="false">Точная геолокация и геолокация в фоне доступны. Включённые триггеры по местоположению работают, даже когда Orbit закрыт.</string>
+    <string name="loctrig_btn_manage" formatted="false">Управление доступом к геолокации</string>
+    <string name="loctrig_background_explain">Чтобы автоматизации прихода и ухода работали при закрытом Orbit, Android требует установить для геолокации значение «%1$s». Откройте настройки приложения Orbit и выберите «Разрешения» → «Геолокация».</string>
+    <string name="loctrig_open_settings" formatted="false">Открыть настройки</string>
+    <string name="loctrig_no_places" formatted="false">Сохранённых мест пока нет. Сначала добавьте место.</string>
+    <string name="loctrig_manage_places" formatted="false">Управление сохранёнными местами…</string>
+    <string name="loctrig_r100" formatted="false">Радиус 100 м</string>
+    <string name="loctrig_r200" formatted="false">Радиус 200 м</string>
+    <string name="loctrig_r300" formatted="false">Радиус 300 м</string>
+    <string name="loctrig_r500" formatted="false">Радиус 500 м</string>
+    <string name="loctrig_r1k" formatted="false">Радиус 1 км</string>
+    <string name="loctrig_r2k" formatted="false">Радиус 2 км</string>
+    <string name="loctrig_r5k" formatted="false">Радиус 5 км</string>
+    <string name="loctrig_turn_on_first" formatted="false">Сначала включите геолокацию Android.</string>
+    <string name="loctrig_service_unavailable" formatted="false">Служба геолокации Android недоступна.</string>
+    <string name="loctrig_no_provider" formatted="false">Не удалось найти включённый источник геолокации.</string>
+    <string name="loctrig_finding" formatted="false">Определение местоположения…</string>
+    <string name="loctrig_my_location" formatted="false">Моё местоположение</string>
+    <string name="loctrig_added" formatted="false">Текущее местоположение добавлено.</string>
+    <string name="loctrig_fix_failed" formatted="false">Orbit не удалось определить текущее местоположение. Попробуйте ещё раз на улице или вставьте координаты.</string>
+    <string name="loctrig_need_name" formatted="false">Дайте этому месту название.</string>
+    <string name="loctrig_bad_coords" formatted="false">Укажите корректные широту и долготу.</string>
+    <string name="loctrig_duplicate" formatted="false">Для этой автоматизации уже есть включённый триггер с той же зоной и событием.</string>
+    <string name="loctrig_save_failed" formatted="false">Не удалось сохранить триггер по местоположению.</string>
+    <string name="loctrig_monitor_failed" formatted="false">Сохранено, но Android не смог запустить отслеживание местоположения. Проверьте доступ к геолокации и попробуйте включить триггер снова.</string>
+    <string name="loctrig_finish_setup" formatted="false">Сохранено. Завершите настройку геолокации, чтобы этот триггер работал в фоне.</string>
+    <string name="loctrig_discard_title" formatted="false">Отменить изменения триггера?</string>
+    <string name="loctrig_discard_message" formatted="false">Несохранённые изменения местоположения и триггера будут потеряны.</string>
+    <string name="loctrig_keep_editing" formatted="false">Продолжить редактирование</string>
+    <string name="loctrig_discard" formatted="false">Отменить изменения</string>
+    <string name="olc_chat" formatted="false">Чат</string>
+    <string name="olc_memory" formatted="false">Память Orbit</string>
+    <string name="olc_screen" formatted="false">Текст экрана</string>
+    <string name="olc_ask_vault" formatted="false">Вопросы к Хранилищу</string>
+    <string name="olc_attachments" formatted="false">Вложения: текст, PDF и документы</string>
+    <string name="olc_notifications" formatted="false">Вопросы об уведомлениях</string>
+    <string name="olc_device_actions" formatted="false">Действия на устройстве своими словами</string>
+    <string name="olc_web" formatted="false">Поиск в интернете и актуальная информация</string>
+    <string name="olc_pictures" formatted="false">Просмотр изображений</string>
+    <string name="olc_routines" formatted="false">Планирование автоматизаций</string>
+    <string name="olc_suggestions" formatted="false">Подсказки умного хранилища</string>
+    <string name="olc_after_model" formatted="false">После установки локальной модели</string>
+    <string name="olc_memory_off" formatted="false">Память Orbit выключена</string>
+    <string name="olc_screen_attach" formatted="false">Когда вы прикрепляете экран</string>
+    <string name="olc_turn_on_vault" formatted="false">Включите умное хранилище</string>
+    <string name="olc_attachment_text" formatted="false">Текст, который Orbit в них читает</string>
+    <string name="olc_needs_access" formatted="false">Нужен доступ к уведомлениям</string>
+    <string name="olc_ni_off" formatted="false">Анализ уведомлений выключен</string>
+    <string name="olc_needs_action_model" formatted="false">Нужна модель действий</string>
+    <string name="olc_turned_off" formatted="false">Выключено</string>
+    <string name="olc_pictures_text" formatted="false">Текст, который Orbit читает на изображении, по-прежнему работает</string>
+    <string name="olp_image_only" formatted="false">Orbit Local пока не умеет смотреть изображения, а Orbit не нашёл на этом изображении текста, который могла бы прочитать локальная модель. Ничего никуда не отправлялось. Чтобы спросить о самом изображении, переключитесь на облачного провайдера, например ChatGPT, в разделе «Настройки» > «ИИ и аккаунт» > «ИИ-провайдеры».</string>
+    <string name="olp_picture_note" formatted="false">Orbit Local не видит изображения, поэтому этот ответ основан только на тексте, который Orbit прочитал на них.</string>
+    <string name="olp_excerpt_note" formatted="false">Orbit Local прочитал только те части вашего вложения, которые больше всего относятся к этому вопросу, а не всё вложение.</string>
+    <string name="olp_checked_vault" formatted="false">"Проверено в вашем Хранилище: "</string>
+    <string name="olp_comp_required_move" formatted="false">Нужен компонент · модель готова к переносу</string>
+    <string name="olp_comp_not_installed" formatted="false">Компонент не установлен</string>
+    <string name="olp_comp_not_verified" formatted="false">Компонент не проверен</string>
+    <string name="olp_comp_update" formatted="false">Нужно обновить компонент</string>
+    <string name="olp_not_play" formatted="false">Недоступно в версии из Google Play</string>
+    <string name="olp_unsupported" formatted="false">Не поддерживается на этом устройстве</string>
+    <string name="olp_checking" formatted="false">Проверка компонента…</string>
+    <string name="olp_ready" formatted="false">Готово · работает офлайн</string>
+    <string name="olp_downloading" formatted="false">Загрузка модели…</string>
+    <string name="olp_starting" formatted="false">Запуск загрузки модели…</string>
+    <string name="olp_waiting" formatted="false">Ожидание соединения</string>
+    <string name="olp_verifying" formatted="false">Проверка модели…</string>
+    <string name="olp_moving" formatted="false">Перенос существующей модели…</string>
+    <string name="olp_paused" formatted="false">Загрузка приостановлена</string>
+    <string name="olp_interrupted" formatted="false">Загрузка прервана</string>
+    <string name="olp_model_missing" formatted="false">Модель не установлена</string>
+    <string name="olp_no_answer" formatted="false">Orbit Local не дал ответа. Попробуйте переформулировать вопрос или смените провайдера для него.</string>
+    <string name="olp_no_routines" formatted="false">Orbit Local пока не умеет создавать автоматизации. Переключите активного провайдера на ChatGPT, чтобы спланировать эту автоматизацию, затем переключитесь обратно.</string>
+    <string name="docview_close_viewer" formatted="false">Закрыть просмотр документа</string>
+    <string name="docview_search" formatted="false">Поиск по документу</string>
+    <string name="docview_save_page" formatted="false">Сохранить эту страницу в Хранилище</string>
+    <string name="docview_ask_page" formatted="false">Спросить Orbit об этой странице</string>
+    <string name="docview_opening" formatted="false">Открытие документа…</string>
+    <string name="docview_prev" formatted="false">Предыдущая страница</string>
+    <string name="docview_page" formatted="false">Стр.</string>
+    <string name="docview_choose_page" formatted="false">Выбрать страницу</string>
+    <string name="docview_next" formatted="false">Следующая страница</string>
+    <string name="docview_indexing" formatted="false">Индексация…</string>
+    <string name="docview_prev_result" formatted="false">Предыдущий результат поиска</string>
+    <string name="docview_next_result" formatted="false">Следующий результат поиска</string>
+    <string name="docview_close_search" formatted="false">Закрыть поиск по документу</string>
+    <string name="docview_no_pages" formatted="false">В этом PDF нет читаемых страниц.</string>
+    <string name="docview_too_many" formatted="false">В этом PDF слишком много страниц для безопасного открытия.</string>
+    <string name="docview_page_of">Страница %1$d из %2$d</string>
+    <string name="docview_rendering" formatted="false">Отрисовка страницы…</string>
+    <string name="docview_open_failed" formatted="false">Orbit не удалось открыть этот PDF.</string>
+    <string name="docview_counter_choose">%1$s, выбрать страницу</string>
+    <string name="docview_choose_doc_page" formatted="false">Выбрать страницу документа</string>
+    <string name="docview_go" formatted="false">Перейти</string>
+    <string name="docview_type_to_search" formatted="false">Введите запрос</string>
+    <string name="docview_no_text" formatted="false">Текст для поиска не найден</string>
+    <string name="docview_search_unavailable" formatted="false">Поиск недоступен</string>
+    <string name="docview_no_results" formatted="false">Нет результатов</string>
+    <string name="docview_result_announce">Результат %1$d из %2$d, страница %3$d</string>
+    <string name="docview_result_short">%1$d из %2$d · с. %3$d</string>
+    <string name="docview_ask_page_no_text" formatted="false">Спросить Orbit об этой странице; на странице нет извлекаемого текста</string>
+    <string name="docview_read_failed" formatted="false">Orbit не удалось прочитать или отобразить эту страницу</string>
+    <string name="docview_vault_off" formatted="false">Хранилище Orbit выключено</string>
+    <string name="docview_save_failed" formatted="false">Orbit не удалось сохранить эту страницу</string>
+    <string name="docview_saved">Страница %1$d сохранена в Хранилище</string>
+    <string name="convsheet_auto_line" formatted="false">Авто выбирает для каждого запроса</string>
+    <string name="convsheet_measuring" formatted="false">Orbit ещё измеряет этот чат.</string>
+    <string name="convsheet_tokens_of">%1$s из %2$s токенов</string>
+    <string name="convsheet_tokens">%1$s токенов</string>
+    <string name="convsheet_used">Использовано: %1$d%%</string>
+    <string name="convsheet_used_model">Использовано: %1$d%% · %2$s</string>
+    <string name="convsheet_window_unknown" formatted="false">Размер окна неизвестен</string>
+    <string name="convsheet_model_window_unknown">%1$s · размер окна неизвестен</string>
+    <string name="convsheet_estimated" formatted="false">Оценка. Orbit считает около четырёх символов текста на токен и фиксированное число токенов на изображение; фактический подсчёт у ИИ может отличаться.</string>
+    <string name="convsheet_note_auto" formatted="false">Авто выбирает модель при отправке, поэтому лимит здесь не показывается. Каждый запрос уходит только к модели, в чьё контекстное окно он помещается.</string>
+    <string name="convsheet_note_local" formatted="false">Orbit Local вписывает каждый запрос в своё небольшое окно на устройстве, сохраняя ваши новейшие сообщения и самые важные части вложений.</string>
+    <string name="convsheet_note_unknown" formatted="false">Orbit не знает размер контекстного окна этой модели, поэтому процент не показывается.</string>
+    <string name="convsheet_title" formatted="false">Контекстное окно</string>
+    <string name="convsheet_continue_new" formatted="false">Продолжить в новом чате</string>
+    <string name="convsheet_kept_title" formatted="false">Сохранено в этом чате</string>
+    <string name="convsheet_nothing_kept" formatted="false">В этом чате ничего не сохранено. Нажмите и удерживайте вложенный документ, текстовый файл или элемент Хранилища, чтобы сохранять его для каждого сообщения.</string>
+    <string name="convsheet_kept_info" formatted="false">Orbit отправляет их с каждым новым сообщением в этом чате, пока вы их не уберёте. Они показываются один раз — там, где вы их добавили.</string>
+    <string name="convsheet_kept_line">%1$s · %2$s токенов</string>
+    <string name="convsheet_kept_desc">%1$s, %2$s. Открывает предпросмотр.</string>
+    <string name="convsheet_stop_keeping">Перестать сохранять: %1$s</string>
+    <string name="convsheet_continue_q" formatted="false">Продолжить в новом чате?</string>
+    <string name="convsheet_continue_msg" formatted="false">Orbit напишет краткое содержание этого чата и начнёт с ним новый чат вместе со всем, что вы сохранили. Этот чат останется без изменений.</string>
+    <string name="ctxl_conversation" formatted="false">Разговор</string>
+    <string name="ctxl_documents" formatted="false">Документы</string>
+    <string name="ctxl_vault" formatted="false">Хранилище</string>
+    <string name="ctxl_screen" formatted="false">Экран</string>
+    <string name="ctxl_images" formatted="false">Изображения</string>
+    <string name="ctxl_notifications" formatted="false">Уведомления</string>
+    <string name="ctxl_memory" formatted="false">Память</string>
+    <string name="ctxl_kept" formatted="false">Сохранено в этом чате</string>
+    <string name="ctxl_instructions" formatted="false">Инструкции Orbit</string>
+    <string name="ctxl_other" formatted="false">Прочее</string>
+    <string name="rbuild_title" formatted="false">Создать с Orbit</string>
+    <string name="rbuild_subtitle" formatted="false">Опишите автоматизацию</string>
+    <string name="rbuild_intro" formatted="false">Опишите, что должна делать автоматизация, и Orbit превратит это в шаги из уже поддерживаемых действий. Ничего не запускается и не сохраняется, пока вы не просмотрите результат и не нажмёте «Сохранить автоматизацию».</string>
+    <string name="rbuild_hint" formatted="false">Включить «Не беспокоить», установить яркость 20% и уменьшить громкость мультимедиа</string>
+    <string name="rbuild_desc_cd" formatted="false">Описание автоматизации</string>
+    <string name="rbuild_build" formatted="false">Создать черновик</string>
+    <string name="rbuild_examples" formatted="false">ПРИМЕРЫ</string>
+    <string name="rbuild_ex1" formatted="false">Перед сном: включить «Не беспокоить», установить яркость 15% и уменьшить громкость мультимедиа</string>
+    <string name="rbuild_ex2" formatted="false">Режим фокуса: включить «Не беспокоить» и яркость 35%</string>
+    <string name="rbuild_ex3" formatted="false">Игры: выключить фонарик, громкость мультимедиа 80%, яркость 90%</string>
+    <string name="rbuild_need_text" formatted="false">Опишите автоматизацию, которую должен создать Orbit.</string>
+    <string name="rbuild_building" formatted="false">Создание автоматизации…</string>
+    <string name="rbuild_failed" formatted="false">Не удалось создать эту автоматизацию</string>
+    <string name="rbuild_automatic" formatted="false">АВТОМАТИЧЕСКИ</string>
+    <string name="rbuild_inactive" formatted="false">Ничего не запланировано, пока вы не просмотрите и не сохраните автоматизацию.</string>
+    <string name="rbuild_steps" formatted="false">ШАГИ</string>
+    <string name="rbuild_step_cd">Шаг %1$d: %2$s</string>
+    <string name="rbuild_scheduling" formatted="false">Планирование</string>
+    <string name="rbuild_review" formatted="false">Просмотреть автоматизацию</string>
+    <string name="rbuild_change" formatted="false">Изменить описание</string>
+    <string name="relay_not_configured" formatted="false">Выбран режим API-ретранслятора, но ретранслятор не настроен. Добавьте HTTPS-адрес ретранслятора или переключите провайдера на аккаунт ChatGPT.</string>
+    <string name="relay_https_only" formatted="false">В целях безопасности Orbit подключается только к HTTPS-адресам ретранслятора.</string>
+    <string name="relay_configured" formatted="false">Ретранслятор настроен</string>
+    <string name="relay_url_required" formatted="false">Нужен адрес ретранслятора</string>
+    <string name="relay_error_code">Ошибка ретранслятора %1$d</string>
+    <string name="relay_error_body">Ошибка ретранслятора %1$d: %2$s</string>
+    <string name="relay_unreachable">Не удалось связаться с ретранслятором Orbit: %1$s</string>
+    <string name="relay_label">Ретранслятор · %1$s</string>
+    <string name="aisel_provider" formatted="false">Провайдер</string>
+    <string name="aisel_model" formatted="false">Модель</string>
+    <string name="aisel_strength" formatted="false">Сила</string>
+    <string name="aisel_no_strength" formatted="false">У этой модели нет настройки силы.</string>
+    <string name="aisel_auto_providers_cd" formatted="false">Выбрать провайдеров, которых может использовать Авто</string>
+    <string name="aisel_favorites" formatted="false">Избранное</string>
+    <string name="aisel_recent" formatted="false">Недавние</string>
+    <string name="aisel_browse" formatted="false">Все модели ›</string>
+    <string name="aisel_browse_cd" formatted="false">Просмотреть все модели</string>
+    <string name="aisel_unavailable" formatted="false">Сейчас недоступно для этого аккаунта</string>
+    <string name="aisel_auto_can_use">Авто может использовать: %1$s ›</string>
+    <string name="aisel_provider_cd">Провайдер: %1$s</string>
+    <string name="aisel_strength_cd">Сила: %1$s</string>
+    <string name="aisel_selected_sentence" formatted="false">. Выбрано</string>
+    <string name="colorpick_hex_warning" formatted="false">Используйте цвет вида #8B7CFF.</string>
+    <string name="colorpick_suggested" formatted="false">Рекомендуемые</string>
+    <string name="colorpick_title" formatted="false">Выберите цвет</string>
+    <string name="colorpick_hex_cd" formatted="false">Значение цвета в шестнадцатеричном виде</string>
+    <string name="colorpick_use" formatted="false">Использовать</string>
+    <string name="colorpick_compare_cd">Сейчас: %1$s. Новый цвет: %2$s</string>
+    <string name="colorpick_current" formatted="false">Текущий</string>
+    <string name="colorpick_new_color" formatted="false">Новый</string>
+    <string name="colorpick_sv_cd" formatted="false">Насыщенность и яркость. Перетащите для настройки.</string>
+    <string name="colorpick_hue_cd" formatted="false">Оттенок. Перетащите, чтобы сменить цветовое семейство.</string>
+    <string name="colorpick_apply" formatted="false">Применить</string>
+    <string name="rtexec_skipped" formatted="false">Пропущено · оповещения триггеров недоступны</string>
+    <string name="rtexec_grant">Предоставьте доступ для «%1$s», чтобы эта автоматизация могла запускаться автоматически.</string>
+    <string name="rtexec_needs_access">Нужен доступ · %1$s</string>
+    <string name="rtexec_confirm">Требует внимания · «%1$s» требует подтверждения</string>
+    <string name="rtexec_visible">Требует внимания · «%1$s» требует открытого Orbit</string>
+    <string name="rtexec_tap_continue">Нажмите, чтобы продолжить с шага %1$d: %2$s.</string>
+    <string name="rtexec_stopped_at">Остановлено на шаге %1$d</string>
+    <string name="rtexec_stopped">Остановлено · %1$s</string>
+    <string name="rtexec_partial">Выполнено частично · ожидает «%1$s»</string>
+    <string name="rtexec_bg_done">Orbit выполнил шаги, безопасные для фона. Нажмите, чтобы продолжить с шага %1$d: %2$s.</string>
+    <string name="rtexec_completed" formatted="false">Выполнено автоматически</string>
+    <string name="rtexec_could_not_run" formatted="false">Остановлено · Orbit не удалось запустить эту автоматизацию</string>
+    <string name="vaultitem_type_link" formatted="false">Ссылка</string>
+    <string name="vaultitem_type_image" formatted="false">Изображение</string>
+    <string name="vaultitem_type_reply" formatted="false">Ответ Orbit</string>
+    <string name="vaultitem_type_page" formatted="false">Страница документа</string>
+    <string name="vaultitem_type_note" formatted="false">Заметка</string>
+    <string name="vaultitem_page_of">Страница %1$d из %2$d</string>
+    <string name="vaultitem_page">Страница %1$d</string>
+    <string name="vaultitem_saved">Сохранено %1$s</string>
+    <string name="vaultitem_edited">Изменено %1$s</string>
+    <string name="runhist_completed" formatted="false">Выполнено</string>
+    <string name="runhist_stopped" formatted="false">Остановлено до завершения</string>
+    <string name="runhist_failed_at">Сбой на действии %1$d</string>
+    <string name="runhist_failed_at_named">Сбой на действии %1$d: %2$s</string>
+    <string name="runhist_trigger" formatted="false">Автоматический триггер</string>
+    <string name="runhist_widget" formatted="false">Виджет или плитка</string>
+    <string name="runhist_manual" formatted="false">Запущено вручную</string>
+    <string name="rtnotify_finish" formatted="false">Нажмите, чтобы завершить автоматизацию.</string>
+    <string name="rtnotify_needs_you">«%1$s» требует вашего участия</string>
+    <string name="rtnotify_stopped_base" formatted="false">Автоматизация, запущенная автоматически, остановлена.</string>
+    <string name="rtnotify_retry">%1$s · Нажмите, чтобы повторить с этого шага.</string>
+    <string name="rtnotify_stopped_title">«%1$s» остановлена</string>
+    <string name="replysurface_use_in_chat" formatted="false">Вставить в чат</string>
+    <string name="replysurface_copied_email" formatted="false">Ответ скопирован · вставьте его в письмо</string>
+    <string name="replysurface_copied_conversation" formatted="false">Ответ скопирован · вставьте его в переписку</string>
+    <string name="replysurface_copied_app">Ответ скопирован · вставьте его в «%1$s»</string>
+    <string name="floatsurf_no_glass" formatted="false">Режим «Сплошной» не использует эффекты стекла. Ваши настройки стекла сохранены.</string>
+    <string name="floatsurf_solid" formatted="false">Чистые непрозрачные элементы без стекла</string>
+    <string name="floatsurf_frosted" formatted="false">Мягкое полупрозрачное стекло</string>
+    <string name="floatsurf_rich" formatted="false">Насыщенное стекло с глубиной и бликами</string>
+    <string name="attachbatch_read_failed" formatted="false">Orbit не удалось прочитать выбранные вложения.</string>
+    <string name="attachbatch_camera_photo" formatted="false">Фото с камеры</string>
+    <string name="attachbatch_clipboard">Буфер обмена · %1$s</string>
+    <string name="rlc_noun_brightness" formatted="false">яркость</string>
+    <string name="rlc_noun_volume" formatted="false">громкость мультимедиа</string>
+    <string name="rlc_conf_max">Устанавливаю %1$s на максимум.</string>
+    <string name="rlc_conf_mute" formatted="false">Отключаю звук мультимедиа.</string>
+    <string name="rlc_conf_min" formatted="false">Устанавливаю яркость на минимум.</string>
+    <string name="rlc_conf_pct">Устанавливаю %1$s на %2$d%%.</string>
+    <string name="rlc_conf_lower_by">Уменьшаю %1$s на %2$d%%.</string>
+    <string name="rlc_conf_raise_by">Увеличиваю %1$s на %2$d%%.</string>
+    <string name="rlc_conf_lower">Уменьшаю %1$s.</string>
+    <string name="rlc_conf_raise">Увеличиваю %1$s.</string>
+    <string name="rlc_sum_max">установить %1$s на максимум</string>
+    <string name="rlc_sum_mute" formatted="false">отключить звук мультимедиа</string>
+    <string name="rlc_sum_min" formatted="false">установить яркость на минимум</string>
+    <string name="rlc_sum_pct">установить %1$s на %2$d%%</string>
+    <string name="rlc_sum_lower_by">уменьшить %1$s на %2$d%%</string>
+    <string name="rlc_sum_raise_by">увеличить %1$s на %2$d%%</string>
+    <string name="rlc_sum_lower">уменьшить %1$s</string>
+    <string name="rlc_sum_raise">увеличить %1$s</string>
+    <string name="worker_chat_changed" formatted="false">Чат изменился до того, как удалось повторить попытку.</string>
+    <string name="worker_weather_failed" formatted="false">Сейчас не удалось загрузить погоду.</string>
+    <string name="worker_could_not_finish" formatted="false">Orbit не удалось завершить этот ответ.</string>
+    <string name="worker_could_not_finish_because">Orbit не удалось завершить этот ответ: %1$s</string>
+    <string name="worker_done" formatted="false">Готово.</string>
+    <string name="worker_retry_not_kept" formatted="false">Orbit не удалось сохранить эту повторную попытку, так как чат изменился.</string>
+    <string name="worker_timed_out">Orbit не дождался ответа от %1$s.</string>
+    <string name="worker_interrupted" formatted="false">Запрос Orbit был прерван.</string>
+    <string name="dialguard_title">Позвонить на %1$s?</string>
+    <string name="dialguard_message">Открыть набор номера для %1$s?</string>
+    <string name="dialguard_confirm" formatted="false">Открыть набор номера</string>
+    <plurals name="convsheet_older_not_sent">
+        <item quantity="one">Отправляются только ваши последние сообщения; самое старое (%1$d) не отправляется повторно.</item>
+        <item quantity="few">Отправляются только ваши последние сообщения; %1$d самых старых не отправляются повторно.</item>
+        <item quantity="many">Отправляются только ваши последние сообщения; %1$d самых старых не отправляются повторно.</item>
+        <item quantity="other">Отправляются только ваши последние сообщения; %1$d самых старых не отправляются повторно.</item>
+    </plurals>
+    <plurals name="rbuild_step_count">
+        <item quantity="one">%1$d шаг</item>
+        <item quantity="few">%1$d шага</item>
+        <item quantity="many">%1$d шагов</item>
+        <item quantity="other">%1$d шага</item>
+    </plurals>
+    <plurals name="runhist_completed_steps">
+        <item quantity="one">Выполнено %1$d из %2$d шага</item>
+        <item quantity="few">Выполнено %1$d из %2$d шагов</item>
+        <item quantity="many">Выполнено %1$d из %2$d шагов</item>
+        <item quantity="other">Выполнено %1$d из %2$d шага</item>
+    </plurals>
+</resources>

@@ -113,7 +113,7 @@ public final class OrbitLocal2Test {
                 r.prompt.contains("parking permit online"));
         assertEquals(1, r.vaultSources.size());
 
-        String answer = OrbitLocalProvider.withNotes("Bake it at 200C [1: Salmon dinner].", r);
+        String answer = OrbitLocalProvider.withNotes(context, "Bake it at 200C [1: Salmon dinner].", r);
         assertTrue("Orbit names what the model read, whatever the model cites",
                 answer.endsWith("Checked in your Vault: [1] Salmon dinner"));
     }
@@ -155,8 +155,8 @@ public final class OrbitLocal2Test {
         assertEquals(LocalContextBudget.PATH_ATTACHMENTS, r.path);
         assertTrue(r.evidenceTrimmed);
         assertTrue(r.estimatedTokens <= LocalContextBudget.inputBudgetTokens(4096));
-        assertTrue(OrbitLocalProvider.withNotes("It ran out of space.", r)
-                .endsWith(OrbitLocalProvider.EXCERPT_NOTE));
+        assertTrue(OrbitLocalProvider.withNotes(context, "It ran out of space.", r)
+                .endsWith(context.getString(OrbitLocalProvider.EXCERPT_NOTE)));
     }
 
     @Test public void aPictureWithNothingReadableIsExplainedNotGuessedAt() {
@@ -166,8 +166,8 @@ public final class OrbitLocal2Test {
                 .images(Collections.singletonList(photo))
                 .explicitAttachment(true).build());
         assertTrue(r.imageOnly);
-        assertTrue(OrbitLocalProvider.IMAGE_ONLY_REPLY.startsWith("Orbit Local can't look at pictures"));
-        assertTrue(OrbitLocalProvider.IMAGE_ONLY_REPLY.contains("Nothing was sent anywhere"));
+        assertTrue(context.getString(OrbitLocalProvider.IMAGE_ONLY_REPLY).startsWith("Orbit Local can't look at pictures"));
+        assertTrue(context.getString(OrbitLocalProvider.IMAGE_ONLY_REPLY).contains("Nothing was sent anywhere"));
         String provider = source("OrbitLocalProvider");
         int imageOnly = provider.indexOf("if (fitted.imageOnly) {");
         int generate = provider.indexOf("OrbitLocalClient.generate(");
@@ -184,8 +184,8 @@ public final class OrbitLocal2Test {
                 .explicitAttachment(true).build());
         assertFalse(r.imageOnly);
         assertTrue(r.prompt.contains("TOTAL 18.20"));
-        assertTrue(OrbitLocalProvider.withNotes("The total is 18.20.", r)
-                .endsWith(OrbitLocalProvider.PICTURE_TEXT_NOTE));
+        assertTrue(OrbitLocalProvider.withNotes(context, "The total is 18.20.", r)
+                .endsWith(context.getString(OrbitLocalProvider.PICTURE_TEXT_NOTE)));
     }
 
     @Test public void aPdfPreviewIsNotTreatedAsAPictureTheUserAskedAbout() {
@@ -202,8 +202,8 @@ public final class OrbitLocal2Test {
         assertEquals(0, OrbitLocalProvider.picturesIn(request));
         LocalContextBudget.Result r = fitted(request);
         assertFalse(r.prompt.contains("You cannot see pictures"));
-        assertFalse(OrbitLocalProvider.withNotes("It ends in June.", r)
-                .contains(OrbitLocalProvider.PICTURE_TEXT_NOTE));
+        assertFalse(OrbitLocalProvider.withNotes(context, "It ends in June.", r)
+                .contains(context.getString(OrbitLocalProvider.PICTURE_TEXT_NOTE)));
     }
 
     // ---- notifications -------------------------------------------------------------------------------------

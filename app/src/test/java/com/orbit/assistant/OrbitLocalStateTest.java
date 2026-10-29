@@ -154,17 +154,17 @@ public final class OrbitLocalStateTest {
      * 1.6 GB under an older Orbit is told the expensive part is done, not simply "not installed".
      */
     @Test public void theStatusLineExplainsWhatIsMissing() {
-        assertEquals("Component not installed", OrbitLocalProvider.componentStatusDetail(
+        assertEquals("Component not installed", OrbitLocalProvider.componentStatusDetail(context,
                 OrbitLocalComponent.State.NOT_INSTALLED, false));
         assertEquals("Component required · model ready to move",
-                OrbitLocalProvider.componentStatusDetail(
+                OrbitLocalProvider.componentStatusDetail(context,
                         OrbitLocalComponent.State.NOT_INSTALLED, true));
-        assertEquals("Component not verified", OrbitLocalProvider.componentStatusDetail(
+        assertEquals("Component not verified", OrbitLocalProvider.componentStatusDetail(context,
                 OrbitLocalComponent.State.UNTRUSTED, true));
-        assertEquals("Component update required", OrbitLocalProvider.componentStatusDetail(
+        assertEquals("Component update required", OrbitLocalProvider.componentStatusDetail(context,
                 OrbitLocalComponent.State.UPDATE_REQUIRED, false));
         assertEquals("a usable component is not itself the problem", "",
-                OrbitLocalProvider.componentStatusDetail(OrbitLocalComponent.State.INSTALLED, false));
+                OrbitLocalProvider.componentStatusDetail(context, OrbitLocalComponent.State.INSTALLED, false));
     }
 
     // ---- the legacy model an older Orbit left behind -----------------------------------------------

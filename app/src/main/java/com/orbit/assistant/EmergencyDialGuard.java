@@ -293,4 +293,24 @@ public final class EmergencyDialGuard {
     public static String confirmLabel() { return "Open dialer"; }
 
     public static String cancelLabel() { return "Cancel"; }
+
+    /** {@link #titleFor(String)} in the user's language, for screens. */
+    public static String titleFor(android.content.Context context, String number) {
+        return context.getString(R.string.dialguard_title, number);
+    }
+
+    /** {@link #messageFor(String)} in the user's language, for screens. */
+    public static String messageFor(android.content.Context context, String number) {
+        return context.getString(R.string.dialguard_message, number);
+    }
+
+    /** {@link #confirmLabel()} in the user's language, for screens. */
+    public static String confirmLabel(android.content.Context context) {
+        return context.getString(R.string.dialguard_confirm);
+    }
+
+    /** {@link #cancelLabel()} in the user's language, for screens. */
+    public static String cancelLabel(android.content.Context context) {
+        return context.getString(R.string.ui_cancel_19766ed6);
+    }
 }

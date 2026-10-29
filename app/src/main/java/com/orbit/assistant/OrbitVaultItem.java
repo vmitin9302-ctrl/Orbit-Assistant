@@ -425,6 +425,28 @@ public final class OrbitVaultItem {
         }
     }
 
+    /**
+     * The same word in the user's language, for screens. The English {@link #typeLabel()} stays for
+     * text that is sent to a model or compared.
+     */
+    public String typeLabel(android.content.Context context) {
+        switch (type) {
+            case TYPE_LINK: return context.getString(R.string.vaultitem_type_link);
+            case TYPE_IMAGE: return context.getString(R.string.vaultitem_type_image);
+            case TYPE_ORBIT_REPLY: return context.getString(R.string.vaultitem_type_reply);
+            case TYPE_DOCUMENT_PAGE: return context.getString(R.string.vaultitem_type_page);
+            default: return context.getString(R.string.vaultitem_type_note);
+        }
+    }
+
+    /** {@link #pageLabel()} in the user's language, for screens. */
+    public String pageLabel(android.content.Context context) {
+        if (!isDocumentPage()) return "";
+        int human = pageIndex + 1;
+        return pageCount > 0 ? context.getString(R.string.vaultitem_page_of, human, pageCount)
+                : context.getString(R.string.vaultitem_page, human);
+    }
+
     /** "Page 7 of 388", "Page 7" when the length was not known, or "" for anything else. */
     public String pageLabel() {
         if (!isDocumentPage()) return "";
@@ -482,6 +504,19 @@ public final class OrbitVaultItem {
     /** "Saved 14 Aug 2026", in the device's own locale and format. */
     public String savedLabel() {
         return "Saved " + DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date(createdAt));
+    }
+
+    /** {@link #savedLabel()} in the user's language, for screens. */
+    public String savedLabel(android.content.Context context) {
+        return context.getString(R.string.vaultitem_saved,
+                DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date(createdAt)));
+    }
+
+    /** {@link #modifiedLabel()} in the user's language, for screens. */
+    public String modifiedLabel(android.content.Context context) {
+        if (modifiedAt <= createdAt + 1000L) return "";
+        return context.getString(R.string.vaultitem_edited,
+                DateFormat.getDateInstance(DateFormat.MEDIUM).format(new Date(modifiedAt)));
     }
 
     /** The same for the last edit, shown only when it genuinely differs from the save. */

@@ -77,7 +77,7 @@ public final class AttachmentBatchLoader {
             // contentState travels with the attachment so the composer can ask a question that
             // matches how much of the document Orbit actually loaded.
             loaded.add(new ComposerAttachment(kindFor(sourceLabel, result.kind),
-                    labelFor(sourceLabel, result.label), result.contextText, result.image,
+                    labelFor(context, sourceLabel, result.label), result.contextText, result.image,
                     result.document, "", result.contentState));
         }
 
@@ -86,7 +86,7 @@ public final class AttachmentBatchLoader {
         int overCapacity = selected - usable;
         int rejected = failed + overCapacity;
         String error = loaded.isEmpty()
-                ? (firstError.isEmpty() ? "Orbit could not read the selected attachments." : firstError)
+                ? (firstError.isEmpty() ? context.getString(R.string.attachbatch_read_failed) : firstError)
                 : "";
         return AttachmentBatch.of(loaded, selected, rejected, error);
     }
@@ -95,9 +95,9 @@ public final class AttachmentBatchLoader {
         return "Camera".equals(sourceLabel) ? "camera" : resultKind;
     }
 
-    private static String labelFor(String sourceLabel, String resultLabel) {
-        if ("Camera".equals(sourceLabel)) return "Camera photo";
-        if ("Clipboard".equals(sourceLabel)) return "Clipboard · " + resultLabel;
+    private static String labelFor(Context context, String sourceLabel, String resultLabel) {
+        if ("Camera".equals(sourceLabel)) return context.getString(R.string.attachbatch_camera_photo);
+        if ("Clipboard".equals(sourceLabel)) return context.getString(R.string.attachbatch_clipboard, resultLabel);
         return resultLabel;
     }
 }
