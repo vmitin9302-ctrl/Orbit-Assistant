@@ -33,7 +33,7 @@ public final class OrbitExtensionActionExecutor {
     public static void execute(Context context, AssistantReply.Action routineAction,
                                Completion completion) {
         if (context == null || routineAction == null || routineAction.params == null) {
-            finish(completion, unavailable());
+            finish(completion, unavailable(context));
             return;
         }
         String extensionId = routineAction.params.optString("extensionId", "");
@@ -42,12 +42,12 @@ public final class OrbitExtensionActionExecutor {
         OrbitExtension.Action action = installed == null || !installed.enabled
                 ? null : installed.extension.findAction(actionId);
         if (action == null) {
-            finish(completion, unavailable());
+            finish(completion, unavailable(context));
             return;
         }
         if (!OrbitExtensionStore.isConfigured(context, installed)) {
             finish(completion, DeviceActionExecutor.Result.unavailable(
-                    installed.extension.name + " needs setup"));
+                    context.getString(R.string.extexec_needs_setup, installed.extension.name)));
             return;
         }
 
@@ -57,7 +57,7 @@ public final class OrbitExtensionActionExecutor {
         }
 
         if (!OrbitExtension.TYPE_HTTPS_REQUEST.equals(action.type)) {
-            finish(completion, unavailable());
+            finish(completion, unavailable(context));
             return;
         }
         Context app = context.getApplicationContext();
@@ -83,7 +83,7 @@ public final class OrbitExtensionActionExecutor {
                     ? OrbitExtensionStore.resolvedConfiguration(context, installed)
                     : Collections.emptyMap();
             if (configuration == null) return DeviceActionExecutor.Result.unavailable(
-                    installed.extension.name + " needs setup");
+                    context.getString(R.string.extexec_needs_setup, installed.extension.name));
             JSONObject rawParameters = routineAction.params.optJSONObject("actionParameters");
             JSONObject safeParameters = installed.extension.schemaVersion ==
                     OrbitExtension.SCHEMA_VERSION_V2
@@ -97,7 +97,7 @@ public final class OrbitExtensionActionExecutor {
             // Validate the fully rendered URL and resolve its host immediately before connecting.
             if (finalUrl.length() > 2048)
                 return DeviceActionExecutor.Result.failed(
-                        "Extension endpoint exceeded Orbit's safe size limit.");
+                        context.getString(R.string.extexec_endpoint_size));
             OrbitExtension.validatePublicUrl(finalUrl, false);
             OrbitExtension.validateResolvedPublicHost(finalUrl);
 
@@ -108,14 +108,14 @@ public final class OrbitExtensionActionExecutor {
             byte[] body = renderedBody.toString().getBytes(StandardCharsets.UTF_8);
             if (body.length > OrbitExtension.MAX_POST_BODY_BYTES)
                 return DeviceActionExecutor.Result.failed(
-                        "Extension request exceeded Orbit's safe size limit.");
+                        context.getString(R.string.extexec_request_size));
 
             Map<String, String> renderedHeaders = new LinkedHashMap<>();
             for (OrbitExtension.RequestHeader header : action.headers) {
                 String value = OrbitExtensionV2.renderString(
                         header.valueTemplate, configuration, parameters);
                 if (value.length() > 1024 || unsafeHeaderValue(value))
-                    return DeviceActionExecutor.Result.failed("Extension request headers are invalid.");
+                    return DeviceActionExecutor.Result.failed(context.getString(R.string.extexec_headers_invalid));
                 renderedHeaders.put(header.name, value);
             }
 
@@ -146,20 +146,20 @@ public final class OrbitExtensionActionExecutor {
             if (input != null) readBounded(input, OrbitExtension.MAX_RESPONSE_BYTES);
             if (status >= 200 && status < 300) {
                 return DeviceActionExecutor.Result.success(
-                        "Extension request succeeded (HTTP " + status + ")");
+                        context.getString(R.string.extexec_succeeded, status));
             }
             if (status >= 300 && status < 400) {
                 return DeviceActionExecutor.Result.failed(
-                        "Extension request stopped at an unreviewed redirect (HTTP " + status + ")");
+                        context.getString(R.string.extexec_redirect, status));
             }
             return DeviceActionExecutor.Result.failed(
-                    "Extension request failed (HTTP " + status + ")");
+                    context.getString(R.string.extexec_failed, status));
         } catch (ResponseTooLargeException ignored) {
-            return DeviceActionExecutor.Result.failed("Extension response exceeded Orbit's safe size limit.");
+            return DeviceActionExecutor.Result.failed(context.getString(R.string.extexec_response_size));
         } catch (IllegalArgumentException ignored) {
-            return DeviceActionExecutor.Result.failed("Extension endpoint is not a public HTTPS address.");
+            return DeviceActionExecutor.Result.failed(context.getString(R.string.extexec_not_https));
         } catch (Exception ignored) {
-            return DeviceActionExecutor.Result.failed("Extension request could not be completed.");
+            return DeviceActionExecutor.Result.failed(context.getString(R.string.extexec_incomplete));
         } finally {
             if (connection != null) connection.disconnect();
         }
@@ -213,25 +213,27 @@ public final class OrbitExtensionActionExecutor {
                     if (!(context instanceof Activity)) intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     if (intent.resolveActivity(context.getPackageManager()) == null) {
                         if (completion != null) completion.finish(DeviceActionExecutor.Result.unavailable(
-                                "No browser is available for this extension action."));
+                                context.getString(R.string.extexec_no_browser)));
                         return;
                     }
                     context.startActivity(intent);
                     if (completion != null) completion.finish(DeviceActionExecutor.Result.success(
-                            "Extension opened the reviewed URL"));
+                            context.getString(R.string.extexec_opened)));
                 } catch (Exception ignored) {
                     if (completion != null) completion.finish(DeviceActionExecutor.Result.failed(
-                            "Orbit could not open the extension URL."));
+                            context.getString(R.string.extexec_open_failed)));
                 }
             });
         } catch (Exception ignored) {
             finish(completion, DeviceActionExecutor.Result.failed(
-                    "Extension URL is not a public web address."));
+                    context.getString(R.string.extexec_not_public)));
         }
     }
 
-    private static DeviceActionExecutor.Result unavailable() {
-        return DeviceActionExecutor.Result.unavailable("Extension action unavailable");
+    private static DeviceActionExecutor.Result unavailable(Context context) {
+        // A null Context only happens when there is nothing to show the message to anyway.
+        return DeviceActionExecutor.Result.unavailable(context == null
+                ? "Extension action unavailable" : context.getString(R.string.extexec_unavailable));
     }
 
     private static void finish(Completion completion, DeviceActionExecutor.Result result) {

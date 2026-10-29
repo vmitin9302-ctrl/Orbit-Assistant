@@ -217,7 +217,7 @@ public final class ThinkingUpdateProviderTest {
             @Override public void onError(String message) { error.set(message); }
         });
         assertNotNull(error.get());
-        assertEquals(RelayProvider.NOT_CONFIGURED_ERROR, error.get());
+        assertEquals(context.getString(RelayProvider.NOT_CONFIGURED_ERROR), error.get());
     }
 
     @Test public void unconnectedOpenRouterRefusesChatWithTheFeatureOn() {

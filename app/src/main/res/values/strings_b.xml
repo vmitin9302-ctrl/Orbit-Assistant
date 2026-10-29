@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="localai_play_unavailable" formatted="false">Orbit Local isn\'t available in the Google Play edition of Orbit yet.</string>
+    <string name="localai_not_removed" formatted="false">Orbit Local was not removed. Nothing was deleted.</string>
+    <string name="localai_component_uninstalled" formatted="false">The Orbit Local component was uninstalled.</string>
+    <string name="localai_removed" formatted="false">Orbit Local was removed.</string>
+    <string name="localai_back_to_providers" formatted="false">Back to AI Providers</string>
+    <string name="localai_tagline" formatted="false">Private AI on your phone</string>
+    <string name="localai_intro" formatted="false">Orbit Local answers on the phone itself. Conversations never leave the device, and chat keeps working with no internet at all. It is optional: nothing is installed until you ask for it, and everything can be removed again.</string>
+    <string name="localai_this_device" formatted="false">This device</string>
+    <string name="localai_free_storage">Free storage: %1$s</string>
+    <string name="localai_what_works" formatted="false">What works on this phone</string>
+    <string name="localai_needs_cloud" formatted="false">Needs a cloud provider</string>
+    <string name="localai_cloud_promise" formatted="false">Orbit Local never passes a request to the cloud. When something needs one, Orbit says so and you choose.</string>
+    <string name="localai_state_works" formatted="false">works on this phone</string>
+    <string name="localai_state_needs_cloud" formatted="false">needs a cloud provider</string>
+    <string name="localai_state_not_ready" formatted="false">not ready yet</string>
+    <string name="localai_component_header" formatted="false">Orbit Local component</string>
+    <string name="localai_component_title" formatted="false">On-device AI component</string>
+    <string name="localai_preparing" formatted="false">Preparing download…</string>
+    <string name="localai_component_installed">Runs AI privately on this device · %1$s\nVersion %2$s</string>
+    <string name="localai_component_update_required" formatted="false">The installed component was built for a different version of Orbit. Update it to use Orbit Local again.</string>
+    <string name="localai_untrusted_install" formatted="false">A package named Orbit Local is installed but was not published by Orbit, so it will not be used. Remove it, then install Orbit Local from here.</string>
+    <string name="localai_component_required">Required to run AI privately on this device · %1$s</string>
+    <string name="localai_untrusted_play" formatted="false">A package named Orbit Local is installed but was not published by Orbit, so it will not be used. You can remove it here.</string>
+    <string name="localai_github_component_play" formatted="false">An Orbit Local component from the GitHub edition of Orbit is installed. The Google Play edition can\'t use it. You can uninstall it here.</string>
+    <string name="localai_small_download" formatted="false">a small download</string>
+    <string name="localai_downloading" formatted="false">Downloading…</string>
+    <string name="localai_remove_untrusted" formatted="false">Remove untrusted component</string>
+    <string name="localai_uninstall_component" formatted="false">Uninstall component</string>
+    <string name="localai_update_component" formatted="false">Update component</string>
+    <string name="localai_install_component" formatted="false">Install component</string>
+    <string name="localai_needs_two" formatted="false">Orbit Local needs two optional downloads:</string>
+    <string name="localai_setup_component">Orbit Local component · %1$s</string>
+    <string name="localai_setup_component_desc" formatted="false">Lets Orbit run AI privately on this device.</string>
+    <string name="localai_setup_model">AI model · %1$s</string>
+    <string name="localai_setup_model_desc" formatted="false">Contains the local AI model itself.</string>
+    <string name="localai_setup_footer" formatted="false">Both can be removed later. A separate, optional action model can be added afterwards if you want Orbit Local to handle phone commands too.</string>
+    <string name="localai_need_install_permission" formatted="false">Android needs permission to install the component from Orbit. Allow this source, then return to Orbit.</string>
+    <string name="localai_installer_failed" formatted="false">Android could not open the package installer.</string>
+    <string name="localai_model_header" formatted="false">Local model</string>
+    <string name="localai_requires_component" formatted="false">Requires Orbit Local component</string>
+    <string name="localai_checking" formatted="false">Checking…</string>
+    <string name="localai_active" formatted="false">Active</string>
+    <string name="localai_verifying" formatted="false">Verifying the model…</string>
+    <string name="localai_moving_progress">Moving your existing model · %1$s of %2$s</string>
+    <string name="localai_progress_starting">%1$s of %2$s · starting…</string>
+    <string name="localai_progress_waiting">%1$s of %2$s · waiting for a connection</string>
+    <string name="localai_progress_percent">%1$s of %2$s · %3$d%%</string>
+    <string name="localai_model_about">Local AI model · about %1$s</string>
+    <string name="localai_legacy_hint_a" formatted="false">\nYou already have this model on the phone. Install the Orbit Local component and Orbit can move it across instead of downloading it again.</string>
+    <string name="localai_install_first" formatted="false">\nInstall the Orbit Local component first.</string>
+    <string name="localai_checking_component" formatted="false">Checking the Orbit Local component…</string>
+    <string name="localai_model_ready">"%1$s installed · Works completely offline\nGood for private chat, drafting, and quick answers. "</string>
+    <string name="localai_model_ready_actions" formatted="false">Phone commands are handled by the action model below; screen reading stays with cloud providers.</string>
+    <string name="localai_model_ready_no_actions" formatted="false">Device actions and screen reading stay with cloud providers for now.</string>
+    <string name="localai_model_downloading" formatted="false">Downloading in the background. You can leave this screen, lock the phone, or use other apps; the download keeps going and picks up where it left off after any interruption.</string>
+    <string name="localai_model_queued" formatted="false">The download is starting. It runs in the background and does not need this screen to stay open.</string>
+    <string name="localai_model_waiting" formatted="false">Waiting for a connection. The download continues on its own once this phone is back online; nothing already downloaded is lost.</string>
+    <string name="localai_model_validating" formatted="false">Making sure every byte arrived intact before the model is enabled.</string>
+    <string name="localai_model_importing" formatted="false">Moving the model you already downloaded into Orbit Local. Your existing copy is kept until this finishes and verifies.</string>
+    <string name="localai_paused" formatted="false">You paused this download. Resume any time; already-downloaded data is kept.</string>
+    <string name="localai_model_interrupted" formatted="false">The download stopped before it finished. Tap Resume to continue from where it got to; already-downloaded data is kept.</string>
+    <string name="localai_one_time">One-time download · %1$s · stored only on this device.</string>
+    <string name="localai_model_legacy_found">You already have this model on the phone from an earlier version of Orbit. Orbit can move it into Orbit Local instead of downloading %1$s again.</string>
+    <string name="localai_model_default">One-time download · about %1$s · stored only on this device. After that, Orbit Local needs no internet and no account.</string>
+    <string name="localai_move_model" formatted="false">Move existing model</string>
+    <string name="localai_try_again" formatted="false">Try again</string>
+    <string name="localai_download_model" formatted="false">Download model</string>
+    <string name="localai_resume" formatted="false">Resume download</string>
+    <string name="localai_remove_downloaded" formatted="false">Remove downloaded data</string>
+    <string name="localai_pause" formatted="false">Pause</string>
+    <string name="localai_stop_moving" formatted="false">Stop moving</string>
+    <string name="localai_now_active" formatted="false">Orbit Local is now the active provider</string>
+    <string name="localai_free_old">Free %1$s of old model data</string>
+    <string name="localai_delete_model" formatted="false">Delete local model</string>
+    <string name="localai_migrate_title" formatted="false">Existing Orbit Local model found</string>
+    <string name="localai_migrate_message" formatted="false">Orbit can move your existing local model into the new Orbit Local component instead of downloading it again.\n\nYour current copy is kept until the moved copy has been verified, so nothing is lost if this is interrupted.</string>
+    <string name="localai_lowspace_title" formatted="false">Not enough space to move the model</string>
+    <string name="localai_lowspace_message" formatted="false">Moving the model needs room for a second copy until the first is removed, and this device does not have it.\n\nOrbit can instead delete the old model and download a fresh copy into Orbit Local. Local AI will be unavailable until that download finishes.</string>
+    <string name="localai_replace_copy" formatted="false">Replace with new copy</string>
+    <string name="localai_downloading_model_toast" formatted="false">Downloading the model into Orbit Local</string>
+    <string name="localai_migrate_failed" formatted="false">Orbit Local could not start moving the model</string>
+    <string name="localai_reclaim_title" formatted="false">Free up the old copy?</string>
+    <string name="localai_reclaim_message">Orbit Local now has its own verified copy of the model. The older copy stored by Orbit is no longer used, and removing it frees about %1$s.\n\nOrbit Local keeps working exactly as it does now.</string>
+    <string name="localai_keep_it" formatted="false">Keep it</string>
+    <string name="localai_free_up" formatted="false">Free up space</string>
+    <string name="localai_old_removed_toast" formatted="false">Old model data removed</string>
+    <string name="localai_actions_header" formatted="false">Device actions</string>
+    <string name="localai_on" formatted="false">On</string>
+    <string name="localai_off" formatted="false">Off</string>
+    <string name="localai_action_model_title" formatted="false">Local action model</string>
+    <string name="localai_understands" formatted="false">Understands: flashlight, brightness, media volume, Do Not Disturb, ringer mode, play/pause/skip, timers, alarms, opening an app, and opening Settings. Nothing else, and nothing it suggests runs without Orbit checking it first.</string>
+    <string name="localai_use_for_commands" formatted="false">Use for device commands</string>
+    <string name="localai_own_first" formatted="false">Orbit\'s own command recognition always runs first. This only handles what it cannot.</string>
+    <string name="localai_about_520" formatted="false">about 520 MB</string>
+    <string name="localai_action_lets_play">Lets Orbit Local understand phone commands it has no exact wording for, entirely on the device. %1$s</string>
+    <string name="localai_action_lets_install" formatted="false">Lets Orbit Local understand phone commands it has no exact wording for, entirely on the device. Install the Orbit Local component first.</string>
+    <string name="localai_action_ready">%1$s installed · Works completely offline\nTurns everyday phrasing like \"kill the torch\" or \"a bit quieter\" into an Orbit action, on the phone. It never chats and never controls Android itself.</string>
+    <string name="localai_action_downloading" formatted="false">Downloading in the background. You can leave this screen or use other apps; the download continues and resumes after any interruption.</string>
+    <string name="localai_action_queued" formatted="false">The download is starting. It runs in the background and does not need this screen open.</string>
+    <string name="localai_action_waiting" formatted="false">Waiting for a connection. The download continues on its own once this phone is back online.</string>
+    <string name="localai_action_interrupted" formatted="false">The download stopped before it finished. Resume to continue from where it got to.</string>
+    <string name="localai_action_default">Optional · one-time download of %1$s · stored only on this device.\nLets Orbit Local act on phone commands that do not match Orbit\'s exact wording, with no internet and no account. Chat works without it.</string>
+    <string name="localai_download_action" formatted="false">Download action model</string>
+    <string name="localai_delete_action" formatted="false">Delete action model</string>
+    <string name="localai_remove_downloaded_q" formatted="false">Remove downloaded data?</string>
+    <string name="localai_remove_action_q" formatted="false">Remove the action model?</string>
+    <string name="localai_partial_message">About %1$s of partly downloaded model data will be removed, freeing that storage. You can start the download again at any time.</string>
+    <string name="localai_action_remove_message">About %1$s of downloaded model data will be removed, freeing that storage. Orbit Local chat and its own model are not affected, and Orbit\'s built-in command recognition keeps working exactly as it does now.</string>
+    <string name="localai_remove" formatted="false">Remove</string>
+    <string name="localai_remove_model" formatted="false">Remove model</string>
+    <string name="localai_action_removed_toast" formatted="false">Action model removed</string>
+    <string name="localai_storage_header" formatted="false">Orbit Local storage</string>
+    <string name="localai_nothing_installed" formatted="false">Nothing installed</string>
+    <string name="localai_no_storage" formatted="false">Orbit Local uses no storage on this device yet. The normal Orbit app is not counted here.</string>
+    <string name="localai_storage_component" formatted="false">Component</string>
+    <string name="localai_model_partial">%1$s (partial)</string>
+    <string name="localai_storage_action" formatted="false">Action model</string>
+    <string name="localai_storage_action_partial" formatted="false">Action model (partial)</string>
+    <string name="localai_earlier_copy" formatted="false">Earlier Orbit copy</string>
+    <string name="localai_earlier_partial" formatted="false">Earlier partial download</string>
+    <string name="localai_remove_orbit_local" formatted="false">Remove Orbit Local</string>
+    <string name="localai_remove_details_full" formatted="false">Removes everything Orbit Local uses on this device: the component, the AI model it stores, any model data left by an earlier version of Orbit, and the downloaded component installer.\n\nOrbit itself, your conversations, memories, Routines, settings, and cloud providers are all untouched.</string>
+    <string name="localai_remove_details_legacy" formatted="false">The Orbit Local component is not installed, but model data from an earlier version of Orbit is still stored on this device. This removes it.\n\nOrbit itself, your conversations, memories, Routines, settings, and cloud providers are all untouched.</string>
+    <string name="localai_remove_old_data" formatted="false">Remove old local model data</string>
+    <string name="localai_remove_q" formatted="false">Remove Orbit Local?</string>
+    <string name="localai_remove_message">This removes everything Orbit Local uses on this device — the component, the AI model, any model data left by an earlier version of Orbit, and the downloaded installer — freeing about %1$s.\n\nOrbit itself stays installed. Your conversations, memories, Routines, and settings are not affected, and your cloud providers keep working.</string>
+    <string name="localai_chatgpt_active_inline" formatted="false">" ChatGPT becomes the active provider."</string>
+    <string name="localai_android_confirm" formatted="false">\n\nAndroid asks you to confirm next. Nothing is deleted unless you confirm it there.</string>
+    <string name="localai_already_removed" formatted="false">Orbit Local was already removed.</string>
+    <string name="localai_remove_old_q" formatted="false">Remove old local model data?</string>
+    <string name="localai_remove_old_message">About %1$s of model data stored by an earlier version of Orbit will be deleted, freeing that storage.\n\nOrbit itself, your conversations, memories, Routines, settings, and cloud providers are not affected. You can set Orbit Local up again at any time.</string>
+    <string name="localai_old_removed" formatted="false">Old local model data removed.</string>
+    <string name="localai_uninstall_q" formatted="false">Uninstall the component?</string>
+    <string name="localai_uninstall_model_warning">\n\nThe local AI model is stored inside the component, so Android removes the %1$s of model data with it. It cannot be kept separately.</string>
+    <string name="localai_uninstall_message" formatted="false">Orbit stops being able to run AI on this device until the component is installed again.</string>
+    <string name="localai_chatgpt_active_para" formatted="false">\n\nChatGPT becomes the active provider.</string>
+    <string name="localai_remove_named_q">Remove %1$s?</string>
+    <string name="localai_model_remove_message">About %1$s of downloaded model data will be removed, freeing that storage. The Orbit Local component stays installed, so another model can be downloaded without setting it up again.</string>
+    <string name="localai_model_remove_tail" formatted="false">" Your conversations, settings, and other providers are not affected."</string>
+    <string name="localai_removed_chatgpt_toast" formatted="false">Model removed. ChatGPT is the active provider again.</string>
+    <string name="localai_local_removed_toast" formatted="false">Local model removed</string>
+    <string name="extv2_bad_id" formatted="false">The extension ID is invalid.</string>
+    <string name="extv2_setup_array" formatted="false">Extension setupFields must be an array.</string>
+    <string name="extv2_actions_count">Extensions must declare between 1 and %1$d actions.</string>
+    <string name="extv2_action_object" formatted="false">Every extension action must be a JSON object.</string>
+    <string name="extv2_action_type">Unsupported extension action type: %1$s</string>
+    <string name="extv2_params_array" formatted="false">HTTPS Request parameters must be an array.</string>
+    <string name="extv2_method" formatted="false">HTTPS Request method must be GET or POST.</string>
+    <string name="extv2_body_object" formatted="false">HTTPS Request body must be a JSON object.</string>
+    <string name="extv2_get_body" formatted="false">GET actions cannot include a request body.</string>
+    <string name="extv2_body_large" formatted="false">HTTPS Request body is too large.</string>
+    <string name="extv2_timeout">HTTPS Request timeout must be between 1 and %1$d seconds.</string>
+    <string name="extv2_headers_object" formatted="false">HTTPS Request headers must be an object.</string>
+    <string name="extv2_many_setup" formatted="false">Too many extension setup fields.</string>
+    <string name="extv2_setup_object" formatted="false">Every setup field must be a JSON object.</string>
+    <string name="extv2_setup_type">Unsupported setup field type: %1$s</string>
+    <string name="extv2_cred_secure" formatted="false">Credential-like setup fields must use secure storage.</string>
+    <string name="extv2_setup_maxlen" formatted="false">Setup field maxLength is out of range.</string>
+    <string name="extv2_secret_default" formatted="false">Secret setup fields cannot declare defaults.</string>
+    <string name="extv2_many_params" formatted="false">Too many action parameters.</string>
+    <string name="extv2_param_object" formatted="false">Every action parameter must be a JSON object.</string>
+    <string name="extv2_param_secret" formatted="false">Action parameters cannot be used for credentials or secrets.</string>
+    <string name="extv2_param_type">Unsupported action parameter type: %1$s</string>
+    <string name="extv2_param_maxlen" formatted="false">Action parameter maxLength is out of range.</string>
+    <string name="extv2_choice_required" formatted="false">Choice parameters must declare choices.</string>
+    <string name="extv2_choice_default" formatted="false">Choice parameter default is not allowed.</string>
+    <string name="extv2_text_choices" formatted="false">Text parameters cannot declare choices.</string>
+    <string name="extv2_choices_invalid" formatted="false">Choice parameter choices are invalid.</string>
+    <string name="extv2_choice_object" formatted="false">Every parameter choice must be a JSON object.</string>
+    <string name="extv2_choice_unique" formatted="false">Parameter choice values must be unique.</string>
+    <string name="extv2_many_headers" formatted="false">Too many request headers.</string>
+    <string name="extv2_header_name" formatted="false">A request header name is invalid.</string>
+    <string name="extv2_header_unique" formatted="false">Request header names must be unique.</string>
+    <string name="extv2_header_blocked">Request header is not allowed: %1$s</string>
+    <string name="extv2_header_text" formatted="false">Request header values must be text.</string>
+    <string name="extv2_header_value" formatted="false">A request header value is invalid.</string>
+    <string name="extv2_cred_header_literal" formatted="false">Credential header literals are not allowed.</string>
+    <string name="extv2_cred_secure_fields" formatted="false">Credential headers may use only secure setup fields.</string>
+    <string name="extv2_cred_secret_fields" formatted="false">Credential headers may use only secret setup fields.</string>
+    <string name="extv2_cred_prefix" formatted="false">Credential header prefixes are not allowed.</string>
+    <string name="extv2_placeholder_keys" formatted="false">Placeholders are not allowed in JSON object keys.</string>
+    <string name="extv2_config_unsupported" formatted="false">Extension configuration contains an unsupported field.</string>
+    <string name="extv2_config_text" formatted="false">Extension configuration values must be text.</string>
+    <string name="extv2_unknown_setup" formatted="false">Unknown extension setup field.</string>
+    <string name="extv2_routine_param" formatted="false">Routine action contains an unsupported parameter.</string>
+    <string name="extv2_routine_text" formatted="false">Routine action parameters must be text.</string>
+    <string name="extv2_routine_choice" formatted="false">Routine action choice is not allowed.</string>
+    <string name="extv2_enter">Enter %1$s.</string>
+    <string name="extv2_routine_large" formatted="false">Routine action parameters are too large.</string>
+    <string name="extv2_tpl_setup" formatted="false">Template references an unknown setup field.</string>
+    <string name="extv2_tpl_secure" formatted="false">Secure setup field is used in an unsupported template location.</string>
+    <string name="extv2_tpl_param" formatted="false">Template references an unknown action parameter.</string>
+    <string name="extv2_tpl_syntax" formatted="false">Template placeholder syntax is invalid.</string>
+    <string name="extv2_tpl_endpoint" formatted="false">Templated endpoints must keep a fixed HTTPS host or use one URL setup field.</string>
+    <string name="extv2_tpl_host" formatted="false">Endpoint hosts cannot come from text or Routine parameters.</string>
+    <string name="extv2_tpl_url" formatted="false">URL setup fields must supply the complete endpoint.</string>
+    <string name="extv2_value_long" formatted="false">A configured value is too long.</string>
+    <string name="extv2_value_control" formatted="false">A configured value contains unsupported control characters.</string>
+    <string name="extv2_missing">Missing extension field: %1$s</string>
+    <string name="extv2_field_text">Extension field %1$s must be text.</string>
+    <string name="extv2_field_long">Extension field %1$s is too long.</string>
+    <string name="extv2_field_control">Extension field %1$s contains unsupported control characters.</string>
+    <string name="extv2_field_bool">Extension field %1$s must be true or false.</string>
+    <string name="extv2_field_number">Extension field %1$s must be a number.</string>
+    <string name="extv2_field_whole">Extension field %1$s must be a whole number.</string>
+    <string name="extv2_json_unsafe" formatted="false">Extension JSON could not be processed safely.</string>
+    <string name="extv2_action_ids" formatted="false">Extension action IDs must be valid and unique.</string>
+    <string name="extv2_setup_ids" formatted="false">Setup field IDs must be valid and unique.</string>
+    <string name="extv2_param_ids" formatted="false">Action parameter IDs must be valid and unique.</string>
+    <string name="extv2_unsup_manifest">Unsupported field in extension manifest: %1$s</string>
+    <string name="extv2_unsup_openurl">Unsupported field in Open URL action: %1$s</string>
+    <string name="extv2_unsup_https">Unsupported field in HTTPS Request action: %1$s</string>
+    <string name="extv2_unsup_setup">Unsupported field in setup field: %1$s</string>
+    <string name="extv2_unsup_param">Unsupported field in action parameter: %1$s</string>
+    <string name="extv2_unsup_choice">Unsupported field in parameter choice: %1$s</string>
+    <string name="extv2_cred_literal" formatted="false">Credential-like header literals are not allowed.</string>
+    <string name="extexec_needs_setup">%1$s needs setup</string>
+    <string name="extexec_endpoint_size" formatted="false">Extension endpoint exceeded Orbit\'s safe size limit.</string>
+    <string name="extexec_request_size" formatted="false">Extension request exceeded Orbit\'s safe size limit.</string>
+    <string name="extexec_headers_invalid" formatted="false">Extension request headers are invalid.</string>
+    <string name="extexec_succeeded">Extension request succeeded (HTTP %1$d)</string>
+    <string name="extexec_redirect">Extension request stopped at an unreviewed redirect (HTTP %1$d)</string>
+    <string name="extexec_failed">Extension request failed (HTTP %1$d)</string>
+    <string name="extexec_response_size" formatted="false">Extension response exceeded Orbit\'s safe size limit.</string>
+    <string name="extexec_not_https" formatted="false">Extension endpoint is not a public HTTPS address.</string>
+    <string name="extexec_incomplete" formatted="false">Extension request could not be completed.</string>
+    <string name="extexec_no_browser" formatted="false">No browser is available for this extension action.</string>
+    <string name="extexec_opened" formatted="false">Extension opened the reviewed URL</string>
+    <string name="extexec_open_failed" formatted="false">Orbit could not open the extension URL.</string>
+    <string name="extexec_not_public" formatted="false">Extension URL is not a public web address.</string>
+    <string name="extexec_unavailable" formatted="false">Extension action unavailable</string>
+    <string name="upd_stable_release" formatted="false">The latest GitHub release is not a stable published release.</string>
+    <string name="upd_tag_malformed" formatted="false">The latest Orbit release tag is malformed.</string>
+    <string name="upd_latest_no_assets" formatted="false">The latest Orbit release has no assets.</string>
+    <string name="upd_not_eligible" formatted="false">The Orbit release is not an eligible published release.</string>
+    <string name="upd_no_assets" formatted="false">The Orbit release has no assets.</string>
+    <string name="upd_file_unavailable" formatted="false">The downloaded update file is unavailable.</string>
+    <string name="upd_checksum_mismatch" formatted="false">The downloaded APK checksum did not match the official release.</string>
+    <string name="upd_cannot_inspect" formatted="false">Android could not inspect the downloaded APK.</string>
+    <string name="upd_wrong_package" formatted="false">The downloaded APK has the wrong package name.</string>
+    <string name="upd_version_mismatch" formatted="false">The downloaded APK version does not match the release manifest.</string>
+    <string name="upd_not_newer" formatted="false">The downloaded APK is not newer than this Orbit installation.</string>
+    <string name="upd_unexpected_signers" formatted="false">The downloaded APK has an unexpected signer set.</string>
+    <string name="upd_signer_unverified" formatted="false">The downloaded APK signer could not be verified.</string>
+    <string name="upd_not_orbit_signed" formatted="false">The downloaded APK is not signed by Orbit\'s permanent certificate.</string>
+    <string name="upd_verified_unavailable" formatted="false">The verified update file is unavailable.</string>
+    <string name="upd_installer_prepare" formatted="false">Orbit could not prepare the update installer.</string>
+    <string name="upd_apk_large" formatted="false">The official APK is unexpectedly large.</string>
+    <string name="upd_size_mismatch" formatted="false">The APK download size did not match the release metadata.</string>
+    <string name="upd_download_limit" formatted="false">The APK download exceeded the safe size limit.</string>
+    <string name="upd_download_incomplete" formatted="false">The APK download was incomplete.</string>
+    <string name="upd_download_finalize" formatted="false">Orbit could not finalize the APK download.</string>
+    <string name="upd_schema" formatted="false">The Orbit update manifest schema is unsupported.</string>
+    <string name="upd_manifest_package" formatted="false">The Orbit update manifest has the wrong package name.</string>
+    <string name="upd_apk_size" formatted="false">The Orbit release APK size is invalid.</string>
+    <string name="upd_version_metadata" formatted="false">The Orbit release version metadata is malformed.</string>
+    <string name="upd_apk_name" formatted="false">The Orbit release APK name is inconsistent.</string>
+    <string name="upd_apk_checksum" formatted="false">The Orbit release APK checksum is malformed.</string>
+    <string name="upd_cert_metadata" formatted="false">The Orbit release certificate metadata is invalid.</string>
+    <string name="upd_duplicate_assets" formatted="false">The Orbit release contains duplicate assets.</string>
+    <string name="upd_asset_url" formatted="false">The Orbit release contains an unexpected asset URL.</string>
+    <string name="upd_https_required" formatted="false">Orbit updates require HTTPS.</string>
+    <string name="upd_insecure_redirect" formatted="false">The update service redirected to an insecure URL.</string>
+    <string name="upd_asset_reference" formatted="false">The Orbit release asset reference is malformed.</string>
+    <string name="upd_response_large" formatted="false">The update service response is too large.</string>
+    <string name="upd_download_http">The official APK download failed (HTTP %1$d).</string>
+    <string name="upd_missing_asset">The Orbit release is missing %1$s.</string>
+    <string name="upd_service_http">The update service returned HTTP %1$d.</string>
+    <string name="upd_check_failed" formatted="false">Orbit could not check for updates.</string>
+    <string name="upd_verify_failed" formatted="false">The downloaded update could not be verified.</string>
+    <string name="upd_verification_failed" formatted="false">The downloaded update failed verification.</string>
+    <string name="upd_download_failed" formatted="false">Orbit could not download the update.</string>
+    <string name="loctrig_new_title" formatted="false">New location trigger</string>
+    <string name="loctrig_edit_title" formatted="false">Edit location trigger</string>
+    <string name="loctrig_intro" formatted="false">Run this routine when your phone arrives at or leaves an area. Choose a reusable saved place, use your current position, or enter coordinates manually.</string>
+    <string name="loctrig_when" formatted="false">WHEN</string>
+    <string name="loctrig_saved_place_label" formatted="false">SAVED PLACE (OPTIONAL)</string>
+    <string name="loctrig_choose_place" formatted="false">Choose saved place</string>
+    <string name="loctrig_saved_help" formatted="false">Choose a reusable place from Settings, use your current location, or enter coordinates manually.</string>
+    <string name="loctrig_name_label" formatted="false">LOCATION NAME</string>
+    <string name="loctrig_name_hint" formatted="false">Home, Work, Gym…</string>
+    <string name="loctrig_use_current" formatted="false">Use my current location</string>
+    <string name="loctrig_coord_help" formatted="false">Orbit stores only the coordinates and label you save for this trigger. Current location requires precise location access.</string>
+    <string name="loctrig_lat" formatted="false">LATITUDE</string>
+    <string name="loctrig_lon" formatted="false">LONGITUDE</string>
+    <string name="loctrig_radius" formatted="false">RADIUS</string>
+    <string name="loctrig_enabled" formatted="false">Enabled</string>
+    <string name="loctrig_background_title" formatted="false">Background behavior</string>
+    <string name="loctrig_background_body" formatted="false">Location triggers use Android\'s system proximity monitoring. The routine still follows Orbit\'s normal automatic-run rules: background-safe steps can finish silently, while steps that require Orbit visible or a confirmation use the existing trigger-alert handoff. Android location boundaries are approximate, so a transition can arrive late and very brief passes may not fire.</string>
+    <string name="loctrig_save" formatted="false">Save location trigger</string>
+    <string name="loctrig_save_changes" formatted="false">Save changes</string>
+    <string name="loctrig_when_leave" formatted="false">When I leave</string>
+    <string name="loctrig_when_arrive" formatted="false">When I arrive</string>
+    <string name="loctrig_ready" formatted="false">Location triggers ready</string>
+    <string name="loctrig_setup_needed" formatted="false">Location setup needed</string>
+    <string name="loctrig_detail_fine" formatted="false">Allow precise location so Orbit can tell when the phone crosses the saved radius.</string>
+    <string name="loctrig_btn_fine" formatted="false">Allow precise location</string>
+    <string name="loctrig_detail_background">Automatic arrive/leave triggers need background location. In Android\'s app permission page, set Location to “%1$s”.</string>
+    <string name="loctrig_btn_background" formatted="false">Allow background location</string>
+    <string name="loctrig_detail_off" formatted="false">Android location services are currently off. Turn them on for arrive/leave monitoring.</string>
+    <string name="loctrig_btn_turn_on" formatted="false">Turn on location</string>
+    <string name="loctrig_detail_ready" formatted="false">Precise and background location are available. Enabled location triggers can monitor even while Orbit is closed.</string>
+    <string name="loctrig_btn_manage" formatted="false">Manage location access</string>
+    <string name="loctrig_background_explain">For arrive/leave Routines to work while Orbit is closed, Android requires Location to be set to “%1$s”. Open Orbit\'s app settings, then choose Permissions → Location.</string>
+    <string name="loctrig_open_settings" formatted="false">Open settings</string>
+    <string name="loctrig_no_places" formatted="false">No saved places yet. Add one first.</string>
+    <string name="loctrig_manage_places" formatted="false">Manage saved places…</string>
+    <string name="loctrig_r100" formatted="false">100 m radius</string>
+    <string name="loctrig_r200" formatted="false">200 m radius</string>
+    <string name="loctrig_r300" formatted="false">300 m radius</string>
+    <string name="loctrig_r500" formatted="false">500 m radius</string>
+    <string name="loctrig_r1k" formatted="false">1 km radius</string>
+    <string name="loctrig_r2k" formatted="false">2 km radius</string>
+    <string name="loctrig_r5k" formatted="false">5 km radius</string>
+    <string name="loctrig_turn_on_first" formatted="false">Turn on Android location first.</string>
+    <string name="loctrig_service_unavailable" formatted="false">Android location service is unavailable.</string>
+    <string name="loctrig_no_provider" formatted="false">Could not find an enabled location provider.</string>
+    <string name="loctrig_finding" formatted="false">Finding location…</string>
+    <string name="loctrig_my_location" formatted="false">My location</string>
+    <string name="loctrig_added" formatted="false">Current location added.</string>
+    <string name="loctrig_fix_failed" formatted="false">Orbit could not get a current location fix. Try again outdoors or paste coordinates.</string>
+    <string name="loctrig_need_name" formatted="false">Give this location a name.</string>
+    <string name="loctrig_bad_coords" formatted="false">Use valid latitude and longitude coordinates.</string>
+    <string name="loctrig_duplicate" formatted="false">An enabled location trigger with this same area and event already exists for this routine.</string>
+    <string name="loctrig_save_failed" formatted="false">Could not save this location trigger.</string>
+    <string name="loctrig_monitor_failed" formatted="false">Saved, but Android could not start location monitoring. Check Location access and try enabling the trigger again.</string>
+    <string name="loctrig_finish_setup" formatted="false">Saved. Finish Location setup to activate this trigger in the background.</string>
+    <string name="loctrig_discard_title" formatted="false">Discard location-trigger changes?</string>
+    <string name="loctrig_discard_message" formatted="false">Your unsaved location and trigger changes will be lost.</string>
+    <string name="loctrig_keep_editing" formatted="false">Keep editing</string>
+    <string name="loctrig_discard" formatted="false">Discard</string>
+    <string name="olc_chat" formatted="false">Chat</string>
+    <string name="olc_memory" formatted="false">Orbit Memory</string>
+    <string name="olc_screen" formatted="false">Screen text</string>
+    <string name="olc_ask_vault" formatted="false">Ask Vault</string>
+    <string name="olc_attachments" formatted="false">Text, PDF and document attachments</string>
+    <string name="olc_notifications" formatted="false">Notification questions</string>
+    <string name="olc_device_actions" formatted="false">Device actions in your own words</string>
+    <string name="olc_web" formatted="false">Web search and current information</string>
+    <string name="olc_pictures" formatted="false">Looking at pictures</string>
+    <string name="olc_routines" formatted="false">Planning Routines</string>
+    <string name="olc_suggestions" formatted="false">Smart Vault suggestions</string>
+    <string name="olc_after_model" formatted="false">After the local model is installed</string>
+    <string name="olc_memory_off" formatted="false">Orbit Memory is off</string>
+    <string name="olc_screen_attach" formatted="false">When you attach the screen</string>
+    <string name="olc_turn_on_vault" formatted="false">Turn on Smart Vault</string>
+    <string name="olc_attachment_text" formatted="false">The text Orbit reads from them</string>
+    <string name="olc_needs_access" formatted="false">Needs notification access</string>
+    <string name="olc_ni_off" formatted="false">Notification Intelligence is off</string>
+    <string name="olc_needs_action_model" formatted="false">Needs the action model</string>
+    <string name="olc_turned_off" formatted="false">Turned off</string>
+    <string name="olc_pictures_text" formatted="false">Text Orbit reads from a picture still works</string>
+    <string name="olp_image_only" formatted="false">Orbit Local can\'t look at pictures yet, and Orbit didn\'t find any text in this one that the local model could read instead. Nothing was sent anywhere. To ask about the picture itself, switch to a cloud provider such as ChatGPT in Settings > AI &amp; account > AI Providers.</string>
+    <string name="olp_picture_note" formatted="false">Orbit Local can\'t see pictures, so this answer uses only the text Orbit read from them.</string>
+    <string name="olp_excerpt_note" formatted="false">Orbit Local read the parts of your attachment most relevant to this question, not all of it.</string>
+    <string name="olp_checked_vault" formatted="false">"Checked in your Vault: "</string>
+    <string name="olp_comp_required_move" formatted="false">Component required · model ready to move</string>
+    <string name="olp_comp_not_installed" formatted="false">Component not installed</string>
+    <string name="olp_comp_not_verified" formatted="false">Component not verified</string>
+    <string name="olp_comp_update" formatted="false">Component update required</string>
+    <string name="olp_not_play" formatted="false">Not available in the Google Play edition</string>
+    <string name="olp_unsupported" formatted="false">Not supported on this device</string>
+    <string name="olp_checking" formatted="false">Checking component…</string>
+    <string name="olp_ready" formatted="false">Ready · works offline</string>
+    <string name="olp_downloading" formatted="false">Downloading model…</string>
+    <string name="olp_starting" formatted="false">Starting model download…</string>
+    <string name="olp_waiting" formatted="false">Waiting for a connection</string>
+    <string name="olp_verifying" formatted="false">Verifying model…</string>
+    <string name="olp_moving" formatted="false">Moving existing model…</string>
+    <string name="olp_paused" formatted="false">Download paused</string>
+    <string name="olp_interrupted" formatted="false">Download interrupted</string>
+    <string name="olp_model_missing" formatted="false">Model not installed</string>
+    <string name="olp_no_answer" formatted="false">Orbit Local produced no answer. Try rephrasing, or switch provider for this question.</string>
+    <string name="olp_no_routines" formatted="false">Orbit Local can\'t build Routines yet. Switch the active provider to ChatGPT to plan this routine, then switch back.</string>
+    <string name="docview_close_viewer" formatted="false">Close document viewer</string>
+    <string name="docview_search" formatted="false">Search document</string>
+    <string name="docview_save_page" formatted="false">Save this page to your Vault</string>
+    <string name="docview_ask_page" formatted="false">Ask Orbit about this page</string>
+    <string name="docview_opening" formatted="false">Opening document…</string>
+    <string name="docview_prev" formatted="false">Previous page</string>
+    <string name="docview_page" formatted="false">Page</string>
+    <string name="docview_choose_page" formatted="false">Choose page</string>
+    <string name="docview_next" formatted="false">Next page</string>
+    <string name="docview_indexing" formatted="false">Indexing…</string>
+    <string name="docview_prev_result" formatted="false">Previous search result</string>
+    <string name="docview_next_result" formatted="false">Next search result</string>
+    <string name="docview_close_search" formatted="false">Close document search</string>
+    <string name="docview_no_pages" formatted="false">This PDF has no readable pages.</string>
+    <string name="docview_too_many" formatted="false">This PDF has too many pages to open safely.</string>
+    <string name="docview_page_of">Page %1$d of %2$d</string>
+    <string name="docview_rendering" formatted="false">Rendering page…</string>
+    <string name="docview_open_failed" formatted="false">Orbit could not open this PDF.</string>
+    <string name="docview_counter_choose">%1$s, choose page</string>
+    <string name="docview_choose_doc_page" formatted="false">Choose document page</string>
+    <string name="docview_go" formatted="false">Go</string>
+    <string name="docview_type_to_search" formatted="false">Type to search</string>
+    <string name="docview_no_text" formatted="false">No searchable text found</string>
+    <string name="docview_search_unavailable" formatted="false">Search unavailable</string>
+    <string name="docview_no_results" formatted="false">No results</string>
+    <string name="docview_result_announce">Result %1$d of %2$d, page %3$d</string>
+    <string name="docview_result_short">%1$d of %2$d · p%3$d</string>
+    <string name="docview_ask_page_no_text" formatted="false">Ask Orbit about this page, no extractable text on this page</string>
+    <string name="docview_read_failed" formatted="false">Orbit could not read or render this page</string>
+    <string name="docview_vault_off" formatted="false">Orbit Vault is turned off</string>
+    <string name="docview_save_failed" formatted="false">Orbit could not save this page</string>
+    <string name="docview_saved">Page %1$d saved to Vault</string>
+    <string name="convsheet_auto_line" formatted="false">Auto chooses per request</string>
+    <string name="convsheet_measuring" formatted="false">Orbit is still measuring this chat.</string>
+    <string name="convsheet_tokens_of">%1$s of %2$s tokens</string>
+    <string name="convsheet_tokens">%1$s tokens</string>
+    <string name="convsheet_used">%1$d%% used</string>
+    <string name="convsheet_used_model">%1$d%% used · %2$s</string>
+    <string name="convsheet_window_unknown" formatted="false">Window size unknown</string>
+    <string name="convsheet_model_window_unknown">%1$s · window size unknown</string>
+    <string name="convsheet_estimated" formatted="false">Estimated. Orbit counts about four characters of text per token and a fixed amount per image; the AI\'s own count can differ.</string>
+    <string name="convsheet_note_auto" formatted="false">Auto picks the model when you send, so no limit is shown here. Each request only goes to a model whose context window fits it.</string>
+    <string name="convsheet_note_local" formatted="false">Orbit Local fits each request into its own small on-device window, keeping your newest messages and the most relevant parts of attachments.</string>
+    <string name="convsheet_note_unknown" formatted="false">Orbit does not know this model\'s context window, so no percentage is shown.</string>
+    <string name="convsheet_title" formatted="false">Context window</string>
+    <string name="convsheet_continue_new" formatted="false">Continue in new chat</string>
+    <string name="convsheet_kept_title" formatted="false">Kept in this chat</string>
+    <string name="convsheet_nothing_kept" formatted="false">Nothing is kept in this chat. Hold an attached document, text file or Vault item to keep it for every message.</string>
+    <string name="convsheet_kept_info" formatted="false">Orbit sends these with every new message in this chat until you remove them. They are shown once, where you added them.</string>
+    <string name="convsheet_kept_line">%1$s · %2$s tokens</string>
+    <string name="convsheet_kept_desc">%1$s, %2$s. Opens a preview.</string>
+    <string name="convsheet_stop_keeping">Stop keeping %1$s</string>
+    <string name="convsheet_continue_q" formatted="false">Continue in a new chat?</string>
+    <string name="convsheet_continue_msg" formatted="false">Orbit will write a short summary of this chat and start a new chat with it, along with anything you kept. This chat stays exactly as it is.</string>
+    <string name="ctxl_conversation" formatted="false">Conversation</string>
+    <string name="ctxl_documents" formatted="false">Documents</string>
+    <string name="ctxl_vault" formatted="false">Vault</string>
+    <string name="ctxl_screen" formatted="false">Screen</string>
+    <string name="ctxl_images" formatted="false">Images</string>
+    <string name="ctxl_notifications" formatted="false">Notifications</string>
+    <string name="ctxl_memory" formatted="false">Memory</string>
+    <string name="ctxl_kept" formatted="false">Kept in this chat</string>
+    <string name="ctxl_instructions" formatted="false">Orbit\'s instructions</string>
+    <string name="ctxl_other" formatted="false">Other</string>
+    <string name="rbuild_title" formatted="false">Create with Orbit</string>
+    <string name="rbuild_subtitle" formatted="false">Describe a routine</string>
+    <string name="rbuild_intro" formatted="false">Describe what you want the routine to do and Orbit will turn it into steps using the actions it already supports. Nothing runs and nothing is saved until you review it and press Save routine.</string>
+    <string name="rbuild_hint" formatted="false">Turn on Do Not Disturb, set brightness to 20%, and lower media volume</string>
+    <string name="rbuild_desc_cd" formatted="false">Routine description</string>
+    <string name="rbuild_build" formatted="false">Build draft</string>
+    <string name="rbuild_examples" formatted="false">EXAMPLES</string>
+    <string name="rbuild_ex1" formatted="false">Bedtime: turn on Do Not Disturb, set brightness to 15%, and lower media volume</string>
+    <string name="rbuild_ex2" formatted="false">Focus mode: Do Not Disturb on and brightness at 35%</string>
+    <string name="rbuild_ex3" formatted="false">Gaming: flashlight off, media volume 80%, brightness 90%</string>
+    <string name="rbuild_need_text" formatted="false">Describe the routine you want Orbit to build.</string>
+    <string name="rbuild_building" formatted="false">Building your routine…</string>
+    <string name="rbuild_failed" formatted="false">Couldn\'t build that routine</string>
+    <string name="rbuild_automatic" formatted="false">AUTOMATIC</string>
+    <string name="rbuild_inactive" formatted="false">Nothing is scheduled until you review and save the routine.</string>
+    <string name="rbuild_steps" formatted="false">STEPS</string>
+    <string name="rbuild_step_cd">Step %1$d: %2$s</string>
+    <string name="rbuild_scheduling" formatted="false">Scheduling</string>
+    <string name="rbuild_review" formatted="false">Review routine</string>
+    <string name="rbuild_change" formatted="false">Change description</string>
+    <string name="relay_not_configured" formatted="false">API-relay mode is selected, but no relay is configured. Add your HTTPS relay URL or switch Provider to ChatGPT account.</string>
+    <string name="relay_https_only" formatted="false">For security, Orbit only connects to HTTPS relay URLs.</string>
+    <string name="relay_configured" formatted="false">Relay configured</string>
+    <string name="relay_url_required" formatted="false">Relay URL required</string>
+    <string name="relay_error_code">Relay error %1$d</string>
+    <string name="relay_error_body">Relay error %1$d: %2$s</string>
+    <string name="relay_unreachable">Could not reach the Orbit relay: %1$s</string>
+    <string name="relay_label">Relay · %1$s</string>
+    <plurals name="convsheet_older_not_sent">
+        <item quantity="one">Only your most recent messages are sent; the %1$d oldest is not resent.</item>
+        <item quantity="other">Only your most recent messages are sent; the %1$d oldest are not resent.</item>
+    </plurals>
+    <plurals name="rbuild_step_count">
+        <item quantity="one">1 step</item>
+        <item quantity="other">%1$d steps</item>
+    </plurals>
+</resources>
