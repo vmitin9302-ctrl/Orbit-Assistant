@@ -52,28 +52,32 @@ public class AppProfileActivity extends Activity {
             AppProfileStore.CATEGORY_MAP, AppProfileStore.CATEGORY_DOCUMENT,
             AppProfileStore.CATEGORY_EMAIL, AppProfileStore.CATEGORY_GENERIC
     };
-    private static final String[] CATEGORY_LABELS = {
-            "Automatic","Conversation","Product / shopping","Article / webpage","Settings",
-            "Media","Map / navigation","Document","Email","Generic"
+    private static final int[] CATEGORY_LABELS = {
+            R.string.appprof_auto, R.string.appprof_cat_conversation, R.string.appprof_cat_product,
+            R.string.appprof_cat_article, R.string.ui_settings_74a883a0, R.string.appprof_cat_media,
+            R.string.appprof_cat_map, R.string.appprof_cat_document, R.string.appprof_cat_email,
+            R.string.appprof_cat_generic
     };
     private static final String[] PRIVACY_VALUES = {
             AppProfileStore.PRIVACY_AUTO, AppProfileStore.PRIVACY_NORMAL,
             AppProfileStore.PRIVACY_SENSITIVE, AppProfileStore.PRIVACY_NEVER
     };
-    private static final String[] PRIVACY_LABELS = {
-            "Automatic", "Normal", "Sensitive · manual screen only", "No screen access"
+    private static final int[] PRIVACY_LABELS = {
+            R.string.appprof_auto, R.string.appprof_priv_normal,
+            R.string.appprof_priv_sensitive_manual, R.string.appprof_priv_never
     };
     private static final String[] SCREEN_VALUES = {
             AppProfileStore.SCREEN_GLOBAL, AppProfileStore.SCREEN_ATTACH, AppProfileStore.SCREEN_NEVER
     };
-    private static final String[] SCREEN_LABELS = {
-            "Use global setting","Attach by default","Never use screen"
+    private static final int[] SCREEN_LABELS = {
+            R.string.appprof_screen_global, R.string.appprof_screen_attach,
+            R.string.appprof_screen_never
     };
     private static final String[] SHOT_VALUES = {
             AppProfileStore.SCREENSHOT_GLOBAL, AppProfileStore.SCREENSHOT_ALLOW, AppProfileStore.SCREENSHOT_BLOCK
     };
-    private static final String[] SHOT_LABELS = {
-            "Use global setting","Allow when globally enabled","Block screenshots"
+    private static final int[] SHOT_LABELS = {
+            R.string.appprof_screen_global, R.string.appprof_shot_allow, R.string.appprof_shot_block
     };
     private static final String[] ACTION_VALUES = {
             AppProfileStore.ACTION_AUTO, AppProfileStore.ACTION_DRAFT, AppProfileStore.ACTION_SUMMARIZE,
@@ -83,10 +87,13 @@ public class AppProfileActivity extends Activity {
             AppProfileStore.ACTION_WHAT_MATTERS, AppProfileStore.ACTION_WHICH_OPTION,
             AppProfileStore.ACTION_ROUTE, AppProfileStore.ACTION_WHAT_NEXT
     };
-    private static final String[] ACTION_LABELS = {
-            "Automatic", "Draft reply", "Summarize", "Explain", "Explain tone", "Needs action?",
-            "Worth it?", "Compare", "Key specs", "Key points", "Recommend", "What matters?",
-            "Which option?", "Route summary", "What next?"
+    private static final int[] ACTION_LABELS = {
+            R.string.appprof_auto, R.string.appprof_act_draft, R.string.appprof_act_summarize,
+            R.string.appprof_act_explain, R.string.appprof_act_tone, R.string.appprof_act_needs_action,
+            R.string.appprof_act_worth, R.string.appprof_act_compare, R.string.appprof_act_key_specs,
+            R.string.appprof_act_key_points, R.string.appprof_act_recommend,
+            R.string.appprof_act_what_matters, R.string.appprof_act_which_option,
+            R.string.appprof_act_route, R.string.appprof_act_what_next
     };
 
     @Override protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +147,7 @@ public class AppProfileActivity extends Activity {
 
         LinearLayout top = new LinearLayout(this);
         top.setGravity(Gravity.CENTER_VERTICAL);
-        ImageButton back = iconButton(R.drawable.ic_back,"Back");
+        ImageButton back = iconButton(R.drawable.ic_back,getString(R.string.ui_back_76900f1b));
         back.setOnClickListener(v -> navigation.performBack());
         top.addView(back,new LinearLayout.LayoutParams(UiKit.dp(this,48),UiKit.dp(this,48)));
         LinearLayout titles = new LinearLayout(this);
@@ -161,50 +168,51 @@ public class AppProfileActivity extends Activity {
         ScreenContextClassifier.Result auto = ScreenContextClassifier.classify(this,"",false,pkg,label);
 
         LinearLayout preview = card();
-        TextView previewTitle = UiKit.text(this, "ORBIT BEHAVIOR", 11, UiKit.accent(this), true);
+        TextView previewTitle = UiKit.text(this, getString(R.string.appprof_orbit_behavior), 11, UiKit.accent(this), true);
         preview.addView(previewTitle);
         String detected = AppProfileStore.CATEGORY_AUTO.equals(current.category)
-                ? (auto.confidence >= 65 ? auto.label : "Automatic")
-                : AppProfileStore.categoryLabel(current.category);
-        preview.addView(infoLine("Context", detected));
-        preview.addView(infoLine("Privacy", AppProfileStore.effectivePrivacyLabel(this,pkg)));
+                ? (auto.confidence >= 65 ? AppProfileStore.categoryDisplayLabel(this, auto.category)
+                        : getString(R.string.appprof_auto))
+                : AppProfileStore.categoryDisplayLabel(this, current.category);
+        preview.addView(infoLine(getString(R.string.appprof_context), detected));
+        preview.addView(infoLine(getString(R.string.appprof_privacy), AppProfileStore.effectivePrivacyDisplayLabel(this,pkg)));
         TextView previewNote = UiKit.text(this,
-                "Automatic adapts from the app and whatever is actually on screen. Your overrides always win.",
+                getString(R.string.appprof_auto_note),
                 12, UiKit.MUTED, false);
         previewNote.setPadding(0,UiKit.dp(this,8),0,0);
         preview.addView(previewNote);
         root.addView(preview, cardLp());
 
-        root.addView(section("BEHAVIOR"));
+        root.addView(section(getString(R.string.appprof_behavior_header)));
         LinearLayout behavior = card();
-        category = addSelector(behavior,"Screen type",CATEGORY_LABELS,CATEGORY_VALUES,current.category);
+        category = addSelector(behavior,getString(R.string.appprof_screen_type),CATEGORY_LABELS,CATEGORY_VALUES,current.category);
         root.addView(behavior,cardLp());
 
-        root.addView(section("PRIVACY"));
+        root.addView(section(getString(R.string.appprof_privacy_header)));
         LinearLayout privacyCard = card();
-        privacy = addSelector(privacyCard,"Privacy level",PRIVACY_LABELS,PRIVACY_VALUES,current.privacyPolicy);
-        screen = addSelector(privacyCard,"Screen context",SCREEN_LABELS,SCREEN_VALUES,current.screenPolicy);
-        screenshot = addSelector(privacyCard,"Screenshots",SHOT_LABELS,SHOT_VALUES,current.screenshotPolicy);
+        privacy = addSelector(privacyCard,getString(R.string.appprof_privacy_level),PRIVACY_LABELS,PRIVACY_VALUES,current.privacyPolicy);
+        screen = addSelector(privacyCard,getString(R.string.appprof_screen_context),SCREEN_LABELS,SCREEN_VALUES,current.screenPolicy);
+        screenshot = addSelector(privacyCard,getString(R.string.appprof_screenshots),SHOT_LABELS,SHOT_VALUES,current.screenshotPolicy);
         TextView privacyNote = UiKit.text(this,
-                "Sensitive never auto-attaches the screen and blocks screenshots. No screen access blocks all screen context for this app.",
+                getString(R.string.appprof_privacy_note),
                 12,UiKit.MUTED,false);
         privacyNote.setPadding(0,UiKit.dp(this,8),0,0);
         privacyCard.addView(privacyNote);
         root.addView(privacyCard,cardLp());
 
-        root.addView(section("QUICK ACTIONS"));
+        root.addView(section(getString(R.string.appprof_quick_header)));
         LinearLayout actions = card();
         TextView actionNote = UiKit.text(this,
-                "Leave a slot Automatic and Orbit will choose it from the screen. Customize any slot you want to keep consistent in this app.",
+                getString(R.string.appprof_quick_note),
                 12, UiKit.MUTED, false);
         actionNote.setPadding(0,0,0,UiKit.dp(this,5));
         actions.addView(actionNote);
-        action1 = addSelector(actions,"Action 1",ACTION_LABELS,ACTION_VALUES,current.action1);
-        action2 = addSelector(actions,"Action 2",ACTION_LABELS,ACTION_VALUES,current.action2);
-        action3 = addSelector(actions,"Action 3",ACTION_LABELS,ACTION_VALUES,current.action3);
+        action1 = addSelector(actions,getString(R.string.appprof_action_n, 1),ACTION_LABELS,ACTION_VALUES,current.action1);
+        action2 = addSelector(actions,getString(R.string.appprof_action_n, 2),ACTION_LABELS,ACTION_VALUES,current.action2);
+        action3 = addSelector(actions,getString(R.string.appprof_action_n, 3),ACTION_LABELS,ACTION_VALUES,current.action3);
         root.addView(actions,cardLp());
 
-        Button save = primaryButton("Save app behavior");
+        Button save = primaryButton(getString(R.string.appprof_save));
         save.setOnClickListener(v -> {
             AppProfileStore.save(this,new AppProfileStore.Profile(pkg,label,
                     selectedValue(category),selectedValue(privacy),
@@ -212,16 +220,16 @@ public class AppProfileActivity extends Activity {
                     current.intelligenceMode,selectedValue(action1),
                     selectedValue(action2),selectedValue(action3),
                     System.currentTimeMillis()));
-            Toast.makeText(this,"App behavior saved",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,getString(R.string.appprof_saved),Toast.LENGTH_SHORT).show();
             finish();
         });
         root.addView(save,new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,UiKit.dp(this,50)));
 
-        Button reset = secondaryButton("Reset to Automatic");
+        Button reset = secondaryButton(getString(R.string.appprof_reset));
         reset.setOnClickListener(v -> {
             AppProfileStore.reset(this,pkg);
-            Toast.makeText(this,"App behavior reset",Toast.LENGTH_SHORT).show();
+            Toast.makeText(this,getString(R.string.appprof_reset_done),Toast.LENGTH_SHORT).show();
             finish();
         });
         LinearLayout.LayoutParams rlp = new LinearLayout.LayoutParams(
@@ -243,8 +251,10 @@ public class AppProfileActivity extends Activity {
         return t;
     }
 
-    private OptionSelector addSelector(LinearLayout card,String labelText,String[] labels,
+    private OptionSelector addSelector(LinearLayout card,String labelText,int[] labelRes,
                                      String[] values,String selected) {
+        String[] labels = new String[labelRes.length];
+        for (int i = 0; i < labels.length; i++) labels[i] = getString(labelRes[i]);
         TextView l = UiKit.text(this,labelText,13,UiKit.MUTED,true);
         l.setPadding(0,UiKit.dp(this,8),0,UiKit.dp(this,5));
         card.addView(l);

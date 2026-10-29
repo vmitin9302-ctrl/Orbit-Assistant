@@ -45,7 +45,7 @@ public final class QuickSettingsTiles {
 
     public static void requestAddRoutineTile(android.app.Activity activity) {
         requestAddTile(activity, OrbitRoutineTileService.class,
-                "Orbit Routine", R.drawable.ic_routine_tile, null);
+                activity.getString(R.string.qstile_routine_label), R.drawable.ic_routine_tile, null);
     }
 
     private static void requestAddTile(android.app.Activity activity,
@@ -54,14 +54,14 @@ public final class QuickSettingsTiles {
                                        AddTileCallback callback) {
         if (Build.VERSION.SDK_INT < 33) {
             Toast.makeText(activity,
-                    "Open Android Quick Settings, tap Edit, then add the " + label + " tile.",
+                    activity.getString(R.string.qstile_add_manually, label),
                     Toast.LENGTH_LONG).show();
             if (callback != null) callback.onResult(false);
             return;
         }
         StatusBarManager manager = activity.getSystemService(StatusBarManager.class);
         if (manager == null) {
-            Toast.makeText(activity, "Android's Quick Settings editor is unavailable.",
+            Toast.makeText(activity, activity.getString(R.string.qstile_editor_unavailable),
                     Toast.LENGTH_LONG).show();
             if (callback != null) callback.onResult(false);
             return;
@@ -71,14 +71,14 @@ public final class QuickSettingsTiles {
                 Icon.createWithResource(activity, iconResource), activity.getMainExecutor(),
                 result -> {
                     if (result == StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ADDED) {
-                        Toast.makeText(activity, label + " added to Quick Settings.",
+                        Toast.makeText(activity, activity.getString(R.string.qstile_added, label),
                                 Toast.LENGTH_SHORT).show();
                     } else if (result == StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_ALREADY_ADDED) {
-                        Toast.makeText(activity, label + " is already in Quick Settings.",
+                        Toast.makeText(activity, activity.getString(R.string.qstile_already_added, label),
                                 Toast.LENGTH_SHORT).show();
                     } else if (result != StatusBarManager.TILE_ADD_REQUEST_RESULT_TILE_NOT_ADDED) {
                         Toast.makeText(activity,
-                                "Open Android Quick Settings, tap Edit, then add the " + label + " tile.",
+                                activity.getString(R.string.qstile_add_manually, label),
                                 Toast.LENGTH_LONG).show();
                     }
                     if (callback != null) callback.onResult(

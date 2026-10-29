@@ -25,10 +25,10 @@ public final class ReminderScheduler {
     public static synchronized ScheduleResult schedule(Context c, ReminderStore.Item item) {
         if (c == null || item == null) return new ScheduleResult(false, false, "Invalid reminder");
         if (item.triggerAt <= System.currentTimeMillis() + 500L) {
-            return new ScheduleResult(false, false, "Reminder time must be in the future");
+            return new ScheduleResult(false, false, c.getString(R.string.remsched_in_past));
         }
         AlarmManager am = (AlarmManager) c.getSystemService(Context.ALARM_SERVICE);
-        if (am == null) return new ScheduleResult(false, false, "Alarm service unavailable");
+        if (am == null) return new ScheduleResult(false, false, c.getString(R.string.remsched_no_alarm));
         cancelAlarm(c, item.id);
         PendingIntent pi = pending(c, item.id, PendingIntent.FLAG_UPDATE_CURRENT);
         boolean exact = RoutineTriggerScheduler.canScheduleExact(c);
@@ -43,10 +43,10 @@ public final class ReminderScheduler {
                 ReminderStore.upsert(c, item);
                 return new ScheduleResult(true, false, "approximate");
             } catch (Exception ignored) {
-                return new ScheduleResult(false, false, "Could not schedule reminder");
+                return new ScheduleResult(false, false, c.getString(R.string.remsched_failed));
             }
         } catch (Exception e) {
-            return new ScheduleResult(false, false, "Could not schedule reminder");
+            return new ScheduleResult(false, false, c.getString(R.string.remsched_failed));
         }
     }
 

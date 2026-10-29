@@ -396,7 +396,7 @@ public final class OrbitVaultStoreTest {
         assertEquals("the oldest item is still there", "note 0", all.get(0).body);
         assertEquals("the last accepted item is newest",
                 "note " + (OrbitVaultStore.MAX_ITEMS - 1), all.get(all.size() - 1).body);
-        assertEquals(OrbitVaultStore.FULL_MESSAGE,
+        assertEquals(OrbitVaultStore.fullMessage(context),
                 OrbitVaultStore.saveFailureMessage(context, "generic"));
     }
 

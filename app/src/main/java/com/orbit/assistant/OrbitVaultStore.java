@@ -65,8 +65,9 @@ public final class OrbitVaultStore {
     static final int MAX_READ_ITEMS = 5000;
 
     /** What a refused save at the ceiling says, wherever it was attempted. */
-    public static final String FULL_MESSAGE =
-            "Your Vault is full (" + MAX_ITEMS + " items). Delete something to save more.";
+    public static String fullMessage(Context c) {
+        return c.getString(R.string.vaultstore_full, MAX_ITEMS);
+    }
 
     /**
      * Increases on every change to the stored document, so derived views - Smart Vault's index in
@@ -79,16 +80,23 @@ public final class OrbitVaultStore {
 
     /** The order the Vault list is shown in. Newest first is the default. */
     public enum Sort {
-        NEWEST("newest", "Newest first"),
-        OLDEST("oldest", "Oldest first");
+        NEWEST("newest", "Newest first", R.string.vaultstore_sort_newest),
+        OLDEST("oldest", "Oldest first", R.string.vaultstore_sort_oldest);
 
         /** Stored identity: never rename. */
         public final String id;
         public final String label;
+        private final int labelRes;
 
-        Sort(String id, String label) {
+        Sort(String id, String label, int labelRes) {
             this.id = id;
             this.label = label;
+            this.labelRes = labelRes;
+        }
+
+        /** The label in the app language. */
+        public String label(Context c) {
+            return c.getString(labelRes);
         }
 
         public static Sort fromId(String value) {
@@ -238,18 +246,18 @@ public final class OrbitVaultStore {
      * failure keeps the surface's own wording.
      */
     public static String saveFailureMessage(Context c, String fallback) {
-        return c != null && enabled(c) && isFull(c) ? FULL_MESSAGE : fallback;
+        return c != null && enabled(c) && isFull(c) ? fullMessage(c) : fallback;
     }
 
     /** "Saved to Vault", with a nearly-full warning appended when there is one to give. */
     public static String savedMessage(Context c) {
         if (c == null) return "Saved to Vault";
         int total = count(c);
-        if (total >= MAX_ITEMS) return "Saved to Vault. Your Vault is now full.";
+        if (total >= MAX_ITEMS) return c.getString(R.string.vaultstore_saved_full);
         if (total >= WARN_AT) {
-            return "Saved to Vault. " + (MAX_ITEMS - total) + " spaces left.";
+            return c.getString(R.string.vaultstore_saved_spaces, MAX_ITEMS - total);
         }
-        return "Saved to Vault";
+        return c.getString(R.string.vaultstore_saved);
     }
 
     /** The counter {@link #generation} exposes, for derived views. */

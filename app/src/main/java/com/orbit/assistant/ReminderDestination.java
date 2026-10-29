@@ -140,13 +140,13 @@ public final class ReminderDestination {
     public static String samsungExplanation(Context c) {
         switch (samsungSupport(c)) {
             case FULL:
-                return "Samsung Reminder opens with the reminder and time filled in. Tap Save there to keep it.";
+                return c.getString(R.string.remdest_samsung_full);
             case SHARE:
-                return "Samsung Reminder opens with the reminder text. Set the time and tap Save there.";
+                return c.getString(R.string.remdest_samsung_share);
             default:
                 return samsungInstalled(c)
-                        ? "This version of Samsung Reminder does not accept reminders from other apps."
-                        : "Samsung Reminder is not installed on this phone.";
+                        ? c.getString(R.string.remdest_samsung_no_accept)
+                        : c.getString(R.string.remdest_samsung_missing);
         }
     }
 }

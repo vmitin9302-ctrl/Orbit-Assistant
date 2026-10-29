@@ -45,7 +45,7 @@ public final class OrbitWidgetActionReceiver extends BroadcastReceiver {
             PendingResult pending = goAsync();
             OrbitWidgetExecutor.toggleFlashlight(app, result -> {
                 Toast.makeText(app, result == null
-                                ? "Flashlight action did not finish." : result.message,
+                                ? app.getString(R.string.widgetrx_flashlight_unfinished) : result.message,
                         Toast.LENGTH_SHORT).show();
                 pending.finish();
             });

@@ -38,9 +38,8 @@ public final class RoutinePlanner {
         return description != null && AUTOMATION_LANGUAGE.matcher(description).find();
     }
 
-    static String automationNotice() {
-        return "The steps were created. Timing, location, and condition automation still needs to "
-                + "be set up in Automatic triggers after you save the routine.";
+    static String automationNotice(Context context) {
+        return context.getString(R.string.planner_automation_notice);
     }
 
     /**
@@ -59,16 +58,19 @@ public final class RoutinePlanner {
     }
 
     /** The response could not be read as a plan at all, even after one repair attempt. */
-    static final String UNREADABLE_MESSAGE =
-            "Orbit couldn't get a usable planning response. Try again.";
+    static String unreadableMessage(Context context) {
+        return context.getString(R.string.planner_unreadable);
+    }
     /** The plan was read perfectly well, but nothing in it is something Orbit can do. */
-    static final String UNSUPPORTED_MESSAGE =
-            "Orbit understood the request but couldn't map it to supported Routine actions.";
+    static String unsupportedMessage(Context context) {
+        return context.getString(R.string.planner_unsupported);
+    }
 
     public static void build(Context context, String description, Callback callback) {
         if (callback == null) return;
         if (context == null || description == null || description.trim().isEmpty()) {
-            callback.onError("Describe the routine you want Orbit to build.");
+            callback.onError(context == null ? "Describe the routine you want Orbit to build."
+                    : context.getString(R.string.planner_describe));
             return;
         }
         final boolean askedForAutomation = mentionsAutomation(description);
@@ -78,15 +80,15 @@ public final class RoutinePlanner {
                 RoutineDraft.Outcome outcome = RoutineDraft.parse(context, raw);
                 if (outcome.draft != null) {
                     record(context, providerLabel, raw, outcome, false, "");
-                    deliver(callback, outcome.draft, askedForAutomation);
+                    deliver(context, callback, outcome.draft, askedForAutomation);
                     return;
                 }
                 // A response Orbit could not read is worth exactly one focused repair. A response
                 // it read fine that asked for unsupported things is a real answer, not a format
                 // problem, so repeating the request would only waste a call.
                 if (!outcome.isUnreadable()) {
-                    record(context, providerLabel, raw, outcome, false, UNSUPPORTED_MESSAGE);
-                    callback.onError(UNSUPPORTED_MESSAGE);
+                    record(context, providerLabel, raw, outcome, false, unsupportedMessage(context));
+                    callback.onError(unsupportedMessage(context));
                     return;
                 }
                 repair(context, description, raw, outcome, providerLabel, askedForAutomation, callback);
@@ -94,7 +96,7 @@ public final class RoutinePlanner {
 
             @Override public void onError(String message) {
                 String error = message == null || message.trim().isEmpty()
-                        ? "Orbit could not build the routine." : message;
+                        ? context.getString(R.string.planner_build_failed) : message;
                 record(context, "", "", null, false, error);
                 callback.onError(error);
             }
@@ -111,27 +113,27 @@ public final class RoutinePlanner {
                 RoutineDraft.Outcome repaired = RoutineDraft.parse(context, raw);
                 if (repaired.draft != null) {
                     record(context, repairProvider, raw, repaired, true, "");
-                    deliver(callback, repaired.draft, askedForAutomation);
+                    deliver(context, callback, repaired.draft, askedForAutomation);
                     return;
                 }
-                String error = repaired.isUnreadable() ? UNREADABLE_MESSAGE : UNSUPPORTED_MESSAGE;
+                String error = repaired.isUnreadable() ? unreadableMessage(context) : unsupportedMessage(context);
                 record(context, repairProvider, raw, repaired, true, error);
                 callback.onError(error);
             }
 
             @Override public void onError(String message) {
                 record(context, providerLabel, firstResponse, firstOutcome, true,
-                        message == null || message.trim().isEmpty() ? UNREADABLE_MESSAGE : message);
+                        message == null || message.trim().isEmpty() ? unreadableMessage(context) : message);
                 callback.onError(message == null || message.trim().isEmpty()
-                        ? UNREADABLE_MESSAGE : message);
+                        ? unreadableMessage(context) : message);
             }
         });
     }
 
-    private static void deliver(Callback callback, RoutineDraft draft, boolean askedForAutomation) {
+    private static void deliver(Context context, Callback callback, RoutineDraft draft, boolean askedForAutomation) {
         // Only when automation was clearly requested but nothing could be drafted from it,
         // so the user is never left thinking the timing was silently ignored.
-        String notice = askedForAutomation && !draft.hasTrigger() ? automationNotice() : "";
+        String notice = askedForAutomation && !draft.hasTrigger() ? automationNotice(context) : "";
         callback.onDraft(draft, notice);
     }
 
