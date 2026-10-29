@@ -79,7 +79,13 @@ def main():
         elif a.tag == 'string-array':
             assert len(a) == len(b), key
         if a.get('formatted') != 'false':
-            assert collections.Counter(FORMAT.findall(android_value(a))) == collections.Counter(FORMAT.findall(android_value(b))), key
+            if a.tag == 'plurals':
+                en_other = next(n for n in a if n.get('quantity') == 'other')
+                want = collections.Counter(FORMAT.findall(android_value(en_other)))
+                for n in list(a) + list(b):
+                    assert collections.Counter(FORMAT.findall(android_value(n))) == want, f'{key}: {n.get("quantity")}'
+            else:
+                assert collections.Counter(FORMAT.findall(android_value(a))) == collections.Counter(FORMAT.findall(android_value(b))), key
     if args.check_resources_only:
         print(f'PASS: {xml_count} XML files; {len(required)} translatable resources paired with Russian')
         return
