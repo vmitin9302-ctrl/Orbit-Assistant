@@ -82,15 +82,15 @@ public final class ProviderRequestMapperTest {
 
     @Test public void errorMappingIsUsefulAndNeverReturnsRawPayload() {
         String secretPayload = "{\"error\":\"secret-provider-payload\"}";
-        assertTrue(ApiKeyProviderClient.error(Prefs.PROVIDER_ANTHROPIC, 401, secretPayload,
+        assertTrue(ApiKeyProviderClient.error(org.robolectric.RuntimeEnvironment.getApplication(), Prefs.PROVIDER_ANTHROPIC, 401, secretPayload,
                 OrbitModelCatalog.CLAUDE_OPUS_5_5).contains("API key is invalid"));
-        assertTrue(ApiKeyProviderClient.error(Prefs.PROVIDER_XAI, 429, secretPayload,
+        assertTrue(ApiKeyProviderClient.error(org.robolectric.RuntimeEnvironment.getApplication(), Prefs.PROVIDER_XAI, 429, secretPayload,
                 OrbitModelCatalog.GROK_4_7).contains("rate limit"));
-        assertTrue(ApiKeyProviderClient.error(Prefs.PROVIDER_ANTHROPIC, 413, secretPayload,
+        assertTrue(ApiKeyProviderClient.error(org.robolectric.RuntimeEnvironment.getApplication(), Prefs.PROVIDER_ANTHROPIC, 413, secretPayload,
                 OrbitModelCatalog.CLAUDE_OPUS_5_5).contains("too large"));
-        assertTrue(ApiKeyProviderClient.error(Prefs.PROVIDER_ANTHROPIC, 529, secretPayload,
+        assertTrue(ApiKeyProviderClient.error(org.robolectric.RuntimeEnvironment.getApplication(), Prefs.PROVIDER_ANTHROPIC, 529, secretPayload,
                 OrbitModelCatalog.CLAUDE_OPUS_5_5).contains("overloaded"));
-        assertFalse(ApiKeyProviderClient.error(Prefs.PROVIDER_XAI, 500, secretPayload,
+        assertFalse(ApiKeyProviderClient.error(org.robolectric.RuntimeEnvironment.getApplication(), Prefs.PROVIDER_XAI, 500, secretPayload,
                 OrbitModelCatalog.GROK_4_7).contains("secret-provider-payload"));
     }
 
