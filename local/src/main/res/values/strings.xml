@@ -3,4 +3,19 @@
     <string name="app_name">Orbit Local</string>
     <string name="orbit_local_bind_permission_label">Run Orbit Local AI</string>
     <string name="orbit_local_bind_permission_description">Allows Orbit to run AI privately on this device.</string>
+    <string name="local_err_no_storage">Not enough free storage for the model. Free some space and try again.</string>
+    <string name="local_err_start_failed">Orbit Local could not start the download on this device. Try again.</string>
+    <string name="local_err_http_refused">The model download was refused (HTTP %1$d). Try again later.</string>
+    <string name="local_err_low_storage">The device ran low on storage during the download. Free some space and resume.</string>
+    <string name="local_err_mismatch">The downloaded data did not match the expected model. Try again.</string>
+    <string name="local_err_incomplete">The file was incomplete. Try again.</string>
+    <string name="local_err_verification">The file failed verification and was removed. Try again.</string>
+    <string name="local_err_install">Orbit could not finish installing the model. Try again.</string>
+    <string name="local_err_move_no_storage">Not enough free storage to move the existing model.</string>
+    <string name="local_err_move_too_large">The existing model was larger than expected and was not moved.</string>
+    <string name="local_err_move_incomplete">The existing model could not be moved completely. Nothing was removed.</string>
+    <string name="local_err_move_failed">The existing model could not be moved. Nothing was removed; you can try again.</string>
+    <string name="local_err_chat_not_installed">the local model is not installed</string>
+    <string name="local_err_action_not_installed">the local action model is not installed</string>
+    <string name="local_err_empty_request">the request was empty</string>
 </resources>

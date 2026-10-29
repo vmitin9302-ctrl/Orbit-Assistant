@@ -365,7 +365,7 @@ public final class AttachmentStripView extends HorizontalScrollView {
         // caption never reaches this: a screen reader is told the kind and the position, and a
         // document is still told its name.
         String description = AttachmentLabels.cardDescription(c, attachment, position, total)
-                + (kept ? ", kept in this chat" : "");
+                + (kept ? c.getString(R.string.h_kept_suffix) : "");
         if (onLongPress != null) {
             final String held = attachment.id;
             card.setOnLongClickListener(v -> {
@@ -380,7 +380,7 @@ public final class AttachmentStripView extends HorizontalScrollView {
                 || attachment.isDocument());
         if (openable) {
             card.setContentDescription(description + (attachment.isDocument()
-                    ? ", opens document viewer" : ", opens full screen"));
+                    ? c.getString(R.string.h_opens_document_suffix) : c.getString(R.string.h_opens_full_suffix)));
             card.setOnClickListener(v -> onOpen.onOpen(attachment.id));
             // pressScale carries Orbit's press feedback and its own haptic tick, so the card is
             // not made to fire a second one on the same touch.

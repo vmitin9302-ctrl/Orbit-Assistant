@@ -176,7 +176,7 @@ public final class ComponentDownloadWorker extends Worker {
         if (decision == StartDecision.NO_STORAGE) {
             ComponentModelStore.recordFailure(app, spec, ComponentModelStore.FAILURE_STORAGE);
             ComponentModelStore.setState(app, spec, ComponentModelStore.State.ERROR,
-                    "Not enough free storage for the model. Free some space and try again.");
+                    app.getString(R.string.local_err_no_storage));
             return;
         }
         if (decision == StartDecision.ALREADY_RUNNING) {
@@ -186,7 +186,7 @@ public final class ComponentDownloadWorker extends Worker {
         }
         if (!enqueue(app, spec)) {
             ComponentModelStore.setState(app, spec, ComponentModelStore.State.ERROR,
-                    "Orbit Local could not start the download on this device. Try again.");
+                    app.getString(R.string.local_err_start_failed));
             return;
         }
         ComponentModelStore.setState(app, spec, ComponentModelStore.State.QUEUED, "");
@@ -378,7 +378,7 @@ public final class ComponentDownloadWorker extends Worker {
                 existing = 0L;
             } else if (!resuming && code != 200) {
                 return fail(c, spec, ComponentModelStore.FAILURE_HTTP,
-                        "The model download was refused (HTTP " + code + "). Try again later.");
+                        c.getString(R.string.local_err_http_refused, code));
             }
 
             try (InputStream in = conn.getInputStream();
@@ -397,14 +397,14 @@ public final class ComponentDownloadWorker extends Worker {
                         long free = ComponentModelStore.freeStorageBytes(c);
                         if (free >= 0 && free < 100L * 1024 * 1024) {
                             return fail(c, spec, ComponentModelStore.FAILURE_STORAGE,
-                                    "The device ran low on storage during the download. Free some space and resume.");
+                                    c.getString(R.string.local_err_low_storage));
                         }
                     }
                     if (written > spec.sizeBytes) {
                         //noinspection ResultOfMethodCallIgnored
                         part.delete();
                         return fail(c, spec, ComponentModelStore.FAILURE_SIZE_MISMATCH,
-                                "The downloaded data did not match the expected model. Try again.");
+                                c.getString(R.string.local_err_mismatch));
                     }
                 }
             }

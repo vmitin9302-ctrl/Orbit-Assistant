@@ -43,4 +43,11 @@ public final class DocumentReference {
         if (namesPage()) return "Page " + (page + 1) + " of " + pageCount;
         return pageCount + (pageCount == 1 ? " page" : " pages");
     }
+
+    /** Localised twin of {@link #pageLabel()} for display. */
+    public String pageLabel(android.content.Context c) {
+        if (pageCount <= 0) return "";
+        if (namesPage()) return c.getString(R.string.h_page_of, page + 1, pageCount);
+        return c.getResources().getQuantityString(R.plurals.h_page_count, pageCount, pageCount);
+    }
 }

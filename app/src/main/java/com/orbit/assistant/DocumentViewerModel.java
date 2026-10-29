@@ -17,6 +17,10 @@ public final class DocumentViewerModel {
     public String counterText() {
         return pageCount <= 0 ? "" : "Page " + (page + 1) + " of " + pageCount;
     }
+    /** Localised twin of {@link #counterText()} for display. */
+    public String counterText(android.content.Context c) {
+        return pageCount <= 0 ? "" : c.getString(R.string.h_page_of, page + 1, pageCount);
+    }
     public boolean moveTo(int requested) {
         int next = clamp(requested);
         if (next == page) return false;

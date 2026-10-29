@@ -185,7 +185,7 @@ public class OrbitSwitch extends View {
 
     private void announceState() {
         if (Build.VERSION.SDK_INT >= 30) {
-            setStateDescription(checked ? "On" : "Off");
+            setStateDescription(getContext().getString(checked ? R.string.h_state_on : R.string.h_state_off));
         }
     }
 

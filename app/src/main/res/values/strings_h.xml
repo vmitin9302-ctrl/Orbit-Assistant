@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="h_page_of">Page %1$d of %2$d</string>
+    <plurals name="h_page_count">
+        <item quantity="one">%d page</item>
+        <item quantity="few">%d pages</item>
+        <item quantity="many">%d pages</item>
+        <item quantity="other">%d pages</item>
+    </plurals>
+    <string name="h_attachment_attached">%1$s attached</string>
+    <plurals name="h_attachments_added">
+        <item quantity="one">%d attachments added</item>
+        <item quantity="few">%d attachments added</item>
+        <item quantity="many">%d attachments added</item>
+        <item quantity="other">%d attachments added</item>
+    </plurals>
+    <plurals name="h_attachments_unreadable">
+        <item quantity="one">%d couldn\'t be read</item>
+        <item quantity="few">%d couldn\'t be read</item>
+        <item quantity="many">%d couldn\'t be read</item>
+        <item quantity="other">%d couldn\'t be read</item>
+    </plurals>
+    <string name="h_trigger_running">Triggered · running</string>
+    <string name="h_state_on">On</string>
+    <string name="h_state_off">Off</string>
+    <string name="h_selected_suffix">, selected</string>
+    <string name="h_kept_suffix">, kept in this chat</string>
+    <string name="h_opens_document_suffix">, opens document viewer</string>
+    <string name="h_opens_full_suffix">, opens full screen</string>
+    <string name="h_dial_cancel_desc">%1$s, close this without opening the dialer</string>
+    <string name="h_dial_confirm_desc">%1$s for %2$s</string>
+    <string name="h_subject_chat">chat</string>
+    <string name="h_swipe_pin">Pin %1$s</string>
+    <string name="h_swipe_unpin">Unpin %1$s</string>
+    <string name="h_swipe_delete">Delete %1$s</string>
+</resources>
