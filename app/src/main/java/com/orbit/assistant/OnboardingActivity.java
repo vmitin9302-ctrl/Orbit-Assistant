@@ -678,8 +678,7 @@ public final class OnboardingActivity extends Activity {
     }
 
     /** The line that tells a first-run user where the rest of the appearance controls live. */
-    static final String THEME_STUDIO_NOTE =
-            getString(R.string.ui_you_can_fine_tune_colors_messages_cards_and_b_e08c6dc3);
+    static final int THEME_STUDIO_NOTE = R.string.ui_you_can_fine_tune_colors_messages_cards_and_b_e08c6dc3;
 
     /**
      * Choose a good starting appearance quickly.
@@ -732,7 +731,7 @@ public final class OnboardingActivity extends Activity {
         presetCard.addView(amoledRow, amoledLp);
 
         // Education, not a step. Nobody is sent to Theme Studio during setup.
-        TextView studio = UiKit.text(this, THEME_STUDIO_NOTE, 12, UiKit.MUTED, false);
+        TextView studio = UiKit.text(this, getString(THEME_STUDIO_NOTE), 12, UiKit.MUTED, false);
         studio.setPadding(0, UiKit.dp(this, 10), 0, 0);
         presetCard.addView(studio);
         page.addView(presetCard, cardLp());

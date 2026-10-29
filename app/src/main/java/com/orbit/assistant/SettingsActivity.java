@@ -1910,18 +1910,13 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
     }
 
     /** What the Vault's switch and its erase control say, in the words the screen shows. */
-    static final String VAULT_TOGGLE_LABEL = getString(R.string.ui_use_orbit_vault_3e080f1d);
-    static final String VAULT_TOGGLE_HELP =
-            getString(R.string.ui_save_text_links_images_and_useful_orbit_answe_4b8928bd)
-                    + getString(R.string.ui_device_and_orbit_uses_a_saved_item_only_when__f110ed71);
-    static final String VAULT_OPEN_LABEL = getString(R.string.ui_open_orbit_vault_14687385);
-    static final String SMART_VAULT_OPEN_LABEL = getString(R.string.ui_smart_vault_4750978a);
-    static final String VAULT_DELETE_LABEL = getString(R.string.ui_delete_vault_data_5ae7870a);
-    static final String VAULT_DELETE_TITLE = getString(R.string.ui_delete_all_vault_data_58d0eee9);
-    static final String VAULT_DELETE_MESSAGE =
-            getString(R.string.ui_all_items_saved_in_orbit_vault_and_their_loca_271cac8e)
-                    + getString(R.string.ui_device_this_cannot_be_undone_your_chats_orbit_c225853c)
-                    + getString(R.string.ui_and_the_rest_of_your_settings_are_not_affecte_fa5d7eeb);
+    static final int VAULT_TOGGLE_LABEL = R.string.ui_use_orbit_vault_3e080f1d;
+    static final int VAULT_TOGGLE_HELP = R.string.ui_save_text_links_images_and_useful_orbit_answe_0dc96c0d;
+    static final int VAULT_OPEN_LABEL = R.string.ui_open_orbit_vault_14687385;
+    static final int SMART_VAULT_OPEN_LABEL = R.string.ui_smart_vault_4750978a;
+    static final int VAULT_DELETE_LABEL = R.string.ui_delete_vault_data_5ae7870a;
+    static final int VAULT_DELETE_TITLE = R.string.ui_delete_all_vault_data_58d0eee9;
+    static final int VAULT_DELETE_MESSAGE = R.string.ui_all_items_saved_in_orbit_vault_and_their_loca_37b6cc43;
 
     /**
      * The Vault's three controls, and the difference between two of them.
@@ -1934,11 +1929,11 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
      * not have to switch it back on in order to be rid of the contents.
      */
     private void buildVaultCard(LinearLayout card) {
-        TextView help = UiKit.text(this, VAULT_TOGGLE_HELP, 13, UiKit.MUTED, false);
+        TextView help = UiKit.text(this, getString(VAULT_TOGGLE_HELP), 13, UiKit.MUTED, false);
         help.setPadding(0, 0, 0, UiKit.dp(this, 12));
         card.addView(help);
 
-        Button openVault = secondaryButton(VAULT_OPEN_LABEL);
+        Button openVault = secondaryButton(getString(VAULT_OPEN_LABEL));
         openVault.setOnClickListener(v -> startActivity(new Intent(this, OrbitVaultActivity.class)));
         LinearLayout.LayoutParams openVaultLp = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 48));
@@ -1954,7 +1949,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
             openVault.setVisibility(checked ? View.VISIBLE : View.GONE);
             if (smartVaultButton != null) smartVaultButton.setVisibility(checked ? View.VISIBLE : View.GONE);
         });
-        card.addView(UiKit.switchRow(this, VAULT_TOGGLE_LABEL, null, control));
+        card.addView(UiKit.switchRow(this, getString(VAULT_TOGGLE_LABEL), null, control));
 
         openVault.setVisibility(Prefs.vaultEnabled(this) ? View.VISIBLE : View.GONE);
         card.addView(openVault, openVaultLp);
@@ -1962,7 +1957,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         // Smart Vault (v0.8.1.0-beta.1) has its own screen, because each of its privacy choices
         // needs a sentence saying what leaves the phone, and five of those would bury this card.
         Button smartVault = secondaryButton(Prefs.smartVaultEnabled(this)
-                ? SMART_VAULT_OPEN_LABEL + getString(R.string.ui_on_be4a8ec8) : SMART_VAULT_OPEN_LABEL);
+                ? getString(SMART_VAULT_OPEN_LABEL) + getString(R.string.ui_on_be4a8ec8) : getString(SMART_VAULT_OPEN_LABEL));
         smartVault.setOnClickListener(v -> startActivity(new Intent(this, SmartVaultActivity.class)));
         LinearLayout.LayoutParams smartLp = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 48));
@@ -1971,7 +1966,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
         card.addView(smartVault, smartLp);
         smartVaultButton = smartVault;
 
-        Button deleteVault = dangerOutlineButton(VAULT_DELETE_LABEL);
+        Button deleteVault = dangerOutlineButton(getString(VAULT_DELETE_LABEL));
         deleteVault.setOnClickListener(v -> confirmDeleteVaultData());
         LinearLayout.LayoutParams deleteVaultLp = new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, UiKit.dp(this, 48));
@@ -1988,8 +1983,8 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
      */
     private void confirmDeleteVaultData() {
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle(VAULT_DELETE_TITLE)
-                .setMessage(VAULT_DELETE_MESSAGE)
+                .setTitle(getString(VAULT_DELETE_TITLE))
+                .setMessage(getString(VAULT_DELETE_MESSAGE))
                 .setNegativeButton(getString(R.string.ui_cancel_19766ed6), null)
                 .setPositiveButton(getString(R.string.ui_delete_all_97811183), (d, w) -> {
                     int removed = OrbitVaultStore.deleteAllData(this);

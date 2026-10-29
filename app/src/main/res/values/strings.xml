@@ -10,16 +10,21 @@
     <string name="widget_routine_description">Run one selected saved Orbit Routine</string>
     <string name="widget_quick_description">Use selected Orbit quick actions</string>
     <!-- Extracted UI strings: English fallback and Russian display text. -->
+    <string name="ui_1_item_d1ecad4a" formatted="false">"1 item"</string>
+    <string name="ui_a_chat_keeps_up_to_566a44c9" formatted="false">"A chat keeps up to "</string>
     <string name="ui_a_customizable_android_assistant_for_quick_an_26b8d046" formatted="false">"A customizable Android assistant for quick answers, screen context, device actions, Routines, reminders, and more."</string>
     <string name="ui_a_restored_backup_brings_back_supported_local_dcfde50f" formatted="false">"A restored backup brings back supported local data and appearance. ChatGPT credentials, Android permissions, and default-assistant status are intentionally not restored."</string>
+    <string name="ui_a_similar_memory_is_already_saved_1bd09e2b" formatted="false">"A similar memory is already saved"</string>
     <string name="ui_about_updates_1b0c2070" formatted="false">"About &amp; updates"</string>
     <string name="ui_account_backed_chatgpt_codex_allowance_and_do_9695bc17" formatted="false">"account-backed ChatGPT/Codex allowance and does not need an OpenAI API key."</string>
     <string name="ui_accurate_reminders_and_routine_time_triggers_ac0b3cea" formatted="false">"Accurate reminders and Routine time triggers."</string>
     <string name="ui_across_conversations_settings_and_orbit_s_oth_a0278d59" formatted="false">"across conversations, Settings and Orbit\'s other pages. Turn this off to "</string>
     <string name="ui_act_locally_c0e2f78d" formatted="false">"Act locally"</string>
+    <string name="ui_action_chain_stopped_after_step_8dc93029" formatted="false">"Action chain stopped after step "</string>
     <string name="ui_actions_stay_on_the_chat_s_own_menu_56abb023" formatted="false">"actions stay on the chat\'s own menu."</string>
     <string name="ui_active_de2433e0" formatted="false">"Active: "</string>
     <string name="ui_active_provider_4cee0d82" formatted="false">"Active provider"</string>
+    <string name="ui_add_9fd728c6" formatted="false">"Add"</string>
     <string name="ui_add_ask_orbit_widget_1b6545d8" formatted="false">"Add Ask Orbit widget"</string>
     <string name="ui_add_integrations_and_new_actions_to_orbit_8ae30a02" formatted="false">"Add integrations and new actions to Orbit"</string>
     <string name="ui_add_orbit_tile_b63bc190" formatted="false">"Add Orbit tile"</string>
@@ -28,43 +33,69 @@
     <string name="ui_add_routine_tile_b36fec6e" formatted="false">"Add Routine tile"</string>
     <string name="ui_add_run_routine_widget_889ddfe7" formatted="false">"Add Run Routine widget"</string>
     <string name="ui_add_the_orbit_tiles_manually_from_android_s_q_867f4d97" formatted="false">"Add the Orbit tiles manually from Android\'s Quick Settings editor."</string>
+    <string name="ui_added_672e9bea" formatted="false">" added · "</string>
+    <string name="ui_added_up_to_282e0aa8" formatted="false">" added · up to "</string>
     <string name="ui_advanced_9f088dbe" formatted="false">"Advanced"</string>
     <string name="ui_advanced_fallback_orbit_calls_a_private_https_119c0528" formatted="false">"Advanced fallback: Orbit calls a private HTTPS relay you control. Your OpenAI API key stays on that server and is never stored in Orbit. ChatGPT credentials, if present, remain securely saved but inactive while this provider is selected."</string>
     <string name="ui_after_choosing_orbit_as_the_default_assistant_b3cab39f" formatted="false">"After choosing Orbit as the default assistant, use whichever assistant button or gesture Android exposes on your device."</string>
     <string name="ui_ai_account_6fa54ff1" formatted="false">"AI &amp; account"</string>
+    <string name="ui_ai_auto_orbit_chooses_the_model_and_reasoning_02dbb66f" formatted="false">"AI: Auto. Orbit chooses the model and reasoning "</string>
+    <string name="ui_ai_auto_orbit_chooses_the_model_and_reasoning_0a51b830" formatted="false">"AI: Auto. Orbit chooses the model and reasoning level "</string>
+    <string name="ui_ai_dd54be8d" formatted="false">"AI: "</string>
+    <string name="ui_ai_for_this_chat_1123aed6" formatted="false">"AI for this chat"</string>
     <string name="ui_ai_model_4d2e74ab" formatted="false">"AI model"</string>
     <string name="ui_ai_providers_5aef60a9" formatted="false">"AI Providers"</string>
     <string name="ui_ai_providers_chatgpt_sign_in_and_default_ai_df2efdcd" formatted="false">"AI Providers, ChatGPT sign-in and default AI"</string>
+    <string name="ui_alarm_d_02d_e6eb5e93" formatted="false">"Alarm · %d:%02d"</string>
+    <string name="ui_alarm_f3b67957" formatted="false">"Alarm"</string>
     <string name="ui_all_items_saved_in_orbit_vault_and_their_loca_271cac8e" formatted="false">"All items saved in Orbit Vault and their local media will be removed from this "</string>
+    <string name="ui_all_items_saved_in_orbit_vault_and_their_loca_37b6cc43" formatted="false">"All items saved in Orbit Vault and their local media will be removed from this device. This cannot be undone.\n\nYour chats, Orbit Memory, your providers and the rest of your settings are not affected."</string>
+    <string name="ui_allow_4c0c78e7" formatted="false">"Allow "</string>
     <string name="ui_allow_contact_name_lookup_057d65f9" formatted="false">"Allow contact-name lookup"</string>
+    <string name="ui_allow_e213c161" formatted="false">"Allow"</string>
     <string name="ui_allow_flashlight_control_a349547e" formatted="false">"Allow flashlight control"</string>
     <string name="ui_allow_longer_pauses_while_speaking_c7b5a7e2" formatted="false">"Allow longer pauses while speaking"</string>
     <string name="ui_allow_orbit_to_read_current_screen_text_560f7375" formatted="false">"Allow Orbit to read current-screen text"</string>
     <string name="ui_allow_orbit_to_receive_screenshots_857a7a14" formatted="false">"Allow Orbit to receive screenshots"</string>
     <string name="ui_allow_screenshots_for_visual_context_and_scre_13e63642" formatted="false">"Allow screenshots for visual context and screen selection"</string>
+    <string name="ui_allowed_1bb201d1" formatted="false">"Allowed"</string>
     <string name="ui_allows_orbit_to_change_system_brightness_d3f28a3b" formatted="false">"Allows Orbit to change system brightness."</string>
     <string name="ui_allows_orbit_to_control_do_not_disturb_376b1b83" formatted="false">"Allows Orbit to control Do Not Disturb."</string>
+    <string name="ui_already_remembered_6595ce77" formatted="false">"Already remembered"</string>
     <string name="ui_and_the_rest_of_your_settings_are_not_affecte_fa5d7eeb" formatted="false">"and the rest of your settings are not affected."</string>
     <string name="ui_android_camera_access_lets_orbit_control_the__6bc49b66" formatted="false">"Android Camera access lets Orbit control the flashlight."</string>
     <string name="ui_android_controls_this_setting_available_butto_98cf13fd" formatted="false">"Android controls this setting. Available button and gesture choices vary by device."</string>
     <string name="ui_android_could_not_open_a_supported_default_as_c372b8db" formatted="false">"Android could not open a supported default-assistant settings screen on this device."</string>
     <string name="ui_android_will_ask_before_adding_either_tile_58235e99" formatted="false">"Android will ask before adding either tile."</string>
+    <string name="ui_answer_version_604157f5" formatted="false">"Answer version"</string>
     <string name="ui_anything_to_your_ai_provider_which_tiles_you__c1acb8cc" formatted="false">"anything to your AI provider. Which tiles you keep, and how they are "</string>
+    <string name="ui_app_0d04bfeb" formatted="false">"App"</string>
     <string name="ui_app_font_cad0292d" formatted="false">"App font"</string>
     <string name="ui_approximate_location_a3162151" formatted="false">"Approximate location"</string>
     <string name="ui_approximate_location_enabled_for_weather_9c595d52" formatted="false">"Approximate location enabled for weather"</string>
     <string name="ui_arranged_is_edited_in_deck_itself_15f3058c" formatted="false">"arranged, is edited in Deck itself."</string>
     <string name="ui_arrival_and_leave_routine_triggers_e3e3e201" formatted="false">"Arrival and leave Routine triggers."</string>
+    <string name="ui_ask_anything_da0e101a" formatted="false">"Ask anything..."</string>
     <string name="ui_ask_orbit_18ea298a" formatted="false">"Ask Orbit"</string>
     <string name="ui_ask_orbit_quick_settings_tile_cf969c5f" formatted="false">"Ask Orbit Quick Settings tile"</string>
     <string name="ui_ask_quickly_110e1409" formatted="false">"Ask quickly"</string>
     <string name="ui_assistant_settings_unavailable_7db001cf" formatted="false">"Assistant settings unavailable"</string>
     <string name="ui_assistant_setup_a047e8d4" formatted="false">"Assistant setup"</string>
+    <string name="ui_attach_current_screen_1c161d52" formatted="false">"Attach current screen"</string>
     <string name="ui_attach_current_screen_by_default_f3780030" formatted="false">"Attach current screen by default"</string>
     <string name="ui_attach_d406ade2" formatted="false">"Attach"</string>
+    <string name="ui_attach_to_message_0ada90a5" formatted="false">"Attach to message"</string>
+    <string name="ui_attached_7bcd3cb6" formatted="false">" attached"</string>
+    <string name="ui_attached_86647942" formatted="false">"Attached: "</string>
+    <string name="ui_attached_ac6d9b76" formatted="false">"Attached"</string>
+    <string name="ui_attachment_040d2b36" formatted="false">"Attachment"</string>
+    <string name="ui_attachment_picker_could_not_be_opened_3b04904f" formatted="false">"Attachment picker could not be opened"</string>
+    <string name="ui_attachment_picker_is_opening_adafa55e" formatted="false">"Attachment picker is opening"</string>
+    <string name="ui_attachments_per_message_79deb9e0" formatted="false">" attachments per message"</string>
     <string name="ui_auto_can_use_a728a9aa" formatted="false">"Auto can use"</string>
     <string name="ui_auto_can_use_f7395827" formatted="false">"Auto can use: "</string>
     <string name="ui_auto_listen_still_works_and_the_mic_appears_w_7065f1c7" formatted="false">"Auto-listen still works, and the mic appears while Orbit is listening."</string>
+    <string name="ui_automatic_profile_a4979345" formatted="false">"Automatic profile"</string>
     <string name="ui_automatically_activate_the_microphone_when_th_fc73b405" formatted="false">"Automatically activate the microphone when the assistant overlay appears."</string>
     <string name="ui_automation_9273c578" formatted="false">"AUTOMATION"</string>
     <string name="ui_back_76900f1b" formatted="false">"Back"</string>
@@ -73,7 +104,16 @@
     <string name="ui_backup_files_contain_personal_data_and_are_no_3e29043b" formatted="false">"Backup files contain personal data and are not encrypted, so keep them somewhere private."</string>
     <string name="ui_backup_restore_35a349d9" formatted="false">"BACKUP &amp; RESTORE"</string>
     <string name="ui_backup_restored_continue_setup_to_reconnect_a_3fb2aa17" formatted="false">"Backup restored. Continue setup to reconnect account and Android access."</string>
+    <string name="ui_blocked_18f2a094" formatted="false">"Blocked"</string>
     <string name="ui_brightness_control_fcfe685e" formatted="false">"Brightness control"</string>
+    <string name="ui_brightness_f04b5cd0" formatted="false">"Brightness · "</string>
+    <string name="ui_calendar_composer_876c0d9f" formatted="false">"Calendar composer · "</string>
+    <string name="ui_calendar_d5d0a30b" formatted="false">"Calendar"</string>
+    <string name="ui_call_8080d0e1" formatted="false">"Call · "</string>
+    <string name="ui_camera_03494b0d" formatted="false">"Camera"</string>
+    <string name="ui_camera_could_not_be_opened_46cde03b" formatted="false">"Camera could not be opened"</string>
+    <string name="ui_camera_permission_is_needed_to_take_a_photo_c5e22d0e" formatted="false">"Camera permission is needed to take a photo"</string>
+    <string name="ui_camera_photo_d0674e0d" formatted="false">"Camera photo"</string>
     <string name="ui_cancel_19766ed6" formatted="false">"Cancel"</string>
     <string name="ui_casual_f32445a7" formatted="false">"Casual"</string>
     <string name="ui_celsius_c_400b949d" formatted="false">"Celsius (°C)"</string>
@@ -97,6 +137,7 @@
     <string name="ui_checking_chatgpt_sign_in_edfa18ba" formatted="false">"Checking ChatGPT sign-in…"</string>
     <string name="ui_choose_a_preset_2f311e68" formatted="false">"Choose a preset"</string>
     <string name="ui_choose_and_configure_orbit_s_active_ai_provid_c011daee" formatted="false">"Choose and configure Orbit\'s active AI provider, manage your ChatGPT connection, and set default intelligence."</string>
+    <string name="ui_choose_calendar_c422fd93" formatted="false">"Choose calendar"</string>
     <string name="ui_choose_how_orbit_deck_is_reached_and_whether__fbcbb056" formatted="false">"Choose how Orbit Deck is reached and whether it may suggest shortcuts."</string>
     <string name="ui_choose_how_orbit_thinks_chatgpt_is_the_recomm_7f0fb2f0" formatted="false">"Choose how Orbit thinks. ChatGPT is the recommended full experience. Orbit Local is optional, private, and can be added later."</string>
     <string name="ui_choose_how_to_open_orbit_583ded88" formatted="false">"Choose how to open Orbit"</string>
@@ -109,31 +150,61 @@
     <string name="ui_choose_which_controls_stay_on_the_overlay_hid_62b0c736" formatted="false">"Choose which controls stay on the overlay. Hidden ones are still one tap away in its More menu, where Float always keeps Recent chats and New chat."</string>
     <string name="ui_choosing_orbit_as_android_s_digital_assistant_3fda0183" formatted="false">"Choosing Orbit as Android\'s digital assistant lets supported buttons and gestures open it system-wide."</string>
     <string name="ui_clear_83b12c22" formatted="false">"Clear"</string>
+    <string name="ui_clear_chat_10a9a815" formatted="false">"Clear chat"</string>
     <string name="ui_clear_orbit_conversation_history_23817ed7" formatted="false">"Clear Orbit conversation history"</string>
     <string name="ui_clear_orbit_history_a7df4bff" formatted="false">"Clear Orbit history?"</string>
     <string name="ui_clear_settings_search_63c62e14" formatted="false">"Clear settings search"</string>
+    <string name="ui_clear_this_chat_1b52d32f" formatted="false">"Clear this chat?"</string>
+    <string name="ui_clipboard_285d69f0" formatted="false">"Clipboard"</string>
+    <string name="ui_clipboard_89ee20f8" formatted="false">"Clipboard · "</string>
+    <string name="ui_clipboard_does_not_contain_usable_text_or_an__2ca6d2eb" formatted="false">"Clipboard does not contain usable text or an image"</string>
+    <string name="ui_clipboard_has_no_usable_content_db8846c3" formatted="false">"Clipboard has no usable content"</string>
+    <string name="ui_clipboard_is_empty_0d50f046" formatted="false">"Clipboard is empty"</string>
+    <string name="ui_clipboard_text_bdd2efed" formatted="false">"Clipboard text"</string>
     <string name="ui_close_7d9eb7ac" formatted="false">"Close"</string>
+    <string name="ui_close_orbit_ebe5e629" formatted="false">"Close Orbit"</string>
     <string name="ui_code_copied_39868c86" formatted="false">"Code copied"</string>
     <string name="ui_condensed_ec5ac7c3" formatted="false">"Condensed"</string>
     <string name="ui_connect_orbit_51a3d76f" formatted="false">"Connect Orbit"</string>
     <string name="ui_connected_to_chatgpt_93968197" formatted="false">"✓ Connected to ChatGPT"</string>
     <string name="ui_connection_provider_130e21b8" formatted="false">"CONNECTION &amp; PROVIDER"</string>
+    <string name="ui_contact_2b5c3d26" formatted="false">"Contact"</string>
     <string name="ui_contact_lookup_e8d9dae8" formatted="false">"Contact lookup"</string>
+    <string name="ui_context_a61adb68" formatted="false">"Context "</string>
     <string name="ui_context_a8bf80b5" formatted="false">"CONTEXT"</string>
+    <string name="ui_context_window_dadd1c23" formatted="false">"Context window "</string>
     <string name="ui_continue_31fbef16" formatted="false">"Continue"</string>
     <string name="ui_continues_an_earlier_chat_aea927b9" formatted="false">"Continues an earlier chat"</string>
     <string name="ui_control_voice_beta_screen_awareness_and_devic_43800609" formatted="false">"Control Voice Beta, screen awareness and device permissions."</string>
+    <string name="ui_conversation_history_is_disabled_in_orbit_set_d0d4c8f5" formatted="false">"Conversation history is disabled in Orbit settings."</string>
     <string name="ui_conversations_1d432f58" formatted="false">"Conversations"</string>
     <string name="ui_conversations_25a8982a" formatted="false">"CONVERSATIONS"</string>
+    <string name="ui_copied_58d73ef4" formatted="false">"Copied ✓"</string>
+    <string name="ui_copied_8d525e5f" formatted="false">"Copied"</string>
+    <string name="ui_copied_instead_f4358811" formatted="false">"Copied instead ✓"</string>
+    <string name="ui_copied_text_026eaa7f" formatted="false">"Copied text"</string>
     <string name="ui_copy_code_49a0053f" formatted="false">"Copy code"</string>
+    <string name="ui_copy_e21f935f" formatted="false">"Copy"</string>
     <string name="ui_core_setup_e575a0fb" formatted="false">"Core setup"</string>
     <string name="ui_could_not_export_backup_98b2798a" formatted="false">"Could not export backup"</string>
     <string name="ui_could_not_open_backup_7902f459" formatted="false">"Could not open backup"</string>
+    <string name="ui_could_not_open_source_1b744217" formatted="false">"Could not open source"</string>
+    <string name="ui_could_not_open_your_vault_d30e83f6" formatted="false">"Could not open your Vault"</string>
+    <string name="ui_could_not_prepare_screen_selection_8f4a488b" formatted="false">"Could not prepare screen selection"</string>
     <string name="ui_could_not_restore_backup_eaf9f738" formatted="false">"Could not restore backup"</string>
     <string name="ui_could_not_save_relay_settings_d1d62e26" formatted="false">"Could not save relay settings"</string>
     <string name="ui_could_not_start_chatgpt_sign_in_41b65366" formatted="false">"Could not start ChatGPT sign-in"</string>
+    <string name="ui_could_not_start_microphone_bca3d1d5" formatted="false">"Could not start microphone"</string>
     <string name="ui_create_edit_and_run_saved_action_engine_chain_346aeb38" formatted="false">"Create, edit and run saved Action Engine chains"</string>
+    <string name="ui_current_screen_87e519a5" formatted="false">"Current screen"</string>
+    <string name="ui_current_screen_already_attached_3d395eda" formatted="false">"Current screen already attached"</string>
+    <string name="ui_current_screen_attached_87a4be41" formatted="false">"Current screen attached"</string>
+    <string name="ui_current_screen_available_b4cf6d1e" formatted="false">"Current screen available"</string>
+    <string name="ui_current_screen_detached_c6a9ed00" formatted="false">"Current screen detached"</string>
+    <string name="ui_current_screen_preview_select_an_area_e1ff2d82" formatted="false">"Current screen preview. Select an area."</string>
+    <string name="ui_current_screen_unavailable_dae17a6b" formatted="false">"Current screen unavailable"</string>
     <string name="ui_current_version_and_verified_official_orbit_r_0592f5c6" formatted="false">"Current version and verified official Orbit releases"</string>
+    <string name="ui_custom_app_profile_d7aaf65a" formatted="false">"Custom app profile"</string>
     <string name="ui_customize_how_orbit_appears_over_other_apps_b45a0930" formatted="false">"Customize how Orbit appears over other apps."</string>
     <string name="ui_customize_your_personal_orbit_shortcuts_f552b43c" formatted="false">"Customize your personal Orbit shortcuts"</string>
     <string name="ui_deck_arranges_shortcuts_to_things_orbit_alrea_8d77519d" formatted="false">"Deck arranges shortcuts to things Orbit already does. Suggestions are worked out on "</string>
@@ -148,21 +219,32 @@
     <string name="ui_delete_all_97811183" formatted="false">"Delete all"</string>
     <string name="ui_delete_all_vault_data_58d0eee9" formatted="false">"Delete all Vault data?"</string>
     <string name="ui_delete_chat_80aaa1b5" formatted="false">"Delete chat?"</string>
+    <string name="ui_delete_chat_93291d9c" formatted="false">"Delete chat"</string>
     <string name="ui_delete_e2d0a549" formatted="false">"Delete"</string>
     <string name="ui_delete_vault_data_5ae7870a" formatted="false">"Delete Vault data"</string>
     <string name="ui_deleted_7960c0f2" formatted="false">"Deleted "</string>
     <string name="ui_design_orbit_s_colors_with_live_previews_pres_400addd3" formatted="false">"Design Orbit\'s colors with live previews, presets and your own saved themes."</string>
     <string name="ui_design_orbit_s_theme_then_set_typography_and__39c0ef22" formatted="false">"Design Orbit\'s theme, then set typography and tactile feedback."</string>
+    <string name="ui_destination_293d404a" formatted="false">"Destination"</string>
+    <string name="ui_detach_current_screen_787e5e46" formatted="false">"Detach current screen"</string>
     <string name="ui_developer_tools_96f0c06b" formatted="false">"Developer tools"</string>
+    <string name="ui_device_action_50816511" formatted="false">"Device action"</string>
     <string name="ui_device_and_orbit_uses_a_saved_item_only_when__f110ed71" formatted="false">"device, and Orbit uses a saved item only when you choose it yourself."</string>
     <string name="ui_device_controls_1c1afb89" formatted="false">"DEVICE CONTROLS"</string>
     <string name="ui_device_this_cannot_be_undone_your_chats_orbit_c225853c" formatted="false">"device. This cannot be undone.\n\nYour chats, Orbit Memory, your providers "</string>
     <string name="ui_diagnostics_and_developer_tools_3cd51c7f" formatted="false">"Diagnostics and developer tools"</string>
     <string name="ui_diagnostics_c34dc2ac" formatted="false">"DIAGNOSTICS"</string>
+    <string name="ui_dismiss_context_notice_f6a42d1a" formatted="false">"Dismiss context notice"</string>
     <string name="ui_do_not_disturb_control_eaafd178" formatted="false">"Do Not Disturb control"</string>
+    <string name="ui_do_not_disturb_off_0a9f7acd" formatted="false">"Do Not Disturb off"</string>
+    <string name="ui_do_not_disturb_on_796ce27f" formatted="false">"Do Not Disturb on"</string>
     <string name="ui_done_11a6767d" formatted="false">"Done"</string>
+    <string name="ui_done_ed251864" formatted="false">"Done."</string>
+    <string name="ui_editing_message_sends_as_a_new_branch_cee30730" formatted="false">"Editing message · sends as a new branch"</string>
+    <string name="ui_editing_previous_message_383e156d" formatted="false">"Editing previous message"</string>
     <string name="ui_empty_chat_4c57b8f0" formatted="false">"Empty chat"</string>
     <string name="ui_enter_an_https_relay_url_first_a096cb2f" formatted="false">"Enter an HTTPS relay URL first."</string>
+    <string name="ui_event_4e1f49a9" formatted="false">"Event"</string>
     <string name="ui_everyday_preferences_5a70e1a5" formatted="false">"Everyday preferences"</string>
     <string name="ui_exit_setup_3f28c148" formatted="false">"Exit setup?"</string>
     <string name="ui_exit_setup_a8b459d5" formatted="false">"Exit setup"</string>
@@ -171,13 +253,24 @@
     <string name="ui_extra_large_cc16912b" formatted="false">"Extra large"</string>
     <string name="ui_fade_settle_e6a24610" formatted="false">"Fade &amp; settle"</string>
     <string name="ui_fahrenheit_f_9c9497df" formatted="false">"Fahrenheit (°F)"</string>
+    <string name="ui_file_50009ce1" formatted="false">"File"</string>
+    <string name="ui_file_attachment_1381b59f" formatted="false">"File attachment"</string>
+    <string name="ui_finalizing_voice_input_cb29fdf6" formatted="false">"Finalizing voice input"</string>
+    <string name="ui_finish_the_current_reply_first_4816d741" formatted="false">"Finish the current reply first"</string>
     <string name="ui_finishing_secure_chatgpt_sign_in_7777d7c7" formatted="false">"Finishing secure ChatGPT sign-in…"</string>
+    <string name="ui_finishing_voice_2c96f4ae" formatted="false">"Finishing voice…"</string>
     <string name="ui_flashlight_control_2b1b2637" formatted="false">"Flashlight control"</string>
+    <string name="ui_flashlight_off_667a783b" formatted="false">"Flashlight off"</string>
+    <string name="ui_flashlight_on_efbf6bed" formatted="false">"Flashlight on"</string>
     <string name="ui_for_advanced_users_running_their_own_https_re_6d06e9df" formatted="false">"For advanced users running their own HTTPS relay. Orbit talks to your server; your API key stays on it and never enters Orbit."</string>
+    <string name="ui_for_each_request_tap_to_change_a1d54c8b" formatted="false">"for each request. Tap to change."</string>
+    <string name="ui_full_continue_in_new_chat_e60ebb45" formatted="false">"% full · Continue in new chat"</string>
     <string name="ui_gallery_316a1d87" formatted="false">"GALLERY"</string>
+    <string name="ui_gallery_352cfc74" formatted="false">"Gallery"</string>
     <string name="ui_gallery_app_eabbd23f" formatted="false">"Gallery app"</string>
     <string name="ui_gestures_eb8ed269" formatted="false">"GESTURES"</string>
     <string name="ui_get_started_61e8d44a" formatted="false">"Get started"</string>
+    <string name="ui_grant_access_8693768c" formatted="false">"Grant access"</string>
     <string name="ui_grant_microphone_permission_65660d48" formatted="false">"Grant microphone permission"</string>
     <string name="ui_hands_free_voice_follow_ups_df5a6a10" formatted="false">"Hands-free voice follow-ups"</string>
     <string name="ui_haptic_feedback_153d8baf" formatted="false">"Haptic feedback"</string>
@@ -189,22 +282,43 @@
     <string name="ui_how_orbit_s_words_are_set_these_are_independe_b8b6bc90" formatted="false">"How Orbit\'s words are set. These are independent of the preset above."</string>
     <string name="ui_https_relay_url_c7f52310" formatted="false">"HTTPS relay URL"</string>
     <string name="ui_if_device_location_is_off_orbit_uses_the_save_b2985802" formatted="false">"If device location is off, Orbit uses the saved city. If neither is available, it will ask for a city and remember the last city you use for weather."</string>
+    <string name="ui_image_04139807" formatted="false">"Image "</string>
     <string name="ui_in_aab38d73" formatted="false">", in "</string>
+    <string name="ui_in_document_viewer_6e8404a5" formatted="false">" in document viewer"</string>
+    <string name="ui_in_reply_to_2d795379" formatted="false">"In reply to "</string>
     <string name="ui_input_awareness_dd9d9904" formatted="false">"Input &amp; awareness"</string>
     <string name="ui_inspect_local_diagnostics_and_developer_troub_3e8e05d2" formatted="false">"Inspect local diagnostics and developer troubleshooting information."</string>
     <string name="ui_intelligence_4a3fa3f8" formatted="false">"INTELLIGENCE"</string>
+    <string name="ui_interrupt_and_speak_ef2ad74a" formatted="false">"Interrupt and speak"</string>
+    <string name="ui_invoke_orbit_with_the_side_button_on_the_scre_c3999434" formatted="false">"Invoke Orbit with the side button on the screen you want first"</string>
     <string name="ui_is_ready_to_view_orbit_will_not_download_it_w_bc15dd01" formatted="false">" is ready to view. Orbit will not download it without your approval."</string>
     <string name="ui_it_has_been_copied_complete_authorization_in__e08721d9" formatted="false">"\n\nIt has been copied. Complete authorization in your browser, then return to Orbit."</string>
     <string name="ui_it_has_been_copied_to_your_clipboard_open_ope_f9fc44f2" formatted="false">"\n\nIt has been copied to your clipboard. Open OpenAI\'s sign-in page, sign into your normal ChatGPT account, and enter this code. Orbit will finish connecting automatically."</string>
+    <string name="ui_items_0f12f4b3" formatted="false">" items"</string>
+    <string name="ui_items_this_one_was_sent_with_this_message_onl_a24cc0d1" formatted="false">" items. This one was sent with this message only."</string>
     <string name="ui_its_own_choice_so_changing_this_never_changes_6058acb0" formatted="false">"its own choice, so changing this never changes an existing chat. "</string>
+    <string name="ui_jump_to_latest_86752458" formatted="false">"Jump to latest"</string>
     <string name="ui_keep_control_7971a6c2" formatted="false">"Keep control"</string>
+    <string name="ui_keep_in_this_chat_aef3be27" formatted="false">"Keep in this chat"</string>
     <string name="ui_keep_setting_up_f0000e34" formatted="false">"Keep setting up"</string>
+    <string name="ui_kept_33adfd9e" formatted="false">"Kept: "</string>
+    <string name="ui_kept_36c67038" formatted="false">" kept"</string>
+    <string name="ui_kept_in_this_chat_b168ee7e" formatted="false">" kept in this chat"</string>
+    <string name="ui_kept_in_this_chat_opens_the_list_fa322905" formatted="false">" kept in this chat. Opens the list."</string>
     <string name="ui_keyboard_aware_assistant_invocation_701c19ae" formatted="false">"Keyboard-aware assistant invocation"</string>
     <string name="ui_large_ab80540d" formatted="false">"Large"</string>
     <string name="ui_later_73b6e48a" formatted="false">"Later"</string>
     <string name="ui_lelo_mode_hidden_again_94c91442" formatted="false">"Lelo mode hidden again"</string>
     <string name="ui_lelo_mode_unlocked_6baa72d6" formatted="false">"Lelo mode unlocked ✨"</string>
+    <string name="ui_let_orbit_do_this_765280bf" formatted="false">"Let Orbit do this?"</string>
+    <string name="ui_level_for_each_request_tap_to_change_f15996c5" formatted="false">"level for each request. Tap to change."</string>
     <string name="ui_light_dbcd5e7b" formatted="false">"Light"</string>
+    <string name="ui_listening_bbb4106e" formatted="false">"Listening…"</string>
+    <string name="ui_listening_dd6e525e" formatted="false">" · Listening…"</string>
+    <string name="ui_listening_tap_mic_when_done_61bfe400" formatted="false">"Listening · tap mic when done"</string>
+    <string name="ui_loading_attachment_416be39a" formatted="false">"Loading attachment..."</string>
+    <string name="ui_loading_attachments_4fb51e5b" formatted="false">"Loading attachments..."</string>
+    <string name="ui_loading_clipboard_attachment_b24fd9f5" formatted="false">"Loading clipboard attachment"</string>
     <string name="ui_local_context_cc1b01b6" formatted="false">"Local context"</string>
     <string name="ui_local_weather_and_location_aware_features_cd8c9a09" formatted="false">"Local weather and location-aware features."</string>
     <string name="ui_location_automation_3a5979c6" formatted="false">"Location automation"</string>
@@ -225,44 +339,79 @@
     <string name="ui_manage_orbit_reminders_400661d7" formatted="false">"Manage Orbit reminders"</string>
     <string name="ui_manage_saved_places_07141853" formatted="false">"Manage saved places"</string>
     <string name="ui_manage_weather_preferences_and_the_local_info_7087536c" formatted="false">"Manage weather preferences and the local information Orbit uses to personalize and organize your assistant experience."</string>
+    <string name="ui_manual_only_be1016ce" formatted="false">"Manual only"</string>
     <string name="ui_many_ai_models_through_one_openrouter_account_d936f413" formatted="false">"Many AI models through one OpenRouter account. Usage is billed to your OpenRouter credits, separately from ChatGPT. Sign in any time from AI Providers."</string>
+    <string name="ui_media_volume_c20a2d77" formatted="false">"Media volume · "</string>
+    <string name="ui_memories_89ad77ff" formatted="false">" memories"</string>
+    <string name="ui_memories_provided_to_this_response_a3e2f02a" formatted="false">"Memories provided to this response"</string>
+    <string name="ui_memory_7f2956ec" formatted="false">" memory"</string>
+    <string name="ui_message_894fb8fb" formatted="false">"Message · "</string>
+    <string name="ui_message_version_47704497" formatted="false">"Message version"</string>
     <string name="ui_microphone_186352a8" formatted="false">"Microphone"</string>
+    <string name="ui_microphone_permission_is_needed_for_voice_bet_b1d1ac71" formatted="false">"Microphone permission is needed for Voice Beta"</string>
+    <string name="ui_microphone_permission_is_not_granted_open_the_71d6f146" formatted="false">"Microphone permission is not granted. Open the Orbit app once and tap “Grant microphone permission”."</string>
+    <string name="ui_minimized_3d4319f2" formatted="false">" minimized, "</string>
+    <string name="ui_minimized_tap_to_expand_1197249e" formatted="false">" minimized. Tap to expand."</string>
     <string name="ui_models_access_e33ea5fc" formatted="false">"Models &amp; access"</string>
     <string name="ui_modern_is_orbit_s_full_floating_assistant_flo_69afb8f4" formatted="false">"Modern is Orbit\'s full floating assistant. Float is compact and grows only when a conversation needs the room; on wider screens it rests in the bottom-right corner, and tapping its handle folds it into a small Peek that keeps your chat going. Classic is the original overlay. Every style works the same way, and changes apply the next time you open the assistant."</string>
     <string name="ui_monospace_64c223c2" formatted="false">"Monospace"</string>
+    <string name="ui_more_options_bc79cdff" formatted="false">"More options"</string>
     <string name="ui_more_provider_options_3fa79cbc" formatted="false">"More provider options"</string>
     <string name="ui_more_provider_options_including_claude_and_ge_7343e53f" formatted="false">"More provider options, including Claude and Gemini, are planned for future Orbit versions."</string>
     <string name="ui_naples_florida_cc9fa8a2" formatted="false">"Naples, Florida"</string>
+    <string name="ui_navigate_6ab4ceec" formatted="false">"Navigate · "</string>
     <string name="ui_needs_access_67b0e137" formatted="false">"Needs access"</string>
     <string name="ui_needs_attention_06e1b32c" formatted="false">"  •  Needs attention"</string>
+    <string name="ui_needs_attention_c1ebc781" formatted="false">"Needs attention"</string>
     <string name="ui_never_sends_your_chat_prompt_or_vault_anywher_7aa422d6" formatted="false">"never sends your chat, prompt or Vault anywhere to do it."</string>
     <string name="ui_never_shows_private_chain_of_thought_4b108433" formatted="false">"Never shows private chain-of-thought."</string>
     <string name="ui_new_chat_10ebc197" formatted="false">"+  New chat"</string>
     <string name="ui_new_chat_db18382a" formatted="false">"New chat"</string>
+    <string name="ui_new_chat_started_with_a_summary_of_2653c480" formatted="false">"New chat started with a summary of “"</string>
+    <string name="ui_new_chat_started_with_a_summary_of_the_last_o_66955a88" formatted="false">"New chat started with a summary of the last one"</string>
     <string name="ui_new_reminders_are_saved_and_alerted_by_orbit_c73f8a7d" formatted="false">"New reminders are saved and alerted by Orbit."</string>
+    <string name="ui_next_cd447acb" formatted="false">"Next "</string>
     <string name="ui_no_chats_yet_269208e4" formatted="false">"No chats yet"</string>
+    <string name="ui_no_file_picker_is_available_87c95c0d" formatted="false">"No file picker is available"</string>
+    <string name="ui_no_gallery_picker_is_available_3f8958c1" formatted="false">"No gallery picker is available"</string>
     <string name="ui_no_matching_chats_27e7713c" formatted="false">"No matching chats"</string>
+    <string name="ui_no_saved_chats_yet_6038aa6e" formatted="false">"No saved chats yet."</string>
     <string name="ui_no_settings_found_3e4d15d4" formatted="false">"No settings found"</string>
     <string name="ui_none_dc937b59" formatted="false">"None"</string>
+    <string name="ui_not_now_a0e63d7c" formatted="false">"Not now"</string>
     <string name="ui_not_signed_in_with_chatgpt_c5d81e8b" formatted="false">"○ Not signed in with ChatGPT"</string>
     <string name="ui_notification_intelligence_b32b4ba2" formatted="false">"Notification intelligence"</string>
     <string name="ui_notification_permission_not_granted_4392f380" formatted="false">"Notification permission not granted"</string>
     <string name="ui_notifications_78801183" formatted="false">"Notifications"</string>
     <string name="ui_notify_me_when_a_background_response_finishes_0e484f9e" formatted="false">"Notify me when a background response finishes"</string>
+    <string name="ui_now_using_90e657d6" formatted="false">"Now using "</string>
     <string name="ui_of_7_42c4647a" formatted="false">" of 7"</string>
     <string name="ui_offers_undo_with_this_off_chats_scroll_and_op_f429c375" formatted="false">"offers Undo. With this off, chats scroll and open as normal and both "</string>
     <string name="ui_ok_565339bc" formatted="false">"OK"</string>
     <string name="ui_on_be4a8ec8" formatted="false">" · On"</string>
+    <string name="ui_only_documents_text_and_vault_items_can_be_ke_653ff114" formatted="false">"Only documents, text and Vault items can be kept in this chat"</string>
     <string name="ui_only_reopen_the_microphone_when_orbit_is_wait_66dd8536" formatted="false">"Only reopen the microphone when Orbit is waiting for your answer."</string>
+    <string name="ui_open_a023a869" formatted="false">"Open · "</string>
     <string name="ui_open_assistant_settings_44fda956" formatted="false">"Open assistant settings"</string>
+    <string name="ui_open_b8039d1d" formatted="false">"Open "</string>
     <string name="ui_open_chatgpt_sign_in_d7f07761" formatted="false">"Open ChatGPT sign-in"</string>
+    <string name="ui_open_link_aab63f85" formatted="false">"Open link"</string>
     <string name="ui_open_orbit_deck_cb75535e" formatted="false">"Open Orbit Deck"</string>
     <string name="ui_open_orbit_diagnostics_029a161f" formatted="false">"Open Orbit diagnostics"</string>
     <string name="ui_open_orbit_instantly_from_android_quick_setti_ceaa1bcf" formatted="false">"Open Orbit instantly from Android Quick Settings."</string>
     <string name="ui_open_orbit_instantly_or_assign_one_saved_rout_df301a52" formatted="false">"Open Orbit instantly, or assign one saved Routine to a Quick Settings tile."</string>
+    <string name="ui_open_orbit_over_another_screen_first_b37ae638" formatted="false">"Open Orbit over another screen first"</string>
+    <string name="ui_open_orbit_over_the_screen_you_want_to_select_34fe1f6c" formatted="false">"Open Orbit over the screen you want to select first."</string>
     <string name="ui_open_orbit_s_dedicated_managers_for_saved_pla_31cd17e9" formatted="false">"Open Orbit\'s dedicated managers for saved places, remembered information, your Vault, per-app behavior and notification context."</string>
     <string name="ui_open_orbit_vault_14687385" formatted="false">"Open Orbit Vault"</string>
     <string name="ui_open_provider_settings_bbcae464" formatted="false">"Open provider settings"</string>
+    <string name="ui_open_source_5283af24" formatted="false">"Open source · "</string>
+    <string name="ui_open_source_in_browser_5e5a8beb" formatted="false">"Open source in browser"</string>
+    <string name="ui_opened_saved_chat_d844bd20" formatted="false">"Opened saved chat"</string>
+    <string name="ui_opening_c926c2c5" formatted="false">"Opening…"</string>
+    <string name="ui_opening_screen_selection_513a0263" formatted="false">"Opening screen selection..."</string>
+    <string name="ui_opening_screen_selection_b5aabc96" formatted="false">"Opening screen selection"</string>
+    <string name="ui_opens_full_screen_a6674f1b" formatted="false">", opens full screen"</string>
     <string name="ui_opens_orbit_s_color_designer_4e1be8e1" formatted="false">". Opens Orbit\'s color designer."</string>
     <string name="ui_optional_59be7133" formatted="false">"Optional"</string>
     <string name="ui_orbit_also_supports_home_screen_widgets_add_t_e478c9a8" formatted="false">"Orbit also supports home-screen widgets. Add them later from your launcher or Orbit Settings."</string>
@@ -274,10 +423,16 @@
     <string name="ui_orbit_can_answer_current_weather_and_forecast_db729daa" formatted="false">"Orbit can answer current weather and forecasts directly in chat using Open-Meteo. You can set a default city or allow approximate device location. Weather questions do not need to open a browser."</string>
     <string name="ui_orbit_chatgpt_code_30d0c7fe" formatted="false">"Orbit ChatGPT code"</string>
     <string name="ui_orbit_conversation_history_cleared_af9bc89c" formatted="false">"Orbit conversation history cleared"</string>
+    <string name="ui_orbit_could_not_attach_that_saved_item_963d70fb" formatted="false">"Orbit could not attach that saved item"</string>
+    <string name="ui_orbit_could_not_attach_those_saved_items_ef8e2c50" formatted="false">"Orbit could not attach those saved items"</string>
     <string name="ui_orbit_could_not_complete_this_backup_operatio_d02d6912" formatted="false">"Orbit could not complete this backup operation."</string>
     <string name="ui_orbit_could_not_complete_this_operation_9507ae61" formatted="false">"Orbit could not complete this operation."</string>
+    <string name="ui_orbit_could_not_create_a_camera_image_f05b6834" formatted="false">"Orbit could not create a camera image"</string>
     <string name="ui_orbit_could_not_finish_5bb52db0" formatted="false">"Orbit could not finish"</string>
+    <string name="ui_orbit_could_not_finish_this_response_e795f0ce" formatted="false">"Orbit could not finish this response."</string>
+    <string name="ui_orbit_could_not_load_this_screen_selection_a69f4a31" formatted="false">"Orbit could not load this screen selection"</string>
     <string name="ui_orbit_could_not_open_a_web_browser_on_this_ph_3ed952a5" formatted="false">"Orbit could not open a web browser on this phone."</string>
+    <string name="ui_orbit_could_not_prepare_this_screen_image_fb47bd8e" formatted="false">"Orbit could not prepare this screen image"</string>
     <string name="ui_orbit_could_not_securely_save_the_optional_re_3b8093b1" formatted="false">"Orbit could not securely save the optional relay access token."</string>
     <string name="ui_orbit_deck_9ba2c945" formatted="false">"Orbit Deck"</string>
     <string name="ui_orbit_deck_b9101ed0" formatted="false">"ORBIT DECK"</string>
@@ -290,6 +445,7 @@
     <string name="ui_orbit_is_ready_539e6f58" formatted="false">"Orbit is ready"</string>
     <string name="ui_orbit_is_ready_to_configure_at_your_pace_93e58d65" formatted="false">"Orbit is ready to configure at your pace"</string>
     <string name="ui_orbit_is_selected_as_your_assistant_your_devi_47ec47a0" formatted="false">"Orbit is selected as your assistant. Your device\'s supported assistant gesture can now invoke it."</string>
+    <string name="ui_orbit_is_thinking_9f7e69e2" formatted="false">"Orbit is thinking"</string>
     <string name="ui_orbit_is_thinking_d4418dd5" formatted="false">"Orbit is thinking..."</string>
     <string name="ui_orbit_is_using_this_account_s_chatgpt_codex_a_49e30102" formatted="false">"Orbit is using this account\'s ChatGPT/Codex allowance. No API key is needed."</string>
     <string name="ui_orbit_is_your_default_assistant_7bea32a3" formatted="false">"✓ Orbit is your default assistant"</string>
@@ -301,8 +457,10 @@
     <string name="ui_orbit_preset_a2d9179f" formatted="false">", Orbit preset"</string>
     <string name="ui_orbit_reminders_are_scheduled_locally_on_this_5837cdb8" formatted="false">"Orbit reminders are scheduled locally on this device and appear as notifications at the time you choose."</string>
     <string name="ui_orbit_reminders_d6d1cb04" formatted="false">"Orbit Reminders"</string>
+    <string name="ui_orbit_reply_c9eb8063" formatted="false">"Orbit reply"</string>
     <string name="ui_orbit_s_fullest_experience_stronger_answers_h_a7ced39f" formatted="false">"Orbit\'s fullest experience: stronger answers, hosted web search, screen and image context, and device-action planning."</string>
     <string name="ui_orbit_s_own_themes_pick_the_one_you_like_the__280953e3" formatted="false">"Orbit\'s own themes. Pick the one you like the look of."</string>
+    <string name="ui_orbit_sends_up_to_f0829664" formatted="false">"Orbit sends up to "</string>
     <string name="ui_orbit_set_as_assistant_bdc4052f" formatted="false">"✓ Orbit set as assistant"</string>
     <string name="ui_orbit_settings_fe42a133" formatted="false">"Orbit settings."</string>
     <string name="ui_orbit_signs_in_through_openai_s_public_codex__d630681a" formatted="false">"Orbit signs in through OpenAI\'s public Codex OAuth sign-in (browser, or a one-time code). Because OpenAI does not document the Codex backend as a general third-party mobile API, this integration is experimental and the API relay remains available as an explicit fallback."</string>
@@ -311,10 +469,12 @@
     <string name="ui_orbit_updated_07ab468e" formatted="false">"Orbit updated"</string>
     <string name="ui_orbit_vault_96a29fe6" formatted="false">"ORBIT VAULT"</string>
     <string name="ui_orbit_widgets_e89c2cc6" formatted="false">"Orbit widgets"</string>
+    <string name="ui_original_images_774edc8f" formatted="false">" original images"</string>
     <string name="ui_overlay_dffe7eb8" formatted="false">"OVERLAY"</string>
     <string name="ui_overlay_style_5b130bb0" formatted="false">"Overlay style"</string>
     <string name="ui_page_follows_your_finger_and_the_screen_you_c_6faa710e" formatted="false">"page follows your finger and the screen you came from appears behind it, "</string>
     <string name="ui_page_transitions_635bbc99" formatted="false">"Page transitions"</string>
+    <string name="ui_percent_full_continue_in_a_new_chat_36340695" formatted="false">" percent full. Continue in a new chat."</string>
     <string name="ui_permissions_capabilities_9853ebdc" formatted="false">"Permissions &amp; capabilities"</string>
     <string name="ui_personalization_context_f525de95" formatted="false">"PERSONALIZATION &amp; CONTEXT"</string>
     <string name="ui_personalization_data_853fcdf3" formatted="false">"Personalization &amp; data"</string>
@@ -324,8 +484,11 @@
     <string name="ui_pinned_feb05050" formatted="false">"PINNED"</string>
     <string name="ui_power_assistant_80cc1c3b" formatted="false">" • Power Assistant"</string>
     <string name="ui_precise_timing_ffd890c4" formatted="false">"Precise timing"</string>
+    <string name="ui_preferred_gallery_unavailable_using_system_pi_7216317f" formatted="false">"Preferred gallery unavailable; using System picker"</string>
+    <string name="ui_previous_2ca88384" formatted="false">"Previous "</string>
     <string name="ui_private_api_relay_d6ca6fb6" formatted="false">"Private API relay"</string>
     <string name="ui_private_relay_saved_and_selected_64aea371" formatted="false">"Private relay saved and selected"</string>
+    <string name="ui_provider_f050385b" formatted="false">"Provider · "</string>
     <string name="ui_provider_model_and_strength_for_new_chats_and_1e37ac22" formatted="false">"Provider, model and strength for new chats and the assistant. Each chat remembers "</string>
     <string name="ui_puts_the_deck_control_in_the_chats_header_dec_b409e04f" formatted="false">"Puts the Deck control in the Chats header. Deck stays reachable from here either way."</string>
     <string name="ui_queued_c0c05da9" formatted="false">"Queued..."</string>
@@ -337,27 +500,49 @@
     <string name="ui_quick_settings_routine_none_dee991b8" formatted="false">"Quick Settings Routine: None"</string>
     <string name="ui_quick_settings_tile_added_01e46d5c" formatted="false">"✓ Quick Settings tile added"</string>
     <string name="ui_quick_settings_tiles_4b5739cc" formatted="false">"Quick Settings tiles"</string>
+    <string name="ui_ready_102d203b" formatted="false">" · Ready"</string>
     <string name="ui_ready_5fa7aac5" formatted="false">"Ready"</string>
+    <string name="ui_ready_9fa4ddce" formatted="false">"Ready · "</string>
     <string name="ui_recent_chats_2ccfecbc" formatted="false">"Recent chats"</string>
     <string name="ui_recent_chats_88464bac" formatted="false">"RECENT CHATS"</string>
     <string name="ui_recent_d5d42c01" formatted="false">"RECENT"</string>
     <string name="ui_recommended_access_a5d8e826" formatted="false">"RECOMMENDED ACCESS"</string>
     <string name="ui_recommended_d70604e8" formatted="false">"Recommended"</string>
+    <string name="ui_regenerate_response_dd7c31a5" formatted="false">"Regenerate response"</string>
+    <string name="ui_regenerating_with_21e30c11" formatted="false">"Regenerating with "</string>
+    <string name="ui_regenerating_without_the_original_screen_imag_a2cb1701" formatted="false">"Regenerating without the original screen image"</string>
     <string name="ui_relay_access_token_optional_dffc0006" formatted="false">"Relay access token (optional)"</string>
     <string name="ui_relay_saved_29654bda" formatted="false">"Relay saved"</string>
     <string name="ui_relay_settings_saved_securely_abd9264e" formatted="false">"Relay settings saved securely"</string>
     <string name="ui_relay_url_required_68955a3c" formatted="false">"Relay URL required"</string>
+    <string name="ui_remember_this_93f0636e" formatted="false">"Remember this?"</string>
     <string name="ui_remind_me_in_20_minutes_to_check_the_oven_3a9d7d7a" formatted="false">"“Remind me in 20 minutes to check the oven”"</string>
+    <string name="ui_reminder_31757bbf" formatted="false">"Reminder"</string>
+    <string name="ui_reminder_3d70003f" formatted="false">"Reminder · "</string>
     <string name="ui_reminders_63f24c8f" formatted="false">"REMINDERS"</string>
     <string name="ui_reminders_routine_alerts_updates_and_backgrou_bbd63bc8" formatted="false">"Reminders, Routine alerts, updates, and background results."</string>
+    <string name="ui_remove_quoted_message_955e5839" formatted="false">"Remove quoted message"</string>
     <string name="ui_rename_3064d79a" formatted="false">"Rename"</string>
+    <string name="ui_rename_chat_26076241" formatted="false">"Rename chat"</string>
     <string name="ui_reopen_the_microphone_after_orbit_speaks_ac40d2a0" formatted="false">"Reopen the microphone after Orbit speaks."</string>
     <string name="ui_replace_send_with_stop_while_orbit_is_generat_b487e592" formatted="false">"Replace Send with Stop while Orbit is generating a reply."</string>
+    <string name="ui_replying_to_3d393bf1" formatted="false">"Replying to "</string>
     <string name="ui_resolve_saved_contact_names_for_voice_and_dev_6c039701" formatted="false">"Resolve saved contact names for voice and device commands."</string>
+    <string name="ui_response_details_062c9292" formatted="false">"Response details"</string>
+    <string name="ui_response_failed_51769723" formatted="false">"Response failed"</string>
+    <string name="ui_response_stopped_34918255" formatted="false">"Response stopped"</string>
+    <string name="ui_response_time_is_measured_on_this_phone_from__617481cd" formatted="false">"Response time is measured on this phone, from sending to the finished answer."</string>
     <string name="ui_restore_a76e13b9" formatted="false">"Restore"</string>
     <string name="ui_restore_orbit_backup_add4c9b6" formatted="false">"Restore Orbit backup?"</string>
     <string name="ui_restore_orbit_backup_f0a34e16" formatted="false">"Restore Orbit backup"</string>
     <string name="ui_restoring_orbit_backup_0f159073" formatted="false">"Restoring Orbit backup…"</string>
+    <string name="ui_retry_942087cc" formatted="false">"Retry"</string>
+    <string name="ui_retry_failed_earlier_answer_kept_79775538" formatted="false">"Retry failed · earlier answer kept"</string>
+    <string name="ui_retry_failed_the_earlier_answer_is_still_here_ac839393" formatted="false">"Retry failed. The earlier answer is still here."</string>
+    <string name="ui_retry_with_143a8e70" formatted="false">"Retry with "</string>
+    <string name="ui_retry_with_d009aa79" formatted="false">"Retry with"</string>
+    <string name="ui_retrying_with_343d3123" formatted="false">"Retrying with "</string>
+    <string name="ui_retrying_without_the_original_screen_image_2b4fc248" formatted="false">"Retrying without the original screen image"</string>
     <string name="ui_routine_created_db380da8" formatted="false">" Routine created"</string>
     <string name="ui_routine_tile_6ce3113a" formatted="false">"Routine tile"</string>
     <string name="ui_routines_61b7bb44" formatted="false">"Routines"</string>
@@ -366,22 +551,53 @@
     <string name="ui_run_routine_489eaedb" formatted="false">"Run Routine"</string>
     <string name="ui_run_setup_again_bb6f72bc" formatted="false">"Run setup again"</string>
     <string name="ui_runs_privately_on_this_phone_and_keeps_workin_98f90f9a" formatted="false">"Runs privately on this phone and keeps working offline once it is set up. It uses a small model, so answers are simpler than cloud AI."</string>
+    <string name="ui_samsung_reminder_083ce02a" formatted="false">"Samsung Reminder · "</string>
+    <string name="ui_save_1509f561" formatted="false">"Save"</string>
     <string name="ui_save_and_use_private_relay_cfc7865b" formatted="false">"Save and use private relay"</string>
     <string name="ui_save_recent_chats_on_this_device_92b8c3c6" formatted="false">"Save recent chats on this device"</string>
     <string name="ui_save_relay_settings_b18e848c" formatted="false">"Save relay settings"</string>
     <string name="ui_save_screen_attachment_thumbnails_in_chat_his_c2f84eef" formatted="false">"Save screen attachment thumbnails in chat history"</string>
+    <string name="ui_save_text_links_images_and_useful_orbit_answe_0dc96c0d" formatted="false">"Save text, links, images and useful Orbit answers for later. Everything stays on this device, and Orbit uses a saved item only when you choose it yourself."</string>
     <string name="ui_save_text_links_images_and_useful_orbit_answe_4b8928bd" formatted="false">"Save text, links, images and useful Orbit answers for later. Everything stays on this "</string>
     <string name="ui_save_weather_location_0966b123" formatted="false">"Save weather location"</string>
     <string name="ui_saved_item_90fa7289" formatted="false">" saved item"</string>
     <string name="ui_saved_items_5fef97f8" formatted="false">" saved items"</string>
+    <string name="ui_saved_to_memory_a3e69a82" formatted="false">"Saved to Memory"</string>
+    <string name="ui_saved_to_orbit_memory_672c6c00" formatted="false">"Saved to Orbit Memory"</string>
     <string name="ui_say_create_a_samsung_reminder_to_use_samsung__0a9a1cd4" formatted="false">" Say “create a Samsung Reminder” to use Samsung Reminder once."</string>
+    <string name="ui_screen_6e56137e" formatted="false">"Screen"</string>
+    <string name="ui_screen_attached_b5c6a9f2" formatted="false">"Screen attached"</string>
     <string name="ui_screen_attached_f32d803b" formatted="false">"  •  Screen attached"</string>
     <string name="ui_screen_buttons_e922b121" formatted="false">"Screen buttons"</string>
+    <string name="ui_screen_disabled_for_1597f201" formatted="false">"Screen disabled for "</string>
+    <string name="ui_screen_disabled_for_this_app_0e4d8a2a" formatted="false">"Screen disabled for this app"</string>
+    <string name="ui_screen_eae0e9c3" formatted="false">"Screen · "</string>
+    <string name="ui_screen_selection_could_not_be_opened_35e921c4" formatted="false">"Screen selection could not be opened"</string>
+    <string name="ui_screen_selection_couldn_t_be_applied_daf129e1" formatted="false">"Screen selection couldn\'t be applied"</string>
+    <string name="ui_screen_selection_is_blocked_for_this_app_2f02a2a8" formatted="false">"Screen selection is blocked for this app."</string>
+    <string name="ui_screen_selection_needs_available_screenshot_c_4349675c" formatted="false">"Screen selection needs available screenshot context"</string>
+    <string name="ui_screen_selection_needs_screenshot_context_39d5d964" formatted="false">"Screen selection needs screenshot context"</string>
+    <string name="ui_screen_selection_needs_screenshot_context_ena_257fdf33" formatted="false">"Screen selection needs screenshot context. Enable Screenshots in Assistant setup."</string>
+    <string name="ui_screen_text_b73327b8" formatted="false">"screen text"</string>
+    <string name="ui_screen_use_blocked_by_this_app_profile_6e66d590" formatted="false">"Screen use blocked by this app profile"</string>
+    <string name="ui_screen_use_is_disabled_for_this_app_3567d3f7" formatted="false">"Screen use is disabled for this app"</string>
+    <string name="ui_screen_use_is_disabled_for_this_app_9e3b7ca1" formatted="false">"Screen use is disabled for this app."</string>
     <string name="ui_search_for_a_control_or_choose_a_section_orbi_04807c36" formatted="false">"Search for a control, or choose a section. Orbit keeps the everyday controls easy to find while deeper options stay out of the way."</string>
     <string name="ui_search_orbit_chats_5a08389f" formatted="false">"Search Orbit chats"</string>
     <string name="ui_search_settings_255b076d" formatted="false">"Search settings"</string>
     <string name="ui_see_all_templates_b852c331" formatted="false">"See all templates"</string>
+    <string name="ui_select_area_50b0e0f1" formatted="false">"Select area"</string>
+    <string name="ui_select_or_mark_area_99bb3322" formatted="false">"Select or mark area"</string>
+    <string name="ui_select_or_mark_part_of_the_current_screen_d0679c57" formatted="false">"Select or mark part of the current screen"</string>
     <string name="ui_selected_bd44f3ef" formatted="false">", selected"</string>
+    <string name="ui_selection_attached_2a488dbb" formatted="false">"Selection attached"</string>
+    <string name="ui_selection_ca406707" formatted="false">"Selection"</string>
+    <string name="ui_send_f6f4688f" formatted="false">"Send"</string>
+    <string name="ui_send_message_93a26b1e" formatted="false">"Send message"</string>
+    <string name="ui_send_this_message_with_202df23c" formatted="false">"Send this message with"</string>
+    <string name="ui_send_with_c889ac71" formatted="false">"Send with "</string>
+    <string name="ui_sending_with_e29e65b5" formatted="false">"Sending with "</string>
+    <string name="ui_sensitive_app_screen_available_manually_0da0c730" formatted="false">"Sensitive app · screen available manually"</string>
     <string name="ui_set_orbit_as_your_assistant_and_configure_sid_918c212e" formatted="false">"Set Orbit as your assistant and configure Side button and Quick Settings access."</string>
     <string name="ui_set_up_4da10f1f" formatted="false">"Set up"</string>
     <string name="ui_set_up_only_the_access_you_want_every_action__5fc768b0" formatted="false">"Set up only the access you want. Every action stays on this setup step when you return from Android Settings."</string>
@@ -390,6 +606,8 @@
     <string name="ui_settings_74a883a0" formatted="false">"Settings"</string>
     <string name="ui_setup_7175b033" formatted="false">"SETUP"</string>
     <string name="ui_setup_complete_d0e3858f" formatted="false">"SETUP COMPLETE"</string>
+    <string name="ui_share_29887a5f" formatted="false">"Share"</string>
+    <string name="ui_shared_items_added_cf001020" formatted="false">" shared items added · "</string>
     <string name="ui_shortcuts_46e978d0" formatted="false">"Shortcuts"</string>
     <string name="ui_show_a_useful_picture_inside_an_answer_when_o_2690118f" formatted="false">"Show a useful picture inside an answer when one genuinely helps. Orbit only reads "</string>
     <string name="ui_show_brief_updates_about_what_orbit_is_workin_5b7d2bee" formatted="false">"Show brief updates about what Orbit is working on while it prepares an answer. "</string>
@@ -398,6 +616,7 @@
     <string name="ui_show_relevant_shortcuts_from_recent_orbit_con_2d66fc10" formatted="false">"Show relevant shortcuts from recent Orbit context."</string>
     <string name="ui_show_stop_button_while_replying_56b08e68" formatted="false">"Show Stop button while replying"</string>
     <string name="ui_side_button_and_assistant_gesture_22694cb5" formatted="false">"Side button and assistant gesture"</string>
+    <string name="ui_sign_in_again_51fbe1dc" formatted="false">"Sign in again"</string>
     <string name="ui_sign_in_with_chatgpt_f6de6480" formatted="false">"Sign in with ChatGPT"</string>
     <string name="ui_sign_in_with_your_normal_chatgpt_account_in_y_3622df7d" formatted="false">"Sign in with your normal ChatGPT account in your browser. Orbit uses your "</string>
     <string name="ui_sign_out_48f0d3d3" formatted="false">"Sign out"</string>
@@ -414,53 +633,88 @@
     <string name="ui_smart_vault_4750978a" formatted="false">"Smart Vault"</string>
     <string name="ui_sourced_images_in_answers_3a51b566" formatted="false">"Sourced images in answers"</string>
     <string name="ui_speak_replies_to_voice_requests_149b600e" formatted="false">"Speak replies to voice requests"</string>
+    <string name="ui_speaking_e86dd1c9" formatted="false">"Speaking…"</string>
+    <string name="ui_speaking_tap_mic_to_interrupt_cc97ae3c" formatted="false">"Speaking · tap mic to interrupt"</string>
+    <string name="ui_speech_recognition_unavailable_27121d96" formatted="false">"Speech recognition unavailable"</string>
     <string name="ui_start_a_chat_here_or_summon_orbit_with_the_si_30dcdbc8" formatted="false">"Start a chat here or summon Orbit with the Side button."</string>
     <string name="ui_start_a_new_chat_each_time_orbit_opens_ae9f2427" formatted="false">"Start a new chat each time Orbit opens"</string>
     <string name="ui_start_listening_when_overlay_opens_f2765c60" formatted="false">"Start listening when overlay opens"</string>
     <string name="ui_start_using_orbit_4fd85706" formatted="false">"Start using Orbit"</string>
     <string name="ui_start_with_something_useful_e4bb6568" formatted="false">"Start with something useful"</string>
     <string name="ui_starting_secure_chatgpt_sign_in_98283674" formatted="false">"Starting secure ChatGPT sign-in…"</string>
+    <string name="ui_step_474a987f" formatted="false">"Step "</string>
     <string name="ui_still_thinking_17e220f6" formatted="false">"STILL THINKING"</string>
+    <string name="ui_stop_editing_previous_message_b0b63965" formatted="false">"Stop editing previous message"</string>
+    <string name="ui_stop_keeping_a9fd9ab8" formatted="false">"Stop keeping "</string>
+    <string name="ui_stop_keeping_in_this_chat_60eaf7ae" formatted="false">"Stop keeping in this chat"</string>
+    <string name="ui_stop_listening_94fa9b23" formatted="false">"Stop listening"</string>
+    <string name="ui_strength_064e9e9e" formatted="false">"Strength · "</string>
+    <string name="ui_strength_2d81f085" formatted="false">"Strength: "</string>
     <string name="ui_style_feedback_25c3ba2c" formatted="false">"Style &amp; feedback"</string>
     <string name="ui_suggested_custom_command_61f89281" formatted="false">"Suggested Custom Command: “"</string>
     <string name="ui_swipe_a_chat_left_to_delete_it_or_right_to_pi_49945a5a" formatted="false">"Swipe a chat left to delete it, or right to pin and unpin it. Deleting always "</string>
     <string name="ui_swipe_to_go_back_cb5e33aa" formatted="false">"Swipe to go back"</string>
+    <string name="ui_swipe_up_to_open_this_chat_swipe_down_to_clos_04939638" formatted="false">"Swipe up to open this chat. Swipe down to close Orbit."</string>
     <string name="ui_system_default_b0459211" formatted="false">"System default"</string>
+    <string name="ui_tap_to_change_d99928ba" formatted="false">". Tap to change."</string>
+    <string name="ui_tap_to_change_provider_or_model_af8ec914" formatted="false">". Tap to change provider or model."</string>
+    <string name="ui_tap_to_expand_e70b7435" formatted="false">". Tap to expand."</string>
+    <string name="ui_tap_to_minimize_orbit_swipe_up_to_open_this_c_3fadac87" formatted="false">"Tap to minimize Orbit. Swipe up to open this chat. Swipe down to close Orbit."</string>
     <string name="ui_templates_create_normal_editable_routines_not_2de69d9b" formatted="false">"Templates create normal editable Routines. Nothing runs during setup."</string>
     <string name="ui_text_and_readability_b4345cc3" formatted="false">"Text and readability"</string>
+    <string name="ui_text_screenshot_637a2fd8" formatted="false">"text + screenshot"</string>
+    <string name="ui_that_chat_is_no_longer_available_d6a86837" formatted="false">"That chat is no longer available"</string>
+    <string name="ui_that_document_is_no_longer_available_eeacb880" formatted="false">"That document is no longer available"</string>
+    <string name="ui_that_message_is_no_longer_here_724e5555" formatted="false">"That message is no longer here"</string>
     <string name="ui_the_buttons_below_add_new_widgets_to_change_o_7955d677" formatted="false">"The buttons below add new widgets. To change one later, touch and hold it on your Home screen, then choose Settings, Edit, or Configure. The exact label depends on your launcher."</string>
     <string name="ui_the_preview_image_a_page_it_already_cited_dec_163273a1" formatted="false">"the preview image a page it already cited declares about itself, and "</string>
     <string name="ui_theme_studio_20f4c4c9" formatted="false">"Theme Studio. "</string>
     <string name="ui_theme_studio_d64bfbb6" formatted="false">"Theme Studio"</string>
     <string name="ui_theme_studio_font_chat_text_size_and_haptics_bf74c1e7" formatted="false">"Theme Studio, font, chat text size and haptics"</string>
+    <string name="ui_these_are_the_memories_orbit_supplied_as_cont_a09547f2" formatted="false">"\n\nThese are the memories Orbit supplied as context. The model may not have needed every one."</string>
+    <string name="ui_thinking_a02f1cea" formatted="false">"Thinking…"</string>
+    <string name="ui_thinking_a20d12c5" formatted="false">"Thinking"</string>
     <string name="ui_thinking_c42e2779" formatted="false">"  •  Thinking"</string>
     <string name="ui_thinking_updates_1f86f314" formatted="false">"Thinking updates"</string>
+    <string name="ui_this_answer_already_has_f4469498" formatted="false">"This answer already has "</string>
+    <string name="ui_this_chat_now_uses_000ac347" formatted="false">"This chat now uses "</string>
     <string name="ui_this_deletes_orbit_s_locally_saved_recent_cha_c52b9668" formatted="false">"This deletes Orbit\'s locally saved recent chats. It does not affect your ChatGPT account."</string>
+    <string name="ui_this_message_only_6202948e" formatted="false">"This message only"</string>
     <string name="ui_this_phone_from_context_orbit_already_has_and_2ba8a210" formatted="false">"this phone from context Orbit already has, and opening Deck never sends "</string>
     <string name="ui_this_removes_the_local_orbit_conversation_6bfd7a45" formatted="false">"This removes the local Orbit conversation."</string>
+    <string name="ui_this_removes_the_messages_but_keeps_the_conve_74cb8daf" formatted="false">"This removes the messages but keeps the conversation and its AI selection."</string>
+    <string name="ui_those_saved_items_are_no_longer_in_your_vault_040b6519" formatted="false">"Those saved items are no longer in your Vault"</string>
+    <string name="ui_timer_d4b19bf4" formatted="false">"Timer · "</string>
     <string name="ui_trigger_alerts_db53cdd6" formatted="false">"Trigger alerts"</string>
     <string name="ui_try_a_different_search_2e6d79de" formatted="false">"Try a different search."</string>
     <string name="ui_try_a_shorter_word_or_the_name_of_the_thing_y_593ba50b" formatted="false">"Try a shorter word, or the name of the thing you want to change."</string>
     <string name="ui_try_asking_695b5a73" formatted="false">"Try asking"</string>
+    <string name="ui_turn_off_06f0e210" formatted="false">"Turn off"</string>
     <string name="ui_typography_feedback_0f49aa48" formatted="false">"TYPOGRAPHY &amp; FEEDBACK"</string>
     <string name="ui_understand_notifications_only_when_this_acces_60483955" formatted="false">"Understand notifications only when this access is enabled."</string>
     <string name="ui_undo_a8283ade" formatted="false">"Undo"</string>
     <string name="ui_undo_deleting_this_chat_1bdc67c1" formatted="false">"Undo deleting this chat"</string>
     <string name="ui_unpin_ee3c7161" formatted="false">"Unpin"</string>
+    <string name="ui_up_to_08c05ead" formatted="false">"Up to "</string>
     <string name="ui_use_approximate_device_location_for_local_wea_033b63bc" formatted="false">"Use approximate device location for local weather"</string>
     <string name="ui_use_bb33dbdb" formatted="false">"Use "</string>
     <string name="ui_use_chatgpt_f8f99c44" formatted="false">"Use ChatGPT"</string>
     <string name="ui_use_code_sign_in_25c62930" formatted="false">"Use code sign-in"</string>
+    <string name="ui_use_full_screen_a4fee062" formatted="false">"Use full screen"</string>
     <string name="ui_use_orbit_local_144ca50f" formatted="false">"Use Orbit Local"</string>
+    <string name="ui_use_orbit_reminders_a3edaab8" formatted="false">"Use Orbit Reminders"</string>
     <string name="ui_use_orbit_s_interactive_edge_gesture_when_ret_770490df" formatted="false">"Use Orbit\'s interactive edge gesture when returning to the previous screen. The "</string>
     <string name="ui_use_orbit_s_page_transition_instead_back_itse_462f21c7" formatted="false">"use Orbit\'s page transition instead. Back itself always works either "</string>
     <string name="ui_use_orbit_vault_3e080f1d" formatted="false">"Use Orbit Vault"</string>
+    <string name="ui_use_screen_1479d77e" formatted="false">"Use screen"</string>
     <string name="ui_use_screen_and_select_area_also_in_attach_und_96d44f97" formatted="false">"Use screen and Select area. Also in Attach, under Screen."</string>
     <string name="ui_use_template_351dd54e" formatted="false">"Use template"</string>
     <string name="ui_use_the_app_quick_settings_or_your_system_ass_e45e0cde" formatted="false">"Use the app, Quick Settings, or your system assistant gesture."</string>
     <string name="ui_use_true_black_amoled_backgrounds_ebcfe7fb" formatted="false">"Use true black AMOLED backgrounds"</string>
+    <string name="ui_used_a154d96a" formatted="false">"Used "</string>
     <string name="ui_used_for_orbit_voice_33d1df94" formatted="false">"Used for Orbit Voice."</string>
     <string name="ui_uses_light_tactile_ticks_for_orbit_controls_a_e89d7325" formatted="false">"Uses light tactile ticks for Orbit controls and Settings interactions. Turn this off to disable those haptics."</string>
+    <string name="ui_versions_81edcc11" formatted="false">" versions"</string>
     <string name="ui_view_full_capabilities_dashboard_9786e312" formatted="false">"View full capabilities dashboard"</string>
     <string name="ui_view_local_routing_context_account_capability_865240bb" formatted="false">"View local routing, context, account, capability, and troubleshooting information."</string>
     <string name="ui_view_update_97850a87" formatted="false">"View update"</string>
@@ -471,16 +725,26 @@
     <string name="ui_voice_beta_screen_context_and_capabilities_724fcc4f" formatted="false">"Voice Beta, screen context and capabilities"</string>
     <string name="ui_voice_context_46ffef58" formatted="false">"VOICE &amp; CONTEXT"</string>
     <string name="ui_voice_context_permissions_4f431dc7" formatted="false">"Voice, context &amp; permissions"</string>
+    <string name="ui_voice_input_8748f239" formatted="false">"Voice input"</string>
+    <string name="ui_voice_input_unavailable_59516e88" formatted="false">"Voice input unavailable"</string>
+    <string name="ui_wait_for_the_current_response_to_finish_615ac88f" formatted="false">"Wait for the current response to finish"</string>
     <string name="ui_waiting_for_chatgpt_sign_in_in_your_browser_24e86bd8" formatted="false">"Waiting for ChatGPT sign-in in your browser…"</string>
+    <string name="ui_waiting_for_current_screen_379a48d9" formatted="false">"Waiting for current screen"</string>
+    <string name="ui_waiting_for_screen_c1e06156" formatted="false">"Waiting for screen"</string>
     <string name="ui_way_from_the_gesture_the_navigation_buttons_a_59597cba" formatted="false">"way, from the gesture, the navigation buttons, and every Back control."</string>
     <string name="ui_weather_0a244108" formatted="false">"WEATHER"</string>
     <string name="ui_weather_gallery_reminders_saved_places_memory_2260a1c6" formatted="false">"Weather, Gallery, reminders, saved places, Memory and backup"</string>
     <string name="ui_weather_location_saved_e676354f" formatted="false">"Weather location saved"</string>
     <string name="ui_weather_units_4887463b" formatted="false">"Weather units"</string>
+    <string name="ui_web_search_7711faa7" formatted="false">"Web search"</string>
     <string name="ui_welcome_to_orbit_9c4a3ca1" formatted="false">"Welcome to Orbit"</string>
+    <string name="ui_what_can_i_help_with_e43f5ab3" formatted="false">"What can I help with?"</string>
     <string name="ui_what_s_new_561b17ed" formatted="false">"What\'s New"</string>
     <string name="ui_what_s_on_my_screen_f2f68c6f" formatted="false">"“What\'s on my screen?”"</string>
     <string name="ui_works_with_any_preset_fc69d41c" formatted="false">"Works with any preset."</string>
+    <string name="ui_write_a_message_then_hold_send_03478eec" formatted="false">"Write a message, then hold Send"</string>
+    <string name="ui_write_a_message_then_hold_send_to_choose_its__14f0f420" formatted="false">"Write a message, then hold Send to choose its AI"</string>
+    <string name="ui_writing_a_summary_for_the_new_chat_4fd1ff8b" formatted="false">"Writing a summary for the new chat…"</string>
     <string name="ui_you_can_assign_a_saved_routine_to_the_routine_d47c9435" formatted="false">"You can assign a saved Routine to the Routine Quick Settings tile later from Settings → Assistant setup."</string>
     <string name="ui_you_can_fine_tune_colors_messages_cards_and_b_e08c6dc3" formatted="false">"You can fine-tune colors, messages, cards and backgrounds later in Theme Studio."</string>
     <string name="ui_you_can_finish_setup_anytime_from_settings_as_9df1931d" formatted="false">"You can finish setup anytime from Settings → Assistant setup."</string>

@@ -369,10 +369,10 @@ public final class OrbitVaultBeta2Test {
                 source("SettingsActivity").contains("VAULT_DELETE_TITLE")
                         && source("SettingsActivity").contains(
                                 "UiKit.styleOrbitDialog(dialog, this, true)"));
-        assertEquals("Delete all Vault data?", SettingsActivity.VAULT_DELETE_TITLE);
+        assertEquals("Delete all Vault data?", context.getString(SettingsActivity.VAULT_DELETE_TITLE));
         assertTrue("the confirmation says what survives",
-                SettingsActivity.VAULT_DELETE_MESSAGE.contains("Orbit Memory")
-                        && SettingsActivity.VAULT_DELETE_MESSAGE.contains("cannot be undone"));
+                context.getString(SettingsActivity.VAULT_DELETE_MESSAGE).contains("Orbit Memory")
+                        && context.getString(SettingsActivity.VAULT_DELETE_MESSAGE).contains("cannot be undone"));
     }
 
     // ---- what a saved item becomes when the user asks about it -------------------------------------

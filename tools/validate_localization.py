@@ -26,6 +26,10 @@ def android_value(node):
 
 
 def canonical(s):
+    # Join Java compile-time string concatenation before token comparison.
+    pair = re.compile(r'("(?:[^"\\]|\\.)*")\s*\+\s*("(?:[^"\\]|\\.)*")')
+    while pair.search(s):
+        s = pair.sub(lambda m: json.dumps(java_value(m[1]) + java_value(m[2]), ensure_ascii=False), s)
     out, last = [], 0
     for m in LEX.finditer(s):
         out.append(re.sub(r'\s+', '', s[last:m.start()]))
@@ -83,8 +87,14 @@ def main():
             continue
         current = (ROOT / path).read_text()
         original = subprocess.check_output(['git', 'show', f'{args.base}:{path}'], cwd=ROOT, text=True)
-        restored = re.sub(r'getString\(R\.string\.(ui_\w+)\)',
-                          lambda m: json.dumps(android_value(en[m[1]]), ensure_ascii=False), current)
+        constants = re.findall(r'static final int (\w+) = R\.string\.(ui_\w+);', current)
+        restored = current
+        for name, key in constants:
+            restored = restored.replace('getString(' + name + ')', name)
+            restored = restored.replace('static final int ' + name + ' = R.string.' + key + ';',
+                                        'static final String ' + name + ' = ' + json.dumps(android_value(en[key]), ensure_ascii=False) + ';')
+        restored = re.sub(r'(?:getContext\(\)\.)?getString\(R\.string\.(ui_\w+)\)',
+                          lambda m: json.dumps(android_value(en[m[1]]), ensure_ascii=False), restored)
         assert canonical(original) == canonical(restored), f'Non-presentation Java change: {path}'
         checked.append(path)
     print(f'PASS: {xml_count} XML files; {len(required)} Russian resources with English fallback')
