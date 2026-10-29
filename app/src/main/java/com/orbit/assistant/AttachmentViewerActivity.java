@@ -520,7 +520,7 @@ public final class AttachmentViewerActivity extends Activity {
     private void updateSourceBar() {
         if (sourceLine == null) return;
         RichAnswerImage image = session == null ? null : session.richImageAt(model.index());
-        String line = image == null ? "" : image.attributionLine();
+        String line = image == null ? "" : image.attributionLine(this);
         sourceLine.setText(line);
         sourceLine.setVisibility(line.isEmpty() ? View.GONE : View.VISIBLE);
         if (openSource != null) {

@@ -1,5 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="actengine_cancelled">Отменено</string>
+    <string name="actengine_else_path">%1$s · выполняется ветка «ИНАЧЕ»</string>
+    <string name="actengine_empty_step">Пустой шаг действия</string>
+    <string name="actengine_matched">Условие выполнено</string>
+    <string name="actengine_matched_if">Условие выполнено · выполняется ветка «ЕСЛИ»</string>
+    <string name="actengine_not_met">Пропущено · условие не выполнено</string>
+    <string name="actengine_not_run">Не выполнено · завершите действие в открытом приложении и повторите запрос</string>
+    <string name="actengine_skipped_else_ran">Пропущено · выполнена ветка «ИНАЧЕ»</string>
+    <string name="actengine_skipped_if_ran">Пропущено · выполнена ветка «ЕСЛИ»</string>
+    <plurals name="actengine_skipped_steps">
+        <item quantity="one">%1$s · пропущен %2$d шаг</item>
+        <item quantity="few">%1$s · пропущено %2$d шага</item>
+        <item quantity="many">%1$s · пропущено %2$d шагов</item>
+        <item quantity="other">%1$s · пропущено %2$d шага</item>
+    </plurals>
+    <string name="actengine_unfinished">Действие не завершено</string>
     <string name="aiprov_action_details">Подробности</string>
     <string name="aiprov_action_manage">Управление</string>
     <string name="aiprov_action_openrouter_sign_in">Войти через OpenRouter</string>
@@ -49,6 +65,16 @@
     <string name="aiprov_save_and_check">Сохранить и проверить</string>
     <string name="aiprov_subtitle">Выберите, чем думает Orbit</string>
     <string name="aiprov_title">ИИ-провайдеры</string>
+    <string name="apps_automatic">Автоматически</string>
+    <string name="apps_automatic_context">Автоматический контекст</string>
+    <string name="apps_automatic_with">Автоматически · %1$s</string>
+    <string name="apps_custom_actions">Свои действия</string>
+    <string name="apps_intro">Orbit автоматически подстраивается под каждое приложение. Откройте любое приложение ниже, чтобы настроить приватность, работу с экраном или все три быстрых действия.</string>
+    <string name="apps_no_match">Нет подходящих приложений</string>
+    <string name="apps_search_hint">Поиск по установленным приложениям</string>
+    <string name="apps_subtitle">Поведение для каждого приложения</string>
+    <string name="apps_summary">%1$s  •  приватность: %2$s</string>
+    <string name="apps_title">Приложения</string>
     <string name="attlab_card_file">Вложение: файл</string>
     <string name="attlab_card_file_n">Вложение: файл, %1$d из %2$d</string>
     <string name="attlab_card_other">Вложение: %1$s</string>
@@ -127,6 +153,8 @@
     <string name="cmded_save_failed">Orbit не смог сохранить эту команду.</string>
     <string name="cmded_subtitle">Запускает одну сохранённую автоматизацию</string>
     <string name="cmded_updated">Команда обновлена.</string>
+    <string name="composer_send_message">Отправить сообщение</string>
+    <string name="composer_stop_response">Остановить ответ</string>
     <string name="diag_cd_collapsed">%1$s, свёрнуто</string>
     <string name="diag_cd_copy_section">Копировать диагностику: %1$s</string>
     <string name="diag_cd_expanded">%1$s, развёрнуто</string>
@@ -168,6 +196,10 @@
     <string name="diag_summary_copied">Сводка скопирована</string>
     <string name="diag_title">Диагностика Orbit</string>
     <string name="diag_typing_copied">Диагностика ввода скопирована</string>
+    <string name="localcomp_installed">Установлен</string>
+    <string name="localcomp_not_installed">Не установлен</string>
+    <string name="localcomp_untrusted">Не проверен</string>
+    <string name="localcomp_update_required">Требуется обновление</string>
     <string name="localinst_asset_malformed">Ссылка на файл Orbit Local некорректна.</string>
     <string name="localinst_cannot_inspect">Android не смог проверить скачанный компонент.</string>
     <string name="localinst_cert_metadata">Данные сертификата компонента Orbit Local недействительны.</string>
@@ -197,6 +229,7 @@
     <string name="localinst_version_mismatch">Компонент Orbit Local не соответствует этой версии Orbit.</string>
     <string name="localinst_wrong_package">В описании компонента Orbit Local указан неверный пакет.</string>
     <string name="localinst_wrong_package_name">У скачанного компонента неверное имя пакета.</string>
+    <string name="locsched_allow_always">Разрешить всегда</string>
     <string name="media_audio_unavailable">Аудиослужба недоступна</string>
     <string name="media_no_command">Нет команды для медиа</string>
     <string name="media_not_allowed">Android не разрешил Orbit управлять приложением %1$s.</string>
@@ -252,6 +285,14 @@
     <string name="proctext_save_to_vault">Сохранить в хранилище</string>
     <string name="proctext_select_some">Выделите текст, чтобы спросить о нём Orbit</string>
     <string name="proctext_unreadable">Orbit не смог прочитать выделенный текст</string>
+    <string name="reminder_notif_title">Напоминание Orbit</string>
+    <string name="richimg_from">Изображение с сайта %1$s</string>
+    <string name="richimg_generated">Сгенерированное изображение</string>
+    <string name="stylepreview_assistant">Вот такая форма у ваших сообщений.</string>
+    <string name="stylepreview_cd">Образец стиля сообщений. Углы: %1$s, %2$s.</string>
+    <string name="stylepreview_no_outline">без контура</string>
+    <string name="stylepreview_outline">контур: %1$s</string>
+    <string name="stylepreview_user">Всё верно?</string>
     <string name="trig_arrive">Прибытие: %1$s · %2$s</string>
     <string name="trig_automatic">Автоматический триггер</string>
     <string name="trig_choose_days">Выберите дни</string>
@@ -374,4 +415,6 @@
     <string name="weather_unit_kmh">км/ч</string>
     <string name="weather_unit_mph">миль/ч</string>
     <string name="weather_wind">Ветер около %1$s %2$s.</string>
+    <string name="widgetact_camera_needed">Orbit нужен доступ к камере, чтобы управлять фонариком.</string>
+    <string name="widgetact_unfinished">Действие с фонариком не завершено.</string>
 </resources>

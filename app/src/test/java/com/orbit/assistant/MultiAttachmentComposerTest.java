@@ -231,7 +231,7 @@ public final class MultiAttachmentComposerTest {
         for (View v : descendants(activity.getWindow().getDecorView())) {
             CharSequence description = v.getContentDescription();
             if (description != null
-                    && ComposerActionState.SEND_DESCRIPTION.contentEquals(description)) {
+                    && org.robolectric.RuntimeEnvironment.getApplication().getString(ComposerActionState.SEND_DESCRIPTION).contentEquals(description)) {
                 v.performClick();
                 return;
             }

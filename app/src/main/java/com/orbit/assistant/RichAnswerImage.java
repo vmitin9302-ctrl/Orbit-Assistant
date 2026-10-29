@@ -126,6 +126,20 @@ public final class RichAnswerImage {
         return caption.isEmpty() ? sourceDomain : caption + " · " + sourceDomain;
     }
 
+    /** {@link #attributionLine()} worded for the current language. */
+    public String attributionLine(android.content.Context context) {
+        if (isGenerated()) return context.getString(R.string.richimg_generated);
+        return attributionLine();
+    }
+
+    /** {@link #contentDescription()} worded for the current language. */
+    public String contentDescription(android.content.Context context) {
+        if (!altText.isEmpty()) return altText;
+        if (!caption.isEmpty()) return caption;
+        return isGenerated() ? context.getString(R.string.richimg_generated)
+                : context.getString(R.string.richimg_from, sourceDomain);
+    }
+
     /** What a screen reader is told about the picture itself. */
     public String contentDescription() {
         if (!altText.isEmpty()) return altText;

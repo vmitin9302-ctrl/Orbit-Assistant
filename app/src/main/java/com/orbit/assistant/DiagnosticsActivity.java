@@ -957,7 +957,7 @@ public final class DiagnosticsActivity extends Activity {
         // on a bind that may not be possible.
         OrbitLocalStatus status = OrbitLocalProvider.cachedStatus(this);
 
-        return "\n  Component: " + OrbitLocalComponent.stateLabel(componentState) +
+        return "\n  Component: " + OrbitLocalComponent.stateLabel(this, componentState) +
                 (installedVersion.isEmpty() ? "" : " · " + installedVersion
                         + " (" + OrbitLocalComponent.installedVersionCode(this) + ")") +
                 "\n  Protocol Orbit speaks: " + OrbitLocalComponent.PROTOCOL_VERSION +
@@ -1217,7 +1217,7 @@ public final class DiagnosticsActivity extends Activity {
                         + " · backend summaries " + ReasoningSummarySupport.stateLabel(this)
                         + " · last source " + ReasoningSummarySupport.lastSource(this)
                         + " · " + ReasoningSummarySupport.updatesReceived(this) + " received" +
-                "\nOrbit Local: " + OrbitLocalComponent.stateLabel(OrbitLocalComponent.state(this)) +
+                "\nOrbit Local: " + OrbitLocalComponent.stateLabel(this, OrbitLocalComponent.state(this)) +
                 "\nCalendar permission: "
                         + (OrbitCalendarStore.hasAccess(this) ? "granted" : "not granted") +
                 // One line, and only when there is one to give. The candidate-by-candidate detail

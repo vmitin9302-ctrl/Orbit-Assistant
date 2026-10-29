@@ -63,7 +63,7 @@ public final class OrbitActionEngine {
 
         AssistantReply.Action action = actions.get(index);
         if (action == null) {
-            DeviceActionExecutor.Result skipped = DeviceActionExecutor.Result.failed("Empty action step").withContinuation(true);
+            DeviceActionExecutor.Result skipped = DeviceActionExecutor.Result.failed(context.getString(R.string.actengine_empty_step)).withContinuation(true);
             if (listener != null) listener.onStep(null, skipped, index, actions.size());
             advance(context, actions, flow, index, confirmationHandler, listener);
             return;
@@ -85,13 +85,13 @@ public final class OrbitActionEngine {
 
                 if (condition.matched) {
                     DeviceActionExecutor.Result met = DeviceActionExecutor.Result.success(
-                            hasElse ? "Condition matched · running the IF path" : "Condition matched");
+                            context.getString(hasElse ? R.string.actengine_matched_if : R.string.actengine_matched));
                     if (listener != null) listener.onStep(action, met, index, actions.size());
                     if (span != null && !span.hasTruePath() && hasElse) {
                         // Nothing on the IF path to run, so the ELSE path is stepped over here
                         // rather than being reached by falling through into it.
-                        reportSkipped(listener, actions, span.elseStart, span.elseEnd,
-                                "Skipped · IF path ran instead");
+                        reportSkipped(context, listener, actions, span.elseStart, span.elseEnd,
+                                context.getString(R.string.actengine_skipped_if_ran));
                         runStep(context, actions, flow, span.elseEnd, confirmationHandler, listener);
                         return;
                     }
@@ -100,15 +100,16 @@ public final class OrbitActionEngine {
                 }
 
                 int gated = RoutineBranch.trueSteps(action);
+                int skippedCount = Math.min(gated, Math.max(0, actions.size() - index - 1));
                 DeviceActionExecutor.Result notMet = DeviceActionExecutor.Result.success(hasElse
-                        ? condition.message + " · running the ELSE path"
-                        : condition.message + " · skipped "
-                                + Math.min(gated, Math.max(0, actions.size() - index - 1))
-                                + (gated == 1 ? " step" : " steps"));
+                        ? context.getString(R.string.actengine_else_path, condition.message)
+                        : context.getResources().getQuantityString(R.plurals.actengine_skipped_steps,
+                                skippedCount, condition.message, skippedCount));
                 if (listener != null) listener.onStep(action, notMet, index, actions.size());
                 int skipEnd = span == null ? Math.min(actions.size(), index + 1 + gated) : span.trueEnd;
-                reportSkipped(listener, actions, index + 1, skipEnd,
-                        hasElse ? "Skipped · ELSE path ran instead" : "Skipped · condition not met");
+                reportSkipped(context, listener, actions, index + 1, skipEnd,
+                        context.getString(hasElse ? R.string.actengine_skipped_else_ran
+                                : R.string.actengine_not_met));
                 runStep(context, actions, flow, skipEnd, confirmationHandler, listener);
                 return;
             }
@@ -125,7 +126,7 @@ public final class OrbitActionEngine {
 
         if (action.requiresConfirmation && confirmationHandler != null) {
             confirmationHandler.request(action, executeNow, () -> {
-                DeviceActionExecutor.Result cancelled = DeviceActionExecutor.Result.cancelled("Cancelled");
+                DeviceActionExecutor.Result cancelled = DeviceActionExecutor.Result.cancelled(context.getString(R.string.actengine_cancelled));
                 if (listener != null) listener.onStep(action, cancelled, index, actions.size());
                 advance(context, actions, flow, index, confirmationHandler, listener);
             });
@@ -146,14 +147,14 @@ public final class OrbitActionEngine {
                                 ConfirmationHandler confirmationHandler, Listener listener) {
         int next = flow == null ? index + 1 : flow.nextAfter(index);
         if (flow != null) {
-            reportSkipped(listener, actions, flow.skipFromAfter(index), flow.skipToAfter(index),
-                    "Skipped · IF path ran instead");
+            reportSkipped(context, listener, actions, flow.skipFromAfter(index), flow.skipToAfter(index),
+                    context.getString(R.string.actengine_skipped_if_ran));
         }
         runStep(context, actions, flow, next, confirmationHandler, listener);
     }
 
     /** Reports a range of steps the run stepped over, so nothing skipped can look like it ran. */
-    private static void reportSkipped(Listener listener, List<AssistantReply.Action> actions,
+    private static void reportSkipped(Context context, Listener listener, List<AssistantReply.Action> actions,
                                       int from, int to, String message) {
         if (listener == null || actions == null) return;
         for (int i = Math.max(0, from); i < Math.min(actions.size(), to); i++) {
@@ -168,7 +169,7 @@ public final class OrbitActionEngine {
                                      Listener listener, AssistantReply.Action action,
                                      DeviceActionExecutor.Result result) {
         DeviceActionExecutor.Result safeResult = result == null
-                ? DeviceActionExecutor.Result.failed("Action did not finish") : result;
+                ? DeviceActionExecutor.Result.failed(context.getString(R.string.actengine_unfinished)) : result;
         if (listener != null) listener.onStep(action, safeResult, index, actions.size());
         if (DeviceActionExecutor.STATUS_HANDED_OFF.equals(safeResult.status)
                 && index + 1 < actions.size()) {
@@ -178,7 +179,7 @@ public final class OrbitActionEngine {
             if (listener != null) {
                 for (int i = index + 1; i < actions.size(); i++) {
                     listener.onStep(actions.get(i), DeviceActionExecutor.Result.cancelled(
-                            "Not run · finish in the app Orbit opened, then ask again"),
+                            context.getString(R.string.actengine_not_run)),
                             i, actions.size());
                 }
                 listener.onFinished(false, index + 1, actions.size());

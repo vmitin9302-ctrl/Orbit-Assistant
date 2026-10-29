@@ -12,8 +12,8 @@ import android.widget.ImageButton;
  * footprint rather than adding a control or moving the composer.
  */
 public final class ComposerActionState {
-    public static final String SEND_DESCRIPTION = "Send message";
-    public static final String STOP_DESCRIPTION = "Stop response";
+    public static final int SEND_DESCRIPTION = R.string.composer_send_message;
+    public static final int STOP_DESCRIPTION = R.string.composer_stop_response;
 
     private ComposerActionState() {}
 
@@ -33,14 +33,14 @@ public final class ComposerActionState {
         return stop ? R.drawable.ic_stop : R.drawable.ic_send;
     }
 
-    public static String descriptionFor(boolean stop) {
-        return stop ? STOP_DESCRIPTION : SEND_DESCRIPTION;
+    public static String descriptionFor(Context c, boolean stop) {
+        return c.getString(stop ? STOP_DESCRIPTION : SEND_DESCRIPTION);
     }
 
     /** Puts the decision on the control without touching anything that would move the composer. */
     public static void apply(ImageButton control, boolean stop) {
         if (control == null) return;
         control.setImageResource(iconFor(stop));
-        control.setContentDescription(descriptionFor(stop));
+        control.setContentDescription(descriptionFor(control.getContext(), stop));
     }
 }
