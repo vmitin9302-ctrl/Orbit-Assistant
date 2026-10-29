@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
 /** The Beta 4 sent-attachment treatment is compact and preview-first, not an ellipsis-only tweak. */
@@ -14,13 +15,13 @@ import org.robolectric.annotation.Config;
 @Config(sdk = {29, 35})
 public final class AttachmentCardBeta4Test {
     @Test public void metadataIsQuietAndTypeSpecific() {
-        assertEquals("PDF · Text loaded", ChatActivity.attachmentMetadata(
+        assertEquals("PDF · Text loaded", ChatActivity.attachmentMetadata(RuntimeEnvironment.getApplication(),
                 new AssistantClient.History("user", "", true, "", "pdf",
                         "paper.pdf", "extracted")));
-        assertEquals("Image", ChatActivity.attachmentMetadata(
+        assertEquals("Image", ChatActivity.attachmentMetadata(RuntimeEnvironment.getApplication(),
                 new AssistantClient.History("user", "", true, "", "image",
                         "photo.jpg", "")));
-        assertEquals("Text · Loaded", ChatActivity.attachmentMetadata(
+        assertEquals("Text · Loaded", ChatActivity.attachmentMetadata(RuntimeEnvironment.getApplication(),
                 new AssistantClient.History("user", "", true, "", "vault",
                         "Note", "saved words")));
     }
