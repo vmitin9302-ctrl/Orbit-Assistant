@@ -228,6 +228,13 @@ public final class OrbitTheme {
         return "Liquid";
     }
 
+    public static String materialLabel(android.content.Context c, String material) {
+        String value = normalizeMaterial(material);
+        if (MATERIAL_SOLID.equals(value)) return c.getString(R.string.theme_material_solid);
+        if (MATERIAL_FROSTED.equals(value)) return c.getString(R.string.theme_material_frosted);
+        return c.getString(R.string.theme_material_liquid);
+    }
+
     public String materialLabel() {
         return materialLabel(material);
     }
@@ -543,6 +550,11 @@ public final class OrbitTheme {
 
     /** The one note Orbit ships. */
     public static final String CREATOR_FAVORITE = "Creator's favorite";
+
+    /** The same note in the app language. */
+    public String note(android.content.Context c) {
+        return noteFor(id).isEmpty() ? "" : c.getString(R.string.theme_creator_favorite);
+    }
 
     /** This theme's note, or "" when it has none. */
     public String note() {

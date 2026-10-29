@@ -168,7 +168,12 @@ public final class RoutineBranch {
      * and keeps its v0.7.4.2 behaviour exactly, including the long-standing tolerance for an IF
      * whose gate reaches past the last step.
      */
-    public static String structureProblem(List<AssistantReply.Action> actions) {
+    public static String structureProblem(android.content.Context c, List<AssistantReply.Action> actions) {
+        return problem(c, actions);
+    }
+
+    /** With no Context only whether there is a problem is answered; the text is for people. */
+    private static String problem(android.content.Context c, List<AssistantReply.Action> actions) {
         if (actions == null || actions.isEmpty()) return "";
         int size = actions.size();
         for (int i = 0; i < size; i++) {
@@ -179,17 +184,19 @@ public final class RoutineBranch {
             int declaredTrue = trueSteps(condition);
             int end = i + 1 + declaredTrue + declaredElse;
             if (end > size) {
-                return "Step " + (i + 1) + " needs " + declaredTrue + " IF "
-                        + (declaredTrue == 1 ? "step" : "steps") + " and " + declaredElse + " ELSE "
-                        + (declaredElse == 1 ? "step" : "steps") + " after it. Add the missing "
-                        + "steps or reduce the branch.";
+                if (c == null) return "invalid";
+                return c.getString(R.string.branch_missing, i + 1,
+                        c.getResources().getQuantityString(R.plurals.branch_if_steps,
+                                declaredTrue, declaredTrue),
+                        c.getResources().getQuantityString(R.plurals.branch_else_steps,
+                                declaredElse, declaredElse));
             }
             // One dependable level of branching. A condition inside a branch would make the paths
             // overlap, which is neither drawable in the editor nor worth the execution ambiguity.
             for (int j = i + 1; j < end; j++) {
                 if (RoutineConditionEvaluator.isCondition(actions.get(j))) {
-                    return "Step " + (j + 1) + " is another IF condition inside the branch that "
-                            + "starts at step " + (i + 1) + ". Branches cannot be nested.";
+                    if (c == null) return "invalid";
+                    return c.getString(R.string.branch_nested_inside, j + 1, i + 1);
                 }
             }
             // And the condition itself must not sit inside another condition's window, whether or
@@ -200,8 +207,8 @@ public final class RoutineBranch {
                 if (!RoutineConditionEvaluator.isCondition(outer)) continue;
                 int outerEnd = Math.min(size, j + 1 + trueSteps(outer) + elseSteps(outer));
                 if (i < outerEnd) {
-                    return "Step " + (i + 1) + " is an IF condition inside the branch that starts "
-                            + "at step " + (j + 1) + ". Branches cannot be nested.";
+                    if (c == null) return "invalid";
+                    return c.getString(R.string.branch_nested_in_outer, i + 1, j + 1);
                 }
             }
         }
@@ -209,7 +216,7 @@ public final class RoutineBranch {
     }
 
     public static boolean structureValid(List<AssistantReply.Action> actions) {
-        return structureProblem(actions).isEmpty();
+        return problem(null, actions).isEmpty();
     }
 
     // ---- execution flow -------------------------------------------------------------------------

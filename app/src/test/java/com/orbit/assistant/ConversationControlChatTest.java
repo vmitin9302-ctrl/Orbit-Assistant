@@ -43,6 +43,10 @@ import java.util.List;
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = {29, 35})
 public final class ConversationControlChatTest {
+    private static String msgLabel(int res) {
+        return RuntimeEnvironment.getApplication().getString(res);
+    }
+
     private Context context;
     private static final AiSelection TERRA = AiSelection.of(Prefs.PROVIDER_CHATGPT,
             OrbitModelCatalog.GPT_5_6_TERRA, AiStrength.MEDIUM);
@@ -216,10 +220,10 @@ public final class ConversationControlChatTest {
     }
 
     @Test public void theUserMenuOffersEditInFullChatOnly() {
-        assertTrue(Arrays.asList(MessageActions.userLabels(true, true)).contains(MessageActions.EDIT_MENU_LABEL));
+        assertTrue(Arrays.asList(MessageActions.userLabels(RuntimeEnvironment.getApplication(), true, true)).contains(msgLabel(MessageActions.EDIT_MENU_LABEL)));
         assertFalse("the overlay passes no edit action",
-                Arrays.asList(MessageActions.userLabels(true)).contains(MessageActions.EDIT_MENU_LABEL));
-        assertEquals(MessageActions.userLabels(true, true).length,
+                Arrays.asList(MessageActions.userLabels(RuntimeEnvironment.getApplication(), true)).contains(msgLabel(MessageActions.EDIT_MENU_LABEL)));
+        assertEquals(MessageActions.userLabels(RuntimeEnvironment.getApplication(), true, true).length,
                 MessageActions.userIcons(true, true).length);
     }
 

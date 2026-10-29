@@ -33,6 +33,10 @@ import java.util.List;
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = {29, 35})
 public final class ChatAiControlsTest {
+    private static String msgLabel(int res) {
+        return RuntimeEnvironment.getApplication().getString(res);
+    }
+
     private Context context;
 
     private static final AiSelection SOL_HIGH =
@@ -200,11 +204,11 @@ public final class ChatAiControlsTest {
         a.retry = () -> {};
         a.retryWith = () -> {};
         a.reply = () -> {};
-        assertEquals(Arrays.asList(MessageActions.RETRY_WITH_MENU_LABEL, MessageActions.REPLY_MENU_LABEL),
-                Arrays.asList(MessageActions.labelsOf(MessageActions.moreMenu(a))));
+        assertEquals(Arrays.asList(msgLabel(MessageActions.RETRY_WITH_MENU_LABEL), msgLabel(MessageActions.REPLY_MENU_LABEL)),
+                Arrays.asList(MessageActions.labelsOf(RuntimeEnvironment.getApplication(), MessageActions.moreMenu(a))));
         a.details = () -> {};
-        assertTrue(Arrays.asList(MessageActions.labelsOf(MessageActions.moreMenu(a)))
-                .contains(MessageActions.DETAILS_MENU_LABEL));
+        assertTrue(Arrays.asList(MessageActions.labelsOf(RuntimeEnvironment.getApplication(), MessageActions.moreMenu(a)))
+                .contains(msgLabel(MessageActions.DETAILS_MENU_LABEL)));
     }
 
     // ---- retry ---------------------------------------------------------------------------------

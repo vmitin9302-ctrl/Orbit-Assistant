@@ -188,7 +188,7 @@ public final class DeckTileRegistryTest {
         assertFalse(DeckIcons.keys().isEmpty());
         for (String key : DeckIcons.keys()) {
             assertTrue(key + " must resolve to a drawable", DeckIcons.resFor(key) != 0);
-            assertFalse(key + " must have a label", DeckIcons.labelFor(key).trim().isEmpty());
+            assertFalse(key + " must have a label", DeckIcons.labelFor(context, key).trim().isEmpty());
             assertTrue(DeckIcons.knows(key));
         }
         assertTrue("an unknown key falls back rather than returning nothing",

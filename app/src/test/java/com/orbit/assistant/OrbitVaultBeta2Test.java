@@ -57,6 +57,10 @@ import java.util.concurrent.Executors;
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = {29, 35})
 public final class OrbitVaultBeta2Test {
+    private static String msgLabel(int res) {
+        return RuntimeEnvironment.getApplication().getString(res);
+    }
+
 
     private Context context;
 
@@ -274,18 +278,18 @@ public final class OrbitVaultBeta2Test {
 
     /** Save to Vault leaves the message menu while the Vault is off, rather than being greyed out. */
     @Test public void saveToVaultLeavesTheMessageMenuWhileTheVaultIsOff() {
-        assertTrue(Arrays.asList(MessageActions.assistantLabels(true, true))
-                .contains(MessageActions.SAVE_TO_VAULT_MENU_LABEL));
+        assertTrue(Arrays.asList(MessageActions.assistantLabels(RuntimeEnvironment.getApplication(), true, true))
+                .contains(msgLabel(MessageActions.SAVE_TO_VAULT_MENU_LABEL)));
         assertEquals(3, MessageActions.assistantIcons(true, true).length);
 
-        String[] off = MessageActions.assistantLabels(true, false);
-        assertFalse(Arrays.asList(off).contains(MessageActions.SAVE_TO_VAULT_MENU_LABEL));
-        assertTrue("Copy is untouched", Arrays.asList(off).contains(MessageActions.COPY_MENU_LABEL));
+        String[] off = MessageActions.assistantLabels(RuntimeEnvironment.getApplication(), true, false);
+        assertFalse(Arrays.asList(off).contains(msgLabel(MessageActions.SAVE_TO_VAULT_MENU_LABEL)));
+        assertTrue("Copy is untouched", Arrays.asList(off).contains(msgLabel(MessageActions.COPY_MENU_LABEL)));
         assertTrue("and so is Retry",
-                Arrays.asList(off).contains(MessageActions.RETRY_MENU_LABEL));
+                Arrays.asList(off).contains(msgLabel(MessageActions.RETRY_MENU_LABEL)));
         assertEquals("labels and icons must stay the same length",
                 off.length, MessageActions.assistantIcons(true, false).length);
-        assertEquals(1, MessageActions.assistantLabels(false, false).length);
+        assertEquals(1, MessageActions.assistantLabels(RuntimeEnvironment.getApplication(), false, false).length);
         assertEquals(1, MessageActions.assistantIcons(false, false).length);
         assertTrue("the menu reads the preference rather than assuming it",
                 source("MessageActions").contains("Prefs.vaultEnabled(bubble.getContext())"));

@@ -100,6 +100,22 @@ public final class OrbitVaultSource {
         return DOCUMENT.equals(family) ? DOCUMENT_DISPLAY : family;
     }
 
+    /** The same label in the app language; the stored source value stays the English vocabulary. */
+    public static String displayLabel(android.content.Context c, String canonicalSource) {
+        String family = family(canonicalSource);
+        if (family.isEmpty()) return "";
+        if (QUICK_CAPTURE.equals(family)) return c.getString(R.string.vaultsrc_quick_capture);
+        if (PHOTO.equals(family)) return c.getString(R.string.vaultsrc_photo);
+        if (SHARED.equals(family)) return c.getString(R.string.vaultsrc_shared);
+        if (SELECTED_TEXT.equals(family)) return c.getString(R.string.vaultsrc_selected_text);
+        if (SCREEN_SELECTION.equals(family)) return c.getString(R.string.vaultsrc_screen_selection);
+        if (ORBIT_REPLY.equals(family)) return c.getString(R.string.vaultsrc_orbit_reply);
+        if (RICH_ANSWER.equals(family)) return c.getString(R.string.vaultsrc_rich_answer);
+        if (DOCUMENT.equals(family)) return c.getString(R.string.vaultsrc_documents);
+        if (CLIPBOARD.equals(family)) return c.getString(R.string.ui_clipboard_285d69f0);
+        return family;
+    }
+
     /**
      * The canonical source this label belongs to, or empty when Orbit did not write it.
      *

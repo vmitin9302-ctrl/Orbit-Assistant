@@ -174,21 +174,21 @@ public final class RoutineBranchTest {
     }
 
     @Test public void anElseThatRunsPastTheLastStepIsMalformed() {
-        String problem = RoutineBranch.structureProblem(
+        String problem = RoutineBranch.structureProblem(org.robolectric.RuntimeEnvironment.getApplication(), 
                 chain(condition(2, 2), timer(1), timer(2), timer(3)));
         assertFalse(problem.isEmpty());
         assertTrue("the message has to name the step", problem.contains("Step 1"));
     }
 
     @Test public void aConditionInsideABranchIsMalformed() {
-        String problem = RoutineBranch.structureProblem(
+        String problem = RoutineBranch.structureProblem(org.robolectric.RuntimeEnvironment.getApplication(), 
                 chain(condition(2, 1), timer(1), condition(1, 0), timer(2), timer(3)));
         assertFalse(problem.isEmpty());
         assertTrue(problem.contains("nested"));
     }
 
     @Test public void aBranchingConditionInsideAnotherConditionsGateIsMalformed() {
-        String problem = RoutineBranch.structureProblem(
+        String problem = RoutineBranch.structureProblem(org.robolectric.RuntimeEnvironment.getApplication(), 
                 chain(condition(3, 0), timer(1), condition(1, 1), timer(2), timer(3)));
         assertFalse(problem.isEmpty());
         assertTrue(problem.contains("nested"));

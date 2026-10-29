@@ -12,6 +12,7 @@ import android.content.Context;
 import android.widget.TextView;
 
 import org.junit.Test;
+import org.robolectric.RuntimeEnvironment;
 import org.junit.runner.RunWith;
 import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
@@ -24,6 +25,10 @@ import org.robolectric.annotation.Config;
 @RunWith(RobolectricTestRunner.class)
 @Config(sdk = {29, 31, 35})
 public final class MessageActionsTest {
+    private static String msgLabel(int res) {
+        return RuntimeEnvironment.getApplication().getString(res);
+    }
+
 
     @Test public void userCopyIsTheVisibleMessageAndNothingElse() {
         assertEquals("Bring milk and eggs", MessageActions.userCopyText("Bring milk and eggs"));
@@ -53,24 +58,24 @@ public final class MessageActionsTest {
     }
 
     @Test public void theLatestAssistantTurnOffersCopySaveAndRegenerate() {
-        assertArrayEquals(new String[]{MessageActions.COPY_MENU_LABEL,
-                        MessageActions.SAVE_TO_VAULT_MENU_LABEL, MessageActions.RETRY_MENU_LABEL},
-                MessageActions.assistantLabels(true));
+        assertArrayEquals(new String[]{msgLabel(MessageActions.COPY_MENU_LABEL),
+                        msgLabel(MessageActions.SAVE_TO_VAULT_MENU_LABEL), msgLabel(MessageActions.RETRY_MENU_LABEL)},
+                MessageActions.assistantLabels(RuntimeEnvironment.getApplication(), true));
         assertEquals(3, MessageActions.assistantIcons(true).length);
     }
 
     /** Regenerate belongs to the latest turn alone. Saving an older answer is always offered. */
     @Test public void olderAssistantTurnsOfferCopyAndSave() {
-        assertArrayEquals(new String[]{MessageActions.COPY_MENU_LABEL,
-                        MessageActions.SAVE_TO_VAULT_MENU_LABEL},
-                MessageActions.assistantLabels(false));
+        assertArrayEquals(new String[]{msgLabel(MessageActions.COPY_MENU_LABEL),
+                        msgLabel(MessageActions.SAVE_TO_VAULT_MENU_LABEL)},
+                MessageActions.assistantLabels(RuntimeEnvironment.getApplication(), false));
         assertEquals(2, MessageActions.assistantIcons(false).length);
     }
 
     /** A surface that offers neither editing nor quoting offers Copy alone. */
     @Test public void userTurnsOfferCopyOnly() {
-        assertArrayEquals(new String[]{MessageActions.COPY_MENU_LABEL},
-                MessageActions.userLabels());
+        assertArrayEquals(new String[]{msgLabel(MessageActions.COPY_MENU_LABEL)},
+                MessageActions.userLabels(RuntimeEnvironment.getApplication()));
         assertEquals(1, MessageActions.userIcons().length);
     }
 
@@ -79,9 +84,9 @@ public final class MessageActionsTest {
      * Edit, then Reply to this, each with its own icon.
      */
     @Test public void fullChatUserTurnsOfferCopyEditAndReply() {
-        assertArrayEquals(new String[]{MessageActions.COPY_MENU_LABEL,
-                        MessageActions.EDIT_MENU_LABEL, MessageActions.REPLY_MENU_LABEL},
-                MessageActions.userLabels(true, true));
+        assertArrayEquals(new String[]{msgLabel(MessageActions.COPY_MENU_LABEL),
+                        msgLabel(MessageActions.EDIT_MENU_LABEL), msgLabel(MessageActions.REPLY_MENU_LABEL)},
+                MessageActions.userLabels(RuntimeEnvironment.getApplication(), true, true));
         int[] icons = MessageActions.userIcons(true, true);
         assertEquals(3, icons.length);
         assertEquals(R.drawable.ic_edit, icons[1]);

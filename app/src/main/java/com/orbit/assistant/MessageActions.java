@@ -29,13 +29,13 @@ import java.util.List;
  * not leave the conversation.
  */
 final class MessageActions {
-    static final String COPY_MENU_LABEL = "Copy";
-    static final String SAVE_TO_VAULT_MENU_LABEL = "Save to Vault";
-    static final String RETRY_MENU_LABEL = "Retry";
-    static final String RETRY_WITH_MENU_LABEL = "Retry with…";
-    static final String REPLY_MENU_LABEL = "Reply to this";
-    static final String DETAILS_MENU_LABEL = "Response details";
-    static final String EDIT_MENU_LABEL = "Edit";
+    static final int COPY_MENU_LABEL = R.string.ui_copy_e21f935f;
+    static final int SAVE_TO_VAULT_MENU_LABEL = R.string.msgact_save_to_vault;
+    static final int RETRY_MENU_LABEL = R.string.ui_retry_942087cc;
+    static final int RETRY_WITH_MENU_LABEL = R.string.msgact_retry_with;
+    static final int REPLY_MENU_LABEL = R.string.msgact_reply;
+    static final int DETAILS_MENU_LABEL = R.string.ui_response_details_062c9292;
+    static final int EDIT_MENU_LABEL = R.string.msgact_edit;
 
     /** Both surfaces draw message bubbles at this radius, so the selection matches their shape. */
     private static final float BUBBLE_RADIUS_DP = 18f;
@@ -108,8 +108,8 @@ final class MessageActions {
      * <p>Save to Vault joins Copy on every reply. The conversation stays visually quiet, and saving
      * is reached by the same gesture and in the same menu language as copying already was.
      */
-    static String[] assistantLabels(boolean canRetry) {
-        return assistantLabels(canRetry, true);
+    static String[] assistantLabels(Context c, boolean canRetry) {
+        return assistantLabels(c, canRetry, true);
     }
 
     /**
@@ -118,10 +118,10 @@ final class MessageActions {
      * <p>Removed rather than greyed out. A disabled entry is a question the user has to answer
      * every time they long-press a reply, and they already answered it in Settings.
      */
-    static String[] assistantLabels(boolean canRetry, boolean vault) {
+    static String[] assistantLabels(Context c, boolean canRetry, boolean vault) {
         AssistantActions a = new AssistantActions();
         if (canRetry) a.retry = () -> {};
-        return labelsOf(assistantMenu(a, vault));
+        return labelsOf(c, assistantMenu(a, vault));
     }
 
     static int[] assistantIcons(boolean canRetry) {
@@ -136,10 +136,10 @@ final class MessageActions {
 
     /** One menu entry: label, icon, and what it does. */
     static final class Entry {
-        final String label;
+        final int label;
         final int icon;
         final Runnable run;
-        Entry(String label, int icon, Runnable run) {
+        Entry(int label, int icon, Runnable run) {
             this.label = label;
             this.icon = icon;
             this.run = run;
@@ -168,9 +168,9 @@ final class MessageActions {
         return out;
     }
 
-    static String[] labelsOf(List<Entry> entries) {
+    static String[] labelsOf(Context c, List<Entry> entries) {
         String[] out = new String[entries.size()];
-        for (int i = 0; i < out.length; i++) out[i] = entries.get(i).label;
+        for (int i = 0; i < out.length; i++) out[i] = c.getString(entries.get(i).label);
         return out;
     }
 
@@ -208,7 +208,7 @@ final class MessageActions {
         if (visible.trim().isEmpty()) return;
         long now = System.currentTimeMillis();
         if (visible.equals(lastSavedText) && now - lastSavedAt < REPEAT_SAVE_WINDOW_MS) {
-            Toast.makeText(c, "Already saved to your Vault", Toast.LENGTH_SHORT).show();
+            Toast.makeText(c, c.getString(R.string.msgact_already_saved), Toast.LENGTH_SHORT).show();
             return;
         }
         String source = sourceUrls == null || sourceUrls.isEmpty() ? "" : sourceUrls.get(0);
@@ -217,7 +217,7 @@ final class MessageActions {
             lastSavedText = visible;
             lastSavedAt = now;
         }
-        Toast.makeText(c, saved ? OrbitVaultStore.savedMessage(c) : OrbitVaultStore.saveFailureMessage(c, "Orbit could not save that reply"),
+        Toast.makeText(c, saved ? OrbitVaultStore.savedMessage(c) : OrbitVaultStore.saveFailureMessage(c, c.getString(R.string.msgact_save_failed)),
                 Toast.LENGTH_SHORT).show();
     }
 
@@ -234,12 +234,13 @@ final class MessageActions {
      * and a visibly broken action is worse than none. The composer-side machinery stays in place so
      * the action can return once resending is dependable; the roadmap records that intent.
      */
-    static String[] userLabels() {
-        return new String[]{COPY_MENU_LABEL};
+    static String[] userLabels(Context c) {
+        return new String[]{c.getString(COPY_MENU_LABEL)};
     }
 
-    static String[] userLabels(boolean canReply) {
-        return canReply ? new String[]{COPY_MENU_LABEL, REPLY_MENU_LABEL} : userLabels();
+    static String[] userLabels(Context c, boolean canReply) {
+        return canReply ? new String[]{c.getString(COPY_MENU_LABEL), c.getString(REPLY_MENU_LABEL)}
+                : userLabels(c);
     }
 
     static int[] userIcons() {
@@ -254,11 +255,11 @@ final class MessageActions {
      * The user-message menu in full chat (0.8.3.0-beta.3+): Copy, Edit, and Reply to this. Edit is
      * offered only by a surface that turns an edit into a real branch; the overlay offers none.
      */
-    static String[] userLabels(boolean canEdit, boolean canReply) {
+    static String[] userLabels(Context c, boolean canEdit, boolean canReply) {
         List<String> out = new ArrayList<>();
-        out.add(COPY_MENU_LABEL);
-        if (canEdit) out.add(EDIT_MENU_LABEL);
-        if (canReply) out.add(REPLY_MENU_LABEL);
+        out.add(c.getString(COPY_MENU_LABEL));
+        if (canEdit) out.add(c.getString(EDIT_MENU_LABEL));
+        if (canReply) out.add(c.getString(REPLY_MENU_LABEL));
         return out.toArray(new String[0]);
     }
 
@@ -321,23 +322,23 @@ final class MessageActions {
         strip.setTag(STRIP_TAG);
         String copyText = assistantCopyText(rawText);
         AfterCopy copied = a.afterCopy != null ? a.afterCopy
-                : () -> Toast.makeText(c, "Copied", Toast.LENGTH_SHORT).show();
-        strip.addView(stripButton(c, R.drawable.ic_copy, "Copy response",
+                : () -> Toast.makeText(c, c.getString(R.string.ui_copied_8d525e5f), Toast.LENGTH_SHORT).show();
+        strip.addView(stripButton(c, R.drawable.ic_copy, c.getString(R.string.msgact_copy_response),
                 v -> copy(c, "Orbit response", copyText, copied)));
         if (a.retry != null) {
-            strip.addView(stripButton(c, R.drawable.ic_regenerate, "Retry response",
+            strip.addView(stripButton(c, R.drawable.ic_regenerate, c.getString(R.string.msgact_retry_response),
                     v -> a.retry.run()));
         }
         if (Prefs.vaultEnabled(c)) {
-            strip.addView(stripButton(c, R.drawable.ic_vault, "Save response to Vault",
+            strip.addView(stripButton(c, R.drawable.ic_vault, c.getString(R.string.msgact_save_response),
                     v -> saveToVault(c, rawText, a.sourceUrls)));
         }
         List<Entry> more = moreMenu(a);
         if (!more.isEmpty()) {
-            ImageButton moreButton = stripButton(c, R.drawable.ic_more, "More response actions", null);
+            ImageButton moreButton = stripButton(c, R.drawable.ic_more, c.getString(R.string.msgact_more), null);
             moreButton.setOnClickListener(v -> {
                 dismiss();
-                UiKit.showOrbitActionMenu(c, moreButton, labelsOf(more), iconsOf(more),
+                UiKit.showOrbitActionMenu(c, moreButton, labelsOf(c, more), iconsOf(more),
                         (index, label) -> more.get(index).run.run());
             });
             strip.addView(moreButton);
@@ -392,10 +393,10 @@ final class MessageActions {
                                           AssistantActions a) {
         boolean vault = Prefs.vaultEnabled(bubble.getContext());
         List<Entry> entries = assistantMenu(a, vault);
-        showMenu(bubble, labelsOf(entries), iconsOf(entries), (index, label) -> {
-            if (COPY_MENU_LABEL.equals(label)) {
+        showMenu(bubble, labelsOf(bubble.getContext(), entries), iconsOf(entries), (index, label) -> {
+            if (bubble.getContext().getString(COPY_MENU_LABEL).equals(label)) {
                 copy(bubble.getContext(), "Orbit response", copyText, a.afterCopy);
-            } else if (SAVE_TO_VAULT_MENU_LABEL.equals(label)) {
+            } else if (bubble.getContext().getString(SAVE_TO_VAULT_MENU_LABEL).equals(label)) {
                 saveToVault(bubble.getContext(), rawText, a.sourceUrls);
             } else {
                 Runnable run = entries.get(index).run;
@@ -408,12 +409,13 @@ final class MessageActions {
                                      Runnable reply, AfterCopy afterCopy) {
         boolean canReply = reply != null;
         boolean canEdit = editResend != null;
-        showMenu(bubble, userLabels(canEdit, canReply), userIcons(canEdit, canReply), (index, label) -> {
-            if (COPY_MENU_LABEL.equals(label)) {
+        showMenu(bubble, userLabels(bubble.getContext(), canEdit, canReply), userIcons(canEdit, canReply), (index, label) -> {
+            Context ctx = bubble.getContext();
+            if (ctx.getString(COPY_MENU_LABEL).equals(label)) {
                 copy(bubble.getContext(), "Orbit message", text, afterCopy);
-            } else if (REPLY_MENU_LABEL.equals(label) && reply != null) {
+            } else if (ctx.getString(REPLY_MENU_LABEL).equals(label) && reply != null) {
                 reply.run();
-            } else if (EDIT_MENU_LABEL.equals(label) && editResend != null) {
+            } else if (ctx.getString(EDIT_MENU_LABEL).equals(label) && editResend != null) {
                 editResend.run();
             }
         });

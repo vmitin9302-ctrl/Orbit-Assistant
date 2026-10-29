@@ -98,6 +98,19 @@ final class KeptContext {
         }
     }
 
+    /** The same label in the app language. */
+    String typeLabel(android.content.Context c) {
+        switch (kind) {
+            case "pdf": return "PDF";
+            case "pdf_page": return c.getString(R.string.kept_type_pdf_page);
+            case "file_text": return c.getString(R.string.kept_type_file_text);
+            case "clipboard": return c.getString(R.string.kept_type_clipboard);
+            case KIND_SUMMARY: return c.getString(R.string.kept_type_summary);
+            default: return OrbitVaultAttachment.KIND.equals(kind)
+                    ? c.getString(R.string.kept_type_vault_item) : c.getString(R.string.ui_attachment_040d2b36);
+        }
+    }
+
     JSONObject toJson() throws Exception {
         JSONObject o = new JSONObject()
                 .put("id", id).put("kind", kind).put("label", label).put("text", text)

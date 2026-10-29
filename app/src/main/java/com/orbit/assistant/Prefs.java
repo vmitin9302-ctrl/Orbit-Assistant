@@ -412,7 +412,7 @@ public final class Prefs {
     /** Save the existing HTTPS-relay configuration without ever handling a raw OpenAI API key. */
     public static String saveRelaySettings(Context c, String rawUrl, String relayToken) {
         String url = rawUrl == null ? "" : rawUrl.trim();
-        if (!url.isEmpty() && !url.startsWith("https://")) return "Use an HTTPS relay URL.";
+        if (!url.isEmpty() && !url.startsWith("https://")) return c.getString(R.string.prefs_relay_https);
         SecureStore.saveRelayToken(c, relayToken == null ? "" : relayToken.trim());
         get(c).edit().putString(BACKEND_URL, url).apply();
         return "";
@@ -716,6 +716,11 @@ public final class Prefs {
     /** How the selection reads to a person. */
     public static String proPreviewLabel(String value) {
         return PRO_PREVIEW_PRO.equals(normalizeProPreview(value)) ? "Pro Preview" : "Free";
+    }
+
+    public static String proPreviewLabel(Context c, String value) {
+        return c.getString(PRO_PREVIEW_PRO.equals(normalizeProPreview(value))
+                ? R.string.prefs_pro_preview : R.string.prefs_free);
     }
 
     public static String quickSettingsRoutineId(Context c) {

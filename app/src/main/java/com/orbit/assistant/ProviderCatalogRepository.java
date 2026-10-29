@@ -152,8 +152,8 @@ public final class ProviderCatalogRepository {
      * Checks a saved key with {@code GET /api/v1/key}. Empty when it works; otherwise one short
      * sentence. Says nothing about credit balances: Orbit never shows or interprets them.
      */
-    static String checkOpenRouterKey(String key) {
-        if (key == null || key.trim().isEmpty()) return "OpenRouter is not connected.";
+    static String checkOpenRouterKey(Context c, String key) {
+        if (key == null || key.trim().isEmpty()) return c.getString(R.string.provcat_or_not_connected);
         HttpURLConnection conn = null;
         try {
             conn = (HttpURLConnection) new URL(OPENROUTER_KEY_URL).openConnection();
@@ -165,10 +165,10 @@ public final class ProviderCatalogRepository {
             int code = conn.getResponseCode();
             if (code >= 200 && code < 300) return "";
             if (code == 401 || code == 403) return OPENROUTER_REJECTED;
-            if (code == 429) return "OpenRouter's rate limit was reached. Try again later.";
-            return "OpenRouter could not check the connection right now. Try again shortly.";
+            if (code == 429) return c.getString(R.string.provcat_or_rate_limit);
+            return c.getString(R.string.provcat_or_check_failed);
         } catch (Exception e) {
-            return "Could not reach OpenRouter. Check the connection and try again.";
+            return c.getString(R.string.provcat_or_unreachable);
         } finally {
             if (conn != null) conn.disconnect();
         }
@@ -178,7 +178,7 @@ public final class ProviderCatalogRepository {
     public static void checkOpenRouterAsync(Context c, Callback callback) {
         Context app = c.getApplicationContext();
         EXEC.execute(() -> {
-            String error = checkOpenRouterKey(SecureStore.loadOpenRouterKey(app));
+            String error = checkOpenRouterKey(app, SecureStore.loadOpenRouterKey(app));
             if (callback != null) callback.onFinished(false, error);
         });
     }
@@ -326,17 +326,17 @@ public final class ProviderCatalogRepository {
                 List<AiModelSpec> models;
                 if (Prefs.PROVIDER_ANTHROPIC.equals(provider)) {
                     String key = SecureStore.loadAnthropicKey(app);
-                    if (key.isEmpty()) throw new CatalogException("Add an Anthropic API key first.");
+                    if (key.isEmpty()) throw new CatalogException(R.string.provcat_add_anthropic_key);
                     models = parseAnthropic(get(ANTHROPIC_URL, "x-api-key", key, true));
                 } else if (Prefs.PROVIDER_XAI.equals(provider)) {
                     String key = SecureStore.loadXaiKey(app);
-                    if (key.isEmpty()) throw new CatalogException("Add an xAI API key first.");
+                    if (key.isEmpty()) throw new CatalogException(R.string.provcat_add_xai_key);
                     models = parseXai(get(XAI_URL, "Authorization", "Bearer " + key, false));
                 } else if (Prefs.PROVIDER_OPENROUTER.equals(provider)) {
                     String key = SecureStore.loadOpenRouterKey(app);
-                    if (key.isEmpty()) throw new CatalogException("Connect OpenRouter first.");
+                    if (key.isEmpty()) throw new CatalogException(R.string.openrouter_err_connect_first);
                     models = fetchOpenRouter(key);
-                    if (models.isEmpty()) throw new CatalogException("The provider returned no compatible chat models.");
+                    if (models.isEmpty()) throw new CatalogException(R.string.provcat_no_models);
                     // Same rule as below: a model that disappeared stays as a historical entry.
                     retainMissing(models, readOpenRouterCacheFile(app), MAX_OPENROUTER_MODELS);
                     List<AiModelSpec> before = readOpenRouterCacheFile(app);
@@ -346,9 +346,9 @@ public final class ProviderCatalogRepository {
                     if (callback != null) callback.onFinished(changed, "");
                     return;
                 } else {
-                    throw new CatalogException("This provider has no dynamic catalog.");
+                    throw new CatalogException(R.string.provcat_no_dynamic);
                 }
-                if (models.isEmpty()) throw new CatalogException("The provider returned no compatible chat models.");
+                if (models.isEmpty()) throw new CatalogException(R.string.provcat_no_models);
                 // A successful refresh may legitimately remove a model. Keep its last-known facts
                 // as an unavailable historical entry so chats, Favorites, and Response Details
                 // retain the exact model rather than silently changing to the new first item.
@@ -360,9 +360,9 @@ public final class ProviderCatalogRepository {
                 OrbitModelCatalog.installDynamic(provider, models);
                 changed = !encoded.equals(before);
             } catch (CatalogException e) {
-                error = e.getMessage();
+                error = e.res != 0 ? app.getString(e.res) : e.getMessage();
             } catch (Exception e) {
-                error = "Could not refresh models. Check the connection and try again.";
+                error = app.getString(R.string.provcat_refresh_failed);
             }
             if (callback != null) callback.onFinished(changed, error);
         });
@@ -462,9 +462,9 @@ public final class ProviderCatalogRepository {
             if (anthropic) conn.setRequestProperty("anthropic-version", "2023-06-01");
             int code = conn.getResponseCode();
             String body = read(code >= 200 && code < 300 ? conn.getInputStream() : conn.getErrorStream());
-            if (code == 401 || code == 403) throw new CatalogException("The saved API key was rejected.");
-            if (code == 429) throw new CatalogException("The provider rate limit was reached. Try again later.");
-            if (code < 200 || code >= 300) throw new CatalogException("The provider could not refresh its model list.");
+            if (code == 401 || code == 403) throw new CatalogException(R.string.provcat_key_rejected);
+            if (code == 429) throw new CatalogException(R.string.provcat_rate_limit);
+            if (code < 200 || code >= 300) throw new CatalogException(R.string.provcat_refresh_failed_list);
             return body;
         } finally {
             if (conn != null) conn.disconnect();
@@ -620,6 +620,9 @@ public final class ProviderCatalogRepository {
     }
 
     private static final class CatalogException extends Exception {
-        CatalogException(String message) { super(message); }
+        /** A string resource to show, resolved where a Context exists; 0 when {@code message} is used. */
+        final int res;
+        CatalogException(String message) { super(message); this.res = 0; }
+        CatalogException(int res) { super("catalog error"); this.res = res; }
     }
 }

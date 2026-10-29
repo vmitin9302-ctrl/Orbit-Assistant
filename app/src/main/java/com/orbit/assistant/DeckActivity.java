@@ -2087,7 +2087,7 @@ public final class DeckActivity extends Activity {
             cell.setScaleType(ImageView.ScaleType.FIT_CENTER);
             int pad = UiKit.dp(this, 10);
             cell.setPadding(pad, pad, pad, pad);
-            cell.setContentDescription(DeckIcons.labelFor(key));
+            cell.setContentDescription(DeckIcons.labelFor(this, key));
             cell.setFocusable(true);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
                     UiKit.dp(this, 44), UiKit.dp(this, 44));
