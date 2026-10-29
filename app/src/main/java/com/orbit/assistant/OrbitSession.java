@@ -1599,7 +1599,7 @@ public class OrbitSession extends VoiceInteractionSession {
         LinearLayout copy = new LinearLayout(c);
         copy.setOrientation(LinearLayout.VERTICAL);
         TextView title = UiKit.text(c, chat.title, 14, UiKit.TEXT, true);
-        TextView time = UiKit.text(c, formatTime(chat.updatedAt), 11, UiKit.MUTED, false);
+        TextView time = UiKit.text(c, formatTime(c, chat.updatedAt), 11, UiKit.MUTED, false);
         copy.addView(title);
         copy.addView(time);
         copy.setOnClickListener(v -> loadConversation(chat.id));
@@ -3840,7 +3840,7 @@ public class OrbitSession extends VoiceInteractionSession {
             case "SHARE": return getContext().getString(R.string.ui_share_29887a5f);
             case "OPEN_URL": return getContext().getString(R.string.ui_open_link_aab63f85);
             case "WEB_SEARCH": return getContext().getString(R.string.ui_web_search_7711faa7);
-            default: return prettyAction(type);
+            default: return prettyAction(getContext(), type);
         }
     }
 
@@ -5109,8 +5109,8 @@ public class OrbitSession extends VoiceInteractionSession {
         return Color.rgb(r, g, bl);
     }
 
-    private static String prettyAction(String type) {
-        if (type == null || type.isEmpty()) return "Device action";
+    private static String prettyAction(Context context, String type) {
+        if (type == null || type.isEmpty()) return context.getString(R.string.core_device_action);
         String raw = type.toLowerCase(Locale.US).replace('_', ' ');
         return raw.substring(0, 1).toUpperCase(Locale.US) + raw.substring(1);
     }
@@ -5121,8 +5121,8 @@ public class OrbitSession extends VoiceInteractionSession {
         return cleaned.length() <= max ? cleaned : cleaned.substring(0, Math.max(0, max - 1)).trim() + "…";
     }
 
-    private static String formatTime(long time) {
-        if (time <= 0) return "Saved chat";
+    private static String formatTime(Context context, long time) {
+        if (time <= 0) return context.getString(R.string.core_saved_chat);
         return DateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT).format(new Date(time));
     }
 

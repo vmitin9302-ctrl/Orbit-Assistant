@@ -124,7 +124,7 @@ public final class OnboardingConnectTest {
 
     @Test public void orbitLocalStatesWhatItCannotDoYet() {
         AiProvider local = AiProviders.byId(Prefs.PROVIDER_LOCAL);
-        String missing = OnboardingActivity.missingCapabilitySentence(local.capabilities());
+        String missing = OnboardingActivity.missingCapabilitySentence(context, local.capabilities());
 
         // Derived from the provider's own declared capabilities, so it cannot drift from them.
         assertTrue(missing.contains("web search"));
@@ -148,7 +148,7 @@ public final class OnboardingConnectTest {
         AiCapabilities everything = AiCapabilities.builder()
                 .streaming(true).deviceActions(true).images(true)
                 .hostedWebSearch(true).routinePlanning(true).build();
-        assertEquals("", OnboardingActivity.missingCapabilitySentence(everything));
+        assertEquals("", OnboardingActivity.missingCapabilitySentence(context, everything));
     }
 
     @Test public void anUnreadyOrbitLocalOffersSetupRatherThanUse() {
