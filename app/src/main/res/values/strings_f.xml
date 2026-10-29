@@ -58,7 +58,7 @@
     <string name="vitem_back_desc">Back to Vault</string>
     <string name="vitem_header_item">Vault item</string>
     <string name="vitem_header_vault">Vault</string>
-    <string name="vitem_suggested_title_suffix"> 00b7 2726 Suggested title</string>
+    <string name="vitem_suggested_title_suffix">" 00b7 2726 Suggested title"</string>
     <string name="vitem_update_failed">Orbit could not update that item</string>
     <string name="vitem_pinned">Pinned</string>
     <string name="vitem_unpinned">Unpinned</string>

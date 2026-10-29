@@ -89,7 +89,7 @@
     <string name="ui_attachment_picker_is_opening_adafa55e" formatted="false">"Открывается выбор вложений"</string>
     <string name="ui_attachments_per_message_79deb9e0" formatted="false">" вложений в сообщении"</string>
     <string name="ui_auto_can_use_a728a9aa" formatted="false">"Доступно для режима «Авто»"</string>
-    <string name="ui_auto_can_use_f7395827" formatted="false">"Доступно для режима «Авто»:"</string>
+    <string name="ui_auto_can_use_f7395827" formatted="false">"Доступно для режима «Авто»: "</string>
     <string name="ui_auto_listen_still_works_and_the_mic_appears_w_7065f1c7" formatted="false">"Автопрослушивание продолжает работать; микрофон появляется, когда Orbit слушает."</string>
     <string name="ui_automatic_profile_a4979345" formatted="false">"Автоматический профиль"</string>
     <string name="ui_automatically_activate_the_microphone_when_th_fc73b405" formatted="false">"Автоматически включать микрофон при открытии плавающего окна помощника."</string>

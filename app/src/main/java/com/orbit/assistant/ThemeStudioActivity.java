@@ -1610,7 +1610,7 @@ public final class ThemeStudioActivity extends Activity {
 
     private void chooseDirection(View anchor) {
         String[] labels = new String[OrbitProStyle.DIRECTION_COUNT];
-        for (int i = 0; i < labels.length; i++) labels[i] = OrbitProStyle.directionLabel(i);
+        for (int i = 0; i < labels.length; i++) labels[i] = OrbitProStyle.directionLabel(this, i);
         UiKit.showOrbitMenu(this, anchor, labels, draft.pro.gradientDirection,
                 (index, label) -> editPro(draft.pro.withGradientDirection(index), true));
     }

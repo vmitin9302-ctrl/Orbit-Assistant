@@ -779,5 +779,5 @@
         <item quantity="many">Ответ в чате по %d лучшим совпадениям</item>
         <item quantity="other">Ответ в чате по %d лучшим совпадениям</item>
     </plurals>
-    <bool name="rcat_clock_24h">true</bool>
+    <bool name="rcat_clock_24h">false</bool>
 </resources>

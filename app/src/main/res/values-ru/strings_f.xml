@@ -58,7 +58,7 @@
     <string name="vitem_back_desc">Назад в хранилище</string>
     <string name="vitem_header_item">Элемент хранилища</string>
     <string name="vitem_header_vault">Хранилище</string>
-    <string name="vitem_suggested_title_suffix"> 00b7 2726 Предложенное название</string>
+    <string name="vitem_suggested_title_suffix">" 00b7 2726 Предложенное название"</string>
     <string name="vitem_update_failed">Orbit не удалось обновить элемент</string>
     <string name="vitem_pinned">Закреплено</string>
     <string name="vitem_unpinned">Откреплено</string>

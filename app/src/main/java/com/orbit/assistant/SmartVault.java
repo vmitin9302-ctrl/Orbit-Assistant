@@ -262,7 +262,7 @@ final class SmartVault {
         if (provider.supportsCompletion(c)) return "";
         return provider.status(c) == AiProvider.Status.NEEDS_SETUP
                 ? c.getString(R.string.smartvault_sign_in_first, provider.displayName())
-                : AiProvider.COMPLETION_UNSUPPORTED;
+                : c.getString(R.string.aip_completion_unsupported);
     }
 
     /** The active provider's name, for sentences that say where something would go. */

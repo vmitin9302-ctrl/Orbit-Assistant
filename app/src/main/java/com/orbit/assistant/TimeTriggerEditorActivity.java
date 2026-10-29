@@ -181,7 +181,9 @@ public class TimeTriggerEditorActivity extends Activity {
     private void refreshFields() {
         timeButton.setText(RoutineActionCatalog.timeLabel(this, hour,minute));
         repeatButton.setText(repeatText());
-        dateButton.setText(startDate.format(java.time.format.DateTimeFormatter.ofLocalizedDate(java.time.format.FormatStyle.MEDIUM)));
+        dateButton.setText("en".equals(java.util.Locale.getDefault().getLanguage())
+                ? startDate.getMonth().getDisplayName(java.time.format.TextStyle.SHORT,java.util.Locale.US)+" "+startDate.getDayOfMonth()+", "+startDate.getYear()
+                : startDate.format(java.time.format.DateTimeFormatter.ofLocalizedDate(java.time.format.FormatStyle.MEDIUM)));
         enabledBox.setChecked(enabled);
         boolean weekly = RoutineTriggerStore.MODE_WEEKLY.equals(mode) || (RoutineTriggerStore.MODE_CUSTOM.equals(mode) && RoutineTriggerStore.UNIT_WEEKS.equals(intervalUnit));
         weeklyBox.setVisibility(weekly?View.VISIBLE:View.GONE);

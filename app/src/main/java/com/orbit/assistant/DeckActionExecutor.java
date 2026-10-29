@@ -82,7 +82,7 @@ public final class DeckActionExecutor {
             boolean vault = DeckTileRegistry.TYPE_VAULT.equals(tile.type)
                     || DeckTileRegistry.TYPE_QUICK_CAPTURE.equals(tile.type);
             finish(callback, Outcome.failed(vault
-                    ? DeckTileResolver.VAULT_OFF + activity.getString(R.string.dax_turn_on)
+                    ? DeckTileResolver.vaultOff(activity) + activity.getString(R.string.dax_turn_on)
                     : resolved.subtitle.isEmpty()
                             ? activity.getString(R.string.dax_unavailable) : resolved.subtitle));
             return;

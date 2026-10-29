@@ -16,4 +16,13 @@
     <string name="lead_vault_type_orbit">Orbit answers</string>
     <string name="markers_transient">could not reach,request failed,timeout,timed out,network,connection,overloaded,temporarily unavailable,server busy</string>
     <string name="markers_overloaded">overloaded,server busy,temporarily unavailable,capacity</string>
+    <string name="lead_vault_off">"Orbit Vault is turned off"</string>
+    <string name="markers_transient_vault">unable to resolve,timeout,timed out,network,connection,429,503,502,took too long</string>
+    <string name="lead_screenshot">screenshot</string>
+    <string name="lead_regenerating_with">Regenerating with %1$d of %2$d original images</string>
+    <string name="lead_step_of">Step %1$d of %2$d</string>
+    <plurals name="lead_deleted_saved_items">
+        <item quantity="one">Deleted %d saved item</item>
+        <item quantity="other">Deleted %d saved items</item>
+    </plurals>
 </resources>

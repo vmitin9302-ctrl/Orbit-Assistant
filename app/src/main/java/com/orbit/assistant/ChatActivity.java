@@ -2845,7 +2845,7 @@ public class ChatActivity extends Activity {
         ClipData.Item item = clip.getItemAt(0);
         Uri uri = item.getUri();
         if (uri != null) {
-            loadUriAttachment(uri, getString(R.string.ui_clipboard_285d69f0));
+            loadUriAttachment(uri, "Clipboard");
             return;
         }
         CharSequence value = item.coerceToText(this);

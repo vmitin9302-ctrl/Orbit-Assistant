@@ -141,6 +141,8 @@ public final class DeckTileResolver {
     /** What a Vault tile says, and what tapping one says, while the Vault is switched off. */
     static final String VAULT_OFF = "Orbit Vault is turned off";
 
+    static String vaultOff(Context c) { return c.getString(R.string.lead_vault_off); }
+
     private static Resolved routine(Context c, DeckTile tile, DeckTileRegistry.Definition definition) {
         String routineId = tile.config(DeckTile.CONFIG_ROUTINE_ID);
         RoutineStore.Routine routine = routineId.isEmpty() ? null : RoutineStore.findById(c, routineId);

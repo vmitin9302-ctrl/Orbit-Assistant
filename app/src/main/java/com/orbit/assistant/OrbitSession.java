@@ -1991,7 +1991,7 @@ public class OrbitSession extends VoiceInteractionSession {
                     category = "";
                 }
                 String attached = text && image ? getContext().getString(R.string.ui_text_screenshot_637a2fd8)
-                        : text ? getContext().getString(R.string.ui_screen_text_b73327b8) : "screenshot";
+                        : text ? getContext().getString(R.string.ui_screen_text_b73327b8) : getContext().getString(R.string.lead_screenshot);
                 contextText.setText(category.isEmpty()
                         ? capitalize(attached) + getContext().getString(R.string.ui_attached_7bcd3cb6)
                         : category + " · " + attached + getContext().getString(R.string.ui_attached_7bcd3cb6));
@@ -3340,8 +3340,7 @@ public class OrbitSession extends VoiceInteractionSession {
         if (user.screenAttached && savedScreen.size() < user.attachmentCount()) {
             stateTextSafe(savedScreen.isEmpty()
                     ? getContext().getString(R.string.ui_regenerating_without_the_original_screen_imag_a2cb1701)
-                    : getContext().getString(R.string.ui_regenerating_with_21e30c11) + savedScreen.size() + " of "
-                            + user.attachmentCount() + getContext().getString(R.string.ui_original_images_774edc8f));
+                    : getContext().getString(R.string.lead_regenerating_with, savedScreen.size(), user.attachmentCount()));
         }
     }
 
@@ -3770,7 +3769,7 @@ public class OrbitSession extends VoiceInteractionSession {
 
         String detail = result == null ? "" : result.message;
         if (entry != null && entry.totalSteps > 1) {
-            detail = getContext().getString(R.string.ui_step_474a987f) + (entry.stepIndex + 1) + " of " + entry.totalSteps + " · " + detail;
+            detail = getContext().getString(R.string.lead_step_of, entry.stepIndex + 1, entry.totalSteps) + " · " + detail;
         }
         boolean redundantOffDetail = reversibleOff
                 && (entry == null || entry.totalSteps <= 1)

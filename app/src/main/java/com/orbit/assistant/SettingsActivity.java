@@ -1990,8 +1990,7 @@ public class SettingsActivity extends Activity implements UiKit.AppearanceListen
                     int removed = OrbitVaultStore.deleteAllData(this);
                     Toast.makeText(this, removed == 0
                                     ? getString(R.string.ui_your_vault_was_already_empty_d6d1fb58)
-                                    : getString(R.string.ui_deleted_7960c0f2) + removed
-                                            + (removed == 1 ? getString(R.string.ui_saved_item_90fa7289) : getString(R.string.ui_saved_items_5fef97f8)),
+                                    : getResources().getQuantityString(R.plurals.lead_deleted_saved_items, removed, removed),
                             Toast.LENGTH_SHORT).show();
                 })
                 .create();

@@ -464,7 +464,7 @@ public final class AiProvidersActivity extends Activity {
     private void refreshOpenRouterCatalog(boolean announce) {
         ProviderCatalogRepository.refreshAsync(this, Prefs.PROVIDER_OPENROUTER, (changed, error) ->
                 runOnUiThread(() -> {
-                    if (announce || error.contains("rejected")) {
+                    if (announce || error.contains("rejected") || error.equals(getString(R.string.provcat_key_rejected))) {
                         Toast.makeText(this, error.isEmpty() ? getString(R.string.aiprov_openrouter_up_to_date)
                                 : error, error.isEmpty() ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG).show();
                     }

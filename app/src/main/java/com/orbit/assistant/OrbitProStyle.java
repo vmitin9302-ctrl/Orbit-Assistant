@@ -827,6 +827,10 @@ public final class OrbitProStyle {
      * <p>Named by where the light starts rather than by an angle, because "Top left" is something
      * you can look at the preview and verify and "135 degrees" is not.
      */
+    public static String directionLabel(android.content.Context context, int direction) {
+        return context.getString(directionLabelRes(direction));
+    }
+
     public static String directionLabel(int direction) {
         switch (direction) {
             case DIRECTION_TR_BL: return "Top right";

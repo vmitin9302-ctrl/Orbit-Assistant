@@ -249,7 +249,7 @@ public final class CapabilitiesActivity extends Activity {
         refreshRuntimeRow(flashlightState, flashlightManage, permission(Manifest.permission.CAMERA));
         refreshRuntimeRow(contactsState, contactsManage, permission(Manifest.permission.READ_CONTACTS));
         // Both halves are needed before Orbit can choose a calendar and verify what it wrote,
-        // so a partial grant reads as getString(R.string.cap_needs_access) rather than as ready.
+        // so a partial grant reads as "Needs access" rather than as ready.
         refreshRuntimeRow(calendarState, calendarManage, OrbitCalendarStore.hasAccess(this));
     }
 

@@ -1208,8 +1208,9 @@ public final class OrbitVaultActivity extends Activity {
         if (item.pinned) meta.append(getString(R.string.vault_pinned_label)).append(" · ");
         meta.append(item.typeLabel(this));
         if (item.isLink() && !item.hostLabel().isEmpty()) meta.append(" · ").append(item.hostLabel());
-        if (!item.source.isEmpty() && !item.source.equals(item.typeLabel(this))) {
-            meta.append(" · ").append(item.source);
+        if (!item.source.isEmpty() && !item.source.equals(item.typeLabel())
+                && !item.source.equals(item.typeLabel(this))) {
+            meta.append(" · ").append(OrbitVaultSource.displayLabel(this, item.source));
         }
         meta.append(" · ").append(item.savedLabel(this));
         TextView metaText = UiKit.text(this, meta.toString(), 11, UiKit.MUTED, false);

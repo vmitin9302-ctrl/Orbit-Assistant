@@ -395,7 +395,8 @@ public final class ExtensionsActivity extends Activity {
                 throw new IllegalArgumentException(getString(R.string.ext_err_duplicate));
             showInstallReview(extension);
         } catch (Exception e) {
-            showError(e.getMessage() == null ? getString(R.string.ext_err_read) : e.getMessage());
+            String reason = OrbitExtensionV2.describe(this, e);
+            showError(reason == null ? getString(R.string.ext_err_read) : reason);
         }
     }
 
@@ -587,8 +588,9 @@ public final class ExtensionsActivity extends Activity {
                         }
                     }
                 } catch (IllegalArgumentException e) {
-                    Toast.makeText(this, e.getMessage() == null ?
-                            getString(R.string.ext_check_values) : e.getMessage(), Toast.LENGTH_SHORT).show();
+                    String reason = OrbitExtensionV2.describe(this, e);
+                    Toast.makeText(this, reason == null ?
+                            getString(R.string.ext_check_values) : reason, Toast.LENGTH_SHORT).show();
                     return;
                 } catch (Exception e) {
                     Toast.makeText(this, getString(R.string.ext_check_values), Toast.LENGTH_SHORT).show();

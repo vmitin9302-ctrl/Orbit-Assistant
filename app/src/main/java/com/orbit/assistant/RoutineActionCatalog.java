@@ -397,7 +397,7 @@ public final class RoutineActionCatalog {
         return timeLabel(null, hour24, minute);
     }
 
-    /** Clock time in the app language (12-hour with AM/PM in English, 24-hour in Russian). */
+    /** Clock time in the app language (12-hour with AM/PM unless the language resources ask for 24-hour). */
     public static String timeLabel(Context c, int hour24, int minute) {
         int h = Math.max(0, Math.min(23, hour24));
         int m = Math.max(0, Math.min(59, minute));

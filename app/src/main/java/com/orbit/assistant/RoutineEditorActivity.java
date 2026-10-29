@@ -418,7 +418,7 @@ public class RoutineEditorActivity extends Activity {
     /** The condition's own description, without the branch bookkeeping the editor now owns. */
     private String conditionTitle(AssistantReply.Action condition) {
         String title = RoutineActionCatalog.title(this, condition);
-        int marker = title.indexOf(" · with ELSE");
+        int marker = title.indexOf(getString(R.string.rcat_with_else));
         return marker < 0 ? title : title.substring(0, marker);
     }
 
@@ -730,8 +730,9 @@ public class RoutineEditorActivity extends Activity {
                                 extension, action, safe));
                         return true;
                     } catch (IllegalArgumentException e) {
-                        return formError(e.getMessage() == null
-                                ? getString(R.string.d_redit_check_extension_values) : e.getMessage());
+                        String reason = OrbitExtensionV2.describe(this, e);
+                        return formError(reason == null
+                                ? getString(R.string.d_redit_check_extension_values) : reason);
                     } catch (Exception e) {
                         return formError(getString(R.string.d_redit_extension_save_failed));
                     }

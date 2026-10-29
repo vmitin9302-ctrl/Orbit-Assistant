@@ -142,7 +142,7 @@ public final class LocalAiActivity extends Activity {
     }
 
     /**
-     * Settles a getString(R.string.localai_remove_orbit_local) that was waiting on Android's own uninstall confirmation.
+     * Settles a "Remove Orbit Local" that was waiting on Android's own uninstall confirmation.
      *
      * <p>The ordering v0.7.7.5 got wrong. It deleted the model, the legacy copy, and the installer
      * cache <em>before</em> asking Android to remove the package — so cancelling Android's
@@ -213,7 +213,7 @@ public final class LocalAiActivity extends Activity {
      * <p>Deliberately small, because Android took the large part with it. What is left is the
      * cached component installer, a provider selection that can no longer answer, and — for the
      * full removal only — a model left behind by an Orbit from before Orbit Local was modular.
-     * An getString(R.string.localai_uninstall_component) must not reach that far: nobody asked it to.
+     * An "Uninstall component" must not reach that far: nobody asked it to.
      */
     private void finishOrbitSideRemoval(String scope) {
         if (SCOPE_EVERYTHING.equals(scope)) LocalModelStore.deleteLegacy(this);

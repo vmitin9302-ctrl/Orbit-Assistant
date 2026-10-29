@@ -430,9 +430,13 @@ public class RoutineTriggersActivity extends Activity {
         String day;
         if (d.equals(today)) day = getString(R.string.d_rtrg_today);
         else if (d.equals(today.plusDays(1))) day = getString(R.string.d_rtrg_tomorrow);
-        else day = z.format(DateTimeFormatter.ofPattern(
-                android.text.format.DateFormat.getBestDateTimePattern(Locale.getDefault(), "EEEMMMd"),
-                Locale.getDefault()));
+        else if ("en".equals(Locale.getDefault().getLanguage())) {
+            day = z.format(DateTimeFormatter.ofPattern("EEE, MMM d", Locale.US));
+        } else {
+            day = z.format(DateTimeFormatter.ofPattern(
+                    android.text.format.DateFormat.getBestDateTimePattern(Locale.getDefault(), "EEEMMMd"),
+                    Locale.getDefault()));
+        }
         return getString(R.string.d_rtrg_next, day,
                 RoutineActionCatalog.timeLabel(this, z.getHour(), z.getMinute()));
     }

@@ -56,7 +56,7 @@ public final class MediaControl {
 
     /** Runs one transport command and reports what Orbit could actually observe. */
     public static DeviceActionExecutor.Result execute(Context c, Command command) {
-        if (c == null || command == null) return DeviceActionExecutor.Result.failed(c.getString(R.string.media_no_command));
+        if (c == null || command == null) return DeviceActionExecutor.Result.failed(c == null ? "No media command" : c.getString(R.string.media_no_command));
 
         MediaController controller = activeController(c);
         if (controller == null) {

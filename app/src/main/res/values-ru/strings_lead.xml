@@ -16,4 +16,15 @@
     <string name="lead_vault_type_orbit">Ответы Orbit</string>
     <string name="markers_transient">не удалось связаться,не ответил вовремя,не дождался,перегружен,временно недоступ,тайм-аут,таймаут,сеть,сети,соединени,нет связи,слишком долго</string>
     <string name="markers_overloaded">перегружен,временно недоступ,нагрузк</string>
+    <string name="lead_vault_off">"Хранилище Orbit отключено"</string>
+    <string name="markers_transient_vault">не удалось связаться,нет связи,тайм-аут,таймаут,сеть,сети,соединени,слишком долго,429,503,502</string>
+    <string name="lead_screenshot">снимок экрана</string>
+    <string name="lead_regenerating_with">Повторное создание с %1$d из %2$d исходных изображений</string>
+    <string name="lead_step_of">Шаг %1$d из %2$d</string>
+    <plurals name="lead_deleted_saved_items">
+        <item quantity="one">Удалён %d сохранённый элемент</item>
+        <item quantity="few">Удалено %d сохранённых элемента</item>
+        <item quantity="many">Удалено %d сохранённых элементов</item>
+        <item quantity="other">Удалено %d сохранённых элемента</item>
+    </plurals>
 </resources>
