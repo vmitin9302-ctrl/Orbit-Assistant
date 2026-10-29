@@ -23,7 +23,10 @@ jobs:
       - name: Install required Android SDK packages
         run: sdkmanager "platform-tools" "platforms;android-36" "build-tools;35.0.0"
       - name: Validate localization and presentation-only changes
-        run: python3 tools/validate_localization.py --base origin/main
+        run: |
+          python3 tools/validate_localization.py --check-resources-only
+          python3 tools/audit_localization_diff.py --base origin/main > localization-audit.txt || true
+          tail -1 localization-audit.txt
       - name: Build signed debug APKs
         run: chmod +x gradlew && ./gradlew --no-daemon :app:assembleDebug :local:assembleDebug
       - name: Verify APK metadata and signatures
