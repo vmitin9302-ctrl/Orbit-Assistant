@@ -131,7 +131,7 @@ public final class DeviceStatusReader {
         String line = c.getString(R.string.devstat_bright_at, percent);
         if (adaptiveBrightness(c)) {
             // A single reading of an adaptive screen is true right now and will not stay true.
-            line += c.getString(R.string.devstat_bright_adaptive);
+            line += " " + c.getString(R.string.devstat_bright_adaptive);
         }
         return Reading.of(line);
     }

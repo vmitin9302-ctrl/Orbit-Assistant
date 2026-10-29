@@ -340,7 +340,7 @@ public final class OrbitRichResponseRenderer {
         view.setMovementMethod(LinkMovementMethod.getInstance());
         view.setLinksClickable(true);
         view.setLinkTextColor(UiKit.linkColorOn(c, surface));
-        view.setContentDescription(c.getString(task.checked ? R.string.rich_checked : R.string.rich_unchecked) + body);
+        view.setContentDescription(c.getString(task.checked ? R.string.rich_checked : R.string.rich_unchecked, body));
         UiKit.applyBubbleTextMetrics(view);
         return view;
     }
